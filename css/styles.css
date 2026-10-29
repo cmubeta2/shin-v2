@@ -1158,15 +1158,52 @@ body {
 }
 
 /* ==========================================================================
-   12. DECAGON DRAWER (MENU THẬP DIỆN 10 MẢNG NGHIỆP VỤ)
+   12. DECAGON DRAWER (MENU THẬP DIỆN 10 MẢNG NGHIỆP VỤ) & HEADER STATUS PILL
    ========================================================================== */
+.header-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  min-height: 28px;
+  text-decoration: none;
+}
+.header-status-pill:hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.header-status-pill.live {
+  border-color: rgba(22, 163, 74, 0.4);
+  background: rgba(22, 163, 74, 0.12);
+  color: #16a34a;
+}
+.header-status-pill.demo {
+  border-color: rgba(217, 119, 6, 0.4);
+  background: rgba(217, 119, 6, 0.12);
+  color: #d97706;
+}
+
+.module-bar, .status-banner {
+  display: none !important;
+}
+
 .decagon-drawer {
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   width: 100%;
-  max-width: 480px;
+  max-width: 340px;
   background: var(--card);
   z-index: 250;
   box-shadow: 4px 0 30px rgba(0,0,0,0.25);
@@ -1194,7 +1231,7 @@ body {
   pointer-events: auto;
 }
 .decagon-head {
-  padding: 16px 20px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1204,10 +1241,10 @@ body {
 .decagon-body {
   flex: 1;
   overflow-y: auto;
-  padding: 16px 18px 40px 18px;
+  padding: 14px 16px 30px 16px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 .decagon-group-title {
   font-size: 11px;
@@ -1221,19 +1258,19 @@ body {
   gap: 6px;
 }
 .decagon-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 .decagon-card {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
+  border-radius: 8px;
+  padding: 10px 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   transition: all 0.15s ease;
   position: relative;
 }
@@ -1241,23 +1278,22 @@ body {
   background: var(--card);
   border-color: var(--primary);
   box-shadow: 0 2px 8px var(--primary-soft);
-  transform: translateY(-1px);
+  transform: translateX(3px);
 }
 .decagon-icon {
-  font-size: 22px;
+  font-size: 20px;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
 }
 .decagon-name {
-  font-size: calc(13px * var(--font-scale));
+  font-size: calc(13.5px * var(--font-scale));
   font-weight: 700;
   color: var(--text);
-  line-height: 1.25;
-}
-.decagon-code {
-  font-size: 10px;
-  color: var(--primary);
-  font-weight: 800;
-  margin-bottom: 2px;
+  line-height: 1.3;
+  flex: 1;
 }
 .badge-count {
   display: inline-flex;

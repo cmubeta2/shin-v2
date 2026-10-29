@@ -39,13 +39,17 @@
           </svg>
         </div>
         <div class="topbar-titles">
-          <div class="topbar-title">SHIN AIOS v2</div>
-          <div class="topbar-sub">Hệ Thống Hợp Nhất</div>
+          <div class="topbar-title">SHIN AIOS</div>
+          <div class="topbar-sub">Hệ thống Quản trị AI</div>
         </div>
       </a>
     </div>
 
     <div class="topbar-actions">
+      <!-- Thẻ trạng thái Demo / Live v2.1.0 nhỏ gọn trên Header kế bên nút tia sét -->
+      <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat()" title="Bấm để quản lý kết nối Token">
+        🟡 Demo v2.1.0
+      </button>
       <!-- Phím tắt Phê Duyệt 1-Chạm kèm Badge Số Lượng Chờ Duyệt -->
       <button class="btn-icon" onclick="ShinApp.chuyenModule('pheduyet')" title="Hộp thư Phê duyệt 1-chạm" style="position:relative;">
         ⚡
@@ -55,16 +59,6 @@
       <button class="btn-icon" onclick="ShinApp.moCaiDat()" title="Bảng màu & Cài đặt">🎨</button>
     </div>
   </header>
-
-  <!-- Dải Chọn Module Ứng Dụng (Module Switcher Bar) -->
-  <nav class="module-bar" id="moduleBar" aria-label="Danh sách module">
-    <!-- Sinh động qua js/app.js -->
-  </nav>
-
-  <!-- Dải Trạng Thái Kết Nối (Status Banner) -->
-  <div class="status-banner" id="statusBanner">
-    <!-- Sinh động qua js/app.js -->
-  </div>
 
   <!-- Vùng Nội Dung Chính (Main Content Container) -->
   <main class="main-container" id="appContent" role="main">
@@ -84,8 +78,8 @@
   <div class="decagon-drawer" id="decagonDrawer" aria-label="Bảng điều hướng 10 Mảng Decagon">
     <div class="decagon-head">
       <div>
-        <div style="font-weight:800; font-size:15px; color:var(--text);">THẬP DIỆN KIẾN TRÚC</div>
-        <div style="font-size:11px; color:var(--text-muted);">10 Mảng Nghiệp Vụ & Dịch Vụ Dùng Chung</div>
+        <div style="font-weight:800; font-size:15px; color:var(--text);">DANH MỤC NGHIỆP VỤ</div>
+        <div style="font-size:11px; color:var(--text-muted);">Hệ thống Quản trị AI</div>
       </div>
       <button class="btn-icon" style="background:transparent; border:none; color:var(--text);" onclick="ShinApp.dongDecagonDrawer()">✕</button>
     </div>

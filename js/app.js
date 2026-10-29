@@ -30,35 +30,35 @@ const ShinApp = (function() {
     { id: 'mocha', ten: 'Mocha Warmth', mauChinh: '#854d0e', moTa: 'Nhân sự & Lịch trực ấm áp' }
   ];
 
-  // Định nghĩa Thập diện kiến trúc 3 cụm chuẩn
+  // Định nghĩa Thập diện kiến trúc Decagon (Icon + Tên mảng gọn gàng 1 cột)
   const DECAGON_GROUPS = [
     {
-      tenNhom: "TẦNG 1: ĐIỀU HÀNH & NỀN TẢNG",
+      tenNhom: "ĐIỀU HÀNH & NỀN TẢNG",
       icon: "🏢",
       danhSach: [
-        { ma: "hub", ten: "Điều Hành Hub", code: "MẢNG 1", icon: "🏢" },
-        { ma: "kpi", ten: "BKS KPI Viện", code: "MẢNG 1", icon: "📊" },
-        { ma: "ks", ten: "Khảo Sát ACHSI", code: "MẢNG 1", icon: "🩺" },
-        { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", code: "TẦNG 0B", icon: "⚡", badge: "4" },
-        { ma: "trithuc", ten: "Tri Thức & SOP", code: "MẢNG 9", icon: "🧠" },
-        { ma: "caidat", ten: "Quản Trị Module", code: "TẦNG 0A", icon: "⚙️" }
+        { ma: "hub", ten: "Executive Hub", icon: "🏢" },
+        { ma: "kpi", ten: "BKS KPI Viện", icon: "📊" },
+        { ma: "ks", ten: "Khảo Sát ACHSI", icon: "🩺" },
+        { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", icon: "⚡", badge: "4" },
+        { ma: "trithuc", ten: "Tri Thức & SOP", icon: "🧠" },
+        { ma: "caidat", ten: "Quản Trị Module", icon: "⚙️" }
       ]
     },
     {
-      tenNhom: "TẦNG 2: VẬN HÀNH NỘI BỘ",
+      tenNhom: "VẬN HÀNH NỘI BỘ",
       icon: "⚙️",
       danhSach: [
-        { ma: "duan", ten: "Quản Lý Dự Án", code: "MẢNG 6", icon: "📌", sub: "Flash Report" },
-        { ma: "phongkham", ten: "Vận Hành PK & PTKH", code: "MẢNG 5", icon: "🏥" },
-        { ma: "congviec", ten: "Công Việc (Task Bus)", code: "MẢNG 7", icon: "📋" }
+        { ma: "duan", ten: "Quản Lý Dự Án & Flash Report", icon: "📌" },
+        { ma: "phongkham", ten: "Vận Hành Phòng Khám & PTKH", icon: "🏥" },
+        { ma: "congviec", ten: "Quản Lý Công Việc", icon: "📋" }
       ]
     },
     {
-      tenNhom: "TẦNG 3: TĂNG TRƯỞNG & ĐỐI TÁC",
+      tenNhom: "TĂNG TRƯỞNG & ĐỐI TÁC",
       icon: "🚀",
       danhSach: [
-        { ma: "crm", ten: "Khách Hàng & B2B", code: "MẢNG 2", icon: "👥" },
-        { ma: "ts", ten: "Giáo Dục & Tuyển Sinh", code: "MẢNG 4", icon: "🎓" }
+        { ma: "crm", ten: "Khách Hàng & Đối Tác", icon: "👥" },
+        { ma: "ts", ten: "Giáo Dục & Tuyển Sinh", icon: "🎓" }
       ]
     }
   ];
@@ -75,16 +75,13 @@ const ShinApp = (function() {
     apDungPalette(currentPalette);
     apDungCochu(currentCochu);
 
-    // Dựng thanh chọn module
-    veThanhModule();
-
-    // Dựng Drawer Decagon 10 mảng
+    // Dựng Drawer Decagon 10 mảng (gọn 1 cột, Icon + Tên)
     veDecagonDrawer();
 
-    // Dựng menu đáy
+    // Dựng thanh điều hướng đáy màn hình (Bottom Nav)
     veMenuDay();
 
-    // Cập nhật banner trạng thái kết nối
+    // Cập nhật thẻ trạng thái kết nối trên Header
     capNhatBannerTrangThai();
 
     // Tải và hiển thị module mặc định
@@ -132,57 +129,6 @@ const ShinApp = (function() {
     localStorage.setItem('shin_cochu', cochu);
   }
 
-  function veThanhModule() {
-    const bar = document.getElementById('moduleBar');
-    if (!bar) return;
-
-    // Nút mở Decagon Hub ở đầu thanh module
-    let itemsHtml = `
-      <button class="module-chip" onclick="ShinApp.moDecagonDrawer()" style="background:var(--primary-soft); color:var(--primary); font-weight:800; border-color:var(--primary);">
-        <span>☰</span>
-        <span>10 Mảng</span>
-      </button>
-    `;
-
-    itemsHtml += MODULES.map(m => `
-      <button class="module-chip ${m.ma === currentModule ? 'active' : ''}" 
-              onclick="ShinApp.chuyenModule('${m.ma}')" 
-              data-mod="${m.ma}">
-        <span>${m.bieuTuong}</span>
-        <span>${m.ten}</span>
-      </button>
-    `).join('');
-
-    bar.innerHTML = itemsHtml;
-  }
-
-  function veDecagonDrawer() {
-    const body = document.getElementById('decagonBody');
-    if (!body) return;
-
-    body.innerHTML = DECAGON_GROUPS.map(g => `
-      <div>
-        <div class="decagon-group-title">
-          <span>${g.icon}</span>
-          <span>${g.tenNhom}</span>
-        </div>
-        <div class="decagon-grid">
-          ${g.danhSach.map(item => `
-            <div class="decagon-card ${item.ma === currentModule ? 'active' : ''}" 
-                 onclick="ShinApp.chuyenModule('${item.ma}'); ShinApp.dongDecagonDrawer();">
-              <span class="decagon-icon">${item.icon}</span>
-              <div style="flex:1; min-width:0;">
-                <div class="decagon-code">${item.code}</div>
-                <div class="decagon-name">${item.ten}</div>
-              </div>
-              ${item.badge ? `<span class="badge-count">${item.badge}</span>` : ''}
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `).join('');
-  }
-
   function veMenuDay() {
     const nav = document.getElementById('bottomNav');
     if (!nav) return;
@@ -206,27 +152,47 @@ const ShinApp = (function() {
     `).join('');
   }
 
+  function veThanhModule() {
+    // Đã có nút Menu trên Header, hàng nút module cuộn ngang đã được lược bỏ theo yêu cầu của Sếp
+  }
+
+  function veDecagonDrawer() {
+    const body = document.getElementById('decagonBody');
+    if (!body) return;
+
+    body.innerHTML = DECAGON_GROUPS.map(g => `
+      <div>
+        <div class="decagon-group-title">
+          <span>${g.icon}</span>
+          <span>${g.tenNhom}</span>
+        </div>
+        <div class="decagon-grid">
+          ${g.danhSach.map(item => `
+            <div class="decagon-card ${item.ma === currentModule ? 'active' : ''}" 
+                 onclick="ShinApp.chuyenModule('${item.ma}'); ShinApp.dongDecagonDrawer();">
+              <span class="decagon-icon">${item.icon}</span>
+              <div class="decagon-name">${item.ten}</div>
+              ${item.badge ? `<span class="badge-count">${item.badge}</span>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
   function capNhatBannerTrangThai() {
-    const banner = document.getElementById('statusBanner');
-    if (!banner) return;
+    const pill = document.getElementById('headerStatusPill');
+    if (!pill) return;
 
     const isLive = SHIN_API.laCheDoLive();
     if (isLive) {
-      banner.innerHTML = `
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span class="status-pill live">🟢 Trực tiếp (Live)</span>
-          <span>Dữ liệu thực từ Google Apps Script & Sheets</span>
-        </div>
-        <button class="toast-btn" style="padding:0;" onclick="ShinApp.moCaiDat()">Quản lý Token</button>
-      `;
+      pill.className = 'header-status-pill live';
+      pill.innerHTML = '🟢 Live v2.1.0';
+      pill.title = 'Đang kết nối dữ liệu thật Apps Script & Sheets · Bấm để đổi Token';
     } else {
-      banner.innerHTML = `
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span class="status-pill demo">🟡 Trình diễn (Demo Mode)</span>
-          <span>Mẫu minh họa độc lập · Nhập Token để xem số liệu thật</span>
-        </div>
-        <button class="toast-btn" style="padding:0; text-decoration:underline;" onclick="ShinApp.moCaiDat()">Kết nối Token ›</button>
-      `;
+      pill.className = 'header-status-pill demo';
+      pill.innerHTML = '🟡 Demo v2.1.0';
+      pill.title = 'Chế độ Trình diễn mẫu · Bấm để nhập Token thật';
     }
   }
 
