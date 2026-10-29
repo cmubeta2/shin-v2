@@ -26,8 +26,8 @@
 
   <!-- Thanh Header Đỉnh Ghim (Sticky Topbar) -->
   <header class="topbar">
-    <div style="display:flex; align-items:center; gap:8px;">
-      <button class="btn-icon" onclick="ShinApp.moDecagonDrawer()" title="Thập diện kiến trúc Decagon (10 Mảng)">
+    <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+      <button class="btn-icon" onclick="ShinApp.moDecagonDrawer()" title="Danh mục 10 Mảng">
         ☰
       </button>
       <a href="#" class="topbar-brand" onclick="ShinApp.chuyenModule('hub'); return false;">
@@ -39,24 +39,24 @@
           </svg>
         </div>
         <div class="topbar-titles">
-          <div class="topbar-title">SHIN AIOS</div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="topbar-title">SHIN AIOS</span>
+            <!-- Thẻ trạng thái nhỏ gọn nằm ngay kế bên chữ SHIN AIOS -->
+            <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat(); event.stopPropagation();" title="Bấm để quản lý kết nối Token">
+              Live v2.1.0
+            </button>
+          </div>
           <div class="topbar-sub">Hệ thống Quản trị AI</div>
         </div>
       </a>
     </div>
 
+    <!-- Phía bên phải gom lại chỉ còn DUY NHẤT 1 nút nhấn tia sét ⚡ -->
     <div class="topbar-actions">
-      <!-- Thẻ trạng thái Demo / Live v2.1.0 nhỏ gọn trên Header kế bên nút tia sét -->
-      <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat()" title="Bấm để quản lý kết nối Token">
-        🟡 Demo v2.1.0
-      </button>
-      <!-- Phím tắt Phê Duyệt 1-Chạm kèm Badge Số Lượng Chờ Duyệt -->
       <button class="btn-icon" onclick="ShinApp.chuyenModule('pheduyet')" title="Hộp thư Phê duyệt 1-chạm" style="position:relative;">
         ⚡
         <span class="badge-count" id="countPendingApproval" style="position:absolute; top:-2px; right:-2px;">4</span>
       </button>
-      <button class="btn-icon" id="btnTheme" onclick="ShinApp.doiTheme()" title="Đổi chế độ sáng / tối">🌙</button>
-      <button class="btn-icon" onclick="ShinApp.moCaiDat()" title="Bảng màu & Cài đặt">🎨</button>
     </div>
   </header>
 
@@ -95,6 +95,29 @@
       <div class="modal-head">
         <div class="modal-title">⚙️ Cài Đặt & Giao Diện</div>
         <button class="btn-icon" style="background:transparent; border:none; color:var(--text);" onclick="ShinApp.dongModal()">✕</button>
+      </div>
+
+      <!-- Chế độ Hiển Thị (Sáng / Tối / Theo máy / Theo giờ) theo chỉ đạo của Sếp -->
+      <div class="form-group" style="margin-bottom:18px;">
+        <label class="form-label">CHẾ ĐỘ HIỂN THỊ (THEME MODE)</label>
+        <div class="theme-mode-grid" id="themeModeGrid">
+          <button class="theme-mode-btn" data-mode="light" onclick="ShinApp.chonThemeMode('light')">
+            <span class="theme-mode-icon">☀️</span>
+            <span class="theme-mode-text">Sáng</span>
+          </button>
+          <button class="theme-mode-btn" data-mode="dark" onclick="ShinApp.chonThemeMode('dark')">
+            <span class="theme-mode-icon">🌙</span>
+            <span class="theme-mode-text">Tối</span>
+          </button>
+          <button class="theme-mode-btn" data-mode="system" onclick="ShinApp.chonThemeMode('system')">
+            <span class="theme-mode-icon">💻</span>
+            <span class="theme-mode-text">Theo máy</span>
+          </button>
+          <button class="theme-mode-btn" data-mode="auto" onclick="ShinApp.chonThemeMode('auto')">
+            <span class="theme-mode-icon">⏰</span>
+            <span class="theme-mode-text">Theo giờ</span>
+          </button>
+        </div>
       </div>
 
       <!-- Chọn 8 Phong Cách -->

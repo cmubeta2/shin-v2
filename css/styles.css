@@ -1163,18 +1163,19 @@ body {
 .header-status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 800;
   border: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--bg-sub);
   color: var(--text);
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s ease;
-  min-height: 28px;
+  height: 20px;
+  line-height: 1;
   text-decoration: none;
 }
 .header-status-pill:hover {
@@ -1191,6 +1192,42 @@ body {
   border-color: rgba(217, 119, 6, 0.4);
   background: rgba(217, 119, 6, 0.12);
   color: #d97706;
+}
+
+/* Khối Chọn Chế Độ Hiển Thị (Sáng / Tối / Theo máy / Theo giờ) */
+.theme-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 6px;
+}
+.theme-mode-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+.theme-mode-btn:hover {
+  border-color: var(--primary);
+}
+.theme-mode-btn.active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.theme-mode-icon {
+  font-size: 16px;
+  margin-bottom: 2px;
 }
 
 .module-bar, .status-banner {

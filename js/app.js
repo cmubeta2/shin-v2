@@ -66,19 +66,20 @@ const ShinApp = (function() {
   let currentModule = 'hub';
   let currentNav = 'home';
   let currentPalette = localStorage.getItem('shin_palette') || 'executive';
+  let currentThemeMode = localStorage.getItem('shin_theme_mode') || 'system';
   let currentTheme = localStorage.getItem('shin_theme') || 'light';
   let currentCochu = localStorage.getItem('shin_cochu') || 'vua';
 
   function init() {
-    // Áp dụng theme và palette từ đầu
-    apDungTheme(currentTheme);
+    // Áp dụng theme theo chế độ (Sáng / Tối / Theo máy / Theo giờ)
+    apDungThemeMode(currentThemeMode);
     apDungPalette(currentPalette);
     apDungCochu(currentCochu);
 
     // Dựng Drawer Decagon 10 mảng (gọn 1 cột, Icon + Tên)
     veDecagonDrawer();
 
-    // Dựng thanh điều hướng đáy màn hình (Bottom Nav)
+    // Dựng thanh điều hướng đáy màn hình (Bottom Nav có nút Cài đặt ở cuối)
     veMenuDay();
 
     // Cập nhật thẻ trạng thái kết nối trên Header
@@ -94,18 +95,64 @@ const ShinApp = (function() {
         dongDecagonDrawer();
       }
     });
+
+    // Lắng nghe sự kiện đổi theme từ hệ điều hành nếu đang để "Theo máy"
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (currentThemeMode === 'system') {
+          apDungThemeMode('system');
+        }
+      });
+    }
+  }
+
+  function chonThemeMode(mode) {
+    currentThemeMode = mode;
+    localStorage.setItem('shin_theme_mode', mode);
+    apDungThemeMode(mode);
+
+    // Cập nhật active button trong modal
+    document.querySelectorAll('.theme-mode-btn').forEach(btn => {
+      if (btn.dataset.mode === mode) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    const tenCheDo = mode === 'light' ? 'Sáng' : mode === 'dark' ? 'Tối' : mode === 'system' ? 'Theo máy' : 'Theo giờ';
+    toast(`Đã áp dụng chế độ hiển thị: ${tenCheDo}`, 'info');
+  }
+
+  function apDungThemeMode(mode) {
+    let resolvedTheme = 'light';
+
+    if (mode === 'light') {
+      resolvedTheme = 'light';
+    } else if (mode === 'dark') {
+      resolvedTheme = 'dark';
+    } else if (mode === 'system') {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      resolvedTheme = prefersDark ? 'dark' : 'light';
+    } else if (mode === 'auto') {
+      // Theo giờ: 06:00 đến 18:00 là Sáng, còn lại là Tối
+      const gio = new Date().getHours();
+      resolvedTheme = (gio >= 6 && gio < 18) ? 'light' : 'dark';
+    }
+
+    currentTheme = resolvedTheme;
+    document.documentElement.setAttribute('data-theme', resolvedTheme);
+    localStorage.setItem('shin_theme', resolvedTheme);
   }
 
   function apDungTheme(theme) {
     currentTheme = theme;
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('shin_theme', theme);
-    const btn = document.getElementById('btnTheme');
-    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
   }
 
   function doiTheme() {
-    apDungTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    chonThemeMode(currentTheme === 'dark' ? 'light' : 'dark');
   }
 
   function apDungPalette(paletteId) {
@@ -138,7 +185,7 @@ const ShinApp = (function() {
       { id: 'pheduyet', icon: '⚡', label: 'Phê duyệt', badge: '4' },
       { id: 'duan', icon: '📌', label: 'Dự án', badge: '' },
       { id: 'crm', icon: '👥', label: 'Đối tác', badge: '' },
-      { id: 'decagon', icon: '☰', label: '10 Mảng', badge: '' }
+      { id: 'caidat', icon: '⚙️', label: 'Cài đặt', badge: '' }
     ];
 
     nav.innerHTML = navItems.map(item => `
@@ -259,6 +306,10 @@ const ShinApp = (function() {
   }
 
   function chuyenNav(navId) {
+    if (navId === 'caidat') {
+      moCaiDat();
+      return;
+    }
     if (navId === 'decagon') {
       moDecagonDrawer();
       return;
@@ -303,6 +354,15 @@ const ShinApp = (function() {
   function moCaiDat() {
     const modal = document.getElementById('settingsModal');
     if (!modal) return;
+
+    // Cập nhật trạng thái nút Theme Mode (Sáng / Tối / Theo máy / Theo giờ)
+    document.querySelectorAll('.theme-mode-btn').forEach(btn => {
+      if (btn.dataset.mode === currentThemeMode) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
 
     const tokenInput = document.getElementById('tokenInput');
     if (tokenInput) {
@@ -372,6 +432,7 @@ const ShinApp = (function() {
   return {
     init,
     doiTheme,
+    chonThemeMode,
     apDungPalette,
     chuyenModule,
     chuyenNav,
