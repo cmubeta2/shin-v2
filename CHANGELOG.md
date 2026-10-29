@@ -4,6 +4,60 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.2.0] – 29/10/2026 (NỐI THẬT VÀO HỆ v1 – ĐỢT P1: HUB · KPI · TUYỂN SINH)
+
+> v2 là **cửa thứ 3** của hệ Shin v1: gọi thẳng các máy chủ Apps Script v1, dùng chung 100% dữ liệu, **không sửa gì ở v1**.
+
+### 🔌 Tầng giao tiếp theo đúng giao thức v1 (`00_Loi/Loi_Web.gs`)
+- `{hanh:'web…', token, du}` ➜ `{ok, du}` / `{ok:false, loi:'quyen'|'hanh'|'token'|'loi'}`; Hub nhận `du` là đối tượng, KPI/TS/KS/PK nhận tham số rời trong `du.a` (`SHIN_API.goiCong`).
+- Lỗi được nói bằng lời dễ hiểu; **không còn lặng lẽ thay số thật bằng số mẫu** – khi phải hiện mẫu thì có dải báo vàng/đỏ ở đầu màn.
+- Đo độ trễ từng máy chủ (M0.4) – xem ở ⚙️ Quản Trị Module, có nút "Kiểm tra kết nối 5 máy chủ".
+- Token ở `?t=` được lưu rồi **xóa khỏi thanh địa chỉ** (Q4 đã chốt).
+
+### 🏠 Hub (máy chủ `10_Hub`)
+- Hôm nay: `webHomNay` – lời chào theo giờ + tên, 3 số (việc · khẩn cấp · quá hạn), danh sách việc gom từ mọi app (bấm mở đúng app v1), "Cần chú ý", thẻ số từng app, app chưa kéo được số. Nút **↻ Làm mới** gọi `webLamMoi`.
+- 🔔 Thông báo: `webThongBao`, bấm tin / "✓ Đánh dấu đã xem hết" gọi `webDanhDauDoc`; số chưa đọc hiện ở nút 🏠 menu đáy.
+- 📝 Việc riêng: `webViecRieng` + `webLuuViecRieng` – thêm (ô ngày dd/mm/yyyy, Khẩn cấp), **xong có Hoàn tác 6 giây thật** (chỉ gửi máy chủ khi hết 6 giây), xóa phải bấm 2 lần trong 5 giây.
+- Phân quyền: hỏi `webKhoiDong` của Hub rồi của KPI/TS/KS/PK – app nào trả `quyen` thì **ẩn khỏi menu ☰**, mở thẳng thì gặp màn "Chưa vào được" ghi rõ liên hệ ai.
+
+### 📊 KPI Toàn Viện (máy chủ `30_KPI_ToanVien`)
+- Bản tin tạm tính thật `webBanTin`: KPI viện, số khoa cần chú ý, doanh thu so KH lũy kế; danh sách khoa có màu ≥90% xanh · ≥80% vàng · <80% đỏ, bấm khoa xem chỉ tiêu sắp trượt; 5 trụ; AOP lũy kế / dự báo / cần thêm mỗi tháng; lệch số với tab khoa. Nút **↻ Đọc lại số TV3** (`webBanTin(true)`).
+- Soát lỗi chốt quý · AOP · Báo cáo quý: mở trên app KPI v1 (v2 chưa dựng màn).
+
+### 🎓 Tuyển Sinh (máy chủ `60_TuyenSinh`)
+- Chiến dịch thật từ `webKhoiDong` (giai đoạn, còn bao nhiêu ngày, số lead); bấm chiến dịch ➜ `webLeadCD`: phễu lead → liên hệ → hồ sơ → nhập học, hoa hồng hiện tại + còn bao nhiêu lên bậc, 50 lead đầu (quá hạn nổi bật, 📞 gọi nhanh).
+- Thêm/sửa lead: mở app Tuyển sinh v1.
+
+### 🩺 KS · 🏥 PK
+- Kiểm quyền thật qua `webKhoiDong`; hai app v1 **chưa mở cổng số liệu**, nên màn v2 vẫn là mẫu và ghi rõ điều đó, kèm nút "Mở app v1".
+
+### 🧩 Chuẩn PHONG_CACH_APP_SHIN áp vào phần mới
+- Dữ liệu máy chủ luôn được làm sạch trước khi vẽ (đã thử tên lead chứa mã độc – không chạy).
+- Nút gửi khóa + "Đang lưu…", chặn bấm trùng, thanh chờ 3px trên đỉnh, báo "máy chủ đang xử lý" sau 5 giây / "mạng yếu" sau 20 giây.
+- Toast theo loại (xanh/lam/vàng/đỏ), nút Hoàn tác 44px; khối phụ gập sẵn và nhớ mở/gập; trạng thái trống có gợi ý; 🎉 khi hết việc; số kiểu VN.
+- M0.1 bật/tắt mảng có tác dụng thật (ẩn khỏi menu ☰, lưu trên máy). Phê duyệt 1-chạm (mẫu) dùng Hoàn tác 6 giây, Từ chối bấm 2 lần.
+
+### ✅ Kiểm tra
+- Trình diễn: 11/11 mục menu đúng màn, không cuộn ngang ở 375px và 1280px, 0 lỗi console.
+- Live: chạy với máy chủ giả trả **đúng khuôn dữ liệu của mã v1** (Hub, KPI, TS trả số; KS từ chối quyền; PK mất mạng) – mọi màn hiển thị đúng, Hoàn tác không gửi lệnh, xong thật gửi đúng 1 lệnh. **Chưa thử với máy chủ thật** (cần token của anh).
+
+---
+
+## [2.1.1] – 29/10/2026 (VÁ LỖI BẢN CÔNG KHAI & QUY HOẠCH 10 MẢNG 2.0)
+
+### 🐞 Sửa lỗi
+- **6 màn hình hiện trống** (Dự án, CRM, Công việc, Phê duyệt, Tri thức, Quản trị Module): tầng API trả `{}` cho các mảng chưa có máy chủ nên module không dùng dữ liệu mẫu. Nay trả đúng bộ dữ liệu mẫu của từng mảng (`js/api.js`).
+- **Menu ☰ mở sai màn hình:** mục *Khảo Sát ACHSI* và *Giáo Dục & Tuyển Sinh* dùng mã `ks`/`ts` không tồn tại nên mở Executive Hub. Đã đổi về mã chuẩn `khaosat`/`tuyensinh` (`js/app.js`).
+- **Chế độ Live không gọi được máy chủ KS, TS, PK:** thêm bảng bí danh mã module ➜ khóa endpoint (`KHAOSAT→KS`, `TUYENSINH→TS`, `PHONGKHAM→PK`).
+- **Cuộn ngang ở màn hình 375px** (Dự án, CRM, Phê duyệt): lưới 3 ô số co giãn đúng (`minmax(0, 1fr)`), nhãn ô số được xuống dòng, tab Dự án tự xuống hàng.
+- Nhãn trạng thái Header không còn nháy chữ "Live" trước khi ứng dụng khởi động.
+
+### 📐 Quy hoạch
+- Viết lại `QUY_HOACH_10_MANG_AIOS.md` (bản 2.0): thống nhất 1 cách đánh số mảng theo mã nguồn, bảng quy đổi từ bản 1.0, kiến trúc 3 tầng, 3 luồng liên thông (Lead · Duyệt · Việc), 54 micro-module kèm trạng thái và phiên bản đích, hợp đồng I/O, nguyên tắc dữ liệu, kết quả kiểm tra, lộ trình v2.2 → v2.6 có tiêu chí hoàn thành, các việc cần Sếp chốt.
+- Cập nhật `README.md` (mã module chuẩn, cấu trúc thư mục đủ 11 module) và `UPDATE.md` (lộ trình mới).
+
+---
+
 ## [2.1.0] – 29/10/2026 (THẬP DIỆN KIẾN TRÚC DECAGON & TRUNG TÂM PHÊ DUYỆT 1-CHẠM)
 
 ### 🚀 Nâng cấp Cấu trúc 10 Mảng & Dịch Vụ Dùng Chung

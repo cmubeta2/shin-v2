@@ -111,14 +111,18 @@ const ModulePheDuyet = {
   },
 
   duyet: function(id, tieuDe) {
+    this.anTheHoanTac(id, `Đã duyệt "${tieuDe}" (mẫu – Phê duyệt 1-chạm chưa có máy chủ v1)`);
+  },
+
+  /** Thẻ mờ ngay, 6 giây sau mới gỡ; bấm Hoàn tác thì trả lại như cũ. */
+  anTheHoanTac: function(id, msg) {
     const card = document.getElementById(`card-${id}`);
-    if (card) {
-      card.style.transition = 'all 0.3s ease';
-      card.style.opacity = '0.3';
-      card.style.transform = 'scale(0.98)';
-      setTimeout(() => card.remove(), 400);
-    }
-    ShinApp.toast(`Đã phê duyệt 1-chạm: "${tieuDe}"! 🟢`);
+    if (!card) return;
+    ShinApp.hanhDongHoanTac(msg, {
+      lamTruoc: () => card.classList.add('mo-di'),
+      traLai: () => card.classList.remove('mo-di'),
+      thucHien: async () => { card.remove(); }
+    });
   },
 
   yeuCauSua: function(id) {
@@ -126,15 +130,13 @@ const ModulePheDuyet = {
   },
 
   tuChoi: function(id) {
-    const card = document.getElementById(`card-${id}`);
-    if (card) {
-      card.remove();
-    }
-    ShinApp.toast(`Đã từ chối phiếu ${id}. Thông báo đã gửi đến người lập 🔴`, 'warn');
+    ShinApp.xacNhan2Lan('pd-tuchoi-' + id, 'Từ chối phiếu này', () => {
+      this.anTheHoanTac(id, 'Đã từ chối phiếu (mẫu – chưa gửi cho ai vì chưa có máy chủ).');
+    });
   },
 
   duyetTatCa: function() {
-    ShinApp.toast('Đã phê duyệt toàn bộ các mục an toàn trong danh sách! 🟢');
+    ShinApp.toast('Đã duyệt toàn bộ các mục an toàn trong danh sách (mẫu).');
     setTimeout(() => {
       const container = document.getElementById('appContent');
       if (container) {

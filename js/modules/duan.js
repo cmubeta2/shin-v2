@@ -62,11 +62,11 @@ const ModuleDuAn = {
       </div>
 
       <!-- Tab Điều Hướng Phụ -->
-      <div style="display:flex; gap:8px; margin: 16px 0; border-bottom:1px solid var(--border); padding-bottom:8px;">
-        <button class="module-chip ${this.tabHienTai === 'flash' ? 'active' : ''}" onclick="ModuleDuAn.chuyenTab('flash')">
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin: 16px 0; border-bottom:1px solid var(--border); padding-bottom:8px;">
+        <button class="module-chip ${this.tabHienTai === 'flash' ? 'active' : ''}" style="white-space:normal;" onclick="ModuleDuAn.chuyenTab('flash')">
           ⚡ Báo Cáo Nhanh Hôm Nay (Daily Flash)
         </button>
-        <button class="module-chip ${this.tabHienTai === 'danhsach' ? 'active' : ''}" onclick="ModuleDuAn.chuyenTab('danhsach')">
+        <button class="module-chip ${this.tabHienTai === 'danhsach' ? 'active' : ''}" style="white-space:normal;" onclick="ModuleDuAn.chuyenTab('danhsach')">
           📊 Master Dashboard (${danhSach.length})
         </button>
       </div>
