@@ -19,10 +19,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
   9. `Mảng 9 (Thư viện Tri thức)`: Second Brain kết nối Obsidian Vault và kho quy trình SOP chuẩn (`js/modules/trithuc.js`).
   10. `Gói Tư vấn Quản trị số`: Gói giải pháp đóng gói liên thông từ CRM + Dự án + Tri thức.
 
-### 📱 Nâng cấp Bộ Điều Hướng Shell & Trải Nghiệm Công Thái Học
-- **Decagon Navigation Drawer:** Menu trượt mượt mà phân 3 cụm (Điều hành & Nền tảng, Vận hành nội bộ, Tăng trưởng & Đối tác), hỗ trợ mở nhanh qua nút `☰ 10 Mảng`.
-- **Phím tắt Phê Duyệt 1-Chạm trên Header:** Badge đếm số lượng việc đang chờ duyệt theo thời gian thực (hiển thị `⚡ 4`).
-- **Thanh Bottom Navigation Mới:** 5 phím điều hướng trọng yếu: `🏠 Hôm nay` · `⚡ Phê duyệt` · `📌 Dự án` · `👥 Đối tác` · `☰ 10 Mảng`.
+### 📱 Nâng cấp Bộ Điều Hướng Shell & Trải Nghiệm Công Thái Học (Cập nhật theo chỉ đạo của Sếp)
+- **Header Tinh Gọn Tuyệt Đối:**
+  - Nhãn trạng thái `Live v2.1.0` / `Demo v2.1.0` được gom thành một badge siêu nhỏ (height 20px) đặt ngay cạnh chữ `SHIN AIOS`, không chiếm không gian các nút bấm.
+  - Bên phải Header chỉ giữ DUY NHẤT 1 nút bấm: Nút tia sét `⚡` (kèm badge đếm phiếu chờ duyệt).
+- **Chế Độ Hiển Thị Thông Minh:**
+  - Tích hợp bộ chọn 4 chế độ: `☀️ Sáng`, `🌙 Tối`, `💻 Theo máy` (tự đổi theo OS) và `⏰ Theo giờ` (tự động 06:00 - 18:00 sáng, còn lại tối) đặt ngay trước bảng chọn 8 phong cách màu sắc.
+- **Thanh Bottom Navigation 5 Nút:**
+  - Thay nút `10 Mảng` ở cuối bằng nút `⚙️ Cài đặt` (mở ngay bảng tùy biến màu sắc, theme và token).
+  - Nút mở `☰ 10 Mảng` nằm cố định tại góc trên bên trái Header, phân công nhiệm vụ công thái học rõ ràng và không bị trùng lặp.
 
 ---
 
