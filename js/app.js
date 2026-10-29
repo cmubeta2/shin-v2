@@ -1,6 +1,6 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.1.0 (Thập diện kiến trúc Decagon – 10 Mảng Nghiệp Vụ)
+ * Phiên bản: v2.1.1 (Thập diện kiến trúc Decagon – 10 Mảng Nghiệp Vụ)
  * Tích hợp toàn diện các module, quản trị trạng thái, đổi phong cách giao diện và liên thông dữ liệu.
  */
 
@@ -38,7 +38,7 @@ const ShinApp = (function() {
       danhSach: [
         { ma: "hub", ten: "Executive Hub", icon: "🏢" },
         { ma: "kpi", ten: "BKS KPI Viện", icon: "📊" },
-        { ma: "ks", ten: "Khảo Sát ACHSI", icon: "🩺" },
+        { ma: "khaosat", ten: "Khảo Sát ACHSI", icon: "🩺" },
         { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", icon: "⚡", badge: "4" },
         { ma: "trithuc", ten: "Tri Thức & SOP", icon: "🧠" },
         { ma: "caidat", ten: "Quản Trị Module", icon: "⚙️" }
@@ -58,7 +58,7 @@ const ShinApp = (function() {
       icon: "🚀",
       danhSach: [
         { ma: "crm", ten: "Khách Hàng & Đối Tác", icon: "👥" },
-        { ma: "ts", ten: "Giáo Dục & Tuyển Sinh", icon: "🎓" }
+        { ma: "tuyensinh", ten: "Giáo Dục & Tuyển Sinh", icon: "🎓" }
       ]
     }
   ];
@@ -234,11 +234,11 @@ const ShinApp = (function() {
     const isLive = SHIN_API.laCheDoLive();
     if (isLive) {
       pill.className = 'header-status-pill live';
-      pill.innerHTML = '🟢 Live v2.1.0';
+      pill.innerHTML = '🟢 Live v2.1.1';
       pill.title = 'Đang kết nối dữ liệu thật Apps Script & Sheets · Bấm để đổi Token';
     } else {
       pill.className = 'header-status-pill demo';
-      pill.innerHTML = '🟡 Demo v2.1.0';
+      pill.innerHTML = '🟡 Demo v2.1.1';
       pill.title = 'Chế độ Trình diễn mẫu · Bấm để nhập Token thật';
     }
   }

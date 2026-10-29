@@ -46,9 +46,13 @@ const SHIN_API = (function() {
     return !!layToken();
   }
 
+  // Mã module trong v2 (ModuleX.ma) ➜ khóa endpoint Apps Script của v1
+  const BI_DANH_ENDPOINT = { KHAOSAT: 'KS', TUYENSINH: 'TS', PHONGKHAM: 'PK' };
+
   async function goi(appKey, hanh, du = {}) {
     const token = layToken();
-    const endpoint = ENDPOINTS[appKey.toUpperCase()];
+    const khoa = appKey.toUpperCase();
+    const endpoint = ENDPOINTS[BI_DANH_ENDPOINT[khoa] || khoa];
 
     // Nếu không có token hoặc app chưa cấu hình endpoint
     if (!token || !endpoint) {
@@ -92,7 +96,9 @@ const SHIN_API = (function() {
     if (key === 'ts' || key === 'tuyensinh') return allDemo.tuyensinh;
     if (key === 'ks' || key === 'khaosat') return allDemo.khaosat;
     if (key === 'pk' || key === 'phongkham') return allDemo.phongkham;
-    return {};
+    // Các mảng chưa có máy chủ riêng (crm, duan, congviec, pheduyet, trithuc, caidat...)
+    // trả null để module tự dùng bộ dữ liệu mẫu của chính nó
+    return allDemo[key] || null;
   }
 
   return {

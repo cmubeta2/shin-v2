@@ -4,6 +4,21 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.1.1] – 29/10/2026 (VÁ LỖI BẢN CÔNG KHAI & QUY HOẠCH 10 MẢNG 2.0)
+
+### 🐞 Sửa lỗi
+- **6 màn hình hiện trống** (Dự án, CRM, Công việc, Phê duyệt, Tri thức, Quản trị Module): tầng API trả `{}` cho các mảng chưa có máy chủ nên module không dùng dữ liệu mẫu. Nay trả đúng bộ dữ liệu mẫu của từng mảng (`js/api.js`).
+- **Menu ☰ mở sai màn hình:** mục *Khảo Sát ACHSI* và *Giáo Dục & Tuyển Sinh* dùng mã `ks`/`ts` không tồn tại nên mở Executive Hub. Đã đổi về mã chuẩn `khaosat`/`tuyensinh` (`js/app.js`).
+- **Chế độ Live không gọi được máy chủ KS, TS, PK:** thêm bảng bí danh mã module ➜ khóa endpoint (`KHAOSAT→KS`, `TUYENSINH→TS`, `PHONGKHAM→PK`).
+- **Cuộn ngang ở màn hình 375px** (Dự án, CRM, Phê duyệt): lưới 3 ô số co giãn đúng (`minmax(0, 1fr)`), nhãn ô số được xuống dòng, tab Dự án tự xuống hàng.
+- Nhãn trạng thái Header không còn nháy chữ "Live" trước khi ứng dụng khởi động.
+
+### 📐 Quy hoạch
+- Viết lại `QUY_HOACH_10_MANG_AIOS.md` (bản 2.0): thống nhất 1 cách đánh số mảng theo mã nguồn, bảng quy đổi từ bản 1.0, kiến trúc 3 tầng, 3 luồng liên thông (Lead · Duyệt · Việc), 54 micro-module kèm trạng thái và phiên bản đích, hợp đồng I/O, nguyên tắc dữ liệu, kết quả kiểm tra, lộ trình v2.2 → v2.6 có tiêu chí hoàn thành, các việc cần Sếp chốt.
+- Cập nhật `README.md` (mã module chuẩn, cấu trúc thư mục đủ 11 module) và `UPDATE.md` (lộ trình mới).
+
+---
+
 ## [2.1.0] – 29/10/2026 (THẬP DIỆN KIẾN TRÚC DECAGON & TRUNG TÂM PHÊ DUYỆT 1-CHẠM)
 
 ### 🚀 Nâng cấp Cấu trúc 10 Mảng & Dịch Vụ Dùng Chung
