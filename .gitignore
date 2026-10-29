@@ -12,3 +12,6 @@ node_modules/
 .wrangler/
 .vscode/
 .idea/
+
+# Thu muc .git cu bi khoa (sao luu)
+.git-old-*/
