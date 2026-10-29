@@ -1,6 +1,6 @@
 # SHIN AIOS v2 – HỆ THỐNG ĐIỀU HÀNH HỢP NHẤT ĐA MODULE
 *1 Web duy nhất tích hợp toàn diện mọi tính năng của Hệ sinh thái SHIN v1 · Dữ liệu chung · Khác giao diện.*  
-*Địa chỉ trực tuyến: **[cmubeta2.github.io/shin-v2](https://cmubeta2.github.io/shin-v2/)** · Phiên bản: **v2.0.0**.*
+*Địa chỉ trực tuyến: **[cmubeta2.github.io/shin-v2](https://cmubeta2.github.io/shin-v2/)** · Phiên bản: **v2.1.0**.*
 
 ---
 
@@ -8,23 +8,31 @@
 
 SHIN v2 là phiên bản hợp nhất đa module theo định hướng chiến lược của Sếp Huỳnh Trường Thanh Tâm:
 - **1 Web duy nhất:** Gom toàn bộ các phân hệ nghiệp vụ độc lập trước đây vào một giao diện web duy nhất, tải mượt, chuẩn công thái học di động và máy tính.
-- **Dữ liệu chung 100% với v1:** Không tạo cơ sở dữ liệu mới; v2 kết nối trực tiếp vào các máy chủ Google Apps Script và Google Sheets mà v1 đang dùng. Người dùng có thể sử dụng v1 hoặc v2 tùy theo thói quen mà dữ liệu luôn đồng bộ thời gian thực.
-- **Thiết kế dạng Module:** Kiến trúc cắm-rút (plug-and-play), mỗi nghiệp vụ là một module độc lập kế thừa cùng một bộ khung (Shell Router) và hệ thống thiết kế.
+- **Thập diện kiến trúc Decagon (10 Mảng Nghiệp Vụ):** Thiết kế fractal Lego blocks theo 3 tầng (Nền tảng & Dịch vụ dùng chung ➜ 10 Mảng nghiệp vụ ➜ Gói giải pháp tư vấn số).
+- **Hộp thư Phê duyệt 1-Chạm (Universal Approval Center):** Gom toàn bộ yêu cầu duyệt từ Phòng khám, Dự án, Nhân sự và Marketing về 1 màn hình duy nhất cho Sếp.
+- **Khung Báo Cáo Nhanh Mỗi Ngày (Daily Flash Report) 4 Khối:** Cho mảng Quản lý Dự án (1. Tiến độ; 2. Vướng mắc & Đề xuất; 3. Tài chính phát sinh; 4. Việc chờ Sếp duyệt).
+- **Dữ liệu chung 100% với v1:** Không tạo cơ sở dữ liệu mới; v2 kết nối trực tiếp vào các máy chủ Google Apps Script và Google Sheets mà v1 đang dùng.
 - **Đa chế độ:**
   - **Chế độ Trình diễn (Demo Showcase):** Hoạt động hoàn toàn tự động khi không có Token bí mật, hiển thị số liệu mẫu sinh động, an toàn tuyệt đối khi đưa lên GitHub công khai.
   - **Chế độ Trực tiếp (Live Mode):** Kích hoạt khi có Token HMAC-SHA256 `?t=h1...`, tự động gọi thẳng các endpoint `/exec` qua POST `text/plain` để nạp dữ liệu thật.
 
 ---
 
-## 2. MA TRẬN 5 MODULE HỢP NHẤT
+## 2. MA TRẬN 10 MẢNG NGHIỆP VỤ & DỊCH VỤ DÙNG CHUNG
 
-| STT | Module | Mã | Trách nhiệm & Nghiệp vụ cốt lõi | Bộ màu mặc định |
+| STT | Phân hệ / Module | Mã | Trách nhiệm & Nghiệp vụ cốt lõi | Bộ màu mặc định |
 |---|---|---|---|---|
-| 1 | **Executive Hub** | `HUB` | Bàn làm việc trung tâm, gom việc toàn hệ, xem thẻ 3 số từng mảng, Tab 🧭 Điều hành 2 chiều, điều phối bot Telegram. | Executive Hub (Xanh Quản trị) |
-| 2 | **KPI Toàn Viện** | `KPI` | Ban Kiểm Soát theo dõi AOP 2026/2027, bản tin tạm tính tháng, soát lỗi chốt quý, nháp báo cáo quý (đọc TV3 Read-Only). | Crimson Authority (Đỏ BKS) |
-| 3 | **Tuyển Sinh** | `TS` | Vận hành 3 chiến dịch tuyển sinh thật (GDU, SP Huế, Y tế), hoa hồng bậc thang đại lý, tiếp nhận lead web tự động. | Fintech Growth (Tím Tăng trưởng) |
-| 4 | **Khảo Sát Hài Lòng** | `KS` | Nền tảng khảo sát trải nghiệm người bệnh độc lập theo chuẩn ACHSI 5 trụ cột, phát hiện phản hồi tiêu cực trong 15 phút. | Clinical Precision (Teal 700 AAA) |
-| 5 | **Phòng Khám & PTKH** | `PK` | Vận hành phòng khám ngoại trú: nộp báo cáo ngày, chụp ảnh minh chứng, phân công công việc, xếp lịch trực tuần. | Hoàng Kim & Hổ Phách |
+| 0A | **Quản Trị Module** | `caidat` | Bật/tắt module, cấu hình phân quyền RBAC toàn hệ sinh thái. | Cyber Terminal |
+| 0B | **Phê Duyệt 1-Chạm** | `pheduyet` | Universal Approval Center: duyệt báo cáo ca, tạm ứng chi phí, đổi ca. | Executive Hub |
+| 1 | **Executive Hub** | `hub` | Bàn làm việc trung tâm, gom việc toàn hệ, Tab 🧭 Điều hành 2 chiều. | Executive Hub |
+| 1 | **BKS KPI Toàn Viện** | `kpi` | Theo dõi AOP 2026/2027, bản tin tạm tính tháng, soát lỗi chốt quý. | Crimson Authority |
+| 1 | **Khảo Sát ACHSI** | `ks` | Khảo sát trải nghiệm người bệnh 5 trụ cột chuẩn quốc tế ACHSI. | Clinical Precision |
+| 2 | **Khách Hàng & Đối Tác** | `crm` | CRM B2B KSK Doanh nghiệp, Học viên, CTV, Nhà cung ứng (Không lưu bệnh nhân). | Executive Hub |
+| 4 | **Giáo Dục & Tuyển Sinh** | `ts` | Vận hành chiến dịch tuyển sinh, hoa hồng bậc thang, đón nhận lead. | Fintech Growth |
+| 5 | **Phòng Khám & PTKH** | `pk` | Báo cáo ca ngày, minh chứng ảnh Drive, xếp lịch trực tuần ngoại trú. | Hoàng Kim & Hổ Phách |
+| 6 | **Quản Lý Dự Án** | `duan` | Master Dashboard & Báo cáo nhanh mỗi ngày 4 khối (Daily Flash). | Executive Hub |
+| 7 | **Quản Lý Công Việc** | `congviec` | Universal Task Bus liên thông việc đa nguồn, Kanban 3 cột. | Executive Hub |
+| 9 | **Thư Viện Tri Thức** | `trithuc` | Second Brain kết nối Obsidian Vault và kho quy trình SOP chuẩn. | Nordic Minimalist |
 
 ---
 

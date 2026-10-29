@@ -1,16 +1,22 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Tích hợp toàn diện 5 module: Hub, KPI, Tuyển Sinh, Khảo Sát, Phòng Khám
- * Quản trị trạng thái, đổi phong cách giao diện và liên thông dữ liệu.
+ * Phiên bản: v2.1.0 (Thập diện kiến trúc Decagon – 10 Mảng Nghiệp Vụ)
+ * Tích hợp toàn diện các module, quản trị trạng thái, đổi phong cách giao diện và liên thông dữ liệu.
  */
 
 const ShinApp = (function() {
   const MODULES = [
     ModuleHub,
     ModuleKPI,
-    ModuleTuyenSinh,
     ModuleKhaoSat,
-    ModulePhongKham
+    ModuleCRM,
+    ModuleTuyenSinh,
+    ModulePhongKham,
+    ModuleDuAn,
+    ModuleCongViec,
+    ModulePheDuyet,
+    ModuleTriThuc,
+    ModuleCaiDat
   ];
 
   const PALETTES = [
@@ -22,6 +28,39 @@ const ShinApp = (function() {
     { id: 'cyber', ten: 'Cyber Terminal', mauChinh: '#10b981', moTa: 'Giám sát hệ thống & Nhật ký tác vụ' },
     { id: 'crimson', ten: 'Crimson Authority', mauChinh: '#991b1b', moTa: 'Ban Kiểm Soát & Kỷ cương' },
     { id: 'mocha', ten: 'Mocha Warmth', mauChinh: '#854d0e', moTa: 'Nhân sự & Lịch trực ấm áp' }
+  ];
+
+  // Định nghĩa Thập diện kiến trúc 3 cụm chuẩn
+  const DECAGON_GROUPS = [
+    {
+      tenNhom: "TẦNG 1: ĐIỀU HÀNH & NỀN TẢNG",
+      icon: "🏢",
+      danhSach: [
+        { ma: "hub", ten: "Điều Hành Hub", code: "MẢNG 1", icon: "🏢" },
+        { ma: "kpi", ten: "BKS KPI Viện", code: "MẢNG 1", icon: "📊" },
+        { ma: "ks", ten: "Khảo Sát ACHSI", code: "MẢNG 1", icon: "🩺" },
+        { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", code: "TẦNG 0B", icon: "⚡", badge: "4" },
+        { ma: "trithuc", ten: "Tri Thức & SOP", code: "MẢNG 9", icon: "🧠" },
+        { ma: "caidat", ten: "Quản Trị Module", code: "TẦNG 0A", icon: "⚙️" }
+      ]
+    },
+    {
+      tenNhom: "TẦNG 2: VẬN HÀNH NỘI BỘ",
+      icon: "⚙️",
+      danhSach: [
+        { ma: "duan", ten: "Quản Lý Dự Án", code: "MẢNG 6", icon: "📌", sub: "Flash Report" },
+        { ma: "phongkham", ten: "Vận Hành PK & PTKH", code: "MẢNG 5", icon: "🏥" },
+        { ma: "congviec", ten: "Công Việc (Task Bus)", code: "MẢNG 7", icon: "📋" }
+      ]
+    },
+    {
+      tenNhom: "TẦNG 3: TĂNG TRƯỞNG & ĐỐI TÁC",
+      icon: "🚀",
+      danhSach: [
+        { ma: "crm", ten: "Khách Hàng & B2B", code: "MẢNG 2", icon: "👥" },
+        { ma: "ts", ten: "Giáo Dục & Tuyển Sinh", code: "MẢNG 4", icon: "🎓" }
+      ]
+    }
   ];
 
   let currentModule = 'hub';
@@ -39,6 +78,9 @@ const ShinApp = (function() {
     // Dựng thanh chọn module
     veThanhModule();
 
+    // Dựng Drawer Decagon 10 mảng
+    veDecagonDrawer();
+
     // Dựng menu đáy
     veMenuDay();
 
@@ -48,9 +90,12 @@ const ShinApp = (function() {
     // Tải và hiển thị module mặc định
     chuyenModule(currentModule);
 
-    // Lắng nghe sự kiện bàn phím Esc đóng modal
+    // Lắng nghe sự kiện bàn phím Esc đóng modal và drawer
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') dongModal();
+      if (e.key === 'Escape') {
+        dongModal();
+        dongDecagonDrawer();
+      }
     });
   }
 
@@ -91,13 +136,50 @@ const ShinApp = (function() {
     const bar = document.getElementById('moduleBar');
     if (!bar) return;
 
-    bar.innerHTML = MODULES.map(m => `
+    // Nút mở Decagon Hub ở đầu thanh module
+    let itemsHtml = `
+      <button class="module-chip" onclick="ShinApp.moDecagonDrawer()" style="background:var(--primary-soft); color:var(--primary); font-weight:800; border-color:var(--primary);">
+        <span>☰</span>
+        <span>10 Mảng</span>
+      </button>
+    `;
+
+    itemsHtml += MODULES.map(m => `
       <button class="module-chip ${m.ma === currentModule ? 'active' : ''}" 
               onclick="ShinApp.chuyenModule('${m.ma}')" 
               data-mod="${m.ma}">
         <span>${m.bieuTuong}</span>
         <span>${m.ten}</span>
       </button>
+    `).join('');
+
+    bar.innerHTML = itemsHtml;
+  }
+
+  function veDecagonDrawer() {
+    const body = document.getElementById('decagonBody');
+    if (!body) return;
+
+    body.innerHTML = DECAGON_GROUPS.map(g => `
+      <div>
+        <div class="decagon-group-title">
+          <span>${g.icon}</span>
+          <span>${g.tenNhom}</span>
+        </div>
+        <div class="decagon-grid">
+          ${g.danhSach.map(item => `
+            <div class="decagon-card ${item.ma === currentModule ? 'active' : ''}" 
+                 onclick="ShinApp.chuyenModule('${item.ma}'); ShinApp.dongDecagonDrawer();">
+              <span class="decagon-icon">${item.icon}</span>
+              <div style="flex:1; min-width:0;">
+                <div class="decagon-code">${item.code}</div>
+                <div class="decagon-name">${item.ten}</div>
+              </div>
+              ${item.badge ? `<span class="badge-count">${item.badge}</span>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>
     `).join('');
   }
 
@@ -107,10 +189,10 @@ const ShinApp = (function() {
 
     const navItems = [
       { id: 'home', icon: '🏠', label: 'Hôm nay', badge: '' },
-      { id: 'report', icon: '📝', label: 'Báo cáo', badge: '3' },
-      { id: 'tasks', icon: '✅', label: 'Việc', badge: '6' },
-      { id: 'stats', icon: '📊', label: 'Hiệu suất', badge: '' },
-      { id: 'profile', icon: '👤', label: 'Tôi', badge: '' }
+      { id: 'pheduyet', icon: '⚡', label: 'Phê duyệt', badge: '4' },
+      { id: 'duan', icon: '📌', label: 'Dự án', badge: '' },
+      { id: 'crm', icon: '👥', label: 'Đối tác', badge: '' },
+      { id: 'decagon', icon: '☰', label: '10 Mảng', badge: '' }
     ];
 
     nav.innerHTML = navItems.map(item => `
@@ -155,8 +237,33 @@ const ShinApp = (function() {
     document.querySelectorAll('.module-chip').forEach(chip => {
       if (chip.dataset.mod === maMod) {
         chip.classList.add('active');
+        chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
       } else {
         chip.classList.remove('active');
+      }
+    });
+
+    // Cập nhật Decagon drawer cards
+    document.querySelectorAll('.decagon-card').forEach(card => {
+      if (card.getAttribute('onclick') && card.getAttribute('onclick').includes(`'${maMod}'`)) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    });
+
+    // Đồng bộ trạng thái Bottom Nav
+    if (maMod === 'hub') currentNav = 'home';
+    else if (maMod === 'pheduyet') currentNav = 'pheduyet';
+    else if (maMod === 'duan') currentNav = 'duan';
+    else if (maMod === 'crm') currentNav = 'crm';
+    else currentNav = '';
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+      if (item.dataset.nav === currentNav) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
       }
     });
 
@@ -173,11 +280,24 @@ const ShinApp = (function() {
     `;
 
     // Gọi API (Tự động rẽ nhánh Live hoặc Demo)
-    const res = await SHIN_API.goi(targetMod.ma.toUpperCase(), 'webHomNay', {});
-    targetMod.render(container, res.data);
+    let resData = null;
+    try {
+      const res = await SHIN_API.goi(targetMod.ma.toUpperCase(), 'webHomNay', {});
+      if (res && res.data) resData = res.data;
+    } catch (e) {
+      console.warn('[Shin] Lỗi gọi API, dùng fallback demo', e);
+    }
+
+    targetMod.render(container, resData);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function chuyenNav(navId) {
+    if (navId === 'decagon') {
+      moDecagonDrawer();
+      return;
+    }
+
     currentNav = navId;
     document.querySelectorAll('.nav-item').forEach(item => {
       if (item.dataset.nav === navId) {
@@ -189,15 +309,29 @@ const ShinApp = (function() {
 
     if (navId === 'home') {
       chuyenModule('hub');
-    } else if (navId === 'stats') {
-      chuyenModule('kpi');
-    } else if (navId === 'report') {
-      chuyenModule('phongkham');
-    } else if (navId === 'profile') {
-      moCaiDat();
+    } else if (navId === 'pheduyet') {
+      chuyenModule('pheduyet');
+    } else if (navId === 'duan') {
+      chuyenModule('duan');
+    } else if (navId === 'crm') {
+      chuyenModule('crm');
     } else {
       toast(`Chuyển sang mục: ${navId}`, 'info');
     }
+  }
+
+  function moDecagonDrawer() {
+    const drawer = document.getElementById('decagonDrawer');
+    const overlay = document.getElementById('decagonOverlay');
+    if (drawer) drawer.classList.add('open');
+    if (overlay) overlay.classList.add('open');
+  }
+
+  function dongDecagonDrawer() {
+    const drawer = document.getElementById('decagonDrawer');
+    const overlay = document.getElementById('decagonOverlay');
+    if (drawer) drawer.classList.remove('open');
+    if (overlay) overlay.classList.remove('open');
   }
 
   function moCaiDat() {
@@ -275,6 +409,8 @@ const ShinApp = (function() {
     apDungPalette,
     chuyenModule,
     chuyenNav,
+    moDecagonDrawer,
+    dongDecagonDrawer,
     moCaiDat,
     dongModal,
     luuCaiDatToken,
