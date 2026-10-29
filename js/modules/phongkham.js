@@ -7,6 +7,14 @@ const ModulePhongKham = {
   ten: 'Phòng Khám',
   bieuTuong: '🏥',
   paletteMacDinh: 'gold',
+  mayChu: 'PK',
+
+  /** App Phòng khám v1 hiện chỉ mở cổng webKhoiDong (kiểm quyền) – số liệu chi tiết chưa có cổng web, nên vẫn hiện mẫu. */
+  taiLive: async function() {
+    const kq = await SHIN_API.goiCong('PK', 'webKhoiDong');
+    if (!kq.ok) return kq;
+    return { ok: true, data: null, ghiChu: 'Đã vào được app Phòng khám v1, nhưng app chưa mở cổng số liệu cho v2 – số bên dưới là MẪU. Thao tác thật làm trên app v1.' };
+  },
 
   render: function(container, data) {
     const d = data || window.SHIN_DEMO_DATA.phongkham;
@@ -85,10 +93,10 @@ const ModulePhongKham = {
   },
 
   guiBaoCao: function() {
-    ShinApp.toast('Mở giao diện nộp Báo cáo ngày & Chụp ảnh minh chứng...', 'info');
+    ShinApp.moV1('PK', 'Phòng khám');
   },
 
   xemLich: function() {
-    ShinApp.toast('Mở ma trận phân ca và xếp lịch tuần cho phòng khám...', 'info');
+    ShinApp.moV1('PK', 'Phòng khám');
   }
 };

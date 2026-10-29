@@ -7,6 +7,14 @@ const ModuleKhaoSat = {
   ten: 'Khảo Sát',
   bieuTuong: '🩺',
   paletteMacDinh: 'clinical',
+  mayChu: 'KS',
+
+  /** App Khảo sát v1 hiện chỉ mở cổng webKhoiDong (kiểm quyền) – số liệu chi tiết chưa có cổng web, nên vẫn hiện mẫu. */
+  taiLive: async function() {
+    const kq = await SHIN_API.goiCong('KS', 'webKhoiDong');
+    if (!kq.ok) return kq;
+    return { ok: true, data: null, ghiChu: 'Đã vào được app Khảo sát v1, nhưng app chưa mở cổng số liệu cho v2 – số bên dưới là MẪU. Thao tác thật làm trên app v1.' };
+  },
 
   render: function(container, data) {
     const d = data || window.SHIN_DEMO_DATA.khaosat;
@@ -85,10 +93,10 @@ const ModuleKhaoSat = {
   },
 
   guiKhaoSat: function() {
-    ShinApp.toast('Mở form khảo sát trải nghiệm người bệnh 17 câu...', 'info');
+    ShinApp.moV1('KS', 'Khảo sát');
   },
 
   xuatBaoCao: function() {
-    ShinApp.toast('Xuất báo cáo phân tích xu hướng khảo sát hàng tháng...', 'info');
+    ShinApp.moV1('KS', 'Khảo sát');
   }
 };

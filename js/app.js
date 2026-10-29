@@ -1,10 +1,12 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.1.1 (Thập diện kiến trúc Decagon – 10 Mảng Nghiệp Vụ)
- * Tích hợp toàn diện các module, quản trị trạng thái, đổi phong cách giao diện và liên thông dữ liệu.
+ * Phiên bản: v2.2.0 – nối thật vào 5 máy chủ v1 (Hub · KPI · TS · KS · PK), dùng chung dữ liệu với v1.
+ * Hàm dùng chung theo PHONG_CACH_APP_SHIN mục 5: esc, soVN, toast (+ Hoàn tác 6s), xacNhan2Lan, goiNut, rung.
  */
 
 const ShinApp = (function() {
+  const PHIEN_BAN = 'v2.2.0';
+
   const MODULES = [
     ModuleHub,
     ModuleKPI,
@@ -39,7 +41,7 @@ const ShinApp = (function() {
         { ma: "hub", ten: "Executive Hub", icon: "🏢" },
         { ma: "kpi", ten: "BKS KPI Viện", icon: "📊" },
         { ma: "khaosat", ten: "Khảo Sát ACHSI", icon: "🩺" },
-        { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", icon: "⚡", badge: "4" },
+        { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", icon: "⚡", badge: "4", chiMau: true },
         { ma: "trithuc", ten: "Tri Thức & SOP", icon: "🧠" },
         { ma: "caidat", ten: "Quản Trị Module", icon: "⚙️" }
       ]
@@ -63,32 +65,188 @@ const ShinApp = (function() {
     }
   ];
 
+  // Mảng không được tắt (M0.1): bàn làm việc chính và chính màn Quản trị
+  const MANG_LUON_BAT = ['hub', 'caidat'];
+
+  // Mã liên kết nhanh của Hub (webKhoiDong.lienKet.app[].ma) ➜ khóa máy chủ v2
+  const MA_LIEN_KET = { HUB: 'HUB', KPI: 'KPI', TS: 'TS', KS: 'KS', PK: 'PK', PTKH: 'PK' };
+
   let currentModule = 'hub';
   let currentNav = 'home';
-  let currentPalette = localStorage.getItem('shin_palette') || 'executive';
-  let currentThemeMode = localStorage.getItem('shin_theme_mode') || 'system';
-  let currentTheme = localStorage.getItem('shin_theme') || 'light';
-  let currentCochu = localStorage.getItem('shin_cochu') || 'vua';
+  let currentPalette = docLS('shin_palette') || 'executive';
+  let currentThemeMode = docLS('shin_theme_mode') || 'system';
+  let currentTheme = docLS('shin_theme') || 'light';
+  let currentCochu = docLS('shin_cochu') || 'vua';
+
+  // Trạng thái chế độ Live: người dùng (Hub), liên kết sang app v1, quyền từng máy chủ
+  const live = { nguoi: null, lienKet: {}, linkHub: '', quyen: {}, soChuaDoc: 0, hubSanSang: null };
+  let luotTai = 0;
+
+  /* ---------------- Hàm dùng chung (PHONG_CACH_APP_SHIN mục 5) ---------------- */
+
+  function docLS(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function luuLS(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+  /** Chữ từ máy chủ / sheet ➜ an toàn khi chèn vào HTML (cấm innerHTML dữ liệu thô). */
+  function esc(v) {
+    return String(v === undefined || v === null ? '' : v)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  /** Số kiểu VN: "." tách nghìn, "," thập phân. null / không phải số ➜ "–". */
+  function soVN(n, soLe) {
+    if (n === null || n === undefined || n === '' || !isFinite(Number(n))) return '–';
+    const x = Number(n), p = Math.pow(10, soLe || 0), lam = Math.round(Math.abs(x) * p) / p;
+    const nguyen = Math.floor(lam), le = Math.round((lam - nguyen) * p);
+    let s = String(nguyen).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    if (le) s += ',' + String(le).padStart(String(p).length - 1, '0').replace(/0+$/, '');
+    return (x < 0 ? '−' : '') + s;
+  }
+
+  /** Phân số (1 = 100%) ➜ "94,2%". */
+  function ptVN(v, soLe) {
+    return v === null || v === undefined || !isFinite(Number(v)) ? '–' : soVN(Number(v) * 100, soLe === undefined ? 1 : soLe) + '%';
+  }
+
+  /** "T4, 07/10/2026" */
+  function ngayVN(d) {
+    d = d || new Date();
+    const thu = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'][d.getDay()];
+    const p = x => (x < 10 ? '0' : '') + x;
+    return `${thu}, ${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()}`;
+  }
+
+  /** "Chào buổi sáng, Tâm 👋" – lời chào theo giờ + tên gọi (chữ cuối họ tên). */
+  function loiChao(hoTen) {
+    const g = new Date().getHours();
+    const buoi = g < 11 ? 'buổi sáng' : g < 14 ? 'buổi trưa' : g < 18 ? 'buổi chiều' : 'buổi tối';
+    const tenGoi = String(hoTen || '').trim().split(/\s+/).pop();
+    return `Chào ${buoi}${tenGoi ? ', ' + tenGoi : ''} 👋`;
+  }
+
+  /** Rung phản hồi: 'nhe' 5ms · 'xong' [10,30,10] · 'canh' 40ms. */
+  function rung(kieu) {
+    try {
+      if (!navigator.vibrate) return;
+      navigator.vibrate(kieu === 'xong' ? [10, 30, 10] : kieu === 'canh' ? 40 : 5);
+    } catch (e) {}
+  }
+
+  /**
+   * Toast: loai 'success' | 'info' | 'warn' | 'error'. Thời gian 3,5s / cảnh báo 4,5s / lỗi 6s.
+   * opts.nhan + opts.bam ➜ có nút (vd "Hoàn tác"), giữ ≥ 6s. Trả về hàm đóng toast.
+   */
+  function toast(msg, loai = 'success', opts = {}) {
+    const container = document.getElementById('toastContainer');
+    if (!container) return () => {};
+
+    const coNut = !!(opts.nhan && opts.bam);
+    const thoiGian = opts.thoiGian || (coNut ? 6000 : loai === 'error' ? 6000 : loai === 'warn' ? 4500 : 3500);
+    const toastEl = document.createElement('div');
+    toastEl.className = `toast toast-${loai}`;
+    toastEl.innerHTML = `
+      <span>${esc(msg)}</span>
+      ${coNut ? `<button class="toast-btn">${esc(opts.nhan)}</button>` : ''}
+      <div class="toast-bar" style="animation-duration:${thoiGian}ms"></div>
+    `;
+    let daDong = false, hen = null;
+    // ketThuc: 'het' (hết giờ hoặc bấm vào thân toast ➜ chạy khiHet) | 'nut' (bấm nút ➜ chỉ chạy bam, KHÔNG chạy khiHet)
+    const dong = (ketThuc) => {
+      if (daDong) return;
+      daDong = true;
+      clearTimeout(hen);
+      toastEl.remove();
+      if (ketThuc === 'het' && opts.khiHet) opts.khiHet();
+      if (ketThuc === 'nut') opts.bam();
+    };
+    toastEl.addEventListener('click', (e) => {
+      dong(coNut && e.target.classList.contains('toast-btn') ? 'nut' : 'het');
+    });
+    container.appendChild(toastEl);
+    hen = setTimeout(() => dong('het'), thoiGian);
+    return () => dong('');
+  }
+
+  /**
+   * Không hỏi – cho Hoàn tác: đổi giao diện ngay (lamTruoc), chỉ gửi máy chủ (thucHien) khi hết 6 giây.
+   * Bấm Hoàn tác trong 6 giây ➜ traLai() và KHÔNG gửi gì.
+   */
+  function hanhDongHoanTac(msg, { lamTruoc, traLai, thucHien }) {
+    if (lamTruoc) lamTruoc();
+    rung('nhe');
+    toast(msg, 'success', {
+      nhan: 'Hoàn tác',
+      bam: () => { if (traLai) traLai(); toast('Đã hoàn tác – không có gì được gửi đi.', 'info'); },
+      khiHet: async () => {
+        try { await thucHien(); rung('xong'); }
+        catch (e) { if (traLai) traLai(); toast(e.message || 'Gửi không được – đã trả lại như cũ.', 'error'); }
+      }
+    });
+  }
+
+  /** Việc khó hoàn tác: lần 1 nhắc (toast vàng), bấm lại trong 5 giây mới làm. */
+  const choXacNhan = {};
+  function xacNhan2Lan(khoa, msg, viec) {
+    const bay = Date.now();
+    if (choXacNhan[khoa] && bay - choXacNhan[khoa] < 5000) {
+      delete choXacNhan[khoa];
+      rung('canh');
+      viec();
+      return;
+    }
+    choXacNhan[khoa] = bay;
+    toast(msg + ' – bấm lại lần nữa trong 5 giây để làm.', 'warn', { thoiGian: 5000 });
+  }
+
+  /**
+   * Gọi máy chủ gắn với 1 nút: khóa nút + đổi chữ "Đang lưu…", chặn bấm trùng cùng lệnh trong lúc chờ.
+   * Lỗi ➜ toast đỏ dễ hiểu. Trả về kết quả của ham() hoặc null nếu lỗi / đang chạy.
+   */
+  const dangGui = {};
+  async function goiNut(nut, chuCho, ham, khoa) {
+    khoa = khoa || chuCho;
+    if (dangGui[khoa]) return null;
+    dangGui[khoa] = true;
+    const chuCu = nut ? nut.innerHTML : '';
+    if (nut) { nut.disabled = true; nut.innerHTML = '⏳ ' + esc(chuCho); }
+    const thanh = document.getElementById('thanhCho');
+    if (thanh) thanh.classList.add('chay');
+    const bao5 = setTimeout(() => toast('Máy chủ đang xử lý, anh/chị chờ chút…', 'info'), 5000);
+    const bao20 = setTimeout(() => toast('Mạng đang yếu – kiểm tra 4G/Wi-Fi nếu chờ lâu.', 'warn'), 20000);
+    try {
+      return await ham();
+    } catch (e) {
+      toast(e.message || 'Có lỗi – anh/chị bấm lại giúp em.', 'error');
+      return null;
+    } finally {
+      clearTimeout(bao5); clearTimeout(bao20);
+      delete dangGui[khoa];
+      if (thanh) thanh.classList.remove('chay');
+      if (nut && nut.isConnected) { nut.disabled = false; nut.innerHTML = chuCu; }
+    }
+  }
+
+  /** Gọi máy chủ và ném lỗi tiếng Việt nếu không được – dùng trong goiNut / hanhDongHoanTac. */
+  async function goiBat(appKey, hanh, ...thamSo) {
+    const kq = appKey === 'HUB' ? await SHIN_API.goi(appKey, hanh, thamSo[0] || {}) : await SHIN_API.goiCong(appKey, hanh, ...thamSo);
+    if (!kq.ok) throw new Error(SHIN_API.moTaLoi(kq));
+    return kq.data;
+  }
+
+  /* ---------------- Khởi động ---------------- */
 
   function init() {
-    // Áp dụng theme theo chế độ (Sáng / Tối / Theo máy / Theo giờ)
     apDungThemeMode(currentThemeMode);
     apDungPalette(currentPalette);
     apDungCochu(currentCochu);
 
-    // Dựng Drawer Decagon 10 mảng (gọn 1 cột, Icon + Tên)
     veDecagonDrawer();
-
-    // Dựng thanh điều hướng đáy màn hình (Bottom Nav có nút Cài đặt ở cuối)
     veMenuDay();
-
-    // Cập nhật thẻ trạng thái kết nối trên Header
     capNhatBannerTrangThai();
-
-    // Tải và hiển thị module mặc định
+    if (SHIN_API.laCheDoLive()) khoiDongLive();
     chuyenModule(currentModule);
 
-    // Lắng nghe sự kiện bàn phím Esc đóng modal và drawer
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         dongModal();
@@ -96,59 +254,97 @@ const ShinApp = (function() {
       }
     });
 
-    // Lắng nghe sự kiện đổi theme từ hệ điều hành nếu đang để "Theo máy"
     if (window.matchMedia) {
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (currentThemeMode === 'system') {
-          apDungThemeMode('system');
-        }
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (currentThemeMode === 'system') apDungThemeMode('system');
       });
     }
   }
 
+  /**
+   * Live: hỏi Hub webKhoiDong (tên, vai trò, link sang app v1, số tin chưa đọc), rồi hỏi webKhoiDong
+   * của 4 app còn lại song song ➜ mảng nào trả 'quyen' thì ẩn khỏi menu (giữ nguyên quyền từng app v1).
+   */
+  function khoiDongLive() {
+    live.hubSanSang = nhanDienHub();
+    live.hubSanSang.then(hoiQuyenCacApp);
+    return live.hubSanSang;
+  }
+
+  async function nhanDienHub() {
+    const kqHub = await SHIN_API.goi('HUB', 'webKhoiDong', {});
+    if (kqHub.ok) {
+      const d = kqHub.data || {};
+      live.nguoi = d.nguoi || null;
+      live.soChuaDoc = Number(d.soChuaDoc) || 0;
+      live.linkHub = d.linkExec ? d.linkExec + '?t=' + encodeURIComponent(SHIN_API.layToken()) : '';
+      ((d.lienKet && d.lienKet.app) || []).forEach(a => {
+        const khoa = MA_LIEN_KET[String(a.ma || '').toUpperCase()];
+        if (khoa && a.link) live.lienKet[khoa] = a.link;
+      });
+      live.quyen.HUB = 'co';
+      capNhatNguoiDung();
+    } else {
+      live.quyen.HUB = kqHub.loi === 'quyen' ? 'khong' : 'loi';
+      if (kqHub.loi === 'quyen') toast('Token không vào được Hub – kiểm tra lại link đăng nhập.', 'error');
+    }
+    veMenuDay();
+  }
+
+  async function hoiQuyenCacApp() {
+    const cac = ['KPI', 'TS', 'KS', 'PK'];
+    const ketQua = await Promise.all(cac.map(k => SHIN_API.goiCong(k, 'webKhoiDong')));
+    ketQua.forEach((kq, i) => {
+      live.quyen[cac[i]] = kq.ok ? 'co' : kq.loi === 'quyen' ? 'khong' : 'loi';
+    });
+    veDecagonDrawer();
+    veMenuDay();
+  }
+
+  function capNhatNguoiDung() {
+    const sub = document.querySelector('.topbar-sub');
+    if (sub && live.nguoi) sub.textContent = `${live.nguoi.hoTen || ''} · ${live.nguoi.vaiTro || ''}`;
+  }
+
+  /** Link mở app v1 (đã gắn token) cho 1 máy chủ – dùng cho việc v2 chưa làm màn riêng. */
+  function linkV1(khoa) {
+    return khoa === 'HUB' ? live.linkHub : (live.lienKet[khoa] || '');
+  }
+
+  function moV1(khoa, tenViec) {
+    const link = linkV1(khoa);
+    if (!link) {
+      toast(SHIN_API.laCheDoLive() ? 'Chưa lấy được link app v1 – mở Hub v1 để vào.' : `Chế độ trình diễn: ${tenViec || 'mục này'} mở trên app v1 khi có token.`, 'info');
+      return;
+    }
+    window.open(link, '_blank', 'noopener');
+  }
+
+  /* ---------------- Giao diện: theme, bộ màu, cỡ chữ ---------------- */
+
   function chonThemeMode(mode) {
     currentThemeMode = mode;
-    localStorage.setItem('shin_theme_mode', mode);
+    luuLS('shin_theme_mode', mode);
     apDungThemeMode(mode);
-
-    // Cập nhật active button trong modal
-    document.querySelectorAll('.theme-mode-btn').forEach(btn => {
-      if (btn.dataset.mode === mode) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
+    document.querySelectorAll('.theme-mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
     const tenCheDo = mode === 'light' ? 'Sáng' : mode === 'dark' ? 'Tối' : mode === 'system' ? 'Theo máy' : 'Theo giờ';
     toast(`Đã áp dụng chế độ hiển thị: ${tenCheDo}`, 'info');
   }
 
   function apDungThemeMode(mode) {
     let resolvedTheme = 'light';
-
-    if (mode === 'light') {
-      resolvedTheme = 'light';
-    } else if (mode === 'dark') {
+    if (mode === 'dark') {
       resolvedTheme = 'dark';
     } else if (mode === 'system') {
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      resolvedTheme = prefersDark ? 'dark' : 'light';
+      resolvedTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     } else if (mode === 'auto') {
       // Theo giờ: 06:00 đến 18:00 là Sáng, còn lại là Tối
       const gio = new Date().getHours();
       resolvedTheme = (gio >= 6 && gio < 18) ? 'light' : 'dark';
     }
-
     currentTheme = resolvedTheme;
     document.documentElement.setAttribute('data-theme', resolvedTheme);
-    localStorage.setItem('shin_theme', resolvedTheme);
-  }
-
-  function apDungTheme(theme) {
-    currentTheme = theme;
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('shin_theme', theme);
+    luuLS('shin_theme', resolvedTheme);
   }
 
   function doiTheme() {
@@ -158,154 +354,192 @@ const ShinApp = (function() {
   function apDungPalette(paletteId) {
     currentPalette = paletteId;
     document.documentElement.setAttribute('data-palette', paletteId);
-    localStorage.setItem('shin_palette', paletteId);
-    
-    // Cập nhật trạng thái trong modal nếu đang mở
-    document.querySelectorAll('.palette-card').forEach(card => {
-      if (card.dataset.palette === paletteId) {
-        card.classList.add('active');
-      } else {
-        card.classList.remove('active');
-      }
-    });
+    luuLS('shin_palette', paletteId);
+    document.querySelectorAll('.palette-card').forEach(card => card.classList.toggle('active', card.dataset.palette === paletteId));
   }
 
   function apDungCochu(cochu) {
     currentCochu = cochu;
     document.documentElement.setAttribute('data-cochu', cochu);
-    localStorage.setItem('shin_cochu', cochu);
+    luuLS('shin_cochu', cochu);
   }
+
+  /* ---------------- M0.1 – Bật / tắt mảng (lưu trên máy này) ---------------- */
+
+  function dsMangTat() {
+    try { return JSON.parse(docLS('shin_mang_tat') || '[]'); } catch (e) { return []; }
+  }
+
+  function datMangBat(ma, bat) {
+    if (MANG_LUON_BAT.indexOf(ma) >= 0) return false;
+    const ds = dsMangTat().filter(x => x !== ma);
+    if (!bat) ds.push(ma);
+    luuLS('shin_mang_tat', JSON.stringify(ds));
+    veDecagonDrawer();
+    veMenuDay();
+    return true;
+  }
+
+  function mangDangBat(ma) {
+    return dsMangTat().indexOf(ma) < 0;
+  }
+
+  /** Mảng hiện trong menu: đang bật + (Live) không bị máy chủ v1 từ chối quyền. */
+  function mangDuocHien(ma) {
+    if (!mangDangBat(ma)) return false;
+    const mod = MODULES.find(m => m.ma === ma);
+    const khoa = mod && mod.mayChu;
+    return !(khoa && live.quyen[khoa] === 'khong');
+  }
+
+  /* ---------------- Menu đáy & Decagon drawer ---------------- */
 
   function veMenuDay() {
     const nav = document.getElementById('bottomNav');
     if (!nav) return;
+    const laLive = SHIN_API.laCheDoLive();
 
     const navItems = [
-      { id: 'home', icon: '🏠', label: 'Hôm nay', badge: '' },
-      { id: 'pheduyet', icon: '⚡', label: 'Phê duyệt', badge: '4' },
+      { id: 'home', icon: '🏠', label: 'Hôm nay', badge: laLive && live.soChuaDoc ? String(live.soChuaDoc) : '' },
+      // Phê duyệt 1-chạm chưa có máy chủ v1 ➜ chỉ hiện số đếm ở chế độ trình diễn
+      { id: 'pheduyet', icon: '⚡', label: 'Phê duyệt', badge: laLive ? '' : '4' },
       { id: 'duan', icon: '📌', label: 'Dự án', badge: '' },
       { id: 'crm', icon: '👥', label: 'Đối tác', badge: '' },
       { id: 'caidat', icon: '⚙️', label: 'Cài đặt', badge: '' }
     ];
 
     nav.innerHTML = navItems.map(item => `
-      <button class="nav-item ${item.id === currentNav ? 'active' : ''}" 
+      <button class="nav-item ${item.id === currentNav ? 'active' : ''}"
               onclick="ShinApp.chuyenNav('${item.id}')"
               data-nav="${item.id}">
         <span class="nav-icon">${item.icon}</span>
         <span>${item.label}</span>
-        ${item.badge ? `<span class="nav-badge">${item.badge}</span>` : ''}
+        ${item.badge ? `<span class="nav-badge">${esc(item.badge)}</span>` : ''}
       </button>
     `).join('');
-  }
 
-  function veThanhModule() {
-    // Đã có nút Menu trên Header, hàng nút module cuộn ngang đã được lược bỏ theo yêu cầu của Sếp
+    const badgeDinh = document.getElementById('countPendingApproval');
+    if (badgeDinh) badgeDinh.style.display = laLive ? 'none' : '';
   }
 
   function veDecagonDrawer() {
     const body = document.getElementById('decagonBody');
     if (!body) return;
+    const laLive = SHIN_API.laCheDoLive();
 
-    body.innerHTML = DECAGON_GROUPS.map(g => `
-      <div>
-        <div class="decagon-group-title">
-          <span>${g.icon}</span>
-          <span>${g.tenNhom}</span>
+    body.innerHTML = DECAGON_GROUPS.map(g => {
+      const ds = g.danhSach.filter(item => mangDuocHien(item.ma));
+      if (!ds.length) return '';
+      return `
+        <div>
+          <div class="decagon-group-title">
+            <span>${g.icon}</span>
+            <span>${g.tenNhom}</span>
+          </div>
+          <div class="decagon-grid">
+            ${ds.map(item => `
+              <div class="decagon-card ${item.ma === currentModule ? 'active' : ''}" data-mod="${item.ma}"
+                   onclick="ShinApp.chuyenModule('${item.ma}'); ShinApp.dongDecagonDrawer();">
+                <span class="decagon-icon">${item.icon}</span>
+                <div class="decagon-name">${item.ten}</div>
+                ${item.badge && !(item.chiMau && laLive) ? `<span class="badge-count">${item.badge}</span>` : ''}
+              </div>
+            `).join('')}
+          </div>
         </div>
-        <div class="decagon-grid">
-          ${g.danhSach.map(item => `
-            <div class="decagon-card ${item.ma === currentModule ? 'active' : ''}" 
-                 onclick="ShinApp.chuyenModule('${item.ma}'); ShinApp.dongDecagonDrawer();">
-              <span class="decagon-icon">${item.icon}</span>
-              <div class="decagon-name">${item.ten}</div>
-              ${item.badge ? `<span class="badge-count">${item.badge}</span>` : ''}
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function capNhatBannerTrangThai() {
     const pill = document.getElementById('headerStatusPill');
     if (!pill) return;
 
-    const isLive = SHIN_API.laCheDoLive();
-    if (isLive) {
+    if (SHIN_API.laCheDoLive()) {
       pill.className = 'header-status-pill live';
-      pill.innerHTML = '🟢 Live v2.1.1';
-      pill.title = 'Đang kết nối dữ liệu thật Apps Script & Sheets · Bấm để đổi Token';
+      pill.innerHTML = `🟢 Live ${PHIEN_BAN}`;
+      pill.title = 'Đang dùng dữ liệu thật của các máy chủ v1 · Bấm để đổi Token';
     } else {
       pill.className = 'header-status-pill demo';
-      pill.innerHTML = '🟡 Demo v2.1.1';
+      pill.innerHTML = `🟡 Demo ${PHIEN_BAN}`;
       pill.title = 'Chế độ Trình diễn mẫu · Bấm để nhập Token thật';
     }
   }
 
+  /* ---------------- Điều hướng & nạp module ---------------- */
+
+  /** Khung cảnh báo nguồn dữ liệu đặt đầu màn (Live mà đang hiện dữ liệu mẫu, hoặc lỗi mạng). */
+  function khungNguon(loai, chu, khoaV1) {
+    return `<div class="canh-bao-nguon ${loai}">
+      <span>${esc(chu)}</span>
+      ${khoaV1 && linkV1(khoaV1) ? `<button class="nut-chu" onclick="ShinApp.moV1('${khoaV1}')">Mở app v1 ›</button>` : ''}
+    </div>`;
+  }
+
+  function veKhongCoQuyen(container, mod) {
+    container.innerHTML = `
+      <div class="man-khong-vao">
+        <div class="man-khong-vao-tieu">Chưa vào được ${esc(mod.ten)}</div>
+        <p>Tài khoản của anh/chị chưa được cấp quyền vào app ${esc(SHIN_API.TEN_MAY_CHU[mod.mayChu] || mod.ten)} trên hệ v1.</p>
+        <p>Liên hệ người quản trị app (Admin của ${esc(SHIN_API.TEN_MAY_CHU[mod.mayChu] || 'app')}) để được thêm vào danh sách người dùng.</p>
+        <p class="nho">Không chia sẻ link đăng nhập của mình cho người khác.</p>
+        <button class="btn-primary" onclick="ShinApp.chuyenModule('hub')">🏠 Về trang Hôm nay</button>
+      </div>`;
+  }
+
   async function chuyenModule(maMod) {
     currentModule = maMod;
-    
-    // Cập nhật giao diện chip module
-    document.querySelectorAll('.module-chip').forEach(chip => {
-      if (chip.dataset.mod === maMod) {
-        chip.classList.add('active');
-        chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      } else {
-        chip.classList.remove('active');
-      }
-    });
+    const luot = ++luotTai;
 
-    // Cập nhật Decagon drawer cards
-    document.querySelectorAll('.decagon-card').forEach(card => {
-      if (card.getAttribute('onclick') && card.getAttribute('onclick').includes(`'${maMod}'`)) {
-        card.classList.add('active');
-      } else {
-        card.classList.remove('active');
-      }
-    });
+    document.querySelectorAll('.decagon-card').forEach(card => card.classList.toggle('active', card.dataset.mod === maMod));
 
-    // Đồng bộ trạng thái Bottom Nav
     if (maMod === 'hub') currentNav = 'home';
-    else if (maMod === 'pheduyet') currentNav = 'pheduyet';
-    else if (maMod === 'duan') currentNav = 'duan';
-    else if (maMod === 'crm') currentNav = 'crm';
+    else if (['pheduyet', 'duan', 'crm'].indexOf(maMod) >= 0) currentNav = maMod;
     else currentNav = '';
-
-    document.querySelectorAll('.nav-item').forEach(item => {
-      if (item.dataset.nav === currentNav) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
-    });
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.nav === currentNav));
 
     const targetMod = MODULES.find(m => m.ma === maMod) || MODULES[0];
     const container = document.getElementById('appContent');
     if (!container) return;
 
-    // Hiển thị trạng thái đang tải nhẹ nhàng
     container.innerHTML = `
-      <div style="text-align:center; padding:50px 20px; color:var(--text-muted);">
-        <div style="font-size:28px; margin-bottom:10px;">⏳</div>
-        <div>Đang nạp dữ liệu ${targetMod.ten}...</div>
+      <div class="man-tai">
+        <div class="vong-tai"></div>
+        <div>Đang tải dữ liệu ${esc(targetMod.ten)}...</div>
       </div>
     `;
 
-    // Gọi API (Tự động rẽ nhánh Live hoặc Demo)
-    let resData = null;
-    try {
-      const res = await SHIN_API.goi(targetMod.ma.toUpperCase(), 'webHomNay', {});
-      if (res && res.data) resData = res.data;
-    } catch (e) {
-      console.warn('[Shin] Lỗi gọi API, dùng fallback demo', e);
+    let data = null, banner = '';
+    if (SHIN_API.laCheDoLive()) {
+      // Chờ Hub nhận diện người dùng (tên cho lời chào, link app v1) – lỗi thì vẫn vẽ tiếp
+      if (live.hubSanSang) { try { await live.hubSanSang; } catch (e) {} }
+      if (luot !== luotTai) return;
+      if (targetMod.taiLive) {
+        let kq;
+        try { kq = await targetMod.taiLive(); } catch (e) { kq = { ok: false, loi: 'loi', chiTiet: e.message }; }
+        if (luot !== luotTai) return;   // người dùng đã chuyển màn khác trong lúc chờ
+        if (kq.ok) {
+          data = kq.data;
+          if (kq.ghiChu) banner = khungNguon('mau', kq.ghiChu, targetMod.mayChu);
+        } else if (kq.loi === 'quyen') {
+          if (targetMod.mayChu) live.quyen[targetMod.mayChu] = 'khong';
+          veKhongCoQuyen(container, targetMod);
+          return;
+        } else {
+          banner = khungNguon('loi', `${SHIN_API.moTaLoi(kq)} Đang hiện dữ liệu MẪU, không phải số thật.`, targetMod.mayChu);
+        }
+      } else {
+        banner = khungNguon('mau', 'Mảng này chưa có máy chủ trên hệ v1 – số liệu bên dưới là MẪU để duyệt giao diện.');
+      }
     }
 
-    targetMod.render(container, resData);
+    targetMod.render(container, data);
+    if (banner) container.insertAdjacentHTML('afterbegin', banner);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function chuyenNav(navId) {
+    rung('nhe');
     if (navId === 'caidat') {
       moCaiDat();
       return;
@@ -314,27 +548,8 @@ const ShinApp = (function() {
       moDecagonDrawer();
       return;
     }
-
     currentNav = navId;
-    document.querySelectorAll('.nav-item').forEach(item => {
-      if (item.dataset.nav === navId) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
-    });
-
-    if (navId === 'home') {
-      chuyenModule('hub');
-    } else if (navId === 'pheduyet') {
-      chuyenModule('pheduyet');
-    } else if (navId === 'duan') {
-      chuyenModule('duan');
-    } else if (navId === 'crm') {
-      chuyenModule('crm');
-    } else {
-      toast(`Chuyển sang mục: ${navId}`, 'info');
-    }
+    chuyenModule(navId === 'home' ? 'hub' : navId);
   }
 
   function moDecagonDrawer() {
@@ -355,24 +570,15 @@ const ShinApp = (function() {
     const modal = document.getElementById('settingsModal');
     if (!modal) return;
 
-    // Cập nhật trạng thái nút Theme Mode (Sáng / Tối / Theo máy / Theo giờ)
-    document.querySelectorAll('.theme-mode-btn').forEach(btn => {
-      if (btn.dataset.mode === currentThemeMode) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
+    document.querySelectorAll('.theme-mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === currentThemeMode));
 
     const tokenInput = document.getElementById('tokenInput');
-    if (tokenInput) {
-      tokenInput.value = SHIN_API.layToken();
-    }
+    if (tokenInput) tokenInput.value = SHIN_API.layToken();
 
     const grid = document.getElementById('paletteGrid');
     if (grid) {
       grid.innerHTML = PALETTES.map(p => `
-        <div class="palette-card ${p.id === currentPalette ? 'active' : ''}" 
+        <div class="palette-card ${p.id === currentPalette ? 'active' : ''}"
              data-palette="${p.id}"
              onclick="ShinApp.apDungPalette('${p.id}')">
           <div style="display:flex; align-items:center; justify-content:space-between;">
@@ -394,42 +600,26 @@ const ShinApp = (function() {
 
   function luuCaiDatToken() {
     const tokenInput = document.getElementById('tokenInput');
-    if (tokenInput) {
-      const val = tokenInput.value.trim();
-      SHIN_API.luuToken(val);
-      capNhatBannerTrangThai();
-      dongModal();
-      toast(val ? 'Đã lưu Token kết nối thật thành công! 🟢' : 'Đã chuyển về chế độ Trình diễn mẫu (Demo) 🟡', 'info');
-      chuyenModule(currentModule);
-    }
-  }
-
-  function toast(msg, loai = 'success') {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-
-    const toastEl = document.createElement('div');
-    toastEl.className = 'toast';
-    toastEl.innerHTML = `
-      <span>${msg}</span>
-      <button class="toast-btn" onclick="this.parentElement.remove(); ShinApp.hoanTac();">Hoàn tác</button>
-      <div class="toast-bar"></div>
-    `;
-
-    container.appendChild(toastEl);
-
-    setTimeout(() => {
-      if (toastEl.parentElement) {
-        toastEl.remove();
-      }
-    }, 6000);
-  }
-
-  function hoanTac() {
-    console.log('[Shin] Người dùng bấm hoàn tác');
+    if (!tokenInput) return;
+    const val = tokenInput.value.trim();
+    SHIN_API.luuToken(val);
+    Object.keys(live.quyen).forEach(k => delete live.quyen[k]);
+    live.nguoi = null; live.lienKet = {}; live.linkHub = ''; live.soChuaDoc = 0; live.hubSanSang = null;
+    capNhatBannerTrangThai();
+    dongModal();
+    toast(val ? 'Đã lưu Token – đang nối dữ liệu thật của hệ v1 🟢' : 'Đã chuyển về chế độ Trình diễn mẫu (Demo) 🟡', 'info');
+    const sub = document.querySelector('.topbar-sub');
+    if (sub) sub.textContent = 'Hệ thống Quản trị AI';
+    veDecagonDrawer();
+    veMenuDay();
+    if (val) khoiDongLive();
+    chuyenModule(currentModule);
   }
 
   return {
+    PHIEN_BAN,
+    MODULES,
+    MANG_LUON_BAT,
     init,
     doiTheme,
     chonThemeMode,
@@ -442,7 +632,22 @@ const ShinApp = (function() {
     dongModal,
     luuCaiDatToken,
     toast,
-    hoanTac
+    hanhDongHoanTac,
+    xacNhan2Lan,
+    goiNut,
+    goiBat,
+    esc,
+    soVN,
+    ptVN,
+    ngayVN,
+    loiChao,
+    rung,
+    linkV1,
+    moV1,
+    live,
+    datMangBat,
+    mangDangBat,
+    get mangDangMo() { return currentModule; }
   };
 })();
 

@@ -1,8 +1,10 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.1.1** · Cập nhật ngày: **29/10/2026**.*  
+*Phiên bản hiện tại: **v2.2.0** · Cập nhật ngày: **29/10/2026**.*  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
+
+> **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
 
 ---
 
@@ -14,68 +16,56 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 - **Z:** Số lần sửa đổi bên trong đợt cập nhật.
 
 ```
- [v2.0.0] ✅ ──► [v2.1.0] ✅ ──► [v2.1.1] ✅ ──► [v2.2.0] ──► [v2.3.0] ──► [v2.4.0] ──► [v2.5.0] ──► [v2.6.0]
- 1 Web đa       Decagon 10     Vá lỗi bản     Ghi dữ liệu   Mảng 2,3,6,7  Mảng 8 +     PWA + RBAC   LMS, Phễu,
- module         mảng, Duyệt    công khai,     thật 5 máy    liên thông,   tự động hóa  + Tên miền   Đồ thị tri
- 8 bộ màu       1-chạm, Flash  Quy hoạch 2.0  chủ Apps      Tài chính,    nhân sự,     riêng        thức
-                                              Script        Task Bus      SLA Telegram
+ [v2.1.1] ✅ ──► [v2.2.0] ✅ ──► [v2.3.0] ──────► [v2.4.0] ──────► [v2.5.0] ──────► [v2.6.0]
+ Vá lỗi,        P1: Hub, KPI,   Dùng nốt cổng    Cổng mới ở v1:   Dịch vụ chung   PWA, RBAC,
+ Quy hoạch 2.0  TS nối thật     v1 đã có (KPI,   PK, KS, PTKH     0B → CRM → Dự   tên miền
+                                TS, Điều hành)   (làm ở v1 trước) án → Tài chính
 ```
 
 ---
 
-## 2. CHI TIẾT CÁC PHIÊN BẢN KẾ TIẾP
+## 2. CHI TIẾT CÁC PHIÊN BẢN
 
-### PHIÊN BẢN v2.2.0 – GHI DỮ LIỆU THẬT QUA 5 MÁY CHỦ APPS SCRIPT
-- **Mục tiêu:** Giao tiếp 2 chiều giữa v2 và 5 máy chủ Apps Script ở Chế độ Trực tiếp (`🟢 Live`), ghi dữ liệu thật về Google Sheets.
-- **Nội dung thực hiện:**
-  1. `api.js`: mỗi màn hình gọi đúng hành động của mình (thay cho `webHomNay` chung); thêm `maYeuCau` chống ghi trùng; đo thời gian phản hồi từng máy chủ (M0.4).
-  2. `HUB`: đồng bộ việc từ `webHomNay`, đánh dấu hoàn tất ngay trên v2.
-  3. `KPI`: tải dữ liệu TV3 thật từ `webBanTin` và `webAOP` (chỉ đọc).
-  4. `TS`: nối cổng nhận hồ sơ `webLeadCD`, hiển thị hoa hồng bậc thang thực tế.
-  5. `KS`: người bệnh điền phiếu khảo sát trên v2 và gửi về `70_KhaoSat`.
-  6. `PK`: nhân viên nộp Báo cáo ngày + ảnh minh chứng (Base64) vào Drive qua `21_PhongPTKH`.
-  7. `PD`: Phê duyệt 1-chạm ghi về Sheet `Log_Duyet`; badge ⚡ đếm theo số phiếu thật.
-  8. Toast **Hoàn tác 6s thật**: lệnh ghi chỉ gửi đi khi hết 6 giây.
-  9. Công tắc Bật/Tắt mảng (M0.1) ẩn/hiện mục tương ứng trong menu ☰.
-- **Hoàn thành khi:** mỗi lệnh ghi tạo đúng 1 dòng trong Sheet (kể cả bấm 2 lần); bấm Hoàn tác trong 6s ➜ không có dòng nào; tắt 1 mảng ➜ biến mất khỏi menu sau khi tải lại.
+### PHIÊN BẢN v2.2.0 ✅ – NỐI THẬT ĐỢT P1 (29/10/2026)
+- Tầng API theo đúng giao thức `00_Loi/Loi_Web.gs`; báo lỗi rõ ràng, không lặng lẽ thay số thật bằng số mẫu; đo độ trễ 5 máy chủ; xóa `?t=` khỏi thanh địa chỉ.
+- **Hub:** Hôm nay (`webHomNay`, `webLamMoi`) · 🔔 Thông báo (`webThongBao`, `webDanhDauDoc`) · 📝 Việc riêng (`webViecRieng`, `webLuuViecRieng`) có Hoàn tác 6s thật.
+- **KPI:** Bản tin tạm tính (`webBanTin`). **TS:** Chiến dịch (`webKhoiDong`) + phễu, hoa hồng, lead (`webLeadCD`).
+- **Phân quyền:** hỏi `webKhoiDong` từng app, app nào từ chối thì ẩn khỏi menu.
+- **Chưa làm trong đợt này (đã ghi rõ trên màn):** KS, PK chưa có cổng số liệu ở v1; Phê duyệt 1-chạm, CRM, Dự án, Công việc, Tri thức chưa có máy chủ.
 
 ---
 
-### PHIÊN BẢN v2.3.0 – LIÊN THÔNG MẢNG 2, 3, 6, 7
-- **Nội dung thực hiện:**
-  1. Module mới `taichinh` (Mảng 3): VietQR SePay, sổ chi phí phát sinh, chi trả hoa hồng, đề nghị tạm ứng → Phê duyệt 1-chạm.
-  2. CRM: pipeline B2B 5 bước, tiếp nhận lead, nhắc chăm sóc.
-  3. Dự án: nộp Flash Report 4 khối thật, Blocker Matrix, trình duyệt đề xuất chi.
-  4. Task Bus (M7.1): phàn nàn ≤ 2★, KPI trượt, vướng mắc dự án tự sinh việc trên Kanban.
-  5. Smart Lead Dispatcher (M8.3): lead tuyển sinh → Mảng 4, tư vấn/KSK DN → CRM, đặt lịch khám → máy chủ PK.
-  6. Tìm kiếm tri thức trong trình duyệt (M9.2).
-- **Hoàn thành khi:** lead thử về đúng mảng; phiếu ≤ 2★ tự hiện việc trên Kanban; đề xuất chi dự án đi qua Phê duyệt và vào sổ chi phí.
+### PHIÊN BẢN v2.3.0 – DÙNG NỐT CÁC CỔNG v1 ĐÃ CÓ (không cần sửa v1)
+| App | Cổng đã có ở v1 | Màn v2 sẽ dựng |
+|---|---|---|
+| Hub | `webDieuHanh`, `webHopThu` | Tab 🧭 Điều hành 2 chiều ngay trong v2 (hiện đang mở Hub v1) |
+| KPI | `webSoatLoi`, `webAOP`, `webBaoCaoQuy`, `webLuuTangTruong` | Soát lỗi chốt quý · Phân bổ AOP · Nháp báo cáo quý · AOP 2027 |
+| TS | `webLuuLead`, `webThemNhatKy`, `webChuyenCD`, `webXoaLead`, `webLuuChienDich`, `webChepChienDich` | Form lead (chỉ ô bắt buộc + "＋ Thêm chi tiết"), nhật ký, chuyển chiến dịch, sửa chiến dịch (Admin) |
+- **Hoàn thành khi:** mỗi màn cho cùng số với app v1 tương ứng (bảng đối chiếu v1↔v2 từng màn – đúng nghiệm thu P1 của kế hoạch AGY); thao tác ghi tạo đúng 1 dòng trên sheet.
 
 ---
 
-### PHIÊN BẢN v2.4.0 – TĂNG TRƯỞNG & TỰ ĐỘNG HÓA NHÂN SỰ
-- **Nội dung thực hiện:**
-  1. Module mới `tangtruong` (Mảng 8): lịch nội dung đa kênh, AI Copywriter, chốt chặn duyệt bài trước khi đăng.
-  2. Nhân sự: bóc tách tăng ca TC-NS (xuất cho Kế toán), kiểm soát vi phạm NTC, Team Morale Index.
-  3. Giám sát SLA Xanh → Vàng → Đỏ và báo Telegram khi sắp quá hạn.
-  4. Bàn điều hành 2 chiều 🧭 và nhật ký động cơ AI 4 ca.
-  5. Tường lửa `KHONG_DUA_VAO.md` trước mọi lời gọi AI.
-- **Hoàn thành khi:** bài chưa duyệt không thể xuất bản; việc quá hạn đổi đỏ và báo Telegram; bảng TC-NS khớp file kế toán tháng mẫu.
+### PHIÊN BẢN v2.4.0 – MỞ CỔNG MỚI Ở v1 RỒI DỰNG MÀN v2
+- **PK (`21_PhongPTKH`, thay PTKH trong v2):** thêm cổng báo cáo ngày + minh chứng ảnh, lịch trực, công việc ca.
+- **KS (`70_KhaoSat`):** thêm cổng phiếu khảo sát, 5 trụ ACHSI, radar ≤ 2★.
+- **PTKH (`20_PTKH`):** chỉ thêm `webGoi` (không đổi gì khác), kiểm thử PTKH cũ vẫn đạt 100% (`kiem_tra_tat_ca.js`) – theo P2/P3 của kế hoạch AGY.
+- **Hoàn thành khi:** bộ kiểm thử của từng app v1 vẫn đạt đủ; màn v2 cho cùng số với v1.
 
 ---
 
-### PHIÊN BẢN v2.5.0 – PWA, PHÂN QUYỀN & TÊN MIỀN RIÊNG
-- **Nội dung thực hiện:**
-  1. `manifest.webmanifest` (icon 192px, 512px) + `sw.js` lưu tài nguyên tĩnh, mở app tức thì (< 0,5s); banner "Thêm vào màn hình chính" cho Safari iOS và Chrome Android.
-  2. Ma trận RBAC (M0.2): nhân viên chỉ thấy mảng được cấp quyền; việc tự phân luồng theo quyền; danh bạ nhân sự.
-  3. Cổng cấp token SSO (M0.3).
-  4. Gắn tên miền chính thức (ví dụ `dieuhanh.thanhvumedic.com`) qua CNAME, SSL tự động; mã hóa token trong IndexedDB thay cho localStorage.
-- **Hoàn thành khi:** mở app khi mất mạng; tài khoản nhân viên không thấy mảng ngoài quyền; điểm Lighthouse PWA đạt.
+### PHIÊN BẢN v2.5.0 – DỊCH VỤ CHUNG & MẢNG MỚI (cần máy chủ mới trên Hub, theo Q1)
+Thứ tự theo phản biện của AGY (cái sau dùng lại cái trước): **0B Dịch vụ chung** (phê duyệt 1-chạm, máy báo cáo theo mẫu, trục việc chung) → **CRM** → **Dự án** (Daily Flash 4 khối) → **Tài chính**.
+- **Hoàn thành khi:** phê duyệt ghi `Log_Duyet` và trả kết quả về mảng gốc; Hoàn tác 6s không gửi gì; mỗi phiếu ghi đúng 1 lần.
 
 ---
 
-### PHIÊN BẢN v2.6.0 – MỞ RỘNG
-LMS mini (M4.5) · Phễu Lặn Biển & xuất bản đa nền tảng (M8.5) · Báo cáo hiệu suất truyền thông (M8.6) · Đồ thị tri thức `[[wiki-links]]` (M9.3) · Trích bài học từ báo cáo (M9.4) · Khởi động Tầng 3 Gói Tư vấn số. Phiếu chi tiết lập khi bắt đầu đợt.
+### PHIÊN BẢN v2.6.0 – PWA, PHÂN QUYỀN & TÊN MIỀN RIÊNG
+- `manifest.webmanifest` + `sw.js` (mở tức thì, cài lên màn hình chính); ma trận RBAC M0.2; tên miền chính thức + SSL; mã hóa token trong IndexedDB.
+
+---
+
+### PHIÊN BẢN v2.7.0 – MỞ RỘNG
+Tăng trưởng (Marketing + Web phễu) · LMS · Đồ thị tri thức · Trích bài học từ báo cáo · Tầng 3 Gói tư vấn số.
 
 ---
 

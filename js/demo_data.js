@@ -44,6 +44,17 @@ window.SHIN_DEMO_DATA = {
         { ma: "CRM L1", ten: "CRM Khách hàng & Đối tác đa đối tượng", trangThai: "«HOÀN TẤT»" },
         { ma: "PD L1", ten: "Hộp thư Phê duyệt 1-chạm tập trung", trangThai: "«HOÀN TẤT»" }
       ]
+    },
+    viecRieng: [
+      { id: "vr1", tieuDe: "Gọi lại đối tác KSK Điện lực chốt lịch khám", han: "29/10/2026", uuTien: "cao", homNay: true },
+      { id: "vr2", tieuDe: "Đọc dự thảo AOP 2027 khối ngoại trú", han: "02/11/2026", uuTien: "thuong" }
+    ],
+    thongBao: {
+      soChuaDoc: 1,
+      ds: [
+        { stt: 2, luc: "29/10/2026", tieuDe: "KPI: Bản tin tạm tính tháng 10 đã có", noiDung: "2 khoa dưới 80% – xem chi tiết ở mảng KPI.", daDoc: false },
+        { stt: 1, luc: "28/10/2026", tieuDe: "Tuyển sinh: 3 lead mới từ web phễu", noiDung: "", daDoc: true }
+      ]
     }
   },
 
