@@ -4,6 +4,20 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.5.5] – 30/10/2026 (RÀ SOÁT BẢO MẬT TOKEN · ĐIỆN THOẠI MẶC ĐỊNH MÉP TRÁI)
+
+### 🔒 Bảo mật
+- **Token không bao giờ hiện lại trên màn:** ô nhập dạng mật khẩu, mở Cài đặt không điền lại token, lưu xong xóa ngay khỏi ô; chỉ hiện trạng thái "🟢 Đã kết nối: <tên> · mã <mã> · token ••••".
+- Dán được nguyên **link đăng nhập Hub** (tự tách `?t=`); dán sai dạng ➜ báo, không ghi đè token đang dùng.
+- Nút **Đăng xuất** (bấm 2 lần) xóa token khỏi máy. Hub từ chối token (sai / hết hạn / thu hồi) ➜ tự đăng xuất.
+- **Chính sách nội dung (CSP):** trang chỉ được gọi mạng tới máy chủ v1 (Apps Script) – nếu có mã lạ chèn vào trang cũng không gửi token ra ngoài được; chặn plugin, `<base>`, form gửi ra ngoài.
+- `no-referrer`: mở link sang nơi khác không để lộ địa chỉ trang. Chống nhúng trang vào khung của web lạ (clickjacking).
+- Service worker **không lưu đệm địa chỉ có `?t=`**, xóa bộ đệm cũ khi cập nhật.
+
+### 📱 Điện thoại mặc định thanh trái kiểu **Mép trái** (vẫn đổi được trong ⚙️ Cài đặt).
+
+---
+
 ## [2.5.4] – 30/10/2026 (BỚT THÔNG BÁO THỪA)
 
 Rà toàn app, nguyên tắc: **chỉ báo khi người dùng không tự thấy kết quả trên màn.**

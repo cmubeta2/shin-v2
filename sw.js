@@ -4,7 +4,7 @@
  * KHÔNG đụng tới máy chủ Apps Script (script.google.com) – số liệu luôn lấy thật, không lưu đệm.
  * Đổi PHIEN_BAN_SW mỗi khi đổi danh sách tệp vỏ app.
  */
-const PHIEN_BAN_SW = 'shin-v2.5.4';
+const PHIEN_BAN_SW = 'shin-v2.5.5';
 const VO_APP = [
   './', 'index.html', 'manifest.webmanifest', 'css/styles.css',
   'js/demo_data.js', 'js/api.js', 'js/app.js',
@@ -20,6 +20,7 @@ self.addEventListener('install', (e) => {
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(
+    // Bản cũ (≤ 2.5.4) có thể đã lưu khóa chứa ?t= ➜ xóa hết bộ đệm cũ
     caches.keys().then(ds => Promise.all(ds.filter(k => k !== PHIEN_BAN_SW).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
@@ -30,14 +31,16 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;   // máy chủ v1, phông chữ… đi thẳng mạng
+  // Bảo mật: KHÔNG lưu đệm theo địa chỉ có tham số (?t=<token>…) – trang lưu dưới khóa không tham số
+  const khoa = url.search ? url.origin + url.pathname : req;
   e.respondWith(
     fetch(req).then(res => {
       if (res && res.ok) {
         const ban = res.clone();
-        caches.open(PHIEN_BAN_SW).then(c => c.put(req, ban));
+        caches.open(PHIEN_BAN_SW).then(c => c.put(khoa, ban));
       }
       return res;
-    }).catch(() => caches.match(req, { ignoreSearch: req.mode === 'navigate' })
+    }).catch(() => caches.match(khoa, { ignoreSearch: req.mode === 'navigate' })
       .then(r => r || (req.mode === 'navigate' ? caches.match('index.html') : undefined)))
   );
 });
