@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.5.3] – 30/10/2026 (CHỌN KIỂU THANH TRÁI TRÊN ĐIỆN THOẠI · MẤU KÉO ĐƯỢC)
+
+- ⚙️ Cài đặt ➜ **Thanh danh mục trên điện thoại**: Tự động (≤ 360px dùng mép trái, máy lớn hơn dùng hàng icon) · Hàng icon · **Mép trái** (rộng nội dung nhất – điện thoại 414px được thêm 52px bề ngang). Chỉ áp dụng điện thoại (< 768px); máy tính bảng, desktop giữ hàng icon / thanh mở sẵn.
+- Mấu » **giữ và kéo lên / xuống** để đặt chỗ, nhớ trên máy; mặc định ở **1/3 dưới bên trái** – vừa ngón cái trái. Kéo không mở nhầm thanh; chạm mới mở.
+
+---
+
 ## [2.5.2] – 30/10/2026 (ĐIỆN THOẠI ĐỜI CŨ, MÀN NHỎ)
 
 - **≤ 360px** (iPhone SE đời đầu, Android 5 inch): thanh trái thu thành **tay nắm** – dải màu 4px mép trái + mấu » giữa màn (vùng chạm 44px). Chạm » hoặc **vuốt từ mép trái** để mở; vuốt sang trái hoặc chọn mảng thì thu. Có việc chờ ➜ chấm đỏ trên mấu. Lần đầu: mấu nhấp nháy + gợi ý (1 lần / máy).

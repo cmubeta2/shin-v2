@@ -52,7 +52,7 @@
             <span class="topbar-title">SHIN AIOS</span>
             <!-- Thẻ trạng thái nhỏ gọn nằm ngay kế bên chữ SHIN AIOS -->
             <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat(); event.stopPropagation();" title="Bấm để quản lý kết nối Token">
-              Demo v2.5.2
+              Demo v2.5.3
             </button>
           </div>
           <div class="topbar-sub">Hệ thống Quản trị AI</div>
@@ -84,7 +84,7 @@
 
   <!-- DECAGON DRAWER: THẬP DIỆN KIẾN TRÚC (10 MẢNG NGHIỆP VỤ) -->
   <!-- Tay nắm thanh trái cho máy màn nhỏ (≤ 360px): dải màu mép trái + mấu » -->
-  <button class="rail-tay" id="railTay" onclick="ShinApp.moDecagonDrawer()" aria-label="Mở danh mục nghiệp vụ" aria-controls="decagonDrawer">
+  <button class="rail-tay" id="railTay" aria-label="Mở danh mục nghiệp vụ (giữ và kéo để đổi chỗ)" aria-controls="decagonDrawer">
     <span class="rail-tay-mau" aria-hidden="true">»</span><span class="rail-tay-cham" id="railTayCham" hidden></span>
   </button>
   <div class="decagon-overlay" id="decagonOverlay" onclick="ShinApp.dongDecagonDrawer()"></div>
@@ -144,6 +144,17 @@
         <div class="palette-grid" id="paletteGrid">
           <!-- Sinh động qua js/app.js -->
         </div>
+      </div>
+
+      <!-- Kiểu thanh trái trên điện thoại (Sếp 30/10) -->
+      <div class="form-group" id="khoiKieuRail" style="margin-top:18px;">
+        <label class="form-label">THANH DANH MỤC TRÊN ĐIỆN THOẠI</label>
+        <div class="kieu-rail-grid">
+          <button class="theme-mode-btn" data-kieu="tu_dong" onclick="ShinApp.chonKieuRail('tu_dong')"><span class="theme-mode-icon">✨</span><span class="theme-mode-text">Tự động</span></button>
+          <button class="theme-mode-btn" data-kieu="icon" onclick="ShinApp.chonKieuRail('icon')"><span class="theme-mode-icon">▥</span><span class="theme-mode-text">Hàng icon</span></button>
+          <button class="theme-mode-btn" data-kieu="mep" onclick="ShinApp.chonKieuRail('mep')"><span class="theme-mode-icon">⟫</span><span class="theme-mode-text">Mép trái</span></button>
+        </div>
+        <p class="chu-phu" style="margin-top:6px;">Mép trái: rộng nội dung nhất – chạm hoặc vuốt mấu » để mở, giữ và kéo mấu lên / xuống để đặt chỗ vừa ngón cái. Tự động: máy ≤ 360px dùng mép trái, máy lớn hơn dùng hàng icon.</p>
       </div>
 
       <!-- Cài như ứng dụng (PWA) -->

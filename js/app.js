@@ -1,11 +1,11 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.5.2 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
+ * Phiên bản: v2.5.3 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
  * Hàm dùng chung theo PHONG_CACH_APP_SHIN mục 5: esc, soVN, toast (+ Hoàn tác 6s), xacNhan2Lan, goiNut, rung.
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.5.2';
+  const PHIEN_BAN = 'v2.5.3';
 
   const MODULES = [
     ModuleHub,
@@ -263,6 +263,64 @@ const ShinApp = (function() {
    * ≤ 360px: thanh trái thu thành tay nắm (dải 4px + mấu »); vuốt từ mép trái hoặc chạm » để mở, vuốt sang trái để đóng.
    * Lần đầu: mấu nhấp nháy 2 lần + gợi ý (1 lần / máy). Đang gõ form: ẩn thanh đáy để có chỗ nhìn ô nhập. */
   const MQ_NHO = window.matchMedia ? window.matchMedia('(max-width: 360px)') : { matches: false };
+  const MQ_DIEN_THOAI = window.matchMedia ? window.matchMedia('(max-width: 767px)') : { matches: false };
+
+  /** Kiểu thanh trái trên điện thoại: 'tu_dong' (≤ 360px ➜ mép) | 'icon' | 'mep'. Máy tính bảng / desktop luôn dùng hàng icon. */
+  function kieuRail() { return docLS('shin_kieu_rail') || 'tu_dong'; }
+
+  function apDungKieuRail() {
+    const k = kieuRail();
+    const mep = MQ_DIEN_THOAI.matches && (k === 'mep' || (k === 'tu_dong' && MQ_NHO.matches));
+    document.body.classList.toggle('kieu-mep', mep);
+    const tay = document.getElementById('railTay');
+    const viTri = Number(docLS('shin_tay_top'));
+    if (tay) tay.style.setProperty('--tay-top', viTri >= 10 && viTri <= 90 ? viTri + '%' : '66%');
+    document.querySelectorAll('[data-kieu]').forEach(b => b.classList.toggle('active', b.dataset.kieu === k));
+    return mep;
+  }
+
+  function chonKieuRail(k) {
+    luuLS('shin_kieu_rail', k);
+    const mep = apDungKieuRail();
+    rung('nhe');
+    toast(k === 'mep' ? 'Đã chọn Mép trái – giữ và kéo mấu » để đổi chỗ.' : k === 'icon' ? 'Đã chọn Hàng icon bên trái.' : 'Đã chọn Tự động theo cỡ màn.', 'info');
+    if (mep) goiYTayNam(true);
+  }
+
+  /** Mấu »: chạm = mở; giữ + kéo dọc = đổi chỗ (nhớ % chiều cao trên máy). */
+  function ganKeoTay() {
+    const tay = document.getElementById('railTay');
+    if (!tay) return;
+    let y0 = null, top0 = 0, daKeo = false;
+    tay.addEventListener('pointerdown', (e) => {
+      y0 = e.clientY; top0 = tay.getBoundingClientRect().top + tay.offsetHeight / 2; daKeo = false;
+      try { tay.setPointerCapture(e.pointerId); } catch (er) {}
+    });
+    tay.addEventListener('pointermove', (e) => {
+      if (y0 === null) return;
+      const dy = e.clientY - y0;
+      if (!daKeo && Math.abs(dy) < 8) return;
+      if (!daKeo) { daKeo = true; tay.classList.add('dang-keo'); rung('nhe'); }
+      const h = window.innerHeight, tren = 90, duoi = h - 110;
+      const y = Math.max(tren, Math.min(duoi, top0 + dy));
+      tay.style.setProperty('--tay-top', (y / h * 100).toFixed(1) + '%');
+    });
+    const tha = () => {
+      if (y0 === null) return;
+      y0 = null;
+      if (daKeo) {
+        tay.classList.remove('dang-keo');
+        luuLS('shin_tay_top', String(parseFloat(tay.style.getPropertyValue('--tay-top'))));
+        rung('xong');
+      }
+    };
+    tay.addEventListener('pointerup', tha);
+    tay.addEventListener('pointercancel', tha);
+    tay.addEventListener('click', (e) => {
+      if (daKeo) { e.preventDefault(); e.stopImmediatePropagation(); daKeo = false; return; }
+      moDecagonDrawer();
+    });
+  }
 
   function ganCuChiMayNho() {
     let x0 = null, y0 = null, keo = '';
@@ -292,16 +350,18 @@ const ShinApp = (function() {
       }, 120);
     });
 
+    apDungKieuRail();
+    ganKeoTay();
     goiYTayNam();
-    if (MQ_NHO.addEventListener) MQ_NHO.addEventListener('change', goiYTayNam);
+    [MQ_NHO, MQ_DIEN_THOAI].forEach(mq => { if (mq.addEventListener) mq.addEventListener('change', () => { apDungKieuRail(); goiYTayNam(); }); });
   }
 
-  function goiYTayNam() {
-    if (!MQ_NHO.matches || docLS('shin_goi_y_rail') === '1') return;
+  function goiYTayNam(batBuoc) {
+    if (!document.body.classList.contains('kieu-mep') || (!batBuoc && docLS('shin_goi_y_rail') === '1')) return;
     luuLS('shin_goi_y_rail', '1');
     const tay = document.getElementById('railTay');
     if (tay) { tay.classList.add('nhay'); setTimeout(() => tay.classList.remove('nhay'), 2600); }
-    setTimeout(() => toast('Vuốt từ mép trái hoặc chạm » để mở danh mục nghiệp vụ.', 'info', { thoiGian: 6000 }), 800);
+    if (!batBuoc) setTimeout(() => toast('Chạm » hoặc vuốt từ mép trái để mở danh mục. Giữ và kéo » để đổi chỗ.', 'info', { thoiGian: 6000 }), 800);
   }
 
   /* ---------------- PWA – cài như ứng dụng ở mọi nền tảng (Sếp 30/10) ----------------
@@ -473,7 +533,7 @@ const ShinApp = (function() {
     currentThemeMode = mode;
     luuLS('shin_theme_mode', mode);
     apDungThemeMode(mode);
-    document.querySelectorAll('.theme-mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+    document.querySelectorAll('.theme-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
     const tenCheDo = mode === 'light' ? 'Sáng' : mode === 'dark' ? 'Tối' : mode === 'system' ? 'Theo máy' : 'Theo giờ';
     toast(`Đã áp dụng chế độ hiển thị: ${tenCheDo}`, 'info');
   }
@@ -748,7 +808,8 @@ const ShinApp = (function() {
     const modal = document.getElementById('settingsModal');
     if (!modal) return;
 
-    document.querySelectorAll('.theme-mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === currentThemeMode));
+    document.querySelectorAll('.theme-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === currentThemeMode));
+    apDungKieuRail();
 
     const tokenInput = document.getElementById('tokenInput');
     if (tokenInput) tokenInput.value = SHIN_API.layToken();
@@ -810,6 +871,7 @@ const ShinApp = (function() {
     dongModal,
     luuCaiDatToken,
     caiUngDung,
+    chonKieuRail,
     dangChayApp,
     toast,
     hanhDongHoanTac,
