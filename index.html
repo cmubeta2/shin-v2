@@ -52,7 +52,7 @@
             <span class="topbar-title">SHIN AIOS</span>
             <!-- Thẻ trạng thái nhỏ gọn nằm ngay kế bên chữ SHIN AIOS -->
             <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat(); event.stopPropagation();" title="Bấm để quản lý kết nối Token">
-              Demo v2.5.1
+              Demo v2.5.2
             </button>
           </div>
           <div class="topbar-sub">Hệ thống Quản trị AI</div>
@@ -83,6 +83,10 @@
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <!-- DECAGON DRAWER: THẬP DIỆN KIẾN TRÚC (10 MẢNG NGHIỆP VỤ) -->
+  <!-- Tay nắm thanh trái cho máy màn nhỏ (≤ 360px): dải màu mép trái + mấu » -->
+  <button class="rail-tay" id="railTay" onclick="ShinApp.moDecagonDrawer()" aria-label="Mở danh mục nghiệp vụ" aria-controls="decagonDrawer">
+    <span class="rail-tay-mau" aria-hidden="true">»</span><span class="rail-tay-cham" id="railTayCham" hidden></span>
+  </button>
   <div class="decagon-overlay" id="decagonOverlay" onclick="ShinApp.dongDecagonDrawer()"></div>
   <nav class="decagon-drawer" id="decagonDrawer" aria-label="Danh mục nghiệp vụ">
     <!-- Nút thu gọn / mở rộng (chỉ icon) -->

@@ -1,6 +1,6 @@
 # SHIN AIOS v2 – HỆ THỐNG ĐIỀU HÀNH HỢP NHẤT ĐA MODULE
 *1 Web duy nhất tích hợp toàn diện mọi tính năng của Hệ sinh thái SHIN v1 · Dữ liệu chung · Khác giao diện.*  
-*Địa chỉ trực tuyến: **[cmubeta2.github.io/shin-v2](https://cmubeta2.github.io/shin-v2/)** · Phiên bản: **v2.5.1**.*
+*Địa chỉ trực tuyến: **[cmubeta2.github.io/shin-v2](https://cmubeta2.github.io/shin-v2/)** · Phiên bản: **v2.5.2**.*
 *Quy hoạch chi tiết 10 mảng, hiện trạng và lộ trình: xem **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)**.*
 
 ---
@@ -104,4 +104,4 @@ Mở trực tiếp đường dẫn: `https://cmubeta2.github.io/shin-v2/`
 ## 6. THÔNG TIN BẢN QUYỀN
 - **Chủ quản:** Sếp Huỳnh Trường Thanh Tâm (cmubeta2).
 - **Phát triển:** Shin Digital Familiar (Antigravity & Claude Dual Engine).
-- **Bản phát hành:** v2.5.1.
+- **Bản phát hành:** v2.5.2.

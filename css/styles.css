@@ -1575,3 +1575,71 @@ a.btn-secondary, a.btn-primary { display: inline-flex; align-items: center; just
 .decagon-drawer:not(.open) .rail-chan { flex-direction: column; align-items: center; gap: 4px; }
 .decagon-drawer.open .rail-chan { gap: 6px; }
 [hidden] { display: none !important; }
+
+/* ==========================================================================
+   v2.5.2 – MÁY MÀN NHỎ (Sếp 30/10)
+   ========================================================================== */
+.rail-tay { display: none; }
+
+/* 361–399px: hàng icon gọn 48px */
+@media (min-width: 361px) and (max-width: 399px) {
+  :root { --rail-thu: 48px; }
+  .decagon-drawer:not(.open) .decagon-icon { font-size: 18px; }
+  .decagon-drawer:not(.open) .rail-nut { width: 40px; }
+}
+
+/* ≤ 360px: tay nắm – dải màu 4px mép trái + mấu », vùng chạm 44px */
+@media (max-width: 360px) {
+  :root { --rail-thu: 4px; }
+  .decagon-drawer:not(.open) { background: var(--primary); box-shadow: none; }
+  .decagon-drawer:not(.open) > * { visibility: hidden; }
+  .rail-tay {
+    display: flex; align-items: center; position: fixed; left: 0;
+    top: calc(var(--header-height) + var(--safe-top) + 10px);
+    width: 44px; height: 48px; padding: 0; border: none; background: transparent; z-index: 98; cursor: pointer;
+  }
+  .rail-tay-mau {
+    width: 22px; height: 40px; border-radius: 0 20px 20px 0; background: var(--primary); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  .rail-tay-cham { position: absolute; left: 15px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--c-red); border: 2px solid var(--card); }
+  body.rail-mo .rail-tay { display: none; }
+  .rail-tay.nhay .rail-tay-mau { animation: tayNhay 0.65s ease-in-out 0s 4 alternate; }
+  .main-container { padding-left: 12px; padding-right: 10px; }
+  .tq-3so { gap: 6px; }
+  .tq-o { padding: 8px; }
+  .tq-so { font-size: calc(19px * var(--font-scale)); }
+  .page-title { font-size: calc(17px * var(--font-scale)); }
+}
+@keyframes tayNhay { from { transform: translateX(0); } to { transform: translateX(6px); filter: brightness(1.25); } }
+
+/* ≤ 340px: thanh đáy chỉ icon */
+@media (max-width: 340px) {
+  .nav-nhan { display: none; }
+  .nav-icon { font-size: 22px; }
+}
+
+/* Màn thấp (máy cũ ≤ 640px chiều cao): thanh đáy 52px */
+@media (max-height: 640px) {
+  :root { --nav-height: 52px; }
+  .nav-item { gap: 1px; }
+}
+
+/* Đang gõ form trên điện thoại: ẩn thanh đáy, rail chạy tới đáy */
+@media (max-width: 1023px) {
+  body.dang-go .bottom-nav { display: none; }
+  body.dang-go .decagon-drawer, body.dang-go .decagon-overlay { bottom: 0; }
+}
+
+/* v2.5.2 – Góc dưới trái (Sếp 30/10): thanh đáy tràn hết bề ngang, cùng nền – nút vẫn căn giữa vùng nội dung */
+.bottom-nav {
+  left: 0;
+  padding-left: calc(var(--rail-w) + max(0px, (100vw - var(--rail-w) - var(--noi-max)) / 2));
+  padding-right: max(0px, calc((100vw - var(--rail-w) - var(--noi-max)) / 2));
+  transition: padding-left 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.decagon-drawer:not(.open) { box-shadow: 1px 0 0 var(--border); }
+@media (max-width: 360px) {
+  .rail-tay { top: 38%; }   /* giữa màn: dễ chạm ngón cái, không bị toast / header che */
+}
