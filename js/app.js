@@ -1,11 +1,11 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.5.4 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
+ * Phiên bản: v2.5.5 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
  * Hàm dùng chung theo PHONG_CACH_APP_SHIN mục 5: esc, soVN, toast (+ Hoàn tác 6s), xacNhan2Lan, goiNut, rung.
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.5.4';
+  const PHIEN_BAN = 'v2.5.5';
 
   const MODULES = [
     ModuleHub,
@@ -264,8 +264,8 @@ const ShinApp = (function() {
   const MQ_NHO = window.matchMedia ? window.matchMedia('(max-width: 360px)') : { matches: false };
   const MQ_DIEN_THOAI = window.matchMedia ? window.matchMedia('(max-width: 767px)') : { matches: false };
 
-  /** Kiểu thanh trái trên điện thoại: 'tu_dong' (≤ 360px ➜ mép) | 'icon' | 'mep'. Máy tính bảng / desktop luôn dùng hàng icon. */
-  function kieuRail() { return docLS('shin_kieu_rail') || 'tu_dong'; }
+  /** Kiểu thanh trái trên điện thoại: 'mep' (mặc định) | 'icon' | 'tu_dong' (≤ 360px ➜ mép). Máy tính bảng / desktop luôn dùng hàng icon. */
+  function kieuRail() { return docLS('shin_kieu_rail') || 'mep'; }   // Sếp 30/10: điện thoại mặc định Mép trái
 
   function apDungKieuRail() {
     const k = kieuRail();
@@ -486,7 +486,14 @@ const ShinApp = (function() {
       capNhatNguoiDung();
     } else {
       live.quyen.HUB = kqHub.loi === 'quyen' ? 'khong' : 'loi';
-      if (kqHub.loi === 'quyen') toast('Token không vào được Hub – kiểm tra lại link đăng nhập.', 'error');
+      if (kqHub.loi === 'quyen') {
+        // Token bị Hub từ chối (sai / hết hạn / đã thu hồi) ➜ xóa khỏi máy, về chế độ mẫu
+        SHIN_API.xoaToken();
+        datLaiLive();
+        toast('Token không còn hợp lệ – đã đăng xuất. Mở lại link đăng nhập từ Hub.', 'error');
+        chuyenModule('hub');
+        return;
+      }
     }
     veMenuDay();
   }
@@ -806,8 +813,10 @@ const ShinApp = (function() {
     document.querySelectorAll('.theme-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === currentThemeMode));
     apDungKieuRail();
 
+    // Không bao giờ điền lại token vào ô – chỉ hiện trạng thái đã ẩn
     const tokenInput = document.getElementById('tokenInput');
-    if (tokenInput) tokenInput.value = SHIN_API.layToken();
+    if (tokenInput) tokenInput.value = '';
+    veTrangThaiToken();
 
     const grid = document.getElementById('paletteGrid');
     if (grid) {
@@ -832,21 +841,57 @@ const ShinApp = (function() {
     if (modal) modal.classList.remove('open');
   }
 
-  function luuCaiDatToken() {
-    const tokenInput = document.getElementById('tokenInput');
-    if (!tokenInput) return;
-    const val = tokenInput.value.trim();
-    SHIN_API.luuToken(val);
+  /** "h1.13151.0.xxxx" hoặc link Hub có ?t= ➜ token; không ra token ➜ ''. */
+  function tachToken(chu) {
+    chu = String(chu || '').trim();
+    const m = /[?&]t=([^&#\s]+)/.exec(chu);
+    if (m) { try { chu = decodeURIComponent(m[1]); } catch (e) { chu = m[1]; } }
+    return /^h1\.[A-Za-z0-9_-]{1,40}\.\d+\.\S{8,}$/.test(chu) ? chu : '';
+  }
+
+  /** Trạng thái kết nối (không lộ token): mã người dùng + 4 ký tự cuối chữ ký đã che. */
+  function veTrangThaiToken() {
+    const o = document.getElementById('ttToken');
+    const nut = document.getElementById('nutDangXuat');
+    const tk = SHIN_API.layToken();
+    if (nut) nut.hidden = !tk;
+    if (!o) return;
+    if (!tk) { o.innerHTML = '🟡 Chưa kết nối – đang chạy dữ liệu MẪU.'; return; }
+    const ma = String(tk.split('.')[1] || '');
+    o.innerHTML = `🟢 Đã kết nối${live.nguoi ? ': <b>' + esc(live.nguoi.hoTen) + '</b>' : ''} · mã ${esc(ma)} · token ••••••${esc(tk.slice(-2).replace(/./g, '•'))}`;
+  }
+
+  function datLaiLive() {
     Object.keys(live.quyen).forEach(k => delete live.quyen[k]);
     live.nguoi = null; live.laAdminHub = false; live.soChoDuyet = null; live.lienKet = {}; live.linkHub = ''; live.soChuaDoc = 0; live.hubSanSang = null;
     capNhatBannerTrangThai();
-    dongModal();
     const sub = document.querySelector('.topbar-sub');
     if (sub) sub.textContent = 'Hệ thống Quản trị AI';
     veDecagonDrawer();
     veMenuDay();
-    if (val) khoiDongLive();
+  }
+
+  function luuCaiDatToken() {
+    const tokenInput = document.getElementById('tokenInput');
+    if (!tokenInput) return;
+    const val = tachToken(tokenInput.value);
+    tokenInput.value = '';   // xóa ngay khỏi ô dù đúng hay sai
+    if (!val) { toast('Token không đúng dạng – dán nguyên token hoặc link đăng nhập Hub.', 'warn'); return; }
+    SHIN_API.luuToken(val);
+    datLaiLive();
+    dongModal();
+    khoiDongLive();
     chuyenModule(currentModule);
+  }
+
+  /** Đăng xuất: xóa token khỏi máy này (bấm 2 lần trong 5 giây). */
+  function dangXuat() {
+    xacNhan2Lan('dang-xuat', 'Đăng xuất khỏi máy này', () => {
+      SHIN_API.xoaToken();
+      datLaiLive();
+      dongModal();
+      chuyenModule('hub');
+    });
   }
 
   return {
@@ -864,6 +909,7 @@ const ShinApp = (function() {
     moCaiDat,
     dongModal,
     luuCaiDatToken,
+    dangXuat,
     caiUngDung,
     chonKieuRail,
     dangChayApp,

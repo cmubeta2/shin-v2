@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="SHIN AIOS v2 – Hệ thống điều hành hợp nhất đa module dành cho Doanh nghiệp & Y tế">
+  <!-- Bảo mật (v2.5.5): chỉ được gọi mạng tới máy chủ v1 (Apps Script) – chặn đường gửi token ra nơi khác nếu có mã lạ chèn vào trang -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#0f172a">
   <!-- PWA: cài như ứng dụng trên Android, iPhone/iPad, Windows, macOS, Linux, ChromeOS -->
   <link rel="manifest" href="manifest.webmanifest">
@@ -20,6 +23,8 @@
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
   <link rel="stylesheet" href="css/styles.css">
   <script>
+    // Chống nhúng trang vào khung của web khác (clickjacking) – GitHub Pages không cho đặt header X-Frame-Options
+    if (window.top !== window.self) { try { window.top.location = window.self.location.href; } catch (e) { document.documentElement.style.display = 'none'; } }
     // Chống chớp giao diện (Anti-Flicker Script)
     (function() {
       try {
@@ -52,7 +57,7 @@
             <span class="topbar-title">SHIN AIOS</span>
             <!-- Thẻ trạng thái nhỏ gọn nằm ngay kế bên chữ SHIN AIOS -->
             <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat(); event.stopPropagation();" title="Bấm để quản lý kết nối Token">
-              Demo v2.5.4
+              Demo v2.5.5
             </button>
           </div>
           <div class="topbar-sub">Hệ thống Quản trị AI</div>
@@ -154,7 +159,7 @@
           <button class="theme-mode-btn" data-kieu="icon" onclick="ShinApp.chonKieuRail('icon')"><span class="theme-mode-icon">▥</span><span class="theme-mode-text">Hàng icon</span></button>
           <button class="theme-mode-btn" data-kieu="mep" onclick="ShinApp.chonKieuRail('mep')"><span class="theme-mode-icon">⟫</span><span class="theme-mode-text">Mép trái</span></button>
         </div>
-        <p class="chu-phu" style="margin-top:6px;">Mép trái: rộng nội dung nhất – chạm hoặc vuốt mấu » để mở, giữ và kéo mấu lên / xuống để đặt chỗ vừa ngón cái. Tự động: máy ≤ 360px dùng mép trái, máy lớn hơn dùng hàng icon.</p>
+        <p class="chu-phu" style="margin-top:6px;">Mép trái: rộng nội dung nhất – chạm hoặc vuốt mấu » để mở, giữ và kéo mấu lên / xuống để đặt chỗ vừa ngón cái. Mặc định: Mép trái. Tự động: máy ≤ 360px dùng mép trái, máy lớn hơn dùng hàng icon.</p>
       </div>
 
       <!-- Cài như ứng dụng (PWA) -->
@@ -164,16 +169,15 @@
         <button class="btn-primary" id="nutCaiApp2" style="width:100%;" onclick="ShinApp.caiUngDung()">📲 Cài ứng dụng</button>
       </div>
 
-      <!-- Quản Lý Token Kết Nối Apps Script Thật -->
+      <!-- Kết nối dữ liệu thật – token KHÔNG bao giờ hiện lại trên màn (v2.5.5) -->
       <div class="form-group" style="margin-top:20px; border-top:1px dashed var(--border); padding-top:16px;">
-        <label class="form-label" for="tokenInput">🔑 KẾT NỐI DỮ LIỆU THẬT (TOKEN HUB)</label>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
-          Dán token ký HMAC dạng <code>h1.&lt;mã&gt;.0.&lt;chữ_ký&gt;</code> để kết nối trực tiếp với file Google Sheets & máy chủ Apps Script. Bỏ trống để dùng chế độ Trình diễn mẫu (Demo).
-        </p>
-        <input type="text" id="tokenInput" class="form-input" placeholder="Ví dụ: h1.13151.0.abcxyz..." autocomplete="off">
-        <div style="display:flex; gap:8px; margin-top:10px;">
-          <button class="btn-primary" style="flex:1;" onclick="ShinApp.luuCaiDatToken()">Lưu Kết Nối</button>
-          <button class="btn-secondary" onclick="document.getElementById('tokenInput').value=''; ShinApp.luuCaiDatToken();">Chạy Mẫu (Demo)</button>
+        <label class="form-label" for="tokenInput">🔑 KẾT NỐI DỮ LIỆU THẬT</label>
+        <div class="tt-token" id="ttToken"></div>
+        <input type="password" id="tokenInput" class="form-input" placeholder="Dán token / link đăng nhập Hub…" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text">
+        <p class="chu-phu" style="margin-top:6px;">Token được ẩn ngay khi dán và không hiện lại. Không gửi token / link đăng nhập cho người khác – ai có token là vào được dưới tên anh/chị.</p>
+        <div class="hang-nut">
+          <button class="btn-primary" onclick="ShinApp.luuCaiDatToken()">Lưu kết nối</button>
+          <button class="btn-secondary nut-do" id="nutDangXuat" onclick="ShinApp.dangXuat()">Đăng xuất</button>
         </div>
       </div>
     </div>

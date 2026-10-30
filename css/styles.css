@@ -1648,3 +1648,4 @@ body.kieu-mep .main-container { padding-left: 12px; padding-right: 10px; }
 /* v2.5.3 – chọn kiểu thanh trái trên điện thoại (⚙️ Cài đặt) */
 .kieu-rail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .kieu-rail-grid .theme-mode-btn { min-height: 64px; }
+.tt-token { font-size: calc(14px * var(--font-scale)); padding: 8px 10px; border-radius: 8px; background: var(--bg-sub); margin-bottom: 8px; overflow-wrap: anywhere; }
