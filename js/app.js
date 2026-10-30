@@ -1,14 +1,15 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.2.0 – nối thật vào 5 máy chủ v1 (Hub · KPI · TS · KS · PK), dùng chung dữ liệu với v1.
+ * Phiên bản: v2.5.0 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
  * Hàm dùng chung theo PHONG_CACH_APP_SHIN mục 5: esc, soVN, toast (+ Hoàn tác 6s), xacNhan2Lan, goiNut, rung.
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.2.0';
+  const PHIEN_BAN = 'v2.5.0';
 
   const MODULES = [
     ModuleHub,
+    ModuleDieuHanh,
     ModuleKPI,
     ModuleKhaoSat,
     ModuleCRM,
@@ -18,6 +19,7 @@ const ShinApp = (function() {
     ModuleCongViec,
     ModulePheDuyet,
     ModuleTriThuc,
+    ModuleTaiChinh,
     ModuleCaiDat
   ];
 
@@ -39,9 +41,10 @@ const ShinApp = (function() {
       icon: "🏢",
       danhSach: [
         { ma: "hub", ten: "Executive Hub", icon: "🏢" },
+        { ma: "dieuhanh", ten: "Điều Hành Hệ Shin", icon: "🧭" },
         { ma: "kpi", ten: "BKS KPI Viện", icon: "📊" },
         { ma: "khaosat", ten: "Khảo Sát ACHSI", icon: "🩺" },
-        { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", icon: "⚡", badge: "4", chiMau: true },
+        { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", icon: "⚡" },
         { ma: "trithuc", ten: "Tri Thức & SOP", icon: "🧠" },
         { ma: "caidat", ten: "Quản Trị Module", icon: "⚙️" }
       ]
@@ -60,6 +63,7 @@ const ShinApp = (function() {
       icon: "🚀",
       danhSach: [
         { ma: "crm", ten: "Khách Hàng & Đối Tác", icon: "👥" },
+        { ma: "taichinh", ten: "Tài Chính & Thu Chi", icon: "💰" },
         { ma: "tuyensinh", ten: "Giáo Dục & Tuyển Sinh", icon: "🎓" }
       ]
     }
@@ -79,7 +83,7 @@ const ShinApp = (function() {
   let currentCochu = docLS('shin_cochu') || 'vua';
 
   // Trạng thái chế độ Live: người dùng (Hub), liên kết sang app v1, quyền từng máy chủ
-  const live = { nguoi: null, lienKet: {}, linkHub: '', quyen: {}, soChuaDoc: 0, hubSanSang: null };
+  const live = { nguoi: null, laAdminHub: false, lienKet: {}, linkHub: '', quyen: {}, soChuaDoc: 0, soChoDuyet: null, hubSanSang: null };
   let luotTai = 0;
 
   /* ---------------- Hàm dùng chung (PHONG_CACH_APP_SHIN mục 5) ---------------- */
@@ -107,6 +111,27 @@ const ShinApp = (function() {
   /** Phân số (1 = 100%) ➜ "94,2%". */
   function ptVN(v, soLe) {
     return v === null || v === undefined || !isFinite(Number(v)) ? '–' : soVN(Number(v) * 100, soLe === undefined ? 1 : soLe) + '%';
+  }
+
+  /** Chữ số kiểu VN ("1.500.000" · "12,5") ➜ số; trống / sai ➜ null. */
+  function docSoVN(v) {
+    if (typeof v === 'number') return isFinite(v) ? v : null;
+    const t = String(v === undefined || v === null ? '' : v).trim().replace(/\s|đ/g, '').replace(/\./g, '').replace(',', '.');
+    return t === '' || !isFinite(Number(t)) ? null : Number(t);
+  }
+
+  /** Ô ngày dd/mm/yyyy: tự thêm "/" khi gõ số. */
+  function goNgay(o) {
+    const so = o.value.replace(/\D/g, '').slice(0, 8);
+    o.value = so.length > 4 ? `${so.slice(0, 2)}/${so.slice(2, 4)}/${so.slice(4)}` : so.length > 2 ? `${so.slice(0, 2)}/${so.slice(2)}` : so;
+  }
+
+  /** 'dd/mm/yyyy' hợp lệ (có ngày thật) ➜ true. */
+  function laNgayVN(s) {
+    const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(String(s || '').trim());
+    if (!m) return false;
+    const d = new Date(+m[3], +m[2] - 1, +m[1]);
+    return d.getDate() === +m[1] && d.getMonth() === +m[2] - 1;
   }
 
   /** "T4, 07/10/2026" */
@@ -242,6 +267,8 @@ const ShinApp = (function() {
     apDungCochu(currentCochu);
 
     veDecagonDrawer();
+    apDungRail(railMacDinh());
+    if (MQ_DESKTOP.addEventListener) MQ_DESKTOP.addEventListener('change', () => apDungRail(railMacDinh()));
     veMenuDay();
     capNhatBannerTrangThai();
     if (SHIN_API.laCheDoLive()) khoiDongLive();
@@ -276,6 +303,7 @@ const ShinApp = (function() {
     if (kqHub.ok) {
       const d = kqHub.data || {};
       live.nguoi = d.nguoi || null;
+      live.laAdminHub = !!d.laAdmin;
       live.soChuaDoc = Number(d.soChuaDoc) || 0;
       live.linkHub = d.linkExec ? d.linkExec + '?t=' + encodeURIComponent(SHIN_API.layToken()) : '';
       ((d.lienKet && d.lienKet.app) || []).forEach(a => {
@@ -292,6 +320,10 @@ const ShinApp = (function() {
   }
 
   async function hoiQuyenCacApp() {
+    // Số yêu cầu chờ duyệt cho huy hiệu ⚡ (cổng 0B của Hub – chưa mở thì im lặng, không hiện số)
+    SHIN_API.goi('HUB', 'webPheDuyet', {}).then(kq => {
+      if (kq.ok && kq.data) { live.soChoDuyet = (kq.data.choDuyet || []).length; veMenuDay(); veDecagonDrawer(); }
+    });
     const cac = ['KPI', 'TS', 'KS', 'PK'];
     const ketQua = await Promise.all(cac.map(k => SHIN_API.goiCong(k, 'webKhoiDong')));
     ketQua.forEach((kq, i) => {
@@ -384,9 +416,10 @@ const ShinApp = (function() {
     return dsMangTat().indexOf(ma) < 0;
   }
 
-  /** Mảng hiện trong menu: đang bật + (Live) không bị máy chủ v1 từ chối quyền. */
+  /** Mảng hiện trong menu: đang bật + (Live) không bị máy chủ v1 từ chối quyền. 🧭 Điều hành chỉ Admin Hub. */
   function mangDuocHien(ma) {
     if (!mangDangBat(ma)) return false;
+    if (ma === 'dieuhanh' && SHIN_API.laCheDoLive() && live.quyen.HUB === 'co' && !live.laAdminHub) return false;
     const mod = MODULES.find(m => m.ma === ma);
     const khoa = mod && mod.mayChu;
     return !(khoa && live.quyen[khoa] === 'khong');
@@ -401,8 +434,8 @@ const ShinApp = (function() {
 
     const navItems = [
       { id: 'home', icon: '🏠', label: 'Hôm nay', badge: laLive && live.soChuaDoc ? String(live.soChuaDoc) : '' },
-      // Phê duyệt 1-chạm chưa có máy chủ v1 ➜ chỉ hiện số đếm ở chế độ trình diễn
-      { id: 'pheduyet', icon: '⚡', label: 'Phê duyệt', badge: laLive ? '' : '4' },
+      // Phê duyệt 1-chạm: Live lấy số từ cổng Hub webPheDuyet (chưa mở ➜ không hiện số); Demo hiện số mẫu
+      { id: 'pheduyet', icon: '⚡', label: 'Phê duyệt', badge: laLive ? (live.soChoDuyet ? String(live.soChoDuyet) : '') : '4' },
       { id: 'duan', icon: '📌', label: 'Dự án', badge: '' },
       { id: 'crm', icon: '👥', label: 'Đối tác', badge: '' },
       { id: 'caidat', icon: '⚙️', label: 'Cài đặt', badge: '' }
@@ -439,10 +472,12 @@ const ShinApp = (function() {
           <div class="decagon-grid">
             ${ds.map(item => `
               <div class="decagon-card ${item.ma === currentModule ? 'active' : ''}" data-mod="${item.ma}"
+                   title="${item.ten}" role="button" tabindex="0" aria-label="${item.ten}"
+                   onkeydown="if(event.key==='Enter') this.click()"
                    onclick="ShinApp.chuyenModule('${item.ma}'); ShinApp.dongDecagonDrawer();">
                 <span class="decagon-icon">${item.icon}</span>
                 <div class="decagon-name">${item.ten}</div>
-                ${item.badge && !(item.chiMau && laLive) ? `<span class="badge-count">${item.badge}</span>` : ''}
+                ${item.ma === 'pheduyet' && (laLive ? live.soChoDuyet : 4) ? `<span class="badge-count">${laLive ? esc(live.soChoDuyet) : 4}</span>` : ''}
               </div>
             `).join('')}
           </div>
@@ -521,6 +556,8 @@ const ShinApp = (function() {
         if (kq.ok) {
           data = kq.data;
           if (kq.ghiChu) banner = khungNguon('mau', kq.ghiChu, targetMod.mayChu);
+        } else if (kq.loi === 'hanh') {
+          banner = khungNguon('mau', `Máy chủ ${SHIN_API.TEN_MAY_CHU[targetMod.mayChu] || 'v1'} chưa mở cổng cho mảng này (đang chờ dựng ở hệ v1) – số liệu bên dưới là MẪU.`, targetMod.mayChu);
         } else if (kq.loi === 'quyen') {
           if (targetMod.mayChu) live.quyen[targetMod.mayChu] = 'khong';
           veKhongCoQuyen(container, targetMod);
@@ -552,18 +589,34 @@ const ShinApp = (function() {
     chuyenModule(navId === 'home' ? 'hub' : navId);
   }
 
-  function moDecagonDrawer() {
+  /* ---------------- Thanh menu trái (rail) – Sếp 30/10 ----------------
+   * Thu gọn = hàng icon; ☰ bung / thu. Desktop: mặc định bung, nhớ lựa chọn trên máy; không che nội dung.
+   * Điện thoại: bung thì nổi trên nội dung (lớp mờ), chọn mảng xong tự thu. */
+  const MQ_DESKTOP = window.matchMedia ? window.matchMedia('(min-width: 1024px)') : { matches: false };
+
+  function apDungRail(mo) {
     const drawer = document.getElementById('decagonDrawer');
     const overlay = document.getElementById('decagonOverlay');
-    if (drawer) drawer.classList.add('open');
-    if (overlay) overlay.classList.add('open');
+    document.body.classList.toggle('rail-mo', mo);
+    if (drawer) drawer.classList.toggle('open', mo);
+    if (overlay) overlay.classList.toggle('open', mo && !MQ_DESKTOP.matches);
   }
 
+  function railMacDinh() {
+    return MQ_DESKTOP.matches && docLS('shin_rail_thu') !== '1';
+  }
+
+  /** ☰: bung ↔ thu. */
+  function moDecagonDrawer() {
+    const mo = !document.body.classList.contains('rail-mo');
+    if (MQ_DESKTOP.matches) luuLS('shin_rail_thu', mo ? '0' : '1');
+    apDungRail(mo);
+  }
+
+  /** Thu rail trên điện thoại (sau khi chọn mảng / chạm lớp mờ / Esc). Desktop giữ nguyên. */
   function dongDecagonDrawer() {
-    const drawer = document.getElementById('decagonDrawer');
-    const overlay = document.getElementById('decagonOverlay');
-    if (drawer) drawer.classList.remove('open');
-    if (overlay) overlay.classList.remove('open');
+    if (MQ_DESKTOP.matches) return;
+    apDungRail(false);
   }
 
   function moCaiDat() {
@@ -604,7 +657,7 @@ const ShinApp = (function() {
     const val = tokenInput.value.trim();
     SHIN_API.luuToken(val);
     Object.keys(live.quyen).forEach(k => delete live.quyen[k]);
-    live.nguoi = null; live.lienKet = {}; live.linkHub = ''; live.soChuaDoc = 0; live.hubSanSang = null;
+    live.nguoi = null; live.laAdminHub = false; live.soChoDuyet = null; live.lienKet = {}; live.linkHub = ''; live.soChuaDoc = 0; live.hubSanSang = null;
     capNhatBannerTrangThai();
     dongModal();
     toast(val ? 'Đã lưu Token – đang nối dữ liệu thật của hệ v1 🟢' : 'Đã chuyển về chế độ Trình diễn mẫu (Demo) 🟡', 'info');
@@ -638,6 +691,11 @@ const ShinApp = (function() {
     goiBat,
     esc,
     soVN,
+    docSoVN,
+    goNgay,
+    laNgayVN,
+    veMenuDay,
+    veDecagonDrawer,
     ptVN,
     ngayVN,
     loiChao,

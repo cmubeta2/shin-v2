@@ -87,7 +87,9 @@ const ModuleHub = {
             </div>
           `).join('')}
         </div>
-        <button class="btn-primary" onclick="ModuleHub.moDieuHanh()">🧭 Mở Bàn Điều Hành</button>
+        ${SHIN_API.laCheDoLive() && !ShinApp.live.laAdminHub
+          ? '<button class="btn-primary" onclick="ModuleHub.lamMoi(this)">↻ Kéo số mới từ các app</button>'
+          : '<button class="btn-primary" onclick="ModuleHub.moDieuHanh()">🧭 Mở Bàn Điều Hành</button>'}
       </div>
 
       ${(d.loiApp || []).length ? `<div class="canh-bao-nguon loi"><span>Chưa kéo được số của: ${e(d.loiApp.join(', '))}. Bấm "Làm mới" để thử lại.</span></div>` : ''}
@@ -328,7 +330,7 @@ const ModuleHub = {
   },
 
   moDieuHanh: function() {
-    ShinApp.moV1('HUB', 'Bàn Điều Hành 🧭');
+    ShinApp.chuyenModule('dieuhanh');
   }
 };
 

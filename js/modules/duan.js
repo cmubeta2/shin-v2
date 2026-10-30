@@ -13,9 +13,58 @@ const ModuleDuAn = {
   bieuTuong: '📌',
   paletteMacDinh: 'executive',
   tabHienTai: 'flash', // 'flash' hoặc 'danhsach'
+  mayChu: 'HUB',
+  _d: null,
+
+  /**
+   * Live (v2.5.0 – HOP_DONG_CONG_V2.md mục Dự án, máy chủ Hub): webDuAn({}) ➜
+   * {duAn:[{ma, ten, quanLy, tienDo, nganSach, daChi, trangThai, hanChot, mucDo}], flash:{ngay, nguoiBaoCao, tienDo[], vuongMac[], taiChinh{}, choDuyet[]}}
+   */
+  taiLive: async function() {
+    const kq = await SHIN_API.goi('HUB', 'webDuAn', {});
+    if (!kq.ok) return kq;
+    return { ok: true, data: this.tuV1(kq.data) };
+  },
+
+  /** THUẦN. Cổng webDuAn ➜ khuôn màn. Mọi chữ từ máy chủ được thoát HTML tại đây (khuôn vẽ chèn thẳng); màu do v2 tự tính. */
+  tuV1: function(p) {
+    p = p || {};
+    const e = ShinApp.esc, tien = v => v === null || v === undefined || v === '' ? '—' : ShinApp.soVN(v) + ' đ';
+    const MAU = { xanh: 'var(--c-green)', vang: 'var(--c-yellow)', do: 'var(--c-red)' };
+    const f = p.flash || {}, tc = f.taiChinh || {};
+    const ds = (p.duAn || []).map(x => ({
+      ma: String(x.ma || '').replace(/[^\w-]/g, ''), ten: e(x.ten), quanLy: e(x.quanLy), tienDo: Math.max(0, Math.min(100, Math.round(Number(x.tienDo) || 0))),
+      nganSach: e(tien(x.nganSach)), daChi: e(tien(x.daChi)), trangThai: e(x.trangThai), hanChot: e(x.hanChot), den: MAU[x.mucDo] || 'var(--c-blue)'
+    }));
+    const dungHan = (p.duAn || []).filter(x => x.mucDo === 'xanh').length;
+    return {
+      live: true,
+      hero: {
+        chao: 'Quản Lý Dự Án & Báo Cáo Nhanh 📌',
+        ngay: e(f.ngay || ShinApp.ngayVN()),
+        so: [
+          { nhan: 'Dự án đang chạy', giaTri: ShinApp.soVN(ds.length), mau: 'var(--c-blue)' },
+          { nhan: 'Đúng tiến độ', giaTri: dungHan + '/' + ds.length, mau: 'var(--c-green)' },
+          { nhan: 'Việc chờ duyệt', giaTri: ShinApp.soVN((f.choDuyet || []).length), mau: 'var(--c-yellow)' }
+        ]
+      },
+      danhSachDuAn: ds,
+      flashReport: {
+        ngay: e(f.ngay), nguoiBaoCao: e(f.nguoiBaoCao),
+        khoi1_tienDo: (f.tienDo || []).map(e),
+        khoi2_vuongMac: (f.vuongMac || []).map(v => ({ vanDe: e(v.vanDe), mucDo: e(v.mucDo), deXuat: e(v.deXuat) })),
+        khoi3_taiChinh: {
+          tongNganSach: e(tien(tc.tongNganSach)), daGiaiNgan: e(tien(tc.daGiaiNgan)),
+          phatSinhTrongNgay: (tc.phatSinh || []).map(x => ({ khoanMuc: e(x.khoanMuc), soTien: e(tien(x.soTien)), nguoiChi: e(x.nguoiChi), tinhTrang: e(x.tinhTrang) }))
+        },
+        khoi4_choDuyet: (f.choDuyet || []).map(x => ({ ma: e(String(x.ma || '').replace(/[^\w-]/g, '')), loai: e(x.loai), tieuDe: e(x.tieuDe), han: e(x.han), uuTien: e(x.uuTien) }))
+      }
+    };
+  },
 
   render: function(container, data) {
-    const d = data || window.SHIN_DEMO_DATA.duan;
+    const d = data || this._d || window.SHIN_DEMO_DATA.duan;
+    this._d = d;
     const hero = d.hero || {};
     const danhSach = d.danhSachDuAn || [];
     const flash = d.flashReport || {};
@@ -244,16 +293,19 @@ const ModuleDuAn = {
     this.tabHienTai = tab;
     const container = document.getElementById('appContent');
     if (container) {
-      this.render(container, window.SHIN_DEMO_DATA.duan);
+      this.render(container, this._d);
     }
   },
 
+  /** Việc chờ duyệt của dự án đi qua Trung tâm Phê duyệt 0B (một sổ duyệt chung). */
   duyetNhanh: function(ma) {
-    ShinApp.toast(`Đã duyệt 1-chạm thành công mục ${ma}! 🟢`);
+    if (SHIN_API.laCheDoLive() && this._d && this._d.live) { ShinApp.chuyenModule('pheduyet'); return; }
+    ShinApp.toast(`Đã duyệt mục ${ma} (mẫu).`);
   },
 
   yeuCauSua: function(ma) {
-    ShinApp.toast(`Đã gửi yêu cầu bổ sung/chỉnh sửa cho ${ma} 📝`, 'info');
+    if (SHIN_API.laCheDoLive() && this._d && this._d.live) { ShinApp.chuyenModule('pheduyet'); return; }
+    ShinApp.toast(`Đã gửi yêu cầu sửa cho ${ma} (mẫu).`, 'info');
   },
 
   moFormTaoMoi: function() {

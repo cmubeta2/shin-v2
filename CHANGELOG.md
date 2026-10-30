@@ -4,6 +4,30 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.5.0] – 30/10/2026 (GOM ĐỢT v2.3 → v2.5 · THANH MENU TRÁI)
+
+### 🧭 v2.3.0 – Dùng nốt các cổng v1 đã có (không sửa v1)
+- **Điều hành hệ Shin** (chỉ Admin Hub) – mảng mới trong menu, nút "🧭 Mở Bàn Điều Hành" trên Hôm nay mở thẳng trong v2 (`webDieuHanh`, `webHopThu`):
+  ① Chờ anh (Đã làm / Bỏ qua / lựa chọn / Duyệt dòng có **Hoàn tác 6 giây**; Để sau chọn ngày; Trả lời / Hỏi lại; hoàn tác phía máy trong 10 phút) ·
+  ⚡ Giao việc cho Shin · ⑤ Duyệt kế hoạch (theo mặc định / chọn khác từng câu) · Dòng việc các app (ô số lọc, phiếu từng dòng, Lên đầu / Hạ / Tạm dừng / Góp ý, xin đưa lên app) · Tác vụ tự động · Hoạt động gần đây.
+- **KPI**: thêm 3 thẻ cho BKS / Admin – 🔎 Soát lỗi chốt quý (`webSoatLoi`, chọn quý), 🎯 Phân bổ AOP (`webAOP`), 📄 Nháp báo cáo quý ra Google Docs (`webBaoCaoQuy`, tạo lại phải bấm 2 lần).
+- **Tuyển sinh**: tiếp nhận / sửa lead ngay trong v2 (ô bắt buộc + "＋ Thêm chi tiết", kiểm SĐT như v1, Loss cần lý do) · nhật ký · chuyển chiến dịch · xóa lead có Hoàn tác 6 giây · Admin sửa chiến dịch + bậc hoa hồng, tạo mới, chép chiến dịch.
+
+### 🔌 v2.4.0 – Màn chờ cổng mới của KS, PK (v2 xong, v1 mở cổng theo `HOP_DONG_CONG_V2.md`)
+- Khảo sát (`webTongQuan`) và Phòng PTKH (`webHomNay`) đã dựng màn theo hợp đồng cổng. Máy chủ chưa mở ➜ dải vàng "chưa mở cổng" + số MẪU; mở rồi ➜ tự hiện số thật.
+
+### ⚡ v2.5.0 – Dịch vụ chung & mảng mới (chờ Hub mở cổng)
+- Phê duyệt 1-chạm (`webPheDuyet`, `webDuyet`): Duyệt có Hoàn tác 6s, Cần sửa / Từ chối phải ghi ý kiến, từ chối bấm 2 lần; huy hiệu ⚡ lấy số thật khi cổng mở.
+- CRM (`webCRM`, `webLuuDoiTac`): lọc theo loại, tìm nhanh, thêm / sửa đối tác. Dự án (`webDuAn`) Daily Flash 4 khối – việc chờ duyệt chuyển sang 0B. **Mảng mới 💰 Tài chính** (`webTaiChinh`).
+- Mọi chữ từ máy chủ đều được thoát HTML (bỏ các chỗ chèn thô ở CRM, Phê duyệt, Khảo sát, Phòng khám, Dự án).
+
+### 🧱 Thanh menu trái (Sếp 30/10)
+- Mọi màn luôn có hàng icon nhỏ bên trái (chỉ icon). Bấm ☰ mới bung ra có tên; điện thoại chọn mảng xong tự thu.
+- Desktop: mặc định bung, không che header / nội dung / thanh đáy (nội dung tự lùi), nhớ lựa chọn thu / bung trên máy.
+- Nội dung chính và thanh đáy có bề rộng tối đa (760px điện thoại – máy tính bảng, 960px desktop), căn giữa phần còn lại.
+
+---
+
 ## [2.2.0] – 29/10/2026 (NỐI THẬT VÀO HỆ v1 – ĐỢT P1: HUB · KPI · TUYỂN SINH)
 
 > v2 là **cửa thứ 3** của hệ Shin v1: gọi thẳng các máy chủ Apps Script v1, dùng chung 100% dữ liệu, **không sửa gì ở v1**.
