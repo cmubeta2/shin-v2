@@ -1,11 +1,11 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.5.1 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
+ * Phiên bản: v2.5.2 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
  * Hàm dùng chung theo PHONG_CACH_APP_SHIN mục 5: esc, soVN, toast (+ Hoàn tác 6s), xacNhan2Lan, goiNut, rung.
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.5.1';
+  const PHIEN_BAN = 'v2.5.2';
 
   const MODULES = [
     ModuleHub,
@@ -259,6 +259,51 @@ const ShinApp = (function() {
     return kq.data;
   }
 
+  /* ---------------- Máy màn nhỏ (v2.5.2 – Sếp 30/10) ----------------
+   * ≤ 360px: thanh trái thu thành tay nắm (dải 4px + mấu »); vuốt từ mép trái hoặc chạm » để mở, vuốt sang trái để đóng.
+   * Lần đầu: mấu nhấp nháy 2 lần + gợi ý (1 lần / máy). Đang gõ form: ẩn thanh đáy để có chỗ nhìn ô nhập. */
+  const MQ_NHO = window.matchMedia ? window.matchMedia('(max-width: 360px)') : { matches: false };
+
+  function ganCuChiMayNho() {
+    let x0 = null, y0 = null, keo = '';
+    document.addEventListener('touchstart', (e) => {
+      if (MQ_DESKTOP.matches || e.touches.length !== 1) return;
+      const t = e.touches[0], mo = document.body.classList.contains('rail-mo');
+      keo = !mo && t.clientX <= 24 ? 'mo' : mo ? 'dong' : '';
+      x0 = t.clientX; y0 = t.clientY;
+    }, { passive: true });
+    document.addEventListener('touchmove', (e) => {
+      if (!keo || x0 === null) return;
+      const t = e.touches[0], dx = t.clientX - x0, dy = Math.abs(t.clientY - y0);
+      if (dy > 40) { keo = ''; return; }
+      if (keo === 'mo' && dx > 40) { keo = ''; rung('nhe'); apDungRail(true); }
+      else if (keo === 'dong' && dx < -50) { keo = ''; apDungRail(false); }
+    }, { passive: true });
+    document.addEventListener('touchend', () => { keo = ''; x0 = null; }, { passive: true });
+
+    // Gõ form trên điện thoại: ẩn thanh đáy (bàn phím đã chiếm chỗ)
+    document.addEventListener('focusin', (e) => {
+      if (!MQ_DESKTOP.matches && e.target && e.target.matches && e.target.matches('input:not([type=checkbox]):not([type=radio]), textarea, select')) document.body.classList.add('dang-go');
+    });
+    document.addEventListener('focusout', () => {
+      setTimeout(() => {
+        const a = document.activeElement;
+        if (!(a && a.matches && a.matches('input, textarea, select'))) document.body.classList.remove('dang-go');
+      }, 120);
+    });
+
+    goiYTayNam();
+    if (MQ_NHO.addEventListener) MQ_NHO.addEventListener('change', goiYTayNam);
+  }
+
+  function goiYTayNam() {
+    if (!MQ_NHO.matches || docLS('shin_goi_y_rail') === '1') return;
+    luuLS('shin_goi_y_rail', '1');
+    const tay = document.getElementById('railTay');
+    if (tay) { tay.classList.add('nhay'); setTimeout(() => tay.classList.remove('nhay'), 2600); }
+    setTimeout(() => toast('Vuốt từ mép trái hoặc chạm » để mở danh mục nghiệp vụ.', 'info', { thoiGian: 6000 }), 800);
+  }
+
   /* ---------------- PWA – cài như ứng dụng ở mọi nền tảng (Sếp 30/10) ----------------
    * Chrome / Edge / Samsung / Opera (Android, Windows, macOS, Linux, ChromeOS): bắt beforeinstallprompt ➜ nút 📲 bấm là cài.
    * iPhone / iPad (Safari): không có hộp cài tự động ➜ hướng dẫn Chia sẻ ⬆ ➜ "Thêm vào MH chính".
@@ -337,6 +382,7 @@ const ShinApp = (function() {
 
     veDecagonDrawer();
     apDungRail(railMacDinh());
+    ganCuChiMayNho();
     if (MQ_DESKTOP.addEventListener) MQ_DESKTOP.addEventListener('change', () => apDungRail(railMacDinh()));
     veMenuDay();
     capNhatBannerTrangThai();
@@ -516,7 +562,7 @@ const ShinApp = (function() {
               onclick="ShinApp.chuyenNav('${item.id}')"
               data-nav="${item.id}">
         <span class="nav-icon">${item.icon}</span>
-        <span>${item.label}</span>
+        <span class="nav-nhan">${item.label}</span>
         ${item.badge ? `<span class="nav-badge">${esc(item.badge)}</span>` : ''}
       </button>
     `).join('');
@@ -529,6 +575,9 @@ const ShinApp = (function() {
     const body = document.getElementById('decagonBody');
     if (!body) return;
     const laLive = SHIN_API.laCheDoLive();
+    // Chấm đỏ trên tay nắm (máy nhỏ): bên trong có việc chờ (phiếu ⚡)
+    const cham = document.getElementById('railTayCham');
+    if (cham) cham.hidden = !(laLive ? live.soChoDuyet : 4);
 
     body.innerHTML = DECAGON_GROUPS.map(g => {
       const ds = g.danhSach.filter(item => mangDuocHien(item.ma));

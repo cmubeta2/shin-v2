@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.5.2] – 30/10/2026 (ĐIỆN THOẠI ĐỜI CŨ, MÀN NHỎ)
+
+- **≤ 360px** (iPhone SE đời đầu, Android 5 inch): thanh trái thu thành **tay nắm** – dải màu 4px mép trái + mấu » giữa màn (vùng chạm 44px). Chạm » hoặc **vuốt từ mép trái** để mở; vuốt sang trái hoặc chọn mảng thì thu. Có việc chờ ➜ chấm đỏ trên mấu. Lần đầu: mấu nhấp nháy + gợi ý (1 lần / máy).
+- **361–399px**: hàng icon gọn 48px. **≤ 340px**: thanh đáy chỉ icon. **Màn thấp ≤ 640px**: thanh đáy 52px. Màn nhỏ: cụm 3 số hero gọn lại.
+- Đang gõ form trên điện thoại: ẩn thanh đáy cho bàn phím có chỗ.
+- **Góc dưới trái**: thanh đáy tràn hết bề ngang (cùng nền), nút vẫn căn giữa vùng nội dung – hết khoảng trống lệch màu giữa thanh trái và thanh đáy.
+
+---
+
 ## [2.5.1] – 30/10/2026 (CÀI NHƯ ỨNG DỤNG Ở MỌI NỀN TẢNG – PWA)
 
 - `manifest.webmanifest`: tên SHIN, bộ icon 192/512 + icon maskable (Android), `apple-touch-icon` (iPhone/iPad), favicon; mở toàn màn hình (standalone); lối tắt giữ-icon: Hôm nay · Điều hành · Phê duyệt · Tuyển sinh (`?m=<mảng>`).
