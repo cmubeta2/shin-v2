@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.5.1] – 30/10/2026 (CÀI NHƯ ỨNG DỤNG Ở MỌI NỀN TẢNG – PWA)
+
+- `manifest.webmanifest`: tên SHIN, bộ icon 192/512 + icon maskable (Android), `apple-touch-icon` (iPhone/iPad), favicon; mở toàn màn hình (standalone); lối tắt giữ-icon: Hôm nay · Điều hành · Phê duyệt · Tuyển sinh (`?m=<mảng>`).
+- `sw.js`: mạng trước – bản mới lên web là app có ngay; rớt mạng vẫn mở được vỏ app. Không lưu đệm số liệu máy chủ v1 (luôn lấy thật).
+- Nút 📲 ở chân thanh trái + khối "Cài SHIN như ứng dụng" trong ⚙️ Cài đặt: Chrome / Edge / Samsung (Android, Windows, macOS, Linux, ChromeOS) bấm là cài; iPhone / iPad, Safari Mac, Firefox hiện hướng dẫn cài tay đúng máy. Đã cài thì tự ẩn.
+- Header chừa tai thỏ / thanh trạng thái iPhone khi chạy dạng app.
+- Quy tắc: mọi bản đẩy web từ nay mặc định có PWA (UPDATE.md mục 3).
+
+---
+
 ## [2.5.0] – 30/10/2026 (GOM ĐỢT v2.3 → v2.5 · THANH MENU TRÁI)
 
 ### 🧭 v2.3.0 – Dùng nốt các cổng v1 đã có (không sửa v1)

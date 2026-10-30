@@ -4,7 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="SHIN AIOS v2 – Hệ thống điều hành hợp nhất đa module dành cho Doanh nghiệp & Y tế">
-  <meta name="theme-color" content="#0284c7">
+  <meta name="theme-color" content="#0f172a">
+  <!-- PWA: cài như ứng dụng trên Android, iPhone/iPad, Windows, macOS, Linux, ChromeOS -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="SHIN">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="application-name" content="SHIN">
+  <meta name="msapplication-TileColor" content="#0f172a">
+  <meta name="msapplication-TileImage" content="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <title>SHIN AIOS v2 – Hệ Thống Hợp Nhất Đa Module</title>
   <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
   <link rel="stylesheet" href="css/styles.css">
@@ -41,7 +52,7 @@
             <span class="topbar-title">SHIN AIOS</span>
             <!-- Thẻ trạng thái nhỏ gọn nằm ngay kế bên chữ SHIN AIOS -->
             <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat(); event.stopPropagation();" title="Bấm để quản lý kết nối Token">
-              Demo v2.5.0
+              Demo v2.5.1
             </button>
           </div>
           <div class="topbar-sub">Hệ thống Quản trị AI</div>
@@ -87,6 +98,7 @@
 
     <!-- Cài đặt giao diện & token (chỉ icon) -->
     <div class="rail-chan">
+      <button class="rail-nut" id="nutCaiApp" hidden onclick="ShinApp.caiUngDung()" title="Cài SHIN như ứng dụng" aria-label="Cài ứng dụng">📲</button>
       <button class="rail-nut" onclick="ShinApp.moCaiDat()" title="Cài đặt giao diện & kết nối" aria-label="Cài đặt">⚙️</button>
     </div>
   </nav>
@@ -128,6 +140,13 @@
         <div class="palette-grid" id="paletteGrid">
           <!-- Sinh động qua js/app.js -->
         </div>
+      </div>
+
+      <!-- Cài như ứng dụng (PWA) -->
+      <div class="form-group" id="khoiCaiApp" style="margin-top:20px; border-top:1px dashed var(--border); padding-top:16px;">
+        <label class="form-label">📲 CÀI SHIN NHƯ ỨNG DỤNG</label>
+        <p class="chu-phu" id="huongDanCai">Cài lên màn hình chính / thanh tác vụ để mở nhanh như app, toàn màn hình, không thanh địa chỉ.</p>
+        <button class="btn-primary" id="nutCaiApp2" style="width:100%;" onclick="ShinApp.caiUngDung()">📲 Cài ứng dụng</button>
       </div>
 
       <!-- Quản Lý Token Kết Nối Apps Script Thật -->
