@@ -156,10 +156,7 @@ const ModulePheDuyet = {
         return;
       }
       const kq = await ShinApp.goiNut(nut, 'Đang gửi…', () => ShinApp.goiBat('HUB', 'webDuyet', this.thamSoGui(x, quyet, yKien)), 'pd-' + x.id);
-      if (kq) {
-        this.render(document.getElementById('appContent'), this.tuV1(kq));
-        ShinApp.toast(quyet === 'tu_choi' ? 'Đã từ chối – app gốc nhận ý kiến của anh.' : 'Đã gửi yêu cầu sửa về app gốc.');
-      }
+      if (kq) { this.render(document.getElementById('appContent'), this.tuV1(kq)); ShinApp.rung('xong'); }
     };
     if (quyet === 'tu_choi') ShinApp.xacNhan2Lan('pd-tc-' + x.id, `Từ chối "${x.tieuDe}"`, lam);
     else lam();

@@ -254,7 +254,7 @@ const ModuleTuyenSinh = {
     if (!l) return;
     if (!noi) { ShinApp.toast('Viết nội dung nhật ký trước.', 'warn'); return; }
     const kq = await ShinApp.goiNut(nut, 'Đang ghi…', () => ShinApp.goiBat('TS', 'webThemNhatKy', l.MaLead, noi), 'ts-nk-' + l.MaLead + noi);
-    if (kq) { this.nhanLead(cd.ma, kq); this.veLaiCD(cd.ma); ShinApp.rung('xong'); ShinApp.toast('Đã ghi nhật ký.'); }
+    if (kq) { this.nhanLead(cd.ma, kq); this.veLaiCD(cd.ma); ShinApp.rung('xong'); }
   },
 
   chuyenCD: async function(i, j, nut) {
@@ -445,7 +445,7 @@ const ModuleTuyenSinh = {
     if (loiBac) { ShinApp.toast(loiBac, 'warn'); return; }
     if (!SHIN_API.laCheDoLive()) { this.dongForm(); ShinApp.toast(`Đã lưu chiến dịch ${cd.TenCD} (mẫu).`, 'info'); return; }
     const kq = await ShinApp.goiNut(nut, 'Đang lưu…', () => ShinApp.goiBat('TS', 'webLuuChienDich', cd, bac), 'ts-cd-' + (maCD || cd.TenCD));
-    if (kq) { this.nhanChienDich(kq); ShinApp.rung('xong'); ShinApp.toast(`Đã lưu chiến dịch ${cd.TenCD}.`); }
+    if (kq) { this.nhanChienDich(kq); ShinApp.rung('xong'); }
   },
 
   chepCD: async function(i, nut) {

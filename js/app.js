@@ -1,11 +1,11 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.5.3 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
+ * Phiên bản: v2.5.4 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
  * Hàm dùng chung theo PHONG_CACH_APP_SHIN mục 5: esc, soVN, toast (+ Hoàn tác 6s), xacNhan2Lan, goiNut, rung.
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.5.3';
+  const PHIEN_BAN = 'v2.5.4';
 
   const MODULES = [
     ModuleHub,
@@ -202,7 +202,7 @@ const ShinApp = (function() {
     rung('nhe');
     toast(msg, 'success', {
       nhan: 'Hoàn tác',
-      bam: () => { if (traLai) traLai(); toast('Đã hoàn tác – không có gì được gửi đi.', 'info'); },
+      bam: () => { if (traLai) traLai(); },
       khiHet: async () => {
         try { await thucHien(); rung('xong'); }
         catch (e) { if (traLai) traLai(); toast(e.message || 'Gửi không được – đã trả lại như cũ.', 'error'); }
@@ -237,7 +237,6 @@ const ShinApp = (function() {
     if (nut) { nut.disabled = true; nut.innerHTML = '⏳ ' + esc(chuCho); }
     const thanh = document.getElementById('thanhCho');
     if (thanh) thanh.classList.add('chay');
-    const bao5 = setTimeout(() => toast('Máy chủ đang xử lý, anh/chị chờ chút…', 'info'), 5000);
     const bao20 = setTimeout(() => toast('Mạng đang yếu – kiểm tra 4G/Wi-Fi nếu chờ lâu.', 'warn'), 20000);
     try {
       return await ham();
@@ -245,7 +244,7 @@ const ShinApp = (function() {
       toast(e.message || 'Có lỗi – anh/chị bấm lại giúp em.', 'error');
       return null;
     } finally {
-      clearTimeout(bao5); clearTimeout(bao20);
+      clearTimeout(bao20);
       delete dangGui[khoa];
       if (thanh) thanh.classList.remove('chay');
       if (nut && nut.isConnected) { nut.disabled = false; nut.innerHTML = chuCu; }
@@ -283,7 +282,6 @@ const ShinApp = (function() {
     luuLS('shin_kieu_rail', k);
     const mep = apDungKieuRail();
     rung('nhe');
-    toast(k === 'mep' ? 'Đã chọn Mép trái – giữ và kéo mấu » để đổi chỗ.' : k === 'icon' ? 'Đã chọn Hàng icon bên trái.' : 'Đã chọn Tự động theo cỡ màn.', 'info');
     if (mep) goiYTayNam(true);
   }
 
@@ -409,7 +407,6 @@ const ShinApp = (function() {
       moi.prompt();
       try {
         const kq = await moi.userChoice;
-        toast(kq && kq.outcome === 'accepted' ? 'Đang cài SHIN lên máy…' : 'Đã bỏ qua – lúc nào cần anh/chị bấm 📲 lại.', 'info');
       } catch (e) {}
       capNhatNutCai();
       return;
@@ -422,7 +419,7 @@ const ShinApp = (function() {
       navigator.serviceWorker.register('sw.js').catch(e => console.warn('[Shin PWA] Không đăng ký được service worker:', e.message));
     }
     window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); loiMoiCai = e; capNhatNutCai(); });
-    window.addEventListener('appinstalled', () => { loiMoiCai = null; capNhatNutCai(); toast('Đã cài SHIN – mở từ màn hình chính / thanh tác vụ nhé 🎉'); });
+    window.addEventListener('appinstalled', () => { loiMoiCai = null; capNhatNutCai(); });
     capNhatNutCai();
   }
 
@@ -534,8 +531,6 @@ const ShinApp = (function() {
     luuLS('shin_theme_mode', mode);
     apDungThemeMode(mode);
     document.querySelectorAll('.theme-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
-    const tenCheDo = mode === 'light' ? 'Sáng' : mode === 'dark' ? 'Tối' : mode === 'system' ? 'Theo máy' : 'Theo giờ';
-    toast(`Đã áp dụng chế độ hiển thị: ${tenCheDo}`, 'info');
   }
 
   function apDungThemeMode(mode) {
@@ -846,7 +841,6 @@ const ShinApp = (function() {
     live.nguoi = null; live.laAdminHub = false; live.soChoDuyet = null; live.lienKet = {}; live.linkHub = ''; live.soChuaDoc = 0; live.hubSanSang = null;
     capNhatBannerTrangThai();
     dongModal();
-    toast(val ? 'Đã lưu Token – đang nối dữ liệu thật của hệ v1 🟢' : 'Đã chuyển về chế độ Trình diễn mẫu (Demo) 🟡', 'info');
     const sub = document.querySelector('.topbar-sub');
     if (sub) sub.textContent = 'Hệ thống Quản trị AI';
     veDecagonDrawer();

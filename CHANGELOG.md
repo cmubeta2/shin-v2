@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.5.4] – 30/10/2026 (BỚT THÔNG BÁO THỪA)
+
+Rà toàn app, nguyên tắc: **chỉ báo khi người dùng không tự thấy kết quả trên màn.**
+- **Bỏ:** mọi thông báo khi chỉnh cài đặt (chế độ sáng/tối, bảng màu, kiểu thanh trái, bật/tắt mảng, lưu token) · "Đã hoàn tác" · "Máy chủ đang xử lý" sau 5 giây (nút đã hiện ⏳ + thanh chạy) · đọc lại / làm mới số · thêm, xóa việc riêng · ghi nhật ký lead · lưu chiến dịch, đối tác · gửi lệnh Chờ anh, giao việc, duyệt kế hoạch, phê duyệt (thẻ đã đổi trạng thái) · tạo nháp báo cáo quý (thẻ hiện link) · thông báo cài app (trình duyệt tự báo).
+- **Giữ:** lỗi · nhắc ô thiếu / sai · Hoàn tác 6 giây · bấm 2 lần cho việc khó hoàn tác · mạng yếu sau 20 giây · cảnh báo SĐT trùng chiến dịch khác · việc gửi đi mà màn không đổi (lệnh theo dòng, xin lên app, tiếp nhận lead, chuyển lead, chép chiến dịch) · hướng dẫn cài app.
+
+---
+
 ## [2.5.3] – 30/10/2026 (CHỌN KIỂU THANH TRÁI TRÊN ĐIỆN THOẠI · MẤU KÉO ĐƯỢC)
 
 - ⚙️ Cài đặt ➜ **Thanh danh mục trên điện thoại**: Tự động (≤ 360px dùng mép trái, máy lớn hơn dùng hàng icon) · Hàng icon · **Mép trái** (rộng nội dung nhất – điện thoại 414px được thêm 52px bề ngang). Chỉ áp dụng điện thoại (< 768px); máy tính bảng, desktop giữ hàng icon / thanh mở sẵn.
