@@ -1588,25 +1588,29 @@ a.btn-secondary, a.btn-primary { display: inline-flex; align-items: center; just
   .decagon-drawer:not(.open) .rail-nut { width: 40px; }
 }
 
-/* ≤ 360px: tay nắm – dải màu 4px mép trái + mấu », vùng chạm 44px */
+/* Kiểu MÉP TRÁI (body.kieu-mep – JS bật khi: điện thoại < 768px và Sếp chọn "Mép trái", hoặc chọn "Tự động" mà màn ≤ 360px):
+   dải màu 4px mép trái + mấu » kéo lên / xuống được (vị trí nhớ trên máy, mặc định 1/3 dưới – vừa ngón cái trái) */
+body.kieu-mep { --rail-thu: 4px; --rail-w: 4px; }
+body.kieu-mep .decagon-drawer:not(.open) { background: var(--primary); box-shadow: none; }
+body.kieu-mep .decagon-drawer:not(.open) > * { visibility: hidden; }
+body.kieu-mep .rail-tay {
+  display: flex; align-items: center; position: fixed; left: 0;
+  top: var(--tay-top, 66%); transform: translateY(-50%);
+  width: 44px; height: 52px; padding: 0; border: none; background: transparent; z-index: 98; cursor: grab;
+  touch-action: none; -webkit-user-select: none; user-select: none;
+}
+body.kieu-mep .rail-tay.dang-keo { cursor: grabbing; }
+body.kieu-mep .rail-tay.dang-keo .rail-tay-mau { transform: scale(1.12); box-shadow: 3px 3px 14px rgba(0, 0, 0, 0.3); }
+.rail-tay-mau {
+  width: 24px; height: 44px; border-radius: 0 22px 22px 0; background: var(--primary); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); transition: transform 0.12s;
+}
+.rail-tay-cham { position: absolute; left: 17px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--c-red); border: 2px solid var(--card); }
+body.rail-mo .rail-tay { display: none !important; }
+.rail-tay.nhay .rail-tay-mau { animation: tayNhay 0.65s ease-in-out 0s 4 alternate; }
+body.kieu-mep .main-container { padding-left: 12px; padding-right: 10px; }
 @media (max-width: 360px) {
-  :root { --rail-thu: 4px; }
-  .decagon-drawer:not(.open) { background: var(--primary); box-shadow: none; }
-  .decagon-drawer:not(.open) > * { visibility: hidden; }
-  .rail-tay {
-    display: flex; align-items: center; position: fixed; left: 0;
-    top: calc(var(--header-height) + var(--safe-top) + 10px);
-    width: 44px; height: 48px; padding: 0; border: none; background: transparent; z-index: 98; cursor: pointer;
-  }
-  .rail-tay-mau {
-    width: 22px; height: 40px; border-radius: 0 20px 20px 0; background: var(--primary); color: #fff;
-    display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-  }
-  .rail-tay-cham { position: absolute; left: 15px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--c-red); border: 2px solid var(--card); }
-  body.rail-mo .rail-tay { display: none; }
-  .rail-tay.nhay .rail-tay-mau { animation: tayNhay 0.65s ease-in-out 0s 4 alternate; }
-  .main-container { padding-left: 12px; padding-right: 10px; }
   .tq-3so { gap: 6px; }
   .tq-o { padding: 8px; }
   .tq-so { font-size: calc(19px * var(--font-scale)); }
@@ -1640,6 +1644,7 @@ a.btn-secondary, a.btn-primary { display: inline-flex; align-items: center; just
   transition: padding-left 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .decagon-drawer:not(.open) { box-shadow: 1px 0 0 var(--border); }
-@media (max-width: 360px) {
-  .rail-tay { top: 38%; }   /* giữa màn: dễ chạm ngón cái, không bị toast / header che */
-}
+
+/* v2.5.3 – chọn kiểu thanh trái trên điện thoại (⚙️ Cài đặt) */
+.kieu-rail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.kieu-rail-grid .theme-mode-btn { min-height: 64px; }
