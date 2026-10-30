@@ -1,11 +1,11 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.5.0 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
+ * Phiên bản: v2.5.1 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
  * Hàm dùng chung theo PHONG_CACH_APP_SHIN mục 5: esc, soVN, toast (+ Hoàn tác 6s), xacNhan2Lan, goiNut, rung.
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.5.0';
+  const PHIEN_BAN = 'v2.5.1';
 
   const MODULES = [
     ModuleHub,
@@ -259,9 +259,78 @@ const ShinApp = (function() {
     return kq.data;
   }
 
+  /* ---------------- PWA – cài như ứng dụng ở mọi nền tảng (Sếp 30/10) ----------------
+   * Chrome / Edge / Samsung / Opera (Android, Windows, macOS, Linux, ChromeOS): bắt beforeinstallprompt ➜ nút 📲 bấm là cài.
+   * iPhone / iPad (Safari): không có hộp cài tự động ➜ hướng dẫn Chia sẻ ⬆ ➜ "Thêm vào MH chính".
+   * Safari macOS: Tệp ➜ "Thêm vào Dock". Firefox máy tính chưa hỗ trợ cài ➜ gợi ý mở bằng Chrome / Edge.
+   * Đã chạy dạng app (standalone) ➜ ẩn nút cài. */
+  let loiMoiCai = null;
+
+  function dangChayApp() {
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone), (display-mode: minimal-ui)').matches) || window.navigator.standalone === true;
+  }
+
+  /** THUẦN-ish. Nền tảng ➜ câu hướng dẫn cài tay khi trình duyệt không có hộp cài. */
+  function huongDanCaiTay() {
+    const ua = navigator.userAgent || '';
+    const ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    if (ios) return /CriOS|FxiOS|EdgiOS/.test(ua)
+      ? 'Trên iPhone/iPad: bấm nút Chia sẻ ⬆ (trên thanh địa chỉ) ➜ "Thêm vào MH chính" ➜ Thêm.'
+      : 'Trên iPhone/iPad (Safari): bấm nút Chia sẻ ⬆ ở thanh dưới ➜ kéo xuống chọn "Thêm vào MH chính" ➜ Thêm.';
+    if (/Macintosh/.test(ua) && /Safari/.test(ua) && !/Chrome|Chromium|Edg/.test(ua)) return 'Trên Mac (Safari): menu Tệp ➜ "Thêm vào Dock…".';
+    if (/Firefox/.test(ua) && !/Android/.test(ua)) return 'Firefox trên máy tính chưa cài được ứng dụng web – anh/chị mở link này bằng Chrome hoặc Edge rồi bấm 📲.';
+    if (/Android/.test(ua)) return 'Trên Android: bấm ⋮ (góc trên) ➜ "Cài đặt ứng dụng" / "Thêm vào màn hình chính".';
+    return 'Bấm biểu tượng cài (⊕ hoặc 🖥) ở cuối thanh địa chỉ, hoặc menu ⋮ ➜ "Cài đặt SHIN".';
+  }
+
+  function capNhatNutCai() {
+    const daCai = dangChayApp();
+    const nut = document.getElementById('nutCaiApp');
+    if (nut) nut.hidden = daCai;
+    const khoi = document.getElementById('khoiCaiApp');
+    if (khoi) khoi.hidden = daCai;
+    const hd = document.getElementById('huongDanCai');
+    if (hd && !daCai) hd.textContent = loiMoiCai ? 'Bấm nút dưới để cài SHIN lên máy – mở nhanh như app, toàn màn hình, không thanh địa chỉ.' : huongDanCaiTay();
+    const nut2 = document.getElementById('nutCaiApp2');
+    if (nut2) nut2.textContent = loiMoiCai ? '📲 Cài ứng dụng' : '📲 Xem cách cài';
+  }
+
+  async function caiUngDung() {
+    rung('nhe');
+    if (dangChayApp()) { toast('SHIN đang chạy dạng ứng dụng rồi 👍', 'info'); return; }
+    if (loiMoiCai) {
+      const moi = loiMoiCai;
+      loiMoiCai = null;
+      moi.prompt();
+      try {
+        const kq = await moi.userChoice;
+        toast(kq && kq.outcome === 'accepted' ? 'Đang cài SHIN lên máy…' : 'Đã bỏ qua – lúc nào cần anh/chị bấm 📲 lại.', 'info');
+      } catch (e) {}
+      capNhatNutCai();
+      return;
+    }
+    toast(huongDanCaiTay(), 'info', { thoiGian: 9000 });
+  }
+
+  function khoiDongPWA() {
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      navigator.serviceWorker.register('sw.js').catch(e => console.warn('[Shin PWA] Không đăng ký được service worker:', e.message));
+    }
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); loiMoiCai = e; capNhatNutCai(); });
+    window.addEventListener('appinstalled', () => { loiMoiCai = null; capNhatNutCai(); toast('Đã cài SHIN – mở từ màn hình chính / thanh tác vụ nhé 🎉'); });
+    capNhatNutCai();
+  }
+
   /* ---------------- Khởi động ---------------- */
 
   function init() {
+    // Lối tắt của app cài (manifest shortcuts): ?m=<mã mảng>
+    try {
+      const u = new URL(location.href), m = u.searchParams.get('m');
+      if (m && MODULES.some(x => x.ma === m)) currentModule = m;
+      if (m || u.searchParams.get('nguon')) { u.searchParams.delete('m'); u.searchParams.delete('nguon'); history.replaceState({}, document.title, u.toString()); }
+    } catch (e) {}
+    khoiDongPWA();
     apDungThemeMode(currentThemeMode);
     apDungPalette(currentPalette);
     apDungCochu(currentCochu);
@@ -691,6 +760,8 @@ const ShinApp = (function() {
     moCaiDat,
     dongModal,
     luuCaiDatToken,
+    caiUngDung,
+    dangChayApp,
     toast,
     hanhDongHoanTac,
     xacNhan2Lan,

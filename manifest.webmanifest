@@ -1,0 +1,28 @@
+{
+  "id": "./",
+  "name": "SHIN AIOS – Hệ thống Quản trị AI",
+  "short_name": "SHIN",
+  "description": "Hệ Shin hợp nhất: Hôm nay, Điều hành, KPI, Tuyển sinh, Phê duyệt… chạy trên máy chủ v1.",
+  "lang": "vi",
+  "dir": "ltr",
+  "start_url": "./?nguon=app",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "categories": ["business", "productivity", "medical"],
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Hôm nay", "url": "./?m=hub", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Điều hành", "url": "./?m=dieuhanh", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Phê duyệt", "url": "./?m=pheduyet", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Tuyển sinh", "url": "./?m=tuyensinh", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
