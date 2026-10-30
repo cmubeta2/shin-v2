@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.5.6] – 30/10/2026 (SỬA LỖI DÁN TOKEN BÁO SAI)
+
+### 🐛 Sửa lỗi
+- v2.5.5 kiểm khuôn token quá chặt (đòi dạng `h1.…`), trong khi token Hub thật là chuỗi chữ số liền (vd 40 ký tự) ➜ dán token thật bị báo "không đúng dạng". Nay chỉ chặn thứ chắc chắn không phải token (link không có `?t=`, có khoảng trắng, quá ngắn); token đúng hay sai do **Hub xét** – Hub từ chối thì app tự đăng xuất và báo.
+- Dán link đăng nhập Hub vẫn tự tách `?t=`; tự bỏ dấu nháy thừa khi chép.
+- Dòng trạng thái lấy mã người dùng từ Hub (không đọc từ token).
+
+---
+
 ## [2.5.5] – 30/10/2026 (RÀ SOÁT BẢO MẬT TOKEN · ĐIỆN THOẠI MẶC ĐỊNH MÉP TRÁI)
 
 ### 🔒 Bảo mật

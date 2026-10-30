@@ -1,11 +1,11 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.5.5 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
+ * Phiên bản: v2.5.6 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
  * Hàm dùng chung theo PHONG_CACH_APP_SHIN mục 5: esc, soVN, toast (+ Hoàn tác 6s), xacNhan2Lan, goiNut, rung.
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.5.5';
+  const PHIEN_BAN = 'v2.5.6';
 
   const MODULES = [
     ModuleHub,
@@ -841,12 +841,14 @@ const ShinApp = (function() {
     if (modal) modal.classList.remove('open');
   }
 
-  /** "h1.13151.0.xxxx" hoặc link Hub có ?t= ➜ token; không ra token ➜ ''. */
+  /** Nguyên token (vd 40 ký tự a-z0-9) hoặc link Hub có ?t= ➜ token; không ra token ➜ ''.
+   *  Chỉ chặn thứ chắc chắn không phải token (link không có t=, có khoảng trắng, quá ngắn) – còn đúng/sai do Hub xét. */
   function tachToken(chu) {
-    chu = String(chu || '').trim();
-    const m = /[?&]t=([^&#\s]+)/.exec(chu);
+    chu = String(chu || '').trim().replace(/^["'`<]+|["'`>]+$/g, '');
+    const m = /[?&#]t=([^&#\s]+)/.exec(chu);
     if (m) { try { chu = decodeURIComponent(m[1]); } catch (e) { chu = m[1]; } }
-    return /^h1\.[A-Za-z0-9_-]{1,40}\.\d+\.\S{8,}$/.test(chu) ? chu : '';
+    if (/^https?:|^www\./i.test(chu)) return '';
+    return /^[^\s<>"'`]{16,2048}$/.test(chu) ? chu : '';
   }
 
   /** Trạng thái kết nối (không lộ token): mã người dùng + 4 ký tự cuối chữ ký đã che. */
@@ -857,8 +859,8 @@ const ShinApp = (function() {
     if (nut) nut.hidden = !tk;
     if (!o) return;
     if (!tk) { o.innerHTML = '🟡 Chưa kết nối – đang chạy dữ liệu MẪU.'; return; }
-    const ma = String(tk.split('.')[1] || '');
-    o.innerHTML = `🟢 Đã kết nối${live.nguoi ? ': <b>' + esc(live.nguoi.hoTen) + '</b>' : ''} · mã ${esc(ma)} · token ••••••${esc(tk.slice(-2).replace(/./g, '•'))}`;
+    const ma = live.nguoi && (live.nguoi.maNV || live.nguoi.ma) || '';
+    o.innerHTML = `🟢 Đã kết nối${live.nguoi ? ': <b>' + esc(live.nguoi.hoTen || '') + '</b>' : ''}${ma ? ' · mã ' + esc(ma) : ''} · token ••••••••`;
   }
 
   function datLaiLive() {
@@ -876,7 +878,7 @@ const ShinApp = (function() {
     if (!tokenInput) return;
     const val = tachToken(tokenInput.value);
     tokenInput.value = '';   // xóa ngay khỏi ô dù đúng hay sai
-    if (!val) { toast('Token không đúng dạng – dán nguyên token hoặc link đăng nhập Hub.', 'warn'); return; }
+    if (!val) { toast('Chưa thấy token – dán nguyên token hoặc nguyên link đăng nhập Hub (có ?t=…).', 'warn'); return; }
     SHIN_API.luuToken(val);
     datLaiLive();
     dongModal();
