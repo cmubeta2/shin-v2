@@ -172,7 +172,6 @@ const ModuleCRM = {
     if (kq) {
       this.render(document.getElementById('appContent'), this.tuV1(kq));
       ShinApp.rung('xong');
-      ShinApp.toast(`Đã lưu ${doiTac.ten}.`);
     }
   },
 

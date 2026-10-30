@@ -97,15 +97,10 @@ const ModuleCaiDat = {
     }, 'cd-kiem-tra');
     const khung = document.getElementById('cdSucKhoe');
     if (khung) khung.innerHTML = this.veSucKhoe();
-    ShinApp.toast('Đã kiểm tra xong 5 máy chủ.', 'info');
   },
 
   toggleMang: function(ma, bat, ten) {
     if (!ShinApp.datMangBat(ma, bat)) return;
     ShinApp.rung('nhe');
-    ShinApp.toast(bat ? `Đã hiện "${ten}" trong menu ☰.` : `Đã ẩn "${ten}" khỏi menu ☰ trên máy này.`, 'info', {
-      nhan: 'Hoàn tác',
-      bam: () => { ShinApp.datMangBat(ma, !bat); ShinApp.chuyenModule('caidat'); }
-    });
   }
 };

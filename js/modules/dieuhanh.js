@@ -174,7 +174,6 @@ const ModuleDieuHanh = {
         }
         const kq = await this.gui(loai, v.ma, thamSo);
         this.capNhatChoAnh(kq.choAnh);
-        ShinApp.toast('Đã gửi – máy nhận trong 15 phút.', 'info');
       }
     });
   },
@@ -224,11 +223,10 @@ const ModuleDieuHanh = {
     if (!SHIN_API.laCheDoLive()) {
       v.trangThai = 'da_gui'; v.nhanTT = 'Đã gửi (mẫu)';
       this.capNhatChoAnh(this._d.choAnh);
-      ShinApp.toast('Đã gửi (mẫu – chưa gửi máy thật).', 'info');
       return;
     }
     const kq = await ShinApp.goiNut(nut, 'Đang gửi…', () => this.gui(loai, v.ma, thamSo), 'dh-' + loai + '-' + v.ma);
-    if (kq) { this.capNhatChoAnh(kq.choAnh); ShinApp.rung('xong'); ShinApp.toast('Đã gửi – máy nhận trong 15 phút.'); }
+    if (kq) { this.capNhatChoAnh(kq.choAnh); ShinApp.rung('xong'); }
   },
 
   /** Hoàn tác phía máy (v1 cho trong 10 phút sau lệnh). */
@@ -241,7 +239,7 @@ const ModuleDieuHanh = {
       return;
     }
     const kq = await ShinApp.goiNut(nut, 'Đang gửi hoàn tác…', () => this.gui('hoan_tac', v.ma, {}), 'dh-hoan-' + v.ma);
-    if (kq) { this.capNhatChoAnh(kq.choAnh); ShinApp.toast('Đã gửi hoàn tác – máy đảo lại trong 15 phút.', 'info'); }
+    if (kq) { this.capNhatChoAnh(kq.choAnh); ShinApp.rung('xong'); }
   },
 
   /* ---------------- ⚡ Giao việc cho Shin ---------------- */
@@ -282,9 +280,9 @@ const ModuleDieuHanh = {
       this._app = '';
       document.getElementById('dhGiao').innerHTML = this.veGiaoViec(this._d.ungDung || [], this._d.giaoViec);
     };
-    if (!SHIN_API.laCheDoLive()) { them(); ShinApp.toast(`Đã giao cho ${app} (mẫu – chưa gửi máy thật).`, 'info'); return; }
+    if (!SHIN_API.laCheDoLive()) { them(); return; }
     const kq = await ShinApp.goiNut(nut, 'Đang giao…', () => this.gui('giao_viec', ma, { app, noiDung: nd }), 'dh-giao-' + nd);
-    if (kq) { them(); ShinApp.rung('xong'); ShinApp.toast(`Đã giao – máy thêm vào hàng đợi ${app} trong 15 phút.`); }
+    if (kq) { them(); ShinApp.rung('xong'); }
   },
 
   /* ---------------- ⑤ Kế hoạch chờ duyệt ---------------- */
@@ -340,9 +338,9 @@ const ModuleDieuHanh = {
       const the = document.getElementById('dhKH' + i);
       if (the) the.outerHTML = `<div class="the"><b>${ShinApp.esc(k.tieuDe)}</b><div class="chu-phu">Đã gửi ý anh – lượt lập kế hoạch tới sẽ ghi quyết định.</div></div>`;
     };
-    if (!SHIN_API.laCheDoLive()) { xong(); ShinApp.toast('Đã gửi ý anh (mẫu).', 'info'); return; }
+    if (!SHIN_API.laCheDoLive()) { xong(); return; }
     const kq = await ShinApp.goiNut(nut, 'Đang gửi…', () => this.gui('duyet_ke_hoach', k.ma, { quyet, cau, gopY }), 'dh-kh-' + k.ma);
-    if (kq) { xong(); ShinApp.rung('xong'); ShinApp.toast('Đã gửi – lượt lập kế hoạch tới sẽ ghi quyết định.'); }
+    if (kq) { xong(); ShinApp.rung('xong'); }
   },
 
   /* ---------------- Dòng việc các app ---------------- */
@@ -451,7 +449,6 @@ const ModuleDieuHanh = {
     const kq = await ShinApp.goiNut(nut, 'Đang đọc bảng…', () => ShinApp.goiBat('HUB', 'webDieuHanh', { lamMoi: true }), 'dh-lam-moi');
     if (kq) {
       this.render(document.getElementById('appContent'), kq);
-      ShinApp.toast('Đã đọc lại bảng mới nhất.', 'info');
     }
   }
 };

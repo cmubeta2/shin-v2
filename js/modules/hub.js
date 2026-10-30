@@ -232,14 +232,12 @@ const ModuleHub = {
 
     if (!SHIN_API.laCheDoLive()) {
       this.capNhatViecRieng([{ id: 'demo' + Date.now(), tieuDe, han, uuTien }].concat(this._d.viecRieng || []));
-      ShinApp.toast(`Đã thêm việc riêng "${tieuDe}" (mẫu – chưa lưu máy chủ).`);
       return;
     }
     const kq = await ShinApp.goiNut(nut, 'Đang lưu…', () => ShinApp.goiBat('HUB', 'webLuuViecRieng', { lam: 'them', tieuDe, han, uuTien }), 'vr-them|' + tieuDe);
     if (kq) {
       this.capNhatViecRieng(kq.viec || []);
       ShinApp.rung('xong');
-      ShinApp.toast(`Đã thêm việc riêng "${tieuDe}".`);
     }
   },
 
@@ -262,9 +260,9 @@ const ModuleHub = {
     const v = (this._d.viecRieng || []).find(x => String(x.id) === String(id));
     if (!v) return;
     ShinApp.xacNhan2Lan('vr-xoa-' + id, `Xóa việc "${v.tieuDe}"`, async () => {
-      if (!SHIN_API.laCheDoLive()) { this.capNhatViecRieng(this._d.viecRieng.filter(x => x !== v)); ShinApp.toast('Đã xóa việc (mẫu).'); return; }
+      if (!SHIN_API.laCheDoLive()) { this.capNhatViecRieng(this._d.viecRieng.filter(x => x !== v)); return; }
       const kq = await ShinApp.goiNut(null, 'Đang xóa…', () => ShinApp.goiBat('HUB', 'webLuuViecRieng', { lam: 'xoa', id }), 'vr-xoa-' + id);
-      if (kq) { this.capNhatViecRieng(kq.viec || []); ShinApp.toast(`Đã xóa việc "${v.tieuDe}".`); }
+      if (kq) this.capNhatViecRieng(kq.viec || []);
     });
   },
 
@@ -315,7 +313,6 @@ const ModuleHub = {
     if (!kq) return;
     const moi = this.tuV1(kq, this._d.thongBao, { viec: this._d.viecRieng });
     this.render(document.getElementById('appContent'), moi);
-    ShinApp.toast(kq.vuaCapNhat ? 'Vừa cập nhật dưới 1 phút trước – đang hiện bản mới nhất.' : 'Đã kéo số mới từ các app.', 'info');
   },
 
   moViec: function(i) {

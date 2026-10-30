@@ -355,7 +355,6 @@ const ModuleKPI = {
     this._phu['baocao' + q] = kq;
     if (this._xem === 'baocao') this.veXem();
     ShinApp.rung('xong');
-    ShinApp.toast(kq.cu ? 'Đã có nháp quý này – mở lại bản cũ.' : 'Đã tạo nháp báo cáo quý trên Google Docs.');
   },
 
   taoLaiBaoCao: function(nut) {
@@ -369,7 +368,6 @@ const ModuleKPI = {
       const moi = this.tuV1(kq);
       moi.xemAOP = this._d.xemAOP;
       this.render(document.getElementById('appContent'), moi);
-      ShinApp.toast('Đã đọc lại số mới nhất từ TV3.', 'info');
     }
   },
 
