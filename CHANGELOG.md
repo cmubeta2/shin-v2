@@ -25,6 +25,8 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 - Mọi màn luôn có hàng icon nhỏ bên trái (chỉ icon). Bấm ☰ mới bung ra có tên; điện thoại chọn mảng xong tự thu.
 - Desktop: mặc định bung, không che header / nội dung / thanh đáy (nội dung tự lùi), nhớ lựa chọn thu / bung trên máy.
 - Nội dung chính và thanh đáy có bề rộng tối đa (760px điện thoại – máy tính bảng, 960px desktop), căn giữa phần còn lại.
+- Nút ☰ chuyển từ header xuống đầu thanh trái thành nút » / « (thu gọn – mở rộng, chỉ icon); ⚙️ Cài đặt (giao diện, token) nằm ở chân thanh trái; Quản Trị Module đổi icon 🧩 cho khỏi trùng.
+- Thanh đáy: ô thứ 5 thay Cài đặt bằng 🧭 Điều hành (Admin) hoặc 📊 KPI (người khác).
 
 ---
 

@@ -46,7 +46,7 @@ const ShinApp = (function() {
         { ma: "khaosat", ten: "Khảo Sát ACHSI", icon: "🩺" },
         { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", icon: "⚡" },
         { ma: "trithuc", ten: "Tri Thức & SOP", icon: "🧠" },
-        { ma: "caidat", ten: "Quản Trị Module", icon: "⚙️" }
+        { ma: "caidat", ten: "Quản Trị Module", icon: "🧩" }
       ]
     },
     {
@@ -438,7 +438,8 @@ const ShinApp = (function() {
       { id: 'pheduyet', icon: '⚡', label: 'Phê duyệt', badge: laLive ? (live.soChoDuyet ? String(live.soChoDuyet) : '') : '4' },
       { id: 'duan', icon: '📌', label: 'Dự án', badge: '' },
       { id: 'crm', icon: '👥', label: 'Đối tác', badge: '' },
-      { id: 'caidat', icon: '⚙️', label: 'Cài đặt', badge: '' }
+      // Ô thứ 5 (Sếp 30/10: Cài đặt đã chuyển xuống thanh trái): Admin ➜ 🧭 Điều hành; người khác ➜ 📊 KPI
+      mangDuocHien('dieuhanh') ? { id: 'dieuhanh', icon: '🧭', label: 'Điều hành', badge: '' } : { id: 'kpi', icon: '📊', label: 'KPI', badge: '' }
     ];
 
     nav.innerHTML = navItems.map(item => `
@@ -529,7 +530,7 @@ const ShinApp = (function() {
     document.querySelectorAll('.decagon-card').forEach(card => card.classList.toggle('active', card.dataset.mod === maMod));
 
     if (maMod === 'hub') currentNav = 'home';
-    else if (['pheduyet', 'duan', 'crm'].indexOf(maMod) >= 0) currentNav = maMod;
+    else if (['pheduyet', 'duan', 'crm', 'dieuhanh', 'kpi'].indexOf(maMod) >= 0) currentNav = maMod;
     else currentNav = '';
     document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.nav === currentNav));
 
@@ -599,6 +600,12 @@ const ShinApp = (function() {
     const overlay = document.getElementById('decagonOverlay');
     document.body.classList.toggle('rail-mo', mo);
     if (drawer) drawer.classList.toggle('open', mo);
+    const nut = document.getElementById('nutRail');
+    if (nut) {
+      const chu = mo ? 'Thu gọn danh mục' : 'Mở rộng danh mục';
+      nut.title = chu; nut.setAttribute('aria-label', chu); nut.setAttribute('aria-expanded', String(mo));
+      nut.querySelector('.rail-mui').textContent = mo ? '«' : '»';
+    }
     if (overlay) overlay.classList.toggle('open', mo && !MQ_DESKTOP.matches);
   }
 
