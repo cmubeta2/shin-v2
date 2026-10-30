@@ -28,9 +28,6 @@
   <!-- Thanh Header Đỉnh Ghim (Sticky Topbar) -->
   <header class="topbar">
     <div style="display:flex; align-items:center; gap:8px; min-width:0;">
-      <button class="btn-icon" onclick="ShinApp.moDecagonDrawer()" title="Danh mục 10 Mảng">
-        ☰
-      </button>
       <a href="#" class="topbar-brand" onclick="ShinApp.chuyenModule('hub'); return false;">
         <div class="topbar-logo">
           <svg viewBox="0 0 100 100" width="24" height="24">
@@ -44,7 +41,7 @@
             <span class="topbar-title">SHIN AIOS</span>
             <!-- Thẻ trạng thái nhỏ gọn nằm ngay kế bên chữ SHIN AIOS -->
             <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat(); event.stopPropagation();" title="Bấm để quản lý kết nối Token">
-              Demo v2.2.0
+              Demo v2.5.0
             </button>
           </div>
           <div class="topbar-sub">Hệ thống Quản trị AI</div>
@@ -76,19 +73,23 @@
 
   <!-- DECAGON DRAWER: THẬP DIỆN KIẾN TRÚC (10 MẢNG NGHIỆP VỤ) -->
   <div class="decagon-overlay" id="decagonOverlay" onclick="ShinApp.dongDecagonDrawer()"></div>
-  <div class="decagon-drawer" id="decagonDrawer" aria-label="Bảng điều hướng 10 Mảng Decagon">
-    <div class="decagon-head">
-      <div>
-        <div style="font-weight:800; font-size:15px; color:var(--text);">DANH MỤC NGHIỆP VỤ</div>
-        <div style="font-size:11px; color:var(--text-muted);">Hệ thống Quản trị AI</div>
-      </div>
-      <button class="btn-icon" style="background:transparent; border:none; color:var(--text);" onclick="ShinApp.dongDecagonDrawer()">✕</button>
+  <nav class="decagon-drawer" id="decagonDrawer" aria-label="Danh mục nghiệp vụ">
+    <!-- Nút thu gọn / mở rộng (chỉ icon) -->
+    <div class="rail-dau">
+      <button class="rail-nut" id="nutRail" onclick="ShinApp.moDecagonDrawer()" title="Mở rộng danh mục" aria-label="Mở rộng danh mục" aria-controls="decagonDrawer" aria-expanded="false">
+        <span class="rail-mui" aria-hidden="true">»</span>
+      </button>
     </div>
 
     <div class="decagon-body" id="decagonBody">
       <!-- Sinh động qua js/app.js theo 3 cụm chuẩn Sếp duyệt -->
     </div>
-  </div>
+
+    <!-- Cài đặt giao diện & token (chỉ icon) -->
+    <div class="rail-chan">
+      <button class="rail-nut" onclick="ShinApp.moCaiDat()" title="Cài đặt giao diện & kết nối" aria-label="Cài đặt">⚙️</button>
+    </div>
+  </nav>
 
   <!-- Modal Cài Đặt Giao Diện & Kết Nối Token -->
   <div class="modal-overlay" id="settingsModal" onclick="if (event.target === this) ShinApp.dongModal();">
@@ -149,6 +150,7 @@
   <script src="js/api.js"></script>
   <!-- Các Module Nghiệp Vụ -->
   <script src="js/modules/hub.js"></script>
+  <script src="js/modules/dieuhanh.js"></script>
   <script src="js/modules/kpi.js"></script>
   <script src="js/modules/khaosat.js"></script>
   <script src="js/modules/crm.js"></script>
@@ -158,6 +160,7 @@
   <script src="js/modules/congviec.js"></script>
   <script src="js/modules/pheduyet.js"></script>
   <script src="js/modules/trithuc.js"></script>
+  <script src="js/modules/taichinh.js"></script>
   <script src="js/modules/caidat_module.js"></script>
   <!-- Bộ Não Ứng Dụng Trung Tâm -->
   <script src="js/app.js"></script>

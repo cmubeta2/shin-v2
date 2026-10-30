@@ -1454,3 +1454,116 @@ details.tq-gon ul { padding-left: 18px; font-size: calc(14px * var(--font-scale)
 #hubViecRieng .dong-title, #hubViecRieng .dong-sub { white-space: normal; overflow: visible; text-overflow: clip; }
 #hubViecRieng .hn-dong { gap: 10px; padding: 8px 10px; }
 details.tq-gon > .nut-rong { width: calc(100% - 24px); max-width: none; }
+
+/* ==========================================================================
+   v2.5.0 – THANH MENU TRÁI (RAIL) · Sếp 30/10
+   Mọi màn: luôn có hàng icon nhỏ bên trái (chỉ icon, không tên). Bấm ☰ mới bung ra có tên.
+   Điện thoại / máy tính bảng: bung ra thì nổi trên nội dung (có lớp mờ), chọn mảng xong tự thu.
+   Desktop (≥ 1024px): mặc định bung sẵn, KHÔNG che header, nội dung, thanh đáy – nội dung tự lùi sang phải.
+   Nội dung chính và thanh đáy có bề rộng tối đa, căn giữa phần còn lại.
+   ========================================================================== */
+:root {
+  --rail-thu: 56px;
+  --rail-mo: 248px;
+  --rail-w: var(--rail-thu);
+  --noi-max: 760px;
+}
+@media (min-width: 1024px) {
+  :root { --noi-max: 960px; }
+  body.rail-mo { --rail-w: var(--rail-mo); }
+}
+
+.decagon-drawer {
+  top: var(--header-height);
+  bottom: calc(var(--nav-height) + var(--safe-bottom));
+  width: var(--rail-thu);
+  max-width: none;
+  transform: none;
+  z-index: 97;
+  box-shadow: 1px 0 0 var(--border);
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s;
+}
+.decagon-drawer.open { width: var(--rail-mo); transform: none; }
+@media (max-width: 1023px) {
+  .decagon-drawer.open { box-shadow: 6px 0 30px rgba(0, 0, 0, 0.25); }
+}
+.decagon-overlay {
+  top: var(--header-height);
+  bottom: calc(var(--nav-height) + var(--safe-bottom));
+  z-index: 96;
+}
+@media (min-width: 1024px) {
+  .decagon-overlay, .decagon-overlay.open { display: none; }
+}
+
+/* Thu gọn: chỉ icon */
+.decagon-drawer:not(.open) .decagon-head { display: none; }
+.decagon-drawer:not(.open) .decagon-body { padding: 8px 6px 16px; gap: 6px; overflow-x: hidden; }
+.decagon-drawer:not(.open) .decagon-group-title { font-size: 0; margin: 2px 6px 4px; height: 1px; background: var(--border); }
+.decagon-drawer:not(.open) .decagon-group-title span { display: none; }
+.decagon-drawer:not(.open) .decagon-grid { gap: 4px; }
+.decagon-drawer:not(.open) .decagon-card { justify-content: center; padding: 0; min-height: 44px; border-color: transparent; background: transparent; }
+.decagon-drawer:not(.open) .decagon-card:hover, .decagon-drawer:not(.open) .decagon-card.active { transform: none; background: var(--primary-soft); box-shadow: none; }
+.decagon-drawer:not(.open) .decagon-name { display: none; }
+.decagon-drawer:not(.open) .badge-count { position: absolute; top: 2px; right: 2px; min-width: 16px; height: 16px; font-size: 9px; padding: 0 4px; }
+.decagon-drawer .decagon-head { padding: 10px 12px; }
+.decagon-drawer.open .decagon-body { padding: 10px 10px 24px; gap: 12px; }
+.decagon-drawer.open .decagon-card { padding: 8px 10px; min-height: 44px; }
+.decagon-drawer .decagon-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Nội dung chính lùi theo rail, bề rộng tối đa, căn giữa phần còn lại */
+.main-container {
+  width: auto;
+  max-width: var(--noi-max);
+  margin-left: calc(var(--rail-w) + max(0px, (100% - var(--rail-w) - var(--noi-max)) / 2));
+  margin-right: auto;
+  transition: margin-left 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (max-width: 1023px) {
+  .main-container { padding-left: 10px; padding-right: 10px; }
+}
+.bottom-nav {
+  left: var(--rail-w);
+  padding-left: max(0px, calc((100vw - var(--rail-w) - var(--noi-max)) / 2));
+  padding-right: max(0px, calc((100vw - var(--rail-w) - var(--noi-max)) / 2));
+  transition: left 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toast-container { left: var(--rail-w); }
+
+/* v2.3.0 – thành phần dùng chung: thẻ tab, chip chọn, ô số lọc, thanh tiến độ, form */
+.hang-tab { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 10px 0 12px; padding-bottom: 2px; }
+.hang-tab::-webkit-scrollbar { display: none; }
+.tab-nut { flex: 0 0 auto; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border); background: var(--card); color: var(--text); font: inherit; font-size: calc(14px * var(--font-scale)); font-weight: 700; cursor: pointer; }
+.tab-nut.dang-chon { background: var(--primary); border-color: var(--primary); color: #fff; }
+.hang-chip { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.chip-chon { min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; font-size: calc(14px * var(--font-scale)); font-weight: 600; cursor: pointer; }
+.chip-chon.dang-chon { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+.luoi-o-so { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 6px; margin-bottom: 10px; }
+.o-so-loc { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 64px; padding: 6px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font: inherit; font-size: calc(12px * var(--font-scale)); text-align: center; }
+button.o-so-loc { cursor: pointer; }
+.o-so-loc b { font-size: calc(20px * var(--font-scale)); }
+.o-so-loc.dang-chon { border-color: var(--primary); background: var(--primary-soft); }
+.thanh-tien { height: 6px; border-radius: 3px; background: var(--bg-sub); overflow: hidden; margin: 6px 0; }
+.thanh-tien > div { height: 100%; background: var(--primary); }
+.chi-tiet-gon summary { cursor: pointer; color: var(--primary); font-size: calc(14px * var(--font-scale)); min-height: 32px; display: flex; align-items: center; }
+.form-the { border-color: var(--primary); }
+.nhan-o { display: block; margin: 10px 0 4px; font-size: calc(14px * var(--font-scale)); font-weight: 600; color: var(--text); }
+.form-the .form-input, .the textarea.form-input, .chi-tiet-dong .form-input, .chi-tiet-dong textarea { width: 100%; box-sizing: border-box; font-size: 16px; }
+textarea.form-input { min-height: 64px; resize: vertical; margin-top: 6px; font-family: inherit; }
+.hang-bac { display: grid; grid-template-columns: 1fr 1fr 1.4fr 44px; gap: 6px; margin-bottom: 6px; align-items: center; }
+.hang-bac .form-input { min-width: 0; }
+.nhat-ky { display: flex; flex-direction: column; gap: 6px; margin: 8px 0; font-size: calc(14px * var(--font-scale)); }
+.nhat-ky > div { padding: 6px 8px; border-left: 3px solid var(--border); background: var(--bg-sub); border-radius: 4px; overflow-wrap: anywhere; }
+.nut-do { color: var(--c-red) !important; border-color: var(--c-red) !important; }
+a.btn-secondary, a.btn-primary { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+.the b, .the p, .hang-tru span { overflow-wrap: anywhere; }
+[id^="tsForm"], #crmForm, .form-the, [id] { scroll-margin-top: calc(var(--header-height) + 10px); }
+
+/* v2.5.0 – Sếp 30/10: nút thu gọn / mở rộng ở đầu thanh trái, ⚙️ Cài đặt ở chân – chỉ icon */
+.rail-dau, .rail-chan { flex: 0 0 auto; display: flex; padding: 6px; }
+.rail-dau { border-bottom: 1px solid var(--border); justify-content: flex-end; }
+.rail-chan { border-top: 1px solid var(--border); justify-content: flex-start; }
+.decagon-drawer:not(.open) .rail-dau, .decagon-drawer:not(.open) .rail-chan { justify-content: center; }
+.rail-nut { width: 44px; height: 44px; border-radius: 10px; border: none; background: transparent; color: var(--text); font-size: 20px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.rail-nut:hover, .rail-nut:focus-visible { background: var(--primary-soft); color: var(--primary); }
+.rail-mui { font-size: 22px; font-weight: 700; }

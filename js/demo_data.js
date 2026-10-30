@@ -406,3 +406,70 @@ window.SHIN_DEMO_DATA = {
     ]
   }
 };
+
+// ==========================================
+// v2.3.0 – 🧭 Điều hành (khuôn webDieuHanh của Hub v1 – dữ liệu GIẢ)
+// ==========================================
+window.SHIN_DEMO_DATA.dieuhanh = {
+  cau: '72% dòng việc đã xong · 2 việc chờ anh · 1 trả lại',
+  luc: '09:40 30/10/2026',
+  luotAi: 'Hôm nay: Claude 6 lượt · agy 4 lượt · 7 ngày: Claude 41 · agy 30',
+  canhBaoCu: '',
+  oSo: [
+    { ma: 'len_app', ten: 'Đã lên app', so: 18 }, { ma: 'kiem_dat', ten: 'Kiểm đạt', so: 3 }, { ma: 'dang_lam', ten: 'Đang làm', so: 4 },
+    { ma: 'dang_cho', ten: 'Đang chờ', so: 6 }, { ma: 'viec_anh', ten: 'Việc anh cần làm', so: 2 }
+  ],
+  choAnh: [
+    { ma: 'V101', tieuDe: 'Dán khóa Hub vào app Khảo sát', chiTiet: 'Mở Script Properties của app KS, thêm HUB_KHOA rồi bấm lưu.', app: 'KS', ngay: '29/10', luaChon: [], trangThai: 'mo', nhanTT: '', traLoi: '', hoanTac: false },
+    { ma: 'TS-L9', tieuDe: 'Duyệt dòng TS-L9: báo cáo hoa hồng theo tháng', chiTiet: 'Phiếu đã lập, chờ anh duyệt trước khi viết code.', app: 'TS', ngay: '30/10', luaChon: ['Duyệt', 'Để sau'], trangThai: 'mo', nhanTT: '', traLoi: '', hoanTac: false }
+  ],
+  ungDung: [
+    { ma: 'HUB', ten: 'Hub điều hành', pbMa: 'v1.8.6', pbApp: '', tyLe: 82, demChu: '1 chờ kiểm',
+      dong: [
+        { l: 'L18', nhan: 'ĐÃ CODE v1.8.7', trangThai: 'da_code', noiDung: 'Thẻ việc riêng có nhắc giờ', cho: '', phieu: true, tomTat: { mucTieu: 'Việc riêng có giờ nhắc, đến giờ báo chuông.', xong: 3, tong: 4, kiemTra: ['Thiếu kiểm khi để trống giờ'] } },
+        { l: 'L19', nhan: 'Chờ kế hoạch', trangThai: 'cho_kh', noiDung: 'Lọc thông báo theo app', cho: '', phieu: false, tomTat: null }
+      ], nhatKy: [{ luc: '2026-10-30T08:22', noiDung: 'Kiểm L17 đạt 12/12' }] },
+    { ma: 'TS', ten: 'Tuyển sinh', pbMa: 'v1.6.1', pbApp: '', tyLe: 90, demChu: '1 chờ anh',
+      dong: [{ l: 'L9', nhan: 'CÓ KH', trangThai: 'cho_anh', noiDung: 'Báo cáo hoa hồng theo tháng', cho: 'anh duyệt', phieu: true, tomTat: { mucTieu: 'Bảng hoa hồng mỗi tháng theo người tư vấn.', xong: 0, tong: 5, kiemTra: [] } }], nhatKy: [] },
+    { ma: 'KS', ten: 'Khảo sát', pbMa: 'v1.0.1', pbApp: '', tyLe: 10, demChu: '',
+      dong: [{ l: 'L1', nhan: '⏸ Chờ anh giao', trangThai: 'cho_viec', noiDung: 'Khung app + quản lý khảo sát', cho: 'LOI L4', phieu: false, tomTat: null }], nhatKy: [] }
+  ],
+  giaoViec: [{ ma: 'GV261029221500', app: 'KPI', noiDung: 'Thêm thẻ so cùng kỳ năm trước vào bản tin', l: 'L12', trangThai: 'co_kh', nhan: 'Có KH' }],
+  keHoach: [{ ma: 'KH0031', tep: 'phieu/L9.md', tieuDe: 'TS L9 – Báo cáo hoa hồng tháng', tomTat: 'Thêm tab Hoa hồng: chọn tháng, bảng theo người tư vấn, xuất Sheets.',
+    cau: [{ ma: 'Q1', hoi: 'Tính hoa hồng theo ngày nhập học hay ngày nộp hồ sơ?', macDinh: 'Ngày nhập học' }, { ma: 'Q2', hoi: 'Có cho CTV xem bảng của mình không?', macDinh: '' }] }],
+  khoa: { chu: 'Không tác vụ nào đang chạy', treo: false },
+  tacVu: [
+    { ten: '① Lập kế hoạch', lanCuoi: '22:57 29/10', ketQua: 'Lập 2 phiếu (TS L9, HUB L19)', lanToi: '10:57' },
+    { ten: '② Viết code', lanCuoi: '09:27', ketQua: 'HUB L18 → ĐÃ CODE', lanToi: '11:27' },
+    { ten: '③ Kiểm tra', lanCuoi: '08:22', ketQua: 'Đạt 1 · trả lại 0', lanToi: '21:22' },
+    { ten: '④ Đưa app', lanCuoi: '09:52', ketQua: 'Đưa HUB v1.8.6', lanToi: '09:52 mai' }
+  ],
+  hoatDong: [{ luc: '2026-10-30 09:52', noi_dung: 'Đưa HUB v1.8.6 lên app', kho: 'Hub' }]
+};
+
+// v2.3.0 – KPI: Soát lỗi · AOP · Báo cáo quý (khuôn webSoatLoi / webAOP / webBaoCaoQuy – dữ liệu GIẢ)
+window.SHIN_DEMO_DATA.kpiPhu = {
+  soatloi: { quy: '3', capNhatLuc: '06:00 30/10/2026', laAdmin: true, khoa: [
+    { tab: 'NOI', ten: 'Khoa Nội', chuaCoQuy: false, soLoi: 2, loi: [{ loai: 'trong', chu: 'C2: chưa nhập KQ' }, { loai: 'ts_nhom', chu: 'Nhóm F: trọng số các chỉ tiêu cộng 95% (cần 100%)' }] },
+    { tab: 'NGOAI', ten: 'Khoa Ngoại', chuaCoQuy: false, soLoi: 0, loi: [] },
+    { tab: 'CDHA', ten: 'Khoa Chẩn đoán hình ảnh', chuaCoQuy: true, soLoi: 0, loi: [] }
+  ] },
+  aop: { nam: 2026, luc: '06:00 30/10/2026', vienDT: 182000000000, soVanDe: 1, chung: ['Phòng Kế hoạch'], khoa: [
+    { ten: 'Toàn phòng khám', phuTrach: 'Ban Giám đốc', doanhThu: 182000000000, vanDe: [] },
+    { ten: 'Khoa Nội', phuTrach: 'BS. Mẫu A', doanhThu: 41000000000, vanDe: ['Tài chính: F3 chưa có trọng số'] },
+    { ten: 'Khoa Ngoại', phuTrach: 'BS. Mẫu B', doanhThu: 36500000000, vanDe: [] }
+  ] },
+  baocao: { url: '', luc: '10:05 30/10/2026', tomTat: 'Quý 3/2026: toàn viện tạm tính 91,4% · 9/12 khoa đạt từ 90% · 3 khoa dưới 90% · 4 chỉ tiêu 0% · cùng kỳ năm trước –.' }
+};
+
+// v2.5.0 – 💰 Tài chính (khuôn webTaiChinh – dữ liệu GIẢ)
+window.SHIN_DEMO_DATA.taichinh = {
+  thang: '10/2026', thu: 486500000, chi: 231700000, ton: 254800000,
+  khoanChoDuyet: [{ ma: 'TC01', khoanMuc: 'Tạm ứng thuê xe X-quang lưu động', soTien: 15000000, nguoiDeXuat: 'Nhân viên mẫu A', duAn: 'DA-KSK01', luc: '11:15 hôm nay' }],
+  giaoDich: [
+    { ngay: '30/10/2026', noiDung: 'Công ty mẫu chuyển khoản đợt 2 KSK', soTien: 120000000, nguon: 'SePay' },
+    { ngay: '29/10/2026', noiDung: 'Chi vé xe đoàn KSK lưu động', soTien: -3200000, nguon: 'Tay' }
+  ]
+};
+
+window.SHIN_DEMO_DATA.khaosat.canXuLy = [{ ma: 'P0412', khaoSat: 'Hài lòng ngoại trú T10', cau: 'Thời gian chờ khám', diem: 2, ngay: '29/10/2026', noiDung: 'Chờ hơn 1 tiếng ở quầy thu ngân.' }];
