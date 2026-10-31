@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.2] – 31/10/2026 (KHÓA AN TOÀN KHO CÔNG KHAI)
+
+### 🔒 Bảo mật
+- Thư mục mã v1 `He sinh thai Shin` giờ nằm chung thư mục SHIN, nên `dong_bo.bat` (`git add -A`) có thể đẩy cả mã v1 lên GitHub công khai. Đã chặn bằng 2 lớp:
+  - `.gitignore` chuyển sang **danh sách trắng**: bỏ qua mọi thứ, chỉ cho phép tệp giao diện v2. Luôn chặn thêm `.clasp.json`, `.env`, `appsscript.json` và `*.gs`.
+  - `dong_bo.bat` kiểm lại trước khi đẩy. Nếu có tệp v1 hoặc bí mật thì DỪNG, huỷ chuẩn bị, không đẩy gì.
+
 ## [2.6.1] – 31/10/2026 (TÀI LIỆU THIẾT KẾ GIAO DIỆN)
 
 ### 📘 Mới

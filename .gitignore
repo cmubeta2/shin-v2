@@ -1,17 +1,34 @@
-# Logs and temp files
+# ===================================================================
+# SHIN v2 – KHO CÔNG KHAI. CHỈ ĐƯỢC ĐẨY MÃ GIAO DIỆN v2 + DỮ LIỆU GIẢ.
+# Dùng DANH SÁCH TRẮNG: bỏ qua MỌI THỨ, rồi chỉ mở lại các tệp v2 bên dưới.
+# Thư mục "He sinh thai Shin" (mã v1, .clasp.json, .env, ID sheet, token…)
+# nằm chung thư mục SHIN nhưng KHÔNG BAO GIỜ được lên GitHub.
+# Thêm tệp/thư mục v2 mới ở gốc ➜ phải thêm dòng "!/ten" vào đây.
+# ===================================================================
+/*
+
+!/.gitignore
+!/.gitattributes
+!/.nojekyll
+!/index.html
+!/manifest.webmanifest
+!/sw.js
+!/*.md
+!/dong_bo.bat
+!/git_shin.bat
+!/assets/
+!/css/
+!/js/
+
+# Chặn thêm bên trong thư mục được mở (phòng khi chép nhầm)
+.clasp.json
+.clasprc.json
+.env
+.env.*
+appsscript.json
+*.gs
 *.log
 *.tmp
 .DS_Store
 Thumbs.db
-
-# Node / Cache
-node_modules/
-.npm/
-
-# Cloudflare / IDE
-.wrangler/
-.vscode/
-.idea/
-
-# Thu muc .git cu bi khoa (sao luu)
-.git-old-*/
+desktop.ini
