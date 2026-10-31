@@ -4,6 +4,21 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.0] – 31/10/2026 (NGƯỜI DÙNG & APP · NỐI PTKH GỐC)
+
+### ✨ Mới
+- **🛡️ Người dùng & App** (chỉ Admin Hub, dữ liệu thật qua cổng Hub có sẵn `webCaiDat`):
+  - 👤 Danh bạ hệ Shin: tìm, vai trò, trạng thái, mảng phụ trách; **🔗 Cấp link vào Hub** cho từng người (`webCapLink`) – link không hiện chữ, chỉ Chép / Gửi, tự quên sau 2 phút.
+  - 📱 Ứng dụng: bật/tắt, lỗi kéo số gần nhất, bot Telegram.
+  - 🧭 Phụ trách: giao 1–2 người cho mỗi mảng (`webLuuPhuTrach`), Hoàn tác 6 giây.
+  - Không phải Admin ➜ mảng ẩn khỏi menu. Thêm / sửa / ngưng người, bật/tắt app ➜ chờ cổng Hub (HOP_DONG_CONG_V2.md mục v2.6), tạm mở Hub v1.
+- **📋 PTKH Gốc**: thẻ số + việc PTKH lấy từ Hub (`webHomNay`), nút mở thẳng app PTKH bằng token Hub (PTKH nhận token Hub từ L36a). Link PTKH tách riêng khỏi PK.
+
+### 🐛 Sửa
+- Kiểm token đúng khuôn Hub thật `h1.<mã>.<hạn hệ 36>.<chữ ký>` (theo Lõi Loi_Token.gs). Dán **link riêng của app PTKH** (token 40 ký tự) ➜ báo rõ "đây là link PTKH, không phải link Hub" thay vì để Hub từ chối rồi đăng xuất.
+
+---
+
 ## [2.5.6] – 30/10/2026 (SỬA LỖI DÁN TOKEN BÁO SAI)
 
 ### 🐛 Sửa lỗi

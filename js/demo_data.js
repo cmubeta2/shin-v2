@@ -473,3 +473,42 @@ window.SHIN_DEMO_DATA.taichinh = {
 };
 
 window.SHIN_DEMO_DATA.khaosat.canXuLy = [{ ma: 'P0412', khaoSat: 'Hài lòng ngoại trú T10', cau: 'Thời gian chờ khám', diem: 2, ngay: '29/10/2026', noiDung: 'Chờ hơn 1 tiếng ở quầy thu ngân.' }];
+
+/* v2.6.0 – MẪU (tên giả) cho 🛡️ Người dùng & App và 📋 PTKH gốc */
+window.SHIN_DEMO_DATA.quantri = {
+  danhBa: [
+    { ma: '90001', hoTen: 'Nguyễn Văn A', vaiTro: 'Admin', trangThai: 'Đang dùng' },
+    { ma: '90002', hoTen: 'Trần Thị B', vaiTro: 'Quản lý', trangThai: 'Đang dùng' },
+    { ma: '90003', hoTen: 'Lê Văn C', vaiTro: 'Người dùng', trangThai: 'Đang dùng' },
+    { ma: '90004', hoTen: 'Phạm Thị D', vaiTro: 'Người dùng', trangThai: 'Đang dùng' },
+    { ma: '90005', hoTen: 'Hoàng Văn E', vaiTro: 'Người dùng', trangThai: 'Ngưng' }
+  ],
+  ungDung: [
+    { ten: 'PTKH – Hiệu suất phòng', bat: true, loiCuoi: '' },
+    { ten: 'KPI toàn viện', bat: true, loiCuoi: '' },
+    { ten: 'Tuyển sinh', bat: true, loiCuoi: 'Hết thời gian chờ lúc 07:30 31/10' },
+    { ten: 'Khảo sát hài lòng', bat: true, loiCuoi: '' },
+    { ten: 'Phòng PTKH (PK)', bat: false, loiCuoi: '' }
+  ],
+  phuTrach: [
+    { ma: 'PTKH', ten: 'Phòng PTKH', dsMa: ['90001', '90002'], nguoi: ['Nguyễn Văn A', 'Trần Thị B'] },
+    { ma: 'KPI', ten: 'KPI toàn viện', dsMa: ['90001'], nguoi: ['Nguyễn Văn A'] },
+    { ma: 'TS', ten: 'Tuyển sinh', dsMa: ['90003'], nguoi: ['Lê Văn C'] },
+    { ma: 'KS', ten: 'Khảo sát', dsMa: [], nguoi: [] }
+  ],
+  bot: { coKhoa: true, chu: 'Đã có khóa •••• · bot @vidu_bot' }
+};
+
+window.SHIN_DEMO_DATA.ptkh = {
+  so: [
+    { nhan: '% hoàn thành phòng (tháng)', chu: '86 %', den: 'vang' },
+    { nhan: 'Báo cáo chờ duyệt', chu: '4 báo cáo', den: 'vang' },
+    { nhan: 'Người cần chú ý', chu: '1 người', den: 'do' }
+  ],
+  viec: [
+    { tieuDe: 'Duyệt 4 báo cáo ngày', han: '31/10/2026', uuTien: 'Quan trọng', quaHan: false, link: '' },
+    { tieuDe: 'Quy trình: 2 thẻ tới hạn – tư vấn gói KSK', han: '31/10/2026', uuTien: 'Khẩn cấp', quaHan: false, link: '' },
+    { tieuDe: 'Chốt phân công tuần 45', han: '01/11/2026', uuTien: '', quaHan: false, link: '' }
+  ],
+  capNhatLuc: '07:30 31/10'
+};

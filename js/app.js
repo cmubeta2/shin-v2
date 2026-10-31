@@ -1,11 +1,11 @@
 /**
  * SHIN v2 – Bộ Não Điều Phối Trung Tâm (Central Application Engine)
- * Phiên bản: v2.5.6 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
+ * Phiên bản: v2.6.0 – chạy trên 5 máy chủ v1 (Hub · KPI · TS · KS · PK); mảng nào v1 chưa mở cổng thì hiện mẫu kèm dải vàng.
  * Hàm dùng chung theo PHONG_CACH_APP_SHIN mục 5: esc, soVN, toast (+ Hoàn tác 6s), xacNhan2Lan, goiNut, rung.
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.5.6';
+  const PHIEN_BAN = 'v2.6.0';
 
   const MODULES = [
     ModuleHub,
@@ -15,11 +15,13 @@ const ShinApp = (function() {
     ModuleCRM,
     ModuleTuyenSinh,
     ModulePhongKham,
+    ModulePTKH,
     ModuleDuAn,
     ModuleCongViec,
     ModulePheDuyet,
     ModuleTriThuc,
     ModuleTaiChinh,
+    ModuleQuanTri,
     ModuleCaiDat
   ];
 
@@ -46,6 +48,7 @@ const ShinApp = (function() {
         { ma: "khaosat", ten: "Khảo Sát ACHSI", icon: "🩺" },
         { ma: "pheduyet", ten: "Phê Duyệt 1-Chạm", icon: "⚡" },
         { ma: "trithuc", ten: "Tri Thức & SOP", icon: "🧠" },
+        { ma: "quantri", ten: "Người Dùng & App", icon: "🛡️" },
         { ma: "caidat", ten: "Quản Trị Module", icon: "🧩" }
       ]
     },
@@ -55,6 +58,7 @@ const ShinApp = (function() {
       danhSach: [
         { ma: "duan", ten: "Quản Lý Dự Án & Flash Report", icon: "📌" },
         { ma: "phongkham", ten: "Vận Hành Phòng Khám & PTKH", icon: "🏥" },
+        { ma: "ptkh", ten: "PTKH Gốc (Hiệu suất)", icon: "📋" },
         { ma: "congviec", ten: "Quản Lý Công Việc", icon: "📋" }
       ]
     },
@@ -73,7 +77,7 @@ const ShinApp = (function() {
   const MANG_LUON_BAT = ['hub', 'caidat'];
 
   // Mã liên kết nhanh của Hub (webKhoiDong.lienKet.app[].ma) ➜ khóa máy chủ v2
-  const MA_LIEN_KET = { HUB: 'HUB', KPI: 'KPI', TS: 'TS', KS: 'KS', PK: 'PK', PTKH: 'PK' };
+  const MA_LIEN_KET = { HUB: 'HUB', KPI: 'KPI', TS: 'TS', KS: 'KS', PK: 'PK', PTKH: 'PTKH' };   // v2.6.0: PTKH gốc tách khỏi PK (21_PhongPTKH)
 
   let currentModule = 'hub';
   let currentNav = 'home';
@@ -519,7 +523,8 @@ const ShinApp = (function() {
 
   /** Link mở app v1 (đã gắn token) cho 1 máy chủ – dùng cho việc v2 chưa làm màn riêng. */
   function linkV1(khoa) {
-    return khoa === 'HUB' ? live.linkHub : (live.lienKet[khoa] || '');
+    if (khoa === 'HUB') return live.linkHub;
+    return live.lienKet[khoa] || (khoa === 'PK' ? live.lienKet.PTKH || '' : '');
   }
 
   function moV1(khoa, tenViec) {
@@ -596,7 +601,7 @@ const ShinApp = (function() {
   /** Mảng hiện trong menu: đang bật + (Live) không bị máy chủ v1 từ chối quyền. 🧭 Điều hành chỉ Admin Hub. */
   function mangDuocHien(ma) {
     if (!mangDangBat(ma)) return false;
-    if (ma === 'dieuhanh' && SHIN_API.laCheDoLive() && live.quyen.HUB === 'co' && !live.laAdminHub) return false;
+    if ((ma === 'dieuhanh' || ma === 'quantri') && SHIN_API.laCheDoLive() && live.quyen.HUB === 'co' && !live.laAdminHub) return false;
     const mod = MODULES.find(m => m.ma === ma);
     const khoa = mod && mod.mayChu;
     return !(khoa && live.quyen[khoa] === 'khong');
@@ -841,14 +846,17 @@ const ShinApp = (function() {
     if (modal) modal.classList.remove('open');
   }
 
-  /** Nguyên token (vd 40 ký tự a-z0-9) hoặc link Hub có ?t= ➜ token; không ra token ➜ ''.
-   *  Chỉ chặn thứ chắc chắn không phải token (link không có t=, có khoảng trắng, quá ngắn) – còn đúng/sai do Hub xét. */
+  /** Token Hub (Lõi Loi_Token.gs): h1.<mã người>.<hạn hệ 36>.<chữ ký HMAC base64url> – dán nguyên token hoặc link Hub có ?t=.
+   *  Trả {token} hoặc {loi: câu báo}. Token 40 ký tự a-z0-9 là link riêng của app PTKH gốc – Hub không nhận. */
+  const KHUON_TOKEN_HUB = /^h1\.[A-Za-z0-9_-]{1,40}\.[0-9a-z]{1,12}\.[A-Za-z0-9_-]{20,}$/;
   function tachToken(chu) {
     chu = String(chu || '').trim().replace(/^["'`<]+|["'`>]+$/g, '');
     const m = /[?&#]t=([^&#\s]+)/.exec(chu);
     if (m) { try { chu = decodeURIComponent(m[1]); } catch (e) { chu = m[1]; } }
-    if (/^https?:|^www\./i.test(chu)) return '';
-    return /^[^\s<>"'`]{16,2048}$/.test(chu) ? chu : '';
+    if (KHUON_TOKEN_HUB.test(chu)) return { token: chu };
+    if (/^[0-9a-f]{40}(xem[A-Za-z0-9]+)?$/i.test(chu)) return { loi: 'Đây là link riêng của app PTKH, không phải link Hub. Mở Hub (🏠 Shin – Hub) rồi chép link Hub có ?t=h1.… dán vào đây.' };
+    if (!chu || /^https?:|^www\./i.test(chu)) return { loi: 'Chưa thấy token – dán nguyên link đăng nhập Hub (có ?t=h1.…) hoặc token h1.….' };
+    return { loi: 'Token không đúng dạng token Hub (h1.…). Chép lại nguyên link Hub giúp em.' };
   }
 
   /** Trạng thái kết nối (không lộ token): mã người dùng + 4 ký tự cuối chữ ký đã che. */
@@ -876,10 +884,10 @@ const ShinApp = (function() {
   function luuCaiDatToken() {
     const tokenInput = document.getElementById('tokenInput');
     if (!tokenInput) return;
-    const val = tachToken(tokenInput.value);
+    const kq = tachToken(tokenInput.value);
     tokenInput.value = '';   // xóa ngay khỏi ô dù đúng hay sai
-    if (!val) { toast('Chưa thấy token – dán nguyên token hoặc nguyên link đăng nhập Hub (có ?t=…).', 'warn'); return; }
-    SHIN_API.luuToken(val);
+    if (!kq.token) { toast(kq.loi, 'warn', { thoiGian: 7000 }); return; }
+    SHIN_API.luuToken(kq.token);
     datLaiLive();
     dongModal();
     khoiDongLive();
