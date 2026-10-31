@@ -87,7 +87,7 @@ const ModuleQuanTri = {
 
       <div class="hang-tab" role="tablist">
         ${[['nguoi', '👤 Người dùng'], ['app', '📱 Ứng dụng'], ['mang', '🧭 Phụ trách']].map(([k, t]) =>
-          `<button class="tab-nut ${tab === k ? 'active' : ''}" role="tab" aria-selected="${tab === k}" onclick="ModuleQuanTri.chonTab('${k}')">${t}</button>`).join('')}
+          `<button class="tab-nut ${tab === k ? 'dang-chon' : ''}" role="tab" aria-selected="${tab === k}" onclick="ModuleQuanTri.chonTab('${k}')">${t}</button>`).join('')}
       </div>
 
       <div id="qtNoiDung">${tab === 'app' ? this.veApp(d) : tab === 'mang' ? this.veMang(d) : this.veNguoi(d)}</div>
