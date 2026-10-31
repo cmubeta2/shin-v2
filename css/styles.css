@@ -1649,3 +1649,8 @@ body.kieu-mep .main-container { padding-left: 12px; padding-right: 10px; }
 .kieu-rail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .kieu-rail-grid .theme-mode-btn { min-height: 64px; }
 .tt-token { font-size: calc(14px * var(--font-scale)); padding: 8px 10px; border-radius: 8px; background: var(--bg-sub); margin-bottom: 8px; overflow-wrap: anywhere; }
+
+/* v2.6.0 – Quản trị người dùng & app: 2 ô chọn người phụ trách cạnh nhau (điện thoại hẹp thì xếp dọc) */
+.hang-o-chon { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.hang-o-chon .form-input { margin: 0; min-width: 0; }
+@media (max-width: 420px) { .hang-o-chon { grid-template-columns: 1fr; } }
