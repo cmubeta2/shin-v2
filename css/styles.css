@@ -1654,3 +1654,6 @@ body.kieu-mep .main-container { padding-left: 12px; padding-right: 10px; }
 .hang-o-chon { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
 .hang-o-chon .form-input { margin: 0; min-width: 0; }
 @media (max-width: 420px) { .hang-o-chon { grid-template-columns: 1fr; } }
+
+/* v2.6.0 – --bg-sub dùng ở thanh tiến độ / nhật ký / ô trạng thái token mà chưa palette nào khai báo */
+:root, [data-theme="dark"] { --bg-sub: var(--border-soft); }

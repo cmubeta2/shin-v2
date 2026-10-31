@@ -4,6 +4,22 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.1] – 31/10/2026 (TÀI LIỆU THIẾT KẾ GIAO DIỆN)
+
+### 📘 Mới
+- `THIET_KE_GIAO_DIEN_SHIN.md`: toàn bộ giao diện Shin gói trong 1 file để dựng trang khác giống y hệt. Gồm:
+  - nguyên tắc;
+  - 8 palette sáng/tối và màu ngữ nghĩa;
+  - cỡ chữ, khung trang, rail, bảng các thành phần;
+  - bộ HTML + CSS + JS chép dùng ngay;
+  - danh sách kiểm trước khi giao.
+
+### 🐛 Sửa
+- Tab ở 🛡️ Người dùng & App không tô màu tab đang chọn (sai tên class).
+- Khai báo `--bg-sub` (thanh tiến độ, nhật ký, ô trạng thái token trước đây không có nền).
+
+---
+
 ## [2.6.0] – 31/10/2026 (NGƯỜI DÙNG & APP · NỐI PTKH GỐC)
 
 ### ✨ Mới
