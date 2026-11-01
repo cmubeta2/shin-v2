@@ -11,6 +11,7 @@
 !/.gitattributes
 !/.nojekyll
 !/index.html
+!/danhgia5t.html
 !/manifest.webmanifest
 !/sw.js
 !/*.md

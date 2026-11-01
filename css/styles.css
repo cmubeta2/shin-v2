@@ -1657,3 +1657,173 @@ body.kieu-mep .main-container { padding-left: 12px; padding-right: 10px; }
 
 /* v2.6.0 – --bg-sub dùng ở thanh tiến độ / nhật ký / ô trạng thái token mà chưa palette nào khai báo */
 :root, [data-theme="dark"] { --bg-sub: var(--border-soft); }
+
+
+/* ==========================================================================
+   MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T (CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
+   ========================================================================== */
+.tab-control-5t {
+  display: flex;
+  background: var(--bg-sub);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius, 10px);
+  padding: 4px;
+  margin: 16px 0;
+  gap: 4px;
+}
+.tab-btn-5t {
+  flex: 1;
+  padding: 10px 14px;
+  min-height: 44px;
+  font-size: calc(13px * var(--font-scale));
+  font-weight: 700;
+  border-radius: calc(var(--card-radius, 10px) - 2px);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+}
+.tab-btn-5t.active {
+  background: var(--card);
+  color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.filter-chip {
+  padding: 6px 14px;
+  min-height: 36px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.filter-chip:hover, .filter-chip.active {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}
+.filter-chip-sm {
+  padding: 4px 10px;
+  min-height: 30px;
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.filter-chip-sm:hover, .filter-chip-sm.active {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+.bang-diem-5t {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.bang-diem-5t th, .bang-diem-5t td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.bang-diem-5t th {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+  background: var(--bg-sub);
+}
+.diem-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.checklist-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  -webkit-overflow-scrolling: touch;
+}
+.bang-checklist-5t {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.bang-checklist-5t th, .bang-checklist-5t td {
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.bang-checklist-5t th {
+  background: var(--bg-sub);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.bang-checklist-5t tr.row-dat {
+  background: rgba(16, 185, 129, 0.05);
+}
+.bang-checklist-5t tr.row-m1-canhbao {
+  background: rgba(220, 38, 38, 0.06);
+}
+.chk-5t {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+.chk-5t.ql {
+  accent-color: #0f766e;
+}
+.note-input-5t {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 11.5px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  box-sizing: border-box;
+}
+.note-input-5t:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.muc-pill {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+}
+.muc-pill.m1 { background: rgba(220, 38, 38, 0.15); color: #dc2626; border: 1px solid rgba(220, 38, 38, 0.3); }
+.muc-pill.m2 { background: rgba(217, 119, 6, 0.15); color: #d97706; border: 1px solid rgba(217, 119, 6, 0.3); }
+.muc-pill.m3 { background: rgba(2, 132, 199, 0.15); color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.3); }
+.muc-pill.m4 { background: rgba(15, 118, 110, 0.15); color: #0f766e; border: 1px solid rgba(15, 118, 110, 0.3); }
+.muc-pill.m5 { background: rgba(124, 58, 237, 0.15); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.3); }

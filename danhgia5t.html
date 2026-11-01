@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light" data-palette="crimson" data-cochu="vua">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Hệ thống Bảng kiểm & Đánh giá Văn hóa Hành vi 5T – Chuẩn hóa theo phương pháp luận Bộ 83 Tiêu chí Chất lượng Bộ Y tế">
+  <meta name="theme-color" content="#991b1b">
+  <title>Đánh Giá Văn Hóa 5T – SHIN AIOS</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    // Chống chớp giao diện (Anti-Flicker Script)
+    (function() {
+      try {
+        var t = localStorage.getItem('shin_theme');
+        var p = localStorage.getItem('shin_palette') || 'crimson';
+        var c = localStorage.getItem('shin_cochu');
+        if (t) document.documentElement.setAttribute('data-theme', t);
+        if (p) document.documentElement.setAttribute('data-palette', p);
+        if (c) document.documentElement.setAttribute('data-cochu', c);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Thanh Header Đỉnh Ghim (Sticky Topbar) -->
+  <header class="topbar">
+    <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+      <a href="index.html" class="btn-icon" title="Quay về SHIN AIOS Hub" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
+        🏠
+      </a>
+      <a href="danhgia5t.html" class="topbar-brand" style="text-decoration:none;">
+        <div class="topbar-logo" style="background:#991b1b;">
+          <span style="font-size:16px;">⭐</span>
+        </div>
+        <div class="topbar-titles">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="topbar-title">ĐÁNH GIÁ 5T</span>
+            <span class="header-status-pill live" style="background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.4);">
+              83 TC BYT
+            </span>
+          </div>
+          <div class="topbar-sub">Văn Hóa Hành Vi Bậc Thang</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="topbar-actions">
+      <button class="btn-icon" onclick="ModuleDanhGia5T.inPhieu()" title="In phiếu thẩm định A4">
+        🖨️
+      </button>
+      <button class="btn-icon" onclick="ShinAppStandalone.moCaiDat()" title="Đổi màu giao diện">
+        🎨
+      </button>
+    </div>
+  </header>
+
+  <!-- Vùng Nội Dung Chính (Main Content Container) -->
+  <main class="main-container" id="appContent" role="main">
+    <!-- Render sinh động qua ModuleDanhGia5T -->
+  </main>
+
+  <!-- Thanh Điều Hướng Đáy Ghim (Fixed Bottom Navigation) -->
+  <nav class="bottom-nav" id="bottomNav" aria-label="Thanh điều hướng nhanh">
+    <button class="nav-item active" id="navDanhGia" onclick="ModuleDanhGia5T.chuyenTab('danhgia'); capNhatNav('navDanhGia');">
+      <span class="nav-icon">✍️</span>
+      <span>Đánh Giá</span>
+    </button>
+    <button class="nav-item" id="navThuVien" onclick="ModuleDanhGia5T.chuyenTab('thuvien'); capNhatNav('navThuVien');">
+      <span class="nav-icon">📚</span>
+      <span>Thư Viện 76 TM</span>
+    </button>
+    <button class="nav-item" onclick="ModuleDanhGia5T.inPhieu()">
+      <span class="nav-icon">🖨️</span>
+      <span>In Phiếu A4</span>
+    </button>
+    <button class="nav-item" onclick="window.location.href='index.html'">
+      <span class="nav-icon">🏢</span>
+      <span>SHIN AIOS</span>
+    </button>
+    <button class="nav-item" onclick="ShinAppStandalone.moCaiDat()">
+      <span class="nav-icon">⚙️</span>
+      <span>Giao Diện</span>
+    </button>
+  </nav>
+
+  <!-- Khung Chứa Toast Thông Báo Có Hoàn Tác 6s -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Modal Cài Đặt Giao Diện Đơn Giản Cho Standalone -->
+  <div class="modal-overlay" id="settingsModal" onclick="if (event.target === this) this.classList.remove('open');">
+    <div class="modal-sheet">
+      <div class="modal-head">
+        <div class="modal-title">⚙️ Giao Diện & Màu Sắc</div>
+        <button class="btn-icon" style="background:transparent; border:none; color:var(--text);" onclick="document.getElementById('settingsModal').classList.remove('open');">✕</button>
+      </div>
+
+      <div class="form-group" style="margin-bottom:16px;">
+        <label class="form-label">CHẾ ĐỘ SÁNG / TỐI</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button class="btn-secondary" onclick="ShinAppStandalone.doiTheme('light')">☀️ Sáng</button>
+          <button class="btn-secondary" onclick="ShinAppStandalone.doiTheme('dark')">🌙 Tối</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">PHONG CÁCH MÀU</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button class="btn-secondary" style="border-left:4px solid #991b1b;" onclick="ShinAppStandalone.doiPalette('crimson')">Crimson (Kiểm soát)</button>
+          <button class="btn-secondary" style="border-left:4px solid #0284c7;" onclick="ShinAppStandalone.doiPalette('executive')">Executive (Lãnh đạo)</button>
+          <button class="btn-secondary" style="border-left:4px solid #0f766e;" onclick="ShinAppStandalone.doiPalette('clinical')">Clinical (Y tế)</button>
+          <button class="btn-secondary" style="border-left:4px solid #dc2626;" onclick="ShinAppStandalone.doiPalette('gold')">Hoàng Kim</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/modules/danhgia5t.js"></script>
+  <script>
+    // Standalone Runner & Helpers
+    const ShinAppStandalone = {
+      toast: function(msg) {
+        const c = document.getElementById('toastContainer');
+        if (!c) return;
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerHTML = `<span>${msg}</span><div class="toast-bar"></div>`;
+        c.appendChild(t);
+        setTimeout(() => { if (t.parentElement) t.remove(); }, 4000);
+      },
+      moCaiDat: function() {
+        const m = document.getElementById('settingsModal');
+        if (m) m.classList.add('open');
+      },
+      doiTheme: function(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('shin_theme', theme);
+      },
+      doiPalette: function(pal) {
+        document.documentElement.setAttribute('data-palette', pal);
+        localStorage.setItem('shin_palette', pal);
+      }
+    };
+
+    // Đảm bảo đối tượng ShinApp tồn tại để tương thích với module
+    if (typeof window.ShinApp === 'undefined') {
+      window.ShinApp = {
+        toast: ShinAppStandalone.toast,
+        moCaiDat: ShinAppStandalone.moCaiDat
+      };
+    }
+
+    function capNhatNav(activeId) {
+      document.querySelectorAll('.bottom-nav .nav-item').forEach(b => {
+        if (b.id === activeId) b.classList.add('active');
+        else b.classList.remove('active');
+      });
+    }
+
+    // Tự động render ngay khi tải xong
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('appContent');
+      if (container) {
+        ModuleDanhGia5T.render(container);
+      }
+    });
+  </script>
+</body>
+</html>

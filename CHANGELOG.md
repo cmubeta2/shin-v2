@@ -4,6 +4,29 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.4] – 01/11/2026 (MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
+
+### ⭐ Mới: Module Đánh Giá Văn Hóa Hành Vi 5T Bậc Thang
+- **Chuẩn hóa 5 Tiêu chí cốt lõi (76 Tiểu mục):**
+  - **T1 – TRUNG THỰC (Integrity):** 15 tiểu mục về chuẩn xác dữ liệu, dũng cảm nhận lỗi, minh bạch liêm chính.
+  - **T2 – TRÁCH NHIỆM (Responsibility):** 15 tiểu mục về cam kết tiến độ, giải quyết đến cùng việc, tư duy làm chủ.
+  - **T3 – THẤU CẢM (Empathy):** 15 tiểu mục về lắng nghe nỗi đau, kiểm soát cảm xúc, ứng xử tôn trọng.
+  - **T4 – TẬN TÂM (Dedication):** 16 tiểu mục về chu đáo tỉ mỉ, dấn thân vượt khó, tương trợ đồng đội.
+  - **T5 – TRI ÂN (Gratitude):** 15 tiểu mục về biết ơn khách hàng/đồng nghiệp, giữ gìn uy tín, phụng sự.
+- **2 Phân Hệ Lớn Trọng Tâm:**
+  1. **Thư Viện Tiêu Chí & Minh Chứng (Handbook):** Tra cứu toàn văn 76 tiểu mục kèm bộ lọc đa chiều (theo Trụ cột 5T, theo Mức M1-M5) và tìm kiếm từ khóa thời gian thực.
+  2. **Bàn Làm Việc Thực Hiện Đánh Giá & Thẩm Định:** Giao diện chấm điểm đối soát kép (Nhân viên tự chấm + Quản lý duyệt), hỗ trợ nạp mẫu kịch bản nhanh (Mức 2, Mức 3, Mức 4, Mức 5) và lưu trữ cục bộ LocalStorage.
+- **Thuật Toán Bậc Thang Lũy Tiến & Bắt Điểm Liệt Mức 1:**
+  - Áp dụng nguyên tắc tích lũy khắt khe chuẩn Bộ Y tế: để đạt Mức $N$ phải đạt 100% các mức trước đó.
+  - Bắt lỗi điểm liệt: vi phạm bất kỳ tiểu mục nào thuộc Mức 1 sẽ lập tức khóa tiêu chí ở Mức 1 và kích hoạt cảnh báo kỷ luật.
+- **Biểu Đồ Radar SVG 5 Trục (Spider Chart):**
+  - Trực quan hóa mức độ trưởng thành văn hóa trên 5 đỉnh đối xứng, hiển thị vùng diện tích điểm đạt để nhận diện ngay "vùng móp" năng lực.
+- **Phiếu Tổng Hợp A4 & Trang Độc Lập:**
+  - Hỗ trợ xuất / in ấn phiếu thẩm định kết quả A4 chuẩn chỉnh có nơi ký 3 bên (Nhân viên, Quản lý, Ban Lãnh đạo).
+  - Xuất bản trang web độc lập `danhgia5t.html` và tích hợp sâu vào Decagon Drawer của `index.html`.
+- **Tích Hợp Kho Tri Thức (Second Brain):**
+  - Đồng bộ tự động vào Obsidian Second Brain tại `Wiki/References/bo-tieu-chi-danh-gia-van-hoa-hanh-vi-5t.md` và `He sinh thai Shin/05_TriThuc/01_KienThuc_Nen/BO_TIEU_CHI_DANH_GIA_5T.md`.
+
 ## [2.6.3] – 01/11/2026 (CHUẨN BỊ CHUYỂN v2 VỀ D:\Shin\AIOS-v2)
 
 ### 🔧 Sửa

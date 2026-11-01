@@ -1,6 +1,6 @@
 # SHIN AIOS v2 – HỆ THỐNG ĐIỀU HÀNH HỢP NHẤT ĐA MODULE
 *1 Web duy nhất tích hợp toàn diện mọi tính năng của Hệ sinh thái SHIN v1 · Dữ liệu chung · Khác giao diện.*  
-*Địa chỉ trực tuyến: **[cmubeta2.github.io/shin-v2](https://cmubeta2.github.io/shin-v2/)** · Phiên bản: **v2.5.5**.*
+*Địa chỉ trực tuyến: **[cmubeta2.github.io/shin-v2](https://cmubeta2.github.io/shin-v2/)** (Trang 5T độc lập: **[cmubeta2.github.io/shin-v2/danhgia5t.html](https://cmubeta2.github.io/shin-v2/danhgia5t.html)**) · Phiên bản: **v2.6.4**.*
 *Quy hoạch chi tiết 10 mảng, hiện trạng và lộ trình: xem **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)**.*
 
 ---
@@ -28,6 +28,7 @@ SHIN v2 là phiên bản hợp nhất đa module theo định hướng chiến l
 | 1 | **Executive Hub** | `hub` | Bàn làm việc trung tâm, gom việc toàn hệ, Tab 🧭 Điều hành 2 chiều. | Executive Hub |
 | 1 | **BKS KPI Toàn Viện** | `kpi` | Theo dõi AOP 2026/2027, bản tin tạm tính tháng, soát lỗi chốt quý. | Crimson Authority |
 | 1 | **Khảo Sát ACHSI** | `khaosat` | Khảo sát trải nghiệm người bệnh 5 trụ cột chuẩn quốc tế ACHSI. | Clinical Precision |
+| 1 | **Đánh Giá Văn Hóa 5T** | `danhgia5t` | Bảng kiểm 76 tiểu mục bậc thang chuẩn 83 TC BYT, Radar SVG, In A4. | Crimson Authority |
 | 2 | **Khách Hàng & Đối Tác** | `crm` | CRM B2B KSK Doanh nghiệp, Học viên, CTV, Nhà cung ứng (Không lưu bệnh nhân). | Executive Hub |
 | 3 | **Tài Chính & Thanh Toán** | `taichinh` | VietQR SePay, chi phí phát sinh, chi trả hoa hồng *(dự kiến v2.3.0)*. | – |
 | 4 | **Giáo Dục & Tuyển Sinh** | `tuyensinh` | Vận hành chiến dịch tuyển sinh, hoa hồng bậc thang, đón nhận lead. | Fintech Growth |
