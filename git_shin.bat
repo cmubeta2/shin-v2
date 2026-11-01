@@ -1,2 +1,3 @@
 @echo off
-git --git-dir="C:\Users\Hyrta\.git-repos\shin-v2.git" --work-tree="D:\Hyrta-One\cmubeta2\My Drive\SHIN" %*
+rem Chay git cho thu muc chua tep nay (vd: git_shin.bat status). Khong con tro toi duong dan cu tren Google Drive.
+git -C "%~dp0." %*

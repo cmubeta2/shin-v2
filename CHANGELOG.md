@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.3] – 01/11/2026 (CHUẨN BỊ CHUYỂN v2 VỀ D:\Shin\AIOS-v2)
+
+### 🔧 Sửa
+- `git_shin.bat` bỏ đường dẫn cố định tới thư mục git cũ trên Google Drive; giờ chạy git ngay trong thư mục chứa tệp, nên dùng được ở bất kỳ chỗ nào anh `git clone` về (vd `D:\Shin\AIOS-v2`).
+- Từ bản này chỉ còn nhánh `main`, không dùng nhánh làm việc riêng.
+
 ## [2.6.2] – 31/10/2026 (KHÓA AN TOÀN KHO CÔNG KHAI)
 
 ### 🔒 Bảo mật
