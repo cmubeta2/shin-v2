@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.6] – 04/11/2026 (KPI – NHÁP AOP NĂM SAU)
+
+### ⭐ Màn chỉnh nháp AOP năm sau
+- `js/modules/kpi.js` › 🎯 AOP › 🗓 Nháp AOP năm sau: đọc `webNhap2027` (mục tiêu năm gốc → năm sau, % tăng trưởng, nguồn: đã chỉnh / theo thực đạt / mặc định); Admin nhập % (−50…200, trống = về mặc định) ➜ `webLuuTangTruong` rồi đọc lại.
+- Cổng lỗi (KPI v1.8.2 chưa lên app) ➜ dải đỏ báo rõ + nút mở app KPI v1, không hiện số mẫu.
+- Demo: `SHIN_DEMO_DATA.kpiPhu.nhap2027` (dữ liệu giả).
+
 ## [2.7.5] – 04/11/2026 (PTKH GỐC ĐỌC THẲNG TỔNG QUAN THÁNG)
 
 ### 🟢 PTKH gốc

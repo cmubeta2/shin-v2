@@ -26,6 +26,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.7.6 ✅ – KPI NHÁP AOP NĂM SAU (04/11/2026, lượt tự động ⑤)
+- Màn chỉnh nháp AOP năm sau (`webNhap2027` + `webLuuTangTruong`).
+- Còn chờ v1: KPI L10 (v1.8.2, có `webNhap2027` trong congWeb_) chưa lên app (app đang v1.8.1) – lên app xong màn chạy số thật.
+- Còn chờ v1: HUB L21–L25 (Phê duyệt, CRM, Dự án, Tài chính, Quản trị) chưa «KIỂM ĐẠT» ➜ chưa nối pheduyet / crm / duan / taichinh / quantri (mục f).
+
 ### PHIÊN BẢN v2.7.5 ✅ – PTKH GỐC: TỔNG QUAN THÁNG SỐ THẬT (04/11/2026, lượt tự động ⑤)
 - Màn PTKH gốc đọc `webDashboard` qua `webGoi` của PTKH (đã lên app v1.297.18).
 - Lượt sau: Báo cáo / Lịch PTKH qua `webGoi`; dùng `webGuiNghiPhep` để màn Phòng PTKH xin nghỉ ngay trên v2.
