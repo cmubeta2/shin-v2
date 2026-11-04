@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.10 ✅ – TRI THỨC: TÌM KIẾM PHÍA TRÌNH DUYỆT (04/11/2026, lượt tự động ⑤)
+- M9.2 lọc toàn văn trên máy; FTS5 phía máy chủ để sau (mảng Tri thức chưa có máy chủ v1).
+- Rà UX (đo ở 375): lớp dùng chung `page-sub`, `hero-date`, `dong-sub` 13px và `tq-nhan` 12px < chuẩn 14px – đổi ở `css/styles.css` ảnh hưởng mọi màn, để lượt rà UX riêng.
+
 ### PHIÊN BẢN v2.6.9 ✅ – KPI NHÁP AOP NĂM SAU (04/11/2026, lượt tự động ⑤)
 - Màn chỉnh nháp AOP năm sau (`webNhap2027` + `webLuuTangTruong`).
 - Còn chờ v1: KPI L10 (v1.8.2, có `webNhap2027` trong congWeb_) chưa lên app (app đang v1.8.1) – lên app xong màn chạy số thật.

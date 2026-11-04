@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.10] – 04/11/2026 (TRI THỨC – TÌM KIẾM TOÀN VĂN PHÍA TRÌNH DUYỆT)
+
+### ✅ M9.2
+- `js/modules/trithuc.js`: ô tìm lọc ngay khi gõ trên mã / tên / lĩnh vực / tóm tắt, không phân biệt dấu & hoa thường, nhiều từ phải khớp đủ; chip lọc theo lĩnh vực; đếm khớp / tổng. Câu tìm không gửi đi đâu.
+- Bỏ style nội tuyến chữ 10–12px, bỏ nút "＋ Thêm tài liệu" giả (chỉ hiện toast), thoát HTML mọi chữ từ dữ liệu.
+
 ## [2.6.9] – 04/11/2026 (KPI – NHÁP AOP NĂM SAU)
 
 ### ⭐ Màn chỉnh nháp AOP năm sau
