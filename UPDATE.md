@@ -26,6 +26,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.7 ✅ – TELEGRAM MINI APP (04/11/2026)
+- Mở v2 từ nút Menu bot Telegram: đọc `Telegram.WebApp.initData` (hoặc `#tgWebAppData=` Telegram gắn trên địa chỉ) ➜ Hub `webTelegram` (HUB L8, không token) ➜ lưu token Hub 12 giờ ➜ vào Live. Đọc xong xóa `#tgWebApp…` khỏi địa chỉ.
+- Lỗi (chưa cài bot, sai chữ ký, hết hạn, Telegram chưa gắn người dùng) ➜ toast đỏ đúng chữ Hub trả, giữ token cũ nếu có.
+- **Chờ anh (V20):** @BotFather ➜ bot Shin ➜ Bot Settings ➜ Menu Button ➜ URL `https://cmubeta2.github.io/shin-v2/`; Hub ⚙️ đã lưu khóa bot (TG_KHOA) và người dùng đã gắn ChatTelegram.
+
 ### PHIÊN BẢN v2.6.6 ✅ – KHẢO SÁT GỌI ĐÚNG CỔNG THẬT APP KS v1.4.3 (04/11/2026)
 - `js/modules/khaosat.js`: bỏ `webTongQuan` (KS không có cổng này) ➜ `webDsKhaoSat` + `webKetQuaKS` (gọi `(token, du)`); tự chọn KS đang mở, bấm tên KS để xem KS khác; Hero: điểm TB / phiếu hợp lệ / NPS (hoặc chờ xác minh).
 - Không hiện câu liên hệ / ý kiến chữ (QK4). HOP_DONG_CONG_V2.md mục KS sửa theo mã v1.

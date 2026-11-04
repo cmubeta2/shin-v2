@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.7] – 04/11/2026 (TELEGRAM MINI APP)
+
+### Mới
+- Mở SHIN v2 trong Telegram (nút Menu bot): tự đổi `initData` lấy token Hub qua cổng `webTelegram` (HUB L8) – khỏi gửi link token.
+
 ## [2.6.6] – 04/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG THẬT)
 
 ### Sửa

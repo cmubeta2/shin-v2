@@ -23,6 +23,13 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 
 ## v2.4.0 – App đã có, cần thêm cổng
 
+### HUB – `webTelegram` (HUB L8, Hub v1.13.3) – KHÔNG token
+
+```js
+POST {hanh:'webTelegram', du:{initData}} → {ok:true, du:{ok:true, token /*Hub 12 giờ*/, hetHan, nguoi:{ma, hoTen}}}
+                                         | {ok:true, du:{ok:false, loi:'chua_cai_bot'|'thieu_hash'|'sai_chu_ky'|'het_han'|'thieu_user'|…, msg}}
+```
+
 ### KS – `70_KhaoSat` (app KS v1.4.3) – cổng nhận `(token, du)` như Hub
 
 > **Sửa 04/11 theo mã v1 (trọng tài):** KS KHÔNG có `webTongQuan`. `ksSoLieu` chỉ đi qua liên thông Hub (ký HMAC) – trình duyệt không gọi được. v2 dùng 2 cổng có thật trong `congWeb_()`:

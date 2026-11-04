@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.6.6';
+  const PHIEN_BAN = 'v2.6.7';
 
   const MODULES = [
     ModuleHub,
@@ -449,8 +449,14 @@ const ShinApp = (function() {
     if (MQ_DESKTOP.addEventListener) MQ_DESKTOP.addEventListener('change', () => apDungRail(railMacDinh()));
     veMenuDay();
     capNhatBannerTrangThai();
-    if (SHIN_API.laCheDoLive()) khoiDongLive();
-    chuyenModule(currentModule);
+    // v2.6.7 – Telegram Mini App (HUB L8): mở từ nút Menu bot ➜ đổi initData lấy token Hub 12 giờ rồi mới vào Live
+    const initData = SHIN_API.docInitDataTelegram();
+    if (initData) {
+      vaoTuTelegram(initData);
+    } else {
+      if (SHIN_API.laCheDoLive()) khoiDongLive();
+      chuyenModule(currentModule);
+    }
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -464,6 +470,22 @@ const ShinApp = (function() {
         if (currentThemeMode === 'system') apDungThemeMode('system');
       });
     }
+  }
+
+  /** Telegram: initData ➜ Hub webTelegram ➜ lưu token; lỗi ➜ giữ token cũ (nếu có) và báo rõ lý do. */
+  async function vaoTuTelegram(initData) {
+    try { if (window.Telegram && Telegram.WebApp) { Telegram.WebApp.ready(); Telegram.WebApp.expand(); } } catch (e) {}
+    const c = document.getElementById('appContent');
+    if (c) c.innerHTML = '<div class="man-tai"><div class="vong-tai"></div><div>Đang đăng nhập qua Telegram…</div></div>';
+    const kq = await SHIN_API.doiTokenTelegram(initData);
+    if (kq.ok) {
+      SHIN_API.luuToken(kq.token);
+    } else {
+      toast(kq.msg || 'Không đăng nhập được qua Telegram – mở link Hub để vào.', 'error', { thoiGian: 8000 });
+    }
+    capNhatBannerTrangThai();
+    if (SHIN_API.laCheDoLive()) khoiDongLive();
+    chuyenModule(currentModule);
   }
 
   /**
