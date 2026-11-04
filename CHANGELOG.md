@@ -4,7 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
-## [2.6.7] – 04/11/2026 (TELEGRAM MINI APP – HUB L8)
+## [2.6.8] – 04/11/2026 (KPI – CHỈNH NHÁP AOP NĂM SAU)
+- Màn KPI ➜ AOP: khối 🗓 Nháp AOP năm sau đọc `webNhap2027` (mức năm nay → mức năm sau, % tăng trưởng, Mặc định / Đã chỉnh).
+- Admin KPI sửa % từng khoa ➜ `webLuuTangTruong` (−50% … 200%, ô trống = về mặc định – đọc lại số mặc định của máy chủ). Người không phải Admin chỉ xem.
+
+ – 04/11/2026 (TELEGRAM MINI APP – HUB L8)
 - Mở SHIN v2 từ nút Menu bot Telegram: v2 đọc `initData` (`Telegram.WebApp.initData` hoặc `#tgWebAppData` Telegram gắn vào link) ➜ gửi Hub `{hanh:'webTelegram', du:{initData}}` (không token) ➜ nhận token Hub hạn 12 giờ.
 - Token Telegram chỉ giữ trong `sessionStorage` (đóng Mini App là mất), không ghi đè token lâu dài; link `?t=` vẫn được ưu tiên. Xóa `#tgWebAppData` khỏi thanh địa chỉ sau khi đổi.
 - Hub trả lỗi (chưa nối Telegram, sai chữ ký, hết hạn…) ➜ toast vàng nói rõ, vẫn mở bản trình diễn.

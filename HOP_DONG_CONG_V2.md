@@ -53,6 +53,8 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 
 Hàm `webNhap2027` đã có sẵn. v2 cần nó để đọc nháp AOP năm sau trước khi gọi `webLuuTangTruong`. Chỉ cần thêm 1 dòng, không đổi logic.
 
+> ✅ **Đã có (KPI v1.8.2 L10)** – v2.6.8 dùng: `webNhap2027()` ➜ `{vien, khoa:[{khoa, muc2026, g, nguon, macDinh, muc2027}], suaDuoc, nam, namGoc}` | `{loi}`; `webLuuTangTruong(khoa, g)` (du.a, g tỷ lệ −0,5…2, `''` = về mặc định) ➜ `{luu:true}` | `{xoa:true}`.
+
 ---
 
 ## v2.5.0 – Dịch vụ chung và mảng mới trên máy chủ Hub (Q1)

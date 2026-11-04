@@ -26,6 +26,9 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.8 ✅ – KPI NHÁP AOP NĂM SAU (04/11/2026)
+- Nối `webNhap2027` (KPI v1.8.2 L10) + `webLuuTangTruong`: xem / chỉnh % tăng trưởng nháp năm sau ngay trong v2.
+
 ### PHIÊN BẢN v2.6.7 ✅ – TELEGRAM MINI APP (04/11/2026)
 - v2 tự đăng nhập khi mở trong Telegram qua cổng Hub `webTelegram` (HUB L8, Hub v1.13.3).
 - **Chờ anh (V20):** @BotFather ➜ bot Shin ➜ Bot Settings ➜ Menu Button ➜ URL `https://cmubeta2.github.io/shin-v2/`; người dùng phải đã nối Telegram ở Hub (ChatTelegram) và Hub đã lưu khóa bot (TG_KHOA).
