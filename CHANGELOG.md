@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.8] – 05/11/2026 (DỰ ÁN – MA TRẬN VƯỚNG MẮC M6.3)
+
+### ✅ Dự án
+- `js/modules/duan.js`: tab mới 🧱 Ma Trận Vướng Mắc (M6.3 Blocker Matrix) – chạy hoàn toàn phía trình duyệt trên dữ liệu màn đang có: gom Khối 2 Flash + dự án đèn đỏ / vàng + dự án quá hạn chưa 100%, xếp Cao → Vừa → Thấp (quá hạn lên đầu), hiện nguồn, người xử lý, hạn gỡ, đề xuất. Nút 📋 Sao chép để giao việc (Task Bus M7.1 chưa có máy chủ – không gửi gì đi).
+- Live dùng lại dữ liệu `webDuAn` đã thoát HTML; Demo dùng `demo_data.js`.
+
 ## [2.7.7] – 05/11/2026 (PTKH GỐC – BÁO CÁO 14 NGÀY + LỊCH TỔ)
 
 ### 🟢 PTKH gốc

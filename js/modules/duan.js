@@ -118,10 +118,13 @@ const ModuleDuAn = {
         <button class="module-chip ${this.tabHienTai === 'danhsach' ? 'active' : ''}" style="white-space:normal;" onclick="ModuleDuAn.chuyenTab('danhsach')">
           📊 Master Dashboard (${danhSach.length})
         </button>
+        <button class="module-chip ${this.tabHienTai === 'matran' ? 'active' : ''}" style="white-space:normal;" onclick="ModuleDuAn.chuyenTab('matran')">
+          🧱 Ma Trận Vướng Mắc (${this.maTranVuongMac(d).length})
+        </button>
       </div>
 
       <div id="duAnTabContent">
-        ${this.tabHienTai === 'flash' ? this.renderFlash(flash) : this.renderDanhSach(danhSach)}
+        ${this.tabHienTai === 'flash' ? this.renderFlash(flash) : this.tabHienTai === 'matran' ? this.renderMaTran(this.maTranVuongMac(d)) : this.renderDanhSach(danhSach)}
       </div>
     `;
 
@@ -287,6 +290,72 @@ const ModuleDuAn = {
         `).join('')}
       </div>
     `;
+  },
+
+  /**
+   * M6.3 Blocker Matrix (v2.7.8) – THUẦN, chạy hoàn toàn phía trình duyệt trên dữ liệu màn đang có
+   * (Live: webDuAn đã thoát HTML trong tuV1; Demo: demo_data). Gom 3 nguồn:
+   *  ① Khối 2 Flash (vướng mắc + đề xuất), ② dự án đèn đỏ / vàng, ③ dự án quá hạn mà chưa 100%.
+   * Trả [{vanDe, nguon, muc:'cao'|'vua'|'thap', nguoiXuLy, han, deXuat, quaHan}] xếp Cao → Thấp, quá hạn lên trước.
+   */
+  maTranVuongMac: function(d, homNay) {
+    d = d || {};
+    const nay = homNay instanceof Date ? homNay : new Date();
+    const moc = new Date(nay.getFullYear(), nay.getMonth(), nay.getDate()).getTime();
+    const docNgay = s => { const m = String(s || '').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? new Date(+m[3], +m[2] - 1, +m[1]).getTime() : null; };
+    const mucTu = s => { const t = String(s || '').toLowerCase(); return /cao|đỏ|gấp|khẩn|nghiêm/.test(t) ? 'cao' : /vừa|trung|vàng/.test(t) ? 'vua' : 'thap'; };
+    const flash = d.flashReport || {};
+    const ds = d.danhSachDuAn || [];
+    const kq = [];
+    (flash.khoi2_vuongMac || []).forEach(v => kq.push({ vanDe: v.vanDe || '', nguon: 'Flash hôm nay', muc: mucTu(v.mucDo), nguoiXuLy: flash.nguoiBaoCao || '', han: '', deXuat: v.deXuat || '', quaHan: false }));
+    ds.forEach(da => {
+      const t = docNgay(da.hanChot), quaHan = t !== null && t < moc && Number(da.tienDo) < 100;
+      const den = String(da.den || '');
+      const muc = quaHan || den.indexOf('red') >= 0 ? 'cao' : den.indexOf('yellow') >= 0 ? 'vua' : null;
+      if (!muc) return;
+      kq.push({ vanDe: (quaHan ? 'Quá hạn ' : 'Chậm tiến độ ') + (da.ma || '') + ' – ' + (da.ten || ''), nguon: 'Dự án · ' + (Number(da.tienDo) || 0) + '%', muc, nguoiXuLy: da.quanLy || '', han: da.hanChot || '', deXuat: da.trangThai || '', quaHan });
+    });
+    const thuTu = { cao: 0, vua: 1, thap: 2 };
+    return kq.sort((a, b) => thuTu[a.muc] - thuTu[b.muc] || (b.quaHan - a.quaHan));
+  },
+
+  renderMaTran: function(ds) {
+    if (!ds.length) return `<div class="card" style="text-align:center; padding:24px; font-size:14px; color:var(--text-muted);">✅ Không có vướng mắc nào cần gỡ.</div>`;
+    const NHOM = [['cao', '🔴 Cao – gỡ trong ngày', 'var(--c-red)'], ['vua', '🟡 Vừa – gỡ trong tuần', 'var(--c-yellow)'], ['thap', '🟢 Thấp – theo dõi', 'var(--c-green)']];
+    this._maTran = ds;
+    return NHOM.map(([k, nhan, mau]) => {
+      const nhom = ds.map((x, i) => ({ x, i })).filter(o => o.x.muc === k);
+      if (!nhom.length) return '';
+      return `
+        <div style="margin-bottom:14px;">
+          <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:8px;">${nhan} · ${nhom.length}</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            ${nhom.map(({ x, i }) => `
+              <div class="card" style="border-left:4px solid ${mau}; padding:12px;">
+                <div style="font-size:14px; font-weight:700; color:var(--text); line-height:1.4; overflow-wrap:anywhere;">${x.quaHan ? '⏰ ' : '⚠️ '}${x.vanDe}</div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px 14px; font-size:14px; color:var(--text-muted); margin:6px 0;">
+                  <span>📍 ${x.nguon}</span>
+                  <span>👤 ${x.nguoiXuLy || '<em>chưa giao</em>'}</span>
+                  ${x.han ? `<span>📅 Hạn: <strong>${x.han}</strong></span>` : ''}
+                </div>
+                ${x.deXuat ? `<div style="font-size:14px; color:var(--text); background:var(--bg-sub); padding:6px 10px; border-radius:6px; line-height:1.4; overflow-wrap:anywhere;">💡 ${x.deXuat}</div>` : ''}
+                <button class="btn-secondary" style="margin-top:8px; min-height:44px; font-size:14px; width:100%;" onclick="ModuleDuAn.saoChepVuongMac(${i})">📋 Sao chép để giao việc</button>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    }).join('');
+  },
+
+  /** Task Bus (M7.1) chưa có máy chủ ➜ sao chép nội dung để dán vào ⚡ Giao việc / Telegram. Không gửi gì đi. */
+  saoChepVuongMac: function(i) {
+    const x = (this._maTran || [])[i];
+    if (!x) return;
+    const tmp = document.createElement('div');
+    tmp.innerHTML = [x.vanDe, x.nguoiXuLy && ('Người xử lý: ' + x.nguoiXuLy), x.han && ('Hạn: ' + x.han), x.deXuat && ('Đề xuất: ' + x.deXuat)].filter(Boolean).join('\n');
+    const txt = tmp.textContent;
+    const xong = () => ShinApp.toast('Đã sao chép – dán vào ⚡ Giao việc hoặc Telegram.');
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(xong, () => ShinApp.toast('Trình duyệt chặn sao chép.', 'info'));
+    else ShinApp.toast('Trình duyệt chặn sao chép.', 'info');
   },
 
   chuyenTab: function(tab) {
