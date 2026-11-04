@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.7] – 05/11/2026 (PTKH GỐC – BÁO CÁO 14 NGÀY + LỊCH TỔ)
+
+### 🟢 PTKH gốc
+- `js/modules/ptkh.js`: thêm 📝 Báo cáo 14 ngày của tôi (`webLichSu`: ngày, ca, số chính, trạng thái duyệt, trễ hạn) và 📅 Lịch tổ tuần này (`webLichTo`: ca / vị trí của tôi theo ngày + ai nghỉ, không lý do) – đọc qua cổng `webGoi` (L148), gọi song song với Tổng quan tháng; lỗi khối nào báo dải đỏ ở khối đó, không thay bằng số mẫu.
+- Demo: `SHIN_DEMO_DATA.ptkh.lichSu`, `.lichTo` (dữ liệu giả).
+
 ## [2.7.6] – 04/11/2026 (KPI – NHÁP AOP NĂM SAU)
 
 ### ⭐ Màn chỉnh nháp AOP năm sau

@@ -163,7 +163,8 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 
 - Địa chỉ máy chủ: v2 lấy **động** từ link PTKH trong `webKhoiDong.lienKet` của Hub (chỉ nhận `https://script.google.com/macros/s/…/exec`), không chép link vào mã.
 - **v2 đang dùng (v2.7.5):** `webDashboard(token, 'thang')` ➜ `{homNay, nopBC, chuoiDH, thang:{tenKy, nhan, toi:{bc:{tong, dungHan, tre, khongNop}, viec:{dangLam, quaHan, xong}}, mucTieu:{ptThoiGian, ngayConLai, chiTieu:[{ten, dvt, th, kh, pt, den, duBao}]}}}`.
-- Sau: báo cáo / lịch (`webLichTo`, `webBangLichNghi`, `webGuiNghiPhep`) – cũng là đường ghi xin nghỉ cho màn Phòng PTKH.
+- **v2.7.7 dùng thêm:** `webLichSu(token)` ➜ `[{khoa, ngay, thu, ca, dungHan, trangThaiDuyet, ghiChuDuyet, so:[chuỗi], vuongMac, …}]` (14 ngày, chính NV); `webLichTo(token, thuHai)` ➜ `{to, thuHai, nv:[{ma, ten, toi, ngay:[{ngay, ca, vt, nghi, le}]}]}` (cùng tổ, nghỉ đã duyệt, không lý do).
+- Sau: ghi (`webBangLichNghi`, `webGuiNghiPhep`) – cũng là đường ghi xin nghỉ cho màn Phòng PTKH.
 - **Cấm trả:** thông tin người bệnh, nội dung khiếu nại có tên / SĐT khách.
 
 ---

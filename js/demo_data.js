@@ -579,3 +579,14 @@ window.SHIN_DEMO_DATA.kpiPhu.nhap2027 = {
     { khoa: 'Khoa C', muc2026: 25e9, g: 0.08, nguon: 'thucDat', macDinh: false, muc2027: 27e9 }
   ]
 };
+
+// v2.7.7 – 📝 Báo cáo 14 ngày (khuôn webLichSu) + 📅 Lịch tổ (khuôn webLichTo) qua webGoi PTKH – dữ liệu GIẢ
+window.SHIN_DEMO_DATA.ptkh.lichSu = [
+  { khoa: '2026-11-04', ngay: '04/11/2026', thu: 'T4', ca: 'Sáng', dungHan: true, trangThaiDuyet: 'Chờ duyệt', ghiChuDuyet: '', so: ['Khách mới: 5', 'Cuộc gọi: 18'] },
+  { khoa: '2026-11-03', ngay: '03/11/2026', thu: 'T3', ca: 'Sáng', dungHan: true, trangThaiDuyet: 'Đã duyệt', ghiChuDuyet: '', so: ['Khách mới: 4', 'Hẹn khám: 2'] },
+  { khoa: '2026-11-02', ngay: '02/11/2026', thu: 'T2', ca: 'Chiều', dungHan: false, trangThaiDuyet: 'Trả lại', ghiChuDuyet: 'Bổ sung ảnh', so: ['Khách mới: 3'] }
+];
+window.SHIN_DEMO_DATA.ptkh.lichTo = { to: 'Tổ Mẫu', thuHai: '2026-11-02', nv: [
+  { ma: 'NV01', ten: 'Nhân viên Mẫu', toi: true, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: i < 6 ? (i % 2 ? 'Chiều' : 'Sáng') : '', vt: i < 6 ? 'Tư vấn' : '', nghi: i === 6 ? 'Nghỉ' : '', le: false })) },
+  { ma: 'NV02', ten: 'Nhân viên A', toi: false, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: 'Sáng', vt: 'Tổng đài', nghi: i === 4 ? 'Nghỉ' : '', le: false })) }
+] };

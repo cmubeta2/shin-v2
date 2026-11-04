@@ -26,6 +26,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.7.7 ✅ – PTKH GỐC: BÁO CÁO 14 NGÀY + LỊCH TỔ (05/11/2026, lượt tự động ⑤)
+- Màn PTKH gốc đọc `webLichSu` + `webLichTo` qua `webGoi` (chỉ đọc; nộp / sửa vẫn mở app PTKH).
+- Lượt 05/11 gom v2.7.5 + v2.7.6 từ PR #14 vào nhánh PR #13. **Chờ anh:** lệnh `gh pr merge` bị chế độ tự động của Claude Code chặn ("Merge Without Review") ➜ PR #13 chưa trộn; #14, #15, #16 làm trùng từ main cũ – trộn #13 rồi đóng 3 PR kia (hoặc cho phép `gh pr merge` trong cài đặt quyền).
+- Còn chờ v1: HUB L21–L25 mới «ĐÃ CODE v1.13.4–v1.13.8», chưa «KIỂM ĐẠT» ➜ chưa nối pheduyet / crm / duan / taichinh / quantri (mục f).
+
 ### PHIÊN BẢN v2.7.6 ✅ – KPI NHÁP AOP NĂM SAU (04/11/2026, lượt tự động ⑤)
 - Màn chỉnh nháp AOP năm sau (`webNhap2027` + `webLuuTangTruong`).
 - Còn chờ v1: KPI L10 (v1.8.2, có `webNhap2027` trong congWeb_) chưa lên app (app đang v1.8.1) – lên app xong màn chạy số thật.
