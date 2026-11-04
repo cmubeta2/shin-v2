@@ -4,7 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
-## [2.6.5] – 04/11/2026 (PHÒNG PTKH NỐI THẬT 21_PhongPTKH v1.0.7)
+## [2.6.6] – 04/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG THẬT CỦA KS v1.4.3)
+- KS v1 không có `webTongQuan` ➜ màn 🩺 đọc `webDsKhaoSat` (danh sách + đếm Đang mở / Nháp) và `webKetQuaKS` của tối đa 3 KS đang mở (số phiếu hợp lệ, chờ xác minh, điểm TB từng câu 5 mức, % hài lòng 4–5★).
+- Không hiện ý kiến chữ / liên hệ người trả lời. KS nào lỗi kết quả ➜ dải vàng nói rõ, không thay bằng số mẫu.
+- Sửa cách gọi: KS nhận `ham(token, du)` (du là object), thôi bọc `du.a`.
+
+ – 04/11/2026 (PHÒNG PTKH NỐI THẬT 21_PhongPTKH v1.0.7)
 
 ### ⭐ Màn 🏥 Phòng PTKH làm lại – 8 tab, số thật khi Live
 - 🏠 Hôm nay (`webKhoiDong` + `webHomNay`): việc quá hạn / hôm nay, trạng thái báo cáo ngày, 5 việc cần xử lý, số chờ duyệt.

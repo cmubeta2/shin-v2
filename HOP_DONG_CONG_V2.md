@@ -23,7 +23,9 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 
 ## v2.4.0 – App đã có, cần thêm cổng
 
-### KS – `70_KhaoSat` · `webTongQuan(token)` (chỉ đọc)
+### KS – `70_KhaoSat` · ~~`webTongQuan(token)`~~ (chỉ đọc)
+
+> **04/11 (v2.6.6) – theo mã v1 thật (KS v1.4.3):** KS KHÔNG có `webTongQuan`. v2 dùng `webDsKhaoSat({})` ➜ `{ds:[{maKS, tieuDe, trangThai, han, soCau, ngayTao}], dem:{dangMo, nhap, daDong}}` và `webKetQuaKS({maKS})` ➜ `{soPhieu, choXacMinh, theoNgay, cau:[{maCH, loai, noiDung, n, tb, tyLe:{'1'..'5': %}, nps}]}` cho ≤ 3 KS đang mở; hài lòng = % chọn 4–5★ của câu `5muc`. Gọi `ham(token, du)` – du là object. Khuôn dưới đây là bản đề xuất cũ, chưa có ở v1 (khối "ý kiến ≤ 2★ cần xử lý" vẫn chờ cổng).
 
 ```js
 { thang: { soPhieu, haiLong /*0..1|null*/, canXuLy },

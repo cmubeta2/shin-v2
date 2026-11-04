@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.6 ✅ – KHẢO SÁT ĐÚNG CỔNG THẬT (04/11/2026)
+- Màn 🩺 dùng `webDsKhaoSat` + `webKetQuaKS` (KS v1.4.3 không có `webTongQuan`); HOP_DONG_CONG_V2.md mục KS đã sửa theo mã v1.
+- Còn chờ v1: khối "Ý kiến ≤ 2★ cần xử lý" (KS chưa có cổng gom ý kiến thấp sao không kèm liên hệ) và tổng hợp 5 trụ ACHSI toàn viện.
+
 ### PHIÊN BẢN v2.6.5 ✅ – PHÒNG PTKH NỐI THẬT (04/11/2026)
 - Màn 🏥 nối 19 cổng của `21_PhongPTKH` v1.0.7 (PK L1–L5): Hôm nay, Công việc, Báo cáo ngày + minh chứng, Duyệt, Thông báo, Lịch tuần (đọc), Nhân sự, Hồ sơ & Góp ý.
 - Còn chờ v1: xin nghỉ / đổi ca, xếp lịch tuần, đề nghị sửa hồ sơ từ v2 – PK chưa có cổng ghi (`webGuiDonNghi`, `webLuuXepLich`; `webDeNghiSuaHoSo` có nhưng màn v2 chưa làm form) → tạm mở app PK.
