@@ -35,16 +35,21 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Quyền:** Admin và "Quản lý khảo sát".
 - **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
 
-### PK – `21_PhongPTKH` · `webHomNay(token)` (chỉ đọc, dùng chung file PTKH qua DB_ID)
+### PK – `21_PhongPTKH` · đã lên app v1.0.7 (L1–L5) – v2.6.5 nối thật
+
+> **Sửa 04/11 theo mã v1 (trọng tài):** máy chủ PK nhận `(token, du)` với `du` là **đối tượng** (như Hub), KHÔNG phải `du.a`. Khuôn dữ liệu đầy đủ ở `He sinh thai Shin/21_PhongPTKH/KE_HOACH_GIAO_DIEN_PK_AGY.md` mục 4. Bản cũ ở đây (`baoCao:{daNop,tong}`, `nhanSu`, `viecCa`) **không còn đúng**.
 
 ```js
-{ ngay: 'dd/mm/yyyy', baoCao: { daNop, tong }, minhChung /*số ảnh hôm nay*/, doiCa /*đơn chờ*/,
-  nhanSu: [{ ten, viTri, ca, trangThai: 'da_nop'|'dang_truc'|'chua_toi_ca'|'chua_nop' }],
-  viecCa: [{ tieuDe, han, xong }] }
+webKhoiDong()  → { nguoi:{hoTen, vaiTro, to, viTri, quyen:[...]}, app:{...}, dem:{thongBao, choDuyet} }
+webHomNay()    → { ngay, viecQuaHan, viecHomNay, baoCaoHomNay:'da_nop'|'chua_nop'|'nghi', canXuLy:[{id, ten, nguon, han, muc, tab}], thongBaoMoi:[...], choDuyet }
+webCongViec({loc}) · webChiTietViec({id}) · webThemViecCaNhan({ten, han}) · webCapNhatViec({id, ...})
+webBaoCao({thang}) · webNopBaoCao({ngay, noiDung:{ma:giaTri}, anh:[{ten, kieu, base64}]}) → {ok, ngay, loiAnh?}
+webLichTuan({tuan}) · webThongBao() · webDaDocThongBao({id|'tatca'}) · webGopYCuaToi() · webGuiGopY({loai, noiDung, anh})
+webHoSo() · webDeNghiSuaHoSo(...) · QUẢN LÝ: webChoDuyet({loai}) · webDuyet({loai, ids, ketQua, lyDo}) · webNhanSu({tim}) · webHoSoNhanSu({ma}) · webDuyetSuaHoSo(...) · webBangXepLich({tuan, to})
 ```
 
-- **Quyền:** lãnh đạo phòng và tổ trưởng xem cả phòng; nhân viên chỉ thấy dòng của mình.
-- **Thuộc dòng:** PK L1–L3.
+- **v2 đang dùng (v2.6.5):** mọi cổng đọc trên + ghi `webNopBaoCao`, `webThemViecCaNhan`, `webDaDocThongBao`, `webGuiGopY`, `webDuyet`.
+- **Chưa có cổng ghi ở PK:** xin nghỉ / đổi ca (`webGuiDonNghi` trong hợp đồng giao diện nhưng chưa vào `congWeb_`), xếp lịch (`webLuuXepLich`) – v2 mở app v1.
 
 ### KPI – thêm `webNhap2027` vào `congWeb_()`
 

@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.5 ✅ – PHÒNG PTKH NỐI THẬT (04/11/2026, lượt tự động ⑤)
+- Màn Phòng PTKH dùng 14 cổng thật của app PK v1.0.7 (đọc 11, ghi 5) – xem CHANGELOG.
+- Còn chờ v1: PK chưa có cổng ghi xin nghỉ / đổi ca (`webGuiDonNghi`, `webHuyDonNghi`) và xếp lịch (`webLuuXepLich`) trong `congWeb_` – v2 tạm mở app v1.
+
 ### PHIÊN BẢN v2.6.4 ✅ – MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T (01/11/2026)
 - **Mục tiêu:** Xây dựng module đánh giá văn hóa hành vi 5T cốt lõi tham chiếu phương pháp luận Bộ 83 Tiêu chí Chất lượng Bộ Y tế, số hóa trên SHIN AIOS và tích hợp Second Brain.
 - **Nội dung hoàn tất:**

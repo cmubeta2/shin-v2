@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.5] – 04/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
+
+### 🟢 Mảng 5 – Phòng PTKH chạy số thật
+- `js/modules/phongkham.js` viết lại theo **cổng thật** của `21_PhongPTKH` (L1–L5, v1.0.7): 9 thẻ Hôm nay · Công việc · Báo cáo · Lịch tuần · Thông báo · Góp ý · Hồ sơ · (tổ trưởng / lãnh đạo) Chờ duyệt · Nhân sự.
+- Gọi `SHIN_API.goi('PK', ham, {…})` – máy chủ PK nhận `du` là đối tượng (sửa cách gọi `du.a` cũ).
+- Ghi thật: nộp báo cáo ngày + ảnh minh chứng (nén JPEG ≤ 1600px, ≤ 6 ảnh, báo riêng ảnh lỗi `loiAnh`), thêm việc cá nhân, đánh dấu đã đọc, gửi góp ý, duyệt Đạt (Hoàn tác 6s, hết giờ mới gửi đúng 1 lần) / Trả lại (bắt buộc lý do).
+- Lỗi cổng từng thẻ ➜ dải đỏ + nút Thử lại, không thay bằng số mẫu. Demo: `demo_data.js` mục `phongkham` đổi sang đúng khuôn cổng thật (dữ liệu giả).
+- `HOP_DONG_CONG_V2.md` mục PK sửa theo mã v1; QUY_HOACH M5.1 / M5.2 / M5.3 (xem) / M5.7 ➜ 🟢.
+
 ## [2.6.4] – 01/11/2026 (MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
 
 ### ⭐ Mới: Module Đánh Giá Văn Hóa Hành Vi 5T Bậc Thang

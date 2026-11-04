@@ -1827,3 +1827,4 @@ body.kieu-mep .main-container { padding-left: 12px; padding-right: 10px; }
 .muc-pill.m3 { background: rgba(2, 132, 199, 0.15); color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.3); }
 .muc-pill.m4 { background: rgba(15, 118, 110, 0.15); color: #0f766e; border: 1px solid rgba(15, 118, 110, 0.3); }
 .muc-pill.m5 { background: rgba(124, 58, 237, 0.15); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.3); }
+button.pk-nut-dong { font: inherit; text-align: left; color: var(--text); cursor: pointer; }   /* v2.6.5 PK: dòng "Cần xử lý" bấm được */
