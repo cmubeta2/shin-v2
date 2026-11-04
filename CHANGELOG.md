@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.4] – 04/11/2026 (RÀ UX ĐO ĐƯỢC)
+
+- `duan.js`: nút 36px ➜ 44px, chữ 10–12px ➜ 13–14px. Ghi lại phần 5T và chữ phụ 12–13px dùng chung để lượt sau.
+
+---
+
 ## [2.7.3] – 04/11/2026 (M9.2 TÌM KIẾM TRI THỨC)
 
 - `trithuc.js`: tìm kiếm toàn văn phía trình duyệt (không dấu, nhiều từ, lọc lĩnh vực, tô đậm); sửa chữ < 14px, nút < 44px, thêm esc.

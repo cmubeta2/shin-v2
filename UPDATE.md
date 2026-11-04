@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.7.3** · Cập nhật ngày: **04/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.7.4** · Cập nhật ngày: **04/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.7.4 ✅ – RÀ UX ĐO ĐƯỢC TRÊN 16 MÀN (04/11/2026)
+- **Cách đo:** Chrome chạy ngầm, mở lần lượt 16 mục menu, đếm chữ có cỡ < 14px và nút / ô nhập cao < 44px.
+- **Đã sửa:** 📌 Dự án – 6 nút 36px ➜ 44px, chữ 10–12px trong thẻ / nút ➜ 13–14px.
+- **Còn lại (để lượt sau, không đổi bố cục lớn):** ⭐ Đánh giá 5T còn nhiều ô chọn 22px, ô ghi chú 26px, chữ bảng 10–12,5px (danhgia5t.js 78 KB – cần 1 lượt riêng); chữ phụ dùng chung `page-sub` / `hero-date` / `dong-sub` 13px và `tq-nhan` 12px theo bộ CSS chung – cần anh chốt có nâng lên 14px toàn hệ không.
+
+---
 
 ### PHIÊN BẢN v2.7.3 ✅ – M9.2 TÌM KIẾM TOÀN VĂN PHÍA TRÌNH DUYỆT (04/11/2026)
 - **Nội dung hoàn tất:** `trithuc.js` – ô tìm trong Hero (16px), so khớp không dấu tiếng Việt, mọi từ phải khớp, xếp hạng mã/tên trước, chip lọc lĩnh vực, tô đậm chỗ khớp, trạng thái "không thấy". Sửa theo 10 nguyên tắc: bỏ chữ 10–12px và nút 36px, thêm esc cho mọi chữ, bỏ onclick ghép chuỗi tên tài liệu.

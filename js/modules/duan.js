@@ -77,8 +77,8 @@ const ModuleDuAn = {
           <div class="page-sub">Master Dashboard & Báo Cáo Nhanh Mỗi Ngày (Daily Flash)</div>
         </div>
         <div style="display:flex; gap:6px;">
-          <button class="btn-secondary" style="min-height:36px; padding:0 12px; font-size:12px;" onclick="ModuleDuAn.chuyenTab('flash')">⚡ Flash Report</button>
-          <button class="btn-secondary" style="min-height:36px; padding:0 12px; font-size:12px;" onclick="ModuleDuAn.chuyenTab('danhsach')">📊 Danh Sách</button>
+          <button class="btn-secondary" style="min-height:44px; padding:0 12px; font-size:14px;" onclick="ModuleDuAn.chuyenTab('flash')">⚡ Flash Report</button>
+          <button class="btn-secondary" style="min-height:44px; padding:0 12px; font-size:14px;" onclick="ModuleDuAn.chuyenTab('danhsach')">📊 Danh Sách</button>
         </div>
       </div>
 
@@ -150,7 +150,7 @@ const ModuleDuAn = {
             <span class="flash-badge" style="background:#0284c7;">1</span>
             TRẠNG THÁI TIẾN ĐỘ DỰ ÁN
           </div>
-          <span style="font-size:12px; color:var(--text-muted);">${k1.length} điểm tin chính</span>
+          <span style="font-size:14px; color:var(--text-muted);">${k1.length} điểm tin chính</span>
         </div>
         <ul class="flash-list">
           ${k1.map(item => `<li>${item}</li>`).join('')}
@@ -164,7 +164,7 @@ const ModuleDuAn = {
             <span class="flash-badge" style="background:#dc2626;">2</span>
             VƯỚNG MẮC & ĐỀ XUẤT GIẢI PHÁP
           </div>
-          <span class="status-pill danger" style="padding:2px 8px; font-size:11px;">Cần chú ý</span>
+          <span class="status-pill danger" style="padding:2px 8px; font-size:13px;">Cần chú ý</span>
         </div>
         <div style="display:flex; flex-direction:column; gap:10px;">
           ${k2.map((v, i) => `
@@ -172,7 +172,7 @@ const ModuleDuAn = {
               <div style="font-weight:700; font-size:13px; color:var(--text); margin-bottom:4px;">
                 ⚠️ ${v.vanDe}
               </div>
-              <div style="font-size:12px; color:var(--c-green); font-weight:600; line-height:1.4;">
+              <div style="font-size:14px; color:var(--c-green); font-weight:600; line-height:1.4;">
                 💡 <strong>Đề xuất giải pháp:</strong> ${v.deXuat}
               </div>
             </div>
@@ -187,23 +187,23 @@ const ModuleDuAn = {
             <span class="flash-badge" style="background:#16a34a;">3</span>
             TÌNH HÌNH TÀI CHÍNH & PHÁT SINH
           </div>
-          <div style="font-size:12px; font-weight:700; color:var(--text);">
+          <div style="font-size:14px; font-weight:700; color:var(--text);">
             Giải ngân: ${k3.daGiaiNgan || '—'}
           </div>
         </div>
-        <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
+        <div style="font-size:14px; color:var(--text-muted); margin-bottom:8px;">
           Tổng quỹ phê duyệt: <strong>${k3.tongNganSach || '—'}</strong>
         </div>
         <div style="display:flex; flex-direction:column; gap:8px;">
           ${(k3.phatSinhTrongNgay || []).map(p => `
-            <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); padding:8px 12px; border-radius:6px; font-size:12px; border:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); padding:8px 12px; border-radius:6px; font-size:14px; border:1px solid var(--border);">
               <div>
                 <div style="font-weight:600; color:var(--text);">${p.khoanMuc}</div>
-                <div style="color:var(--text-muted); font-size:11px;">Người đề xuất: ${p.nguoiChi}</div>
+                <div style="color:var(--text-muted); font-size:13px;">Người đề xuất: ${p.nguoiChi}</div>
               </div>
               <div style="text-align:right;">
                 <div style="font-weight:700; color:var(--c-red);">${p.soTien}</div>
-                <span class="status-pill ${p.tinhTrang.includes('Chờ') ? 'warn' : 'live'}" style="font-size:10px; padding:2px 6px;">
+                <span class="status-pill ${p.tinhTrang.includes('Chờ') ? 'warn' : 'live'}" style="font-size:13px; padding:2px 6px;">
                   ${p.tinhTrang}
                 </span>
               </div>
@@ -219,21 +219,21 @@ const ModuleDuAn = {
             <span class="flash-badge" style="background:#d97706;">4</span>
             VIỆC ĐANG CHỜ SẾP PHÊ DUYỆT
           </div>
-          <span class="status-pill warn" style="padding:2px 8px; font-size:11px;">${k4.length} mục chờ</span>
+          <span class="status-pill warn" style="padding:2px 8px; font-size:13px;">${k4.length} mục chờ</span>
         </div>
         <div style="display:flex; flex-direction:column; gap:10px;">
           ${k4.map(cd => `
             <div style="background:var(--bg-card); padding:10px 12px; border-radius:8px; border:1px solid var(--border);">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div style="font-weight:700; font-size:13px; color:var(--text);">${cd.tieuDe}</div>
-                <span style="font-size:11px; color:var(--c-red); font-weight:700; white-space:nowrap; margin-left:8px;">${cd.uuTien}</span>
+                <span style="font-size:13px; color:var(--c-red); font-weight:700; white-space:nowrap; margin-left:8px;">${cd.uuTien}</span>
               </div>
-              <div style="font-size:11px; color:var(--text-muted); margin:4px 0 8px 0;">Phân loại: ${cd.loai} · Hạn: ${cd.han}</div>
+              <div style="font-size:13px; color:var(--text-muted); margin:4px 0 8px 0;">Phân loại: ${cd.loai} · Hạn: ${cd.han}</div>
               <div style="display:flex; gap:8px;">
-                <button class="btn-primary" style="flex:1; min-height:36px; padding:0 8px; font-size:12px; background:var(--c-green);" onclick="ModuleDuAn.duyetNhanh('${cd.ma}')">
+                <button class="btn-primary" style="flex:1; min-height:44px; padding:0 8px; font-size:14px; background:var(--c-green);" onclick="ModuleDuAn.duyetNhanh('${cd.ma}')">
                   ✓ Duyệt 1-Chạm
                 </button>
-                <button class="btn-secondary" style="min-height:36px; padding:0 10px; font-size:12px;" onclick="ModuleDuAn.yeuCauSua('${cd.ma}')">
+                <button class="btn-secondary" style="min-height:44px; padding:0 10px; font-size:14px;" onclick="ModuleDuAn.yeuCauSua('${cd.ma}')">
                   Góp ý / Yêu cầu sửa
                 </button>
               </div>
@@ -251,7 +251,7 @@ const ModuleDuAn = {
           <div class="card" style="border-left:4px solid ${da.den};">
             <div class="card-header">
               <div>
-                <div style="font-size:11px; font-weight:700; color:var(--primary);">${da.ma}</div>
+                <div style="font-size:13px; font-weight:700; color:var(--primary);">${da.ma}</div>
                 <div class="card-title" style="font-size:15px; margin-top:2px;">${da.ten}</div>
               </div>
               <span class="status-pill" style="background:${da.den}20; color:${da.den}; font-weight:700;">
@@ -264,22 +264,22 @@ const ModuleDuAn = {
               <div style="background:${da.den}; width:${da.tienDo}%; height:100%;"></div>
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:14px; color:var(--text-muted); margin-bottom:10px;">
               <div>👤 Phụ trách: <strong>${da.quanLy}</strong></div>
               <div>📅 Hạn: <strong>${da.hanChot}</strong></div>
               <div>💰 Ngân sách: <strong>${da.nganSach}</strong></div>
               <div>💳 Đã chi: <strong>${da.daChi}</strong></div>
             </div>
 
-            <div style="font-size:12px; color:var(--text); background:var(--bg-sub); padding:6px 10px; border-radius:6px; margin-bottom:10px;">
+            <div style="font-size:14px; color:var(--text); background:var(--bg-sub); padding:6px 10px; border-radius:6px; margin-bottom:10px;">
               📌 <strong>Trạng thái:</strong> ${da.trangThai}
             </div>
 
             <div style="display:flex; gap:8px;">
-              <button class="btn-secondary" style="flex:1; min-height:36px; font-size:12px;" onclick="ShinApp.toast('Mở chi tiết dự án: ${da.ma}')">
+              <button class="btn-secondary" style="flex:1; min-height:44px; font-size:14px;" onclick="ShinApp.toast('Mở chi tiết dự án: ${da.ma}')">
                 Chi tiết WBS
               </button>
-              <button class="btn-primary" style="min-height:36px; font-size:12px; padding:0 12px;" onclick="ShinApp.toast('Cập nhật tiến độ dự án: ${da.ma}')">
+              <button class="btn-primary" style="min-height:44px; font-size:14px; padding:0 12px;" onclick="ShinApp.toast('Cập nhật tiến độ dự án: ${da.ma}')">
                 Cập nhật
               </button>
             </div>
