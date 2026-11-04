@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.5 ✅ – PHÒNG PTKH NỐI THẬT (04/11/2026)
+- Màn 🏥 nối 19 cổng của `21_PhongPTKH` v1.0.7 (PK L1–L5): Hôm nay, Công việc, Báo cáo ngày + minh chứng, Duyệt, Thông báo, Lịch tuần (đọc), Nhân sự, Hồ sơ & Góp ý.
+- Còn chờ v1: xin nghỉ / đổi ca, xếp lịch tuần, đề nghị sửa hồ sơ từ v2 – PK chưa có cổng ghi (`webGuiDonNghi`, `webLuuXepLich`; `webDeNghiSuaHoSo` có nhưng màn v2 chưa làm form) → tạm mở app PK.
+
 ### PHIÊN BẢN v2.6.4 ✅ – MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T (01/11/2026)
 - **Mục tiêu:** Xây dựng module đánh giá văn hóa hành vi 5T cốt lõi tham chiếu phương pháp luận Bộ 83 Tiêu chí Chất lượng Bộ Y tế, số hóa trên SHIN AIOS và tích hợp Second Brain.
 - **Nội dung hoàn tất:**

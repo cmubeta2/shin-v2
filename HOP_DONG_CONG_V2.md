@@ -36,6 +36,7 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
 
 ### PK – `21_PhongPTKH` · `webHomNay(token)` (chỉ đọc, dùng chung file PTKH qua DB_ID)
+> **04/11 (v2.6.5) – theo mã v1 thật:** PK v1.0.7 đã có 19 cổng (`webKhoiDong`, `webHomNay`, `webBaoCao`, `webNopBaoCao`, `webChoDuyet`, `webDuyet`, `webCongViec`, `webChiTietViec`, `webCapNhatViec`, `webThemViecCaNhan`, `webThongBao`, `webDaDocThongBao`, `webGopYCuaToi`, `webGuiGopY`, `webHoSo`, `webDeNghiSuaHoSo`, `webNhanSu`, `webHoSoNhanSu`, `webDuyetSuaHoSo`, `webLichTuan`, `webBangXepLich`). Khuôn dữ liệu: `21_PhongPTKH/KE_HOACH_GIAO_DIEN_PK_AGY.md` mục 4. **Cách gọi:** PK gọi `ham(token, du)` với `du` là object (không bọc `du.a`). Khuôn `{baoCao, minhChung, nhanSu}` cũ bên dưới đã bỏ.
 
 ```js
 { ngay: 'dd/mm/yyyy', baoCao: { daNop, tong }, minhChung /*số ảnh hôm nay*/, doiCa /*đơn chờ*/,

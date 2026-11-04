@@ -151,22 +151,46 @@ window.SHIN_DEMO_DATA = {
   // [5] NHÂN SỰ & VẬN HÀNH PHÒNG KHÁM
   // ==========================================
   phongkham: {
-    hero: {
-      chao: "Vận Hành Phòng Khám & PTKH 🏥",
-      ngay: "Ca trực: Sáng 07:00 – 16:30",
-      so: [
-        { nhan: "Báo cáo nộp", giaTri: "18/20", dvt: "nhân sự", mau: "var(--c-blue)" },
-        { nhan: "Minh chứng ảnh", giaTri: "45", dvt: "ảnh", mau: "var(--c-green)" },
-        { nhan: "Đổi ca trực", giaTri: "1", dvt: "yêu cầu", mau: "var(--c-yellow)" }
-      ],
-      nutChinh: { nhan: "📷 Gửi Báo Cáo & Minh Chứng", hanhDong: "baoCao" }
+    nguoi: { hoTen: "Người dùng mẫu", vaiTro: "Tổ trưởng", to: "CSKH", viTri: "Tiếp đón", quyen: ["nv", "totruong"] },
+    mo: [],
+    dem: { thongBao: 2, choDuyet: 3 },
+    homNay: {
+      ngay: "04/11/2026", viecQuaHan: 1, viecHomNay: 2, baoCaoHomNay: "chua_nop", choDuyet: 3,
+      canXuLy: [
+        { id: "V1", ten: "Gọi lại khách hẹn tái khám (mẫu)", nguon: "Được giao", han: "03/11", muc: "do", tab: "congviec" },
+        { id: "V2", ten: "Cập nhật bảng trực tuần sau", nguon: "Cá nhân", han: "04/11", muc: "vang", tab: "congviec" },
+        { id: "V3", ten: "Rà quy trình tiếp đón buổi chiều", nguon: "Nhờ giúp", han: "06/11", muc: "xanh", tab: "congviec" }
+      ]
     },
-    nhanSuTruc: [
-      { ten: "Nguyễn Thị Kim Thư", viTri: "Điều dưỡng Trưởng", ca: "Sáng", tt: "Đã nộp báo cáo", mau: "var(--c-green)" },
-      { ten: "Trần Văn Nghĩa", viTri: "CSKH Ngoại trú", ca: "Sáng", tt: "Đang trực", mau: "var(--c-blue)" },
-      { ten: "Lê Hoàng Phúc", viTri: "Tiếp đón & Hướng dẫn", ca: "Sáng", tt: "Đã nộp báo cáo", mau: "var(--c-green)" },
-      { ten: "Phạm Ngọc Bích", viTri: "Tổng đài viên", ca: "Chiều", tt: "Chưa tới ca", mau: "var(--c-gray)" }
-    ]
+    tab: {
+      congviec: { dangLam: 3, quaHan: 1, xongTuan: 4, viec: [
+        { id: "V1", ten: "Gọi lại khách hẹn tái khám (mẫu)", loai: "giao", han: "03/11", tienDo: 50, nguoiGiao: "Trưởng phòng", muc: "do" },
+        { id: "V2", ten: "Cập nhật bảng trực tuần sau", loai: "canhan", han: "04/11", tienDo: 25, muc: "vang" },
+        { id: "V3", ten: "Rà quy trình tiếp đón buổi chiều", loai: "nhogiup", han: "06/11", tienDo: 0, nguoiGiao: "Tổ trưởng", muc: "xanh" }
+      ] },
+      baocao: { soDaNop: 3, soChuaNop: 0, soChoDuyet: 1,
+        mau: [ { ma: "khach", nhan: "Số khách tiếp đón", kieu: "so", batBuoc: true }, { ma: "viec", nhan: "Việc đã làm", kieu: "chu", batBuoc: true }, { ma: "kho", nhan: "Khó khăn / đề xuất", kieu: "chu", batBuoc: false } ],
+        lichSu: [ { ngay: "03/11/2026", trangThai: "cho", tomTat: "24 khách · tiếp đón ca sáng", soAnh: 2 }, { ngay: "02/11/2026", trangThai: "da_duyet", tomTat: "19 khách · hỗ trợ tổng đài", soAnh: 1 } ] },
+      duyet: {
+        baoCao: [ { id: "B1", nguoi: "Nhân viên A", ngay: "03/11", tomTat: "21 khách · ca sáng", anh: [] }, { id: "B2", nguoi: "Nhân viên B", ngay: "03/11", tomTat: "17 khách · ca chiều", anh: [] } ],
+        nghi: [ { id: "N1", nguoi: "Nhân viên C", loai: "doi_ca", tuNgay: "06/11", denNgay: "06/11", lyDo: "Việc gia đình" } ],
+        lichTuan: []
+      },
+      thongbao: { ds: [
+        { id: "T1", tieuDe: "Báo cáo 03/11 đã được duyệt", noiDung: "Tổ trưởng đã duyệt báo cáo ngày.", luc: "08:10", daDoc: false, tab: "baocao" },
+        { id: "T2", tieuDe: "Việc mới được giao", noiDung: "Gọi lại khách hẹn tái khám.", luc: "Hôm qua", daDoc: false, tab: "congviec" },
+        { id: "T3", tieuDe: "Lịch tuần đã chốt", noiDung: "Lịch trực tuần 02/11 – 08/11 đã duyệt.", luc: "01/11", daDoc: true, tab: "lich" }
+      ] },
+      lich: { tuan: "T2 02/11 – CN 08/11", phepCon: 8, nghiBuCon: 1,
+        ngay: [ { ngay: "02/11", thu: "T2", viTri: "Tiếp đón", ca: "Sáng" }, { ngay: "03/11", thu: "T3", viTri: "Tiếp đón", ca: "Sáng" }, { ngay: "04/11", thu: "T4", viTri: "Tổng đài", ca: "Chiều" },
+          { ngay: "05/11", thu: "T5", viTri: "Tiếp đón", ca: "Sáng" }, { ngay: "06/11", thu: "T6", viTri: "Tổng đài", ca: "Chiều" }, { ngay: "07/11", thu: "T7", viTri: "Tiếp đón", ca: "Sáng" }, { ngay: "08/11", thu: "CN", nghi: true } ],
+        donNghi: [ { id: "D1", loai: "nghi_tuan", tuNgay: "15/11", denNgay: "15/11", trangThai: "cho", lyDo: "Nghỉ tuần" } ] },
+      nhansu: { dangLam: 12, moiVao: 1, choSua: 1,
+        ds: [ { ma: "NV01", hoTen: "Nhân viên A", viTri: "Tiếp đón", to: "CSKH", trangThai: "Đang làm" }, { ma: "NV02", hoTen: "Nhân viên B", viTri: "Tổng đài", to: "CSKH", trangThai: "Đang làm" }, { ma: "NV03", hoTen: "Nhân viên C", viTri: "Hướng dẫn", to: "CSKH", trangThai: "Thử việc" } ],
+        yeuCauSua: [ { id: "Y1", ma: "NV02", hoTen: "Nhân viên B", truong: "Email", giaTriCu: "cu@vidu.vn", giaTriMoi: "moi@vidu.vn", lyDo: "Đổi email", luc: "03/11" } ] },
+      toi: { hoSo: { hoTen: "Người dùng mẫu", viTri: "Tiếp đón", to: "CSKH", ngayVao: "01/03/2024", email: "mau@vidu.vn", dienThoai: "(ẩn ở bản mẫu)" },
+        gopY: [ { id: "G1", loai: "gop_y", noiDung: "Thêm nút nhắc nộp báo cáo lúc 17h.", luc: "30/10", trangThai: "xong", traLoi: "Đã thêm từ v1.0.4." } ] }
+    }
   },
 
   // ==========================================

@@ -4,7 +4,19 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
-## [2.6.4] – 01/11/2026 (MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
+## [2.6.5] – 04/11/2026 (PHÒNG PTKH NỐI THẬT 21_PhongPTKH v1.0.7)
+
+### ⭐ Màn 🏥 Phòng PTKH làm lại – 8 tab, số thật khi Live
+- 🏠 Hôm nay (`webKhoiDong` + `webHomNay`): việc quá hạn / hôm nay, trạng thái báo cáo ngày, 5 việc cần xử lý, số chờ duyệt.
+- ✅ Công việc (`webCongViec`, `webCapNhatViec`, `webThemViecCaNhan`): +25% / ✓ Xong có Hoàn tác 6s (hết 6s mới gửi, gửi 1 lần).
+- 📝 Báo cáo ngày (`webBaoCao`, `webNopBaoCao`): ô nhập theo mẫu của máy chủ, ảnh minh chứng nén JPEG ≤ 1600px, tối đa 6 ảnh.
+- 🖊️ Duyệt (`webChoDuyet`, `webDuyet`): Đạt (Hoàn tác 6s), Đạt tất cả (bấm 2 lần), Trả lại bắt buộc lý do.
+- 🔔 Thông báo (`webThongBao`, `webDaDocThongBao`), 📅 Lịch tuần chỉ đọc (`webLichTuan`), 👥 Nhân sự + duyệt sửa hồ sơ (`webNhanSu`, `webDuyetSuaHoSo`), 👤 Hồ sơ & 💬 Góp ý (`webHoSo`, `webGopYCuaToi`, `webGuiGopY`).
+- Tab hiện theo vai (`webKhoiDong.mo`); lỗi từng tab báo rõ + nút Thử lại, không thay bằng số mẫu.
+- Sửa cách gọi: cổng PK nhận `ham(token, du)` (du là object) – không bọc `du.a` như KPI/TS/KS.
+- Demo: dữ liệu giả mới cho cả 8 tab (`demo_data.js`), không có dữ liệu thật.
+
+ – 01/11/2026 (MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
 
 ### ⭐ Mới: Module Đánh Giá Văn Hóa Hành Vi 5T Bậc Thang
 - **Chuẩn hóa 5 Tiêu chí cốt lõi (76 Tiểu mục):**
