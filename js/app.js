@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.6.3';
+  const PHIEN_BAN = 'v2.6.5';
 
   const MODULES = [
     ModuleHub,
@@ -284,6 +284,21 @@ const ShinApp = (function() {
     return mep;
   }
 
+  function apDungNavBar() {
+    const an = docLS('shin_navbar') === '0';
+    document.body.classList.toggle('an-navbar', an);
+    document.documentElement.classList.toggle('an-navbar', an);
+    const chk = document.getElementById('chkNavBar');
+    if (chk) chk.checked = !an;
+    return !an;
+  }
+
+  function batTatNavBar(bat) {
+    luuLS('shin_navbar', bat ? '1' : '0');
+    apDungNavBar();
+    rung('nhe');
+  }
+
   function chonKieuRail(k) {
     luuLS('shin_kieu_rail', k);
     const mep = apDungKieuRail();
@@ -354,6 +369,7 @@ const ShinApp = (function() {
       }, 120);
     });
 
+    apDungNavBar();
     apDungKieuRail();
     ganKeoTay();
     goiYTayNam();
@@ -819,6 +835,7 @@ const ShinApp = (function() {
 
     document.querySelectorAll('.theme-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === currentThemeMode));
     apDungKieuRail();
+    apDungNavBar();
 
     // Không bao giờ điền lại token vào ô – chỉ hiện trạng thái đã ẩn
     const tokenInput = document.getElementById('tokenInput');
@@ -924,6 +941,8 @@ const ShinApp = (function() {
     dangXuat,
     caiUngDung,
     chonKieuRail,
+    batTatNavBar,
+    apDungNavBar,
     dangChayApp,
     toast,
     hanhDongHoanTac,

@@ -4,6 +4,23 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.5] – 01/11/2026 (XUẤT BẢN QUY CHUẨN MASTER UX/UI v2.6.4 & HỆ PHÒNG NGỰ 12 LỖI VẶT)
+
+### 📘 Chuẩn Hóa & Xuất Bản Master UX/UI Specification
+- **Rà soát & Nâng cấp Toàn Diện THIET_KE_GIAO_DIEN_SHIN.md**:
+  - Tích hợp 100% hiện trạng AIOS v2.6.4: Module đánh giá văn hóa 5T, biểu đồ Radar SVG 5 trục, in ấn phiếu A4, PWA offline, Content Security Policy, Script Anti-Flicker.
+  - Đồng bộ chi tiết Topbar 56px tinh gọn (chỉ 1 nút ⚡ bên phải kèm badge đếm đỏ), Fixed Bottom Nav 64px 5 nút, Decagon Rail với mấu mép trái di động 66% (body.kieu-mep), 8 palettes màu, 4 chế độ hiển thị, 3 mức cỡ chữ --font-scale.
+  - Chuẩn hóa động lực học chuyển động Animate UI Spring Physics (cubic-bezier(0.16, 1, 0.3, 1) và Asymmetric Exit nhanh 0.16s).
+- **Quy Chuẩn Tấm Cài Đặt Bắt Buộc & Bật/Tắt Nav Bar (Theo Chỉ Đạo Của Sếp)**:
+  - Bổ sung nguyên tắc bất biến: Mọi app dựng sau này **LUÔN PHẢI CÓ TẤM / TRANG CÀI ĐẶT**.
+  - Tích hợp bộ cấu hình **Định dạng thanh mép trái di động**: 3 chế độ (Tự động · Hàng icon 56px · Mép trái 4px kèm mấu kéo » 66% chiều cao nhớ vị trí kéo).
+  - Tích hợp công tắc **BẬT / TẮT THANH ĐIỀU HƯỚNG ĐÁY (Nav Bar)**: Khi tắt, thanh đáy ẩn hoàn toàn, container co padding đáy về 16px mang lại trải nghiệm xem toàn màn hình tối đa, lưu trạng thái vào localStorage (`shin_navbar`).
+- **Hệ Thống Phòng Ngự Triệt Tiêu 12 Lỗi Vặt (Zero-Bug Defense Guide)**:
+  - Cẩm nang đặc trị 12 lỗi hay gặp: Touch target < 44px, iOS Safari auto-zoom (input font < 16px), cuộn ngang layout overflow, xung đột Z-index 8 tầng, Bottom Nav che nội dung cuối, SafeArea iPhone, chớp trắng màn hình FOUC, bàn phím ảo che form, format số/ngày sai chuẩn VN, hộp confirm phiền toái, lag chuyển động và lỗ hổng XSS.
+- **Đồng bộ hóa 3 điểm**: Cập nhật đồng bộ tại AIOS-v2/THIET_KE_GIAO_DIEN_SHIN.md, THIET_KE_GIAO_DIEN_SHIN.md (root) và He sinh thai Shin/THIET_KE_GIAO_DIEN_SHIN.md.
+
+---
+
 ## [2.6.4] – 01/11/2026 (MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
 
 ### ⭐ Mới: Module Đánh Giá Văn Hóa Hành Vi 5T Bậc Thang

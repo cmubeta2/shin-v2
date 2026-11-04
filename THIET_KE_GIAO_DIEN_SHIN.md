@@ -1,534 +1,706 @@
-# THIẾT KẾ GIAO DIỆN SHIN – BẢN CÔ ĐỌNG ĐỂ DỰNG TRANG KHÁC GIỐNG Y HỆT
+# QUY CHUẨN THIẾT KẾ GIAO DIỆN & TRẢI NGHIỆM NGƯỜI DÙNG SHIN (SHIN AIOS MASTER UX/UI SPECIFICATION)
 
-*Rút từ SHIN v2.6.0 (`css/styles.css`, `index.html`, `js/app.js`) · 31/10/2026.*
-
-Đưa nguyên file này cho người thiết kế / lập trình (hoặc AI) dựng web khác.
-- **Mục 1–6** là luật và thông số.
-- **Mục 7** là bộ khung HTML + CSS chép dùng ngay.
-- **Mục 8** là danh sách kiểm trước khi giao.
-
----
-
-## 1. Nguyên tắc bất biến
-
-1. **Điện thoại trước**, màn hẹp nhất 320px. **Cấm cuộn ngang** ở mọi màn (`overflow-x: hidden` trên body; chữ dài thì xuống dòng hoặc cắt "…").
-2. **3 khung cố định**:
-   - Header ghim đỉnh 56px.
-   - Thanh đáy ghim 64px, có đúng 5 nút.
-   - Thanh trái (rail) chỉ có icon.
-   - Nội dung cuộn ở giữa.
-3. **Vùng bấm ≥ 44 × 44px** (nút, ô chọn, dòng danh sách, công tắc). Ô nhập trên điện thoại dùng chữ 16px để iPhone không tự phóng to.
-4. **Mỗi màn mở đầu bằng 1 Hero**, gồm:
-   - lời chào / tên màn;
-   - ngày;
-   - **≤ 3 ô số** (bấm được để lọc);
-   - **1 nút chính** to, rộng hết thẻ.
-5. **Không hộp xác nhận "Bạn có chắc?"**:
-   - Việc hoàn tác được thì làm ngay trên màn và hiện toast **Hoàn tác 6 giây**; hết 6 giây mới gửi máy chủ.
-   - Việc không hoàn tác được thì **bấm 2 lần trong 5 giây**: lần 1 hiện toast vàng nhắc, lần 2 mới làm.
-6. **Thông báo (toast) chỉ khi kết quả KHÔNG thấy trên màn**: lỗi, việc chạy ngầm, Hoàn tác.
-   - Đổi cài đặt, đổi giao diện, bấm tab: **không** toast.
-   - Đã thấy kết quả trên màn thì chỉ rung nhẹ.
-7. **Tiếng Việt toàn bộ.**
-   - Số kiểu Việt Nam: "." tách nghìn, "," thập phân (1.250.000 · 86,5 %).
-   - Ngày dạng `dd/mm/yyyy`. Tiền: `1.250.000 đ`, số lớn `12,5 tr` / `1,2 tỷ`.
-8. **Màu có nghĩa cố định**: đỏ = quá hạn / lỗi / khẩn · vàng = sắp tới / cần chú ý · xanh lá = đạt / xong · xanh dương = thông tin · xám = tắt / chưa có.
-9. **Sáng / Tối** đều phải đẹp. Tối thì bỏ bóng (`--shadow: none`).
-10. **Bảo mật hiển thị**:
-    - Mọi dữ liệu từ máy chủ phải escape trước khi đưa vào HTML.
-    - Không bao giờ hiện token / mật khẩu / link có mã đăng nhập ra màn. Ô nhập bí mật dùng `type="password"`, lưu xong xóa ô.
+> **Mã tài liệu:** `SHIN-SPEC-UIUX-v2.6.4`  
+> **Phiên bản chuẩn hóa:** **v2.6.4** (Cập nhật toàn diện ngày: **01/11/2026**)  
+> **Đơn vị ban hành:** Shin (Digital Familiar) & Huỳnh Trường Thanh Tâm (Sếp)  
+> **Phạm vi áp dụng:** Toàn bộ hệ sinh thái Web App, Dashboard, Micro-modules AIOS v2, Xưởng Web và các Landing Page vệ tinh.  
+> **Mục đích tối thượng:** Cung cấp bộ quy chuẩn bất biến, thông số kỹ thuật chính xác và bộ mã nguồn chuẩn để Kỹ sư Lập trình hoặc AI Agent dựng ứng dụng mới **đạt chuẩn công thái học 100%, đồng bộ tuyệt đối với SHIN AIOS v2 và triệt tiêu vĩnh viễn mọi lỗi vặt**.
 
 ---
 
-## 2. Màu (design tokens)
+## 📑 MỤC LỤC CHI TIẾT
 
-Mọi thành phần **chỉ dùng biến**, không viết mã màu trực tiếp.
-- Đổi bộ màu: đặt `data-palette` trên `<html>`.
-- Đổi sáng / tối: đặt `data-theme="dark"` trên `<html>`.
-
-### 2.1 Bộ biến của 1 palette
-
-| Biến | Ý nghĩa |
-|---|---|
-| `--primary` / `--primary-hover` / `--primary-soft` | Màu chính (nút, mục đang chọn) / khi rê chuột / nền nhạt 12–18 % |
-| `--accent` / `--accent-soft` | Màu nhấn (vạch tiêu đề trang, viền ô nhập khi gõ) |
-| `--on-primary` | Chữ trên nền `--primary` |
-| `--bg` · `--card` · `--border` · `--border-soft` | Nền trang · nền thẻ · viền · viền nhạt (kẻ dòng) |
-| `--text` · `--text-muted` | Chữ chính · chữ phụ |
-| `--sidebar-bg` · `--sidebar-text` · `--sidebar-text-muted` · `--sidebar-border` | Nền header (gradient) và chữ trên header |
-| `--card-radius` · `--hero-radius` · `--btn-radius` | Bo góc thẻ · Hero · nút |
-| `--shadow` | Bóng thẻ (tối = `none`) |
-| `--bg-sub` | Nền rất nhạt (thanh tiến độ, nhật ký) = `var(--border-soft)` |
-
-### 2.2 Tám palette (giá trị SÁNG · TỐI)
-
-| Palette (`data-palette`) | Dùng cho | primary | accent | bg | card | text | text-muted | border | Bo thẻ / Hero / Nút | Header (sidebar-bg) |
-|---|---|---|---|---|---|---|---|---|---|---|
-| `gold` – Hoàng Kim (**mặc định**) | Hành chính, PTKH | `#dc2626` · `#ef4444` | `#d4a017` · `#f59e0b` | `#f4f5f7` · `#0c0d12` | `#ffffff` · `#161822` | `#1f2937` · `#f8fafc` | `#6b7280` · `#94a3b8` | `#e5e7eb` · `#25293a` | 14 / 18 / 10 | `linear-gradient(165deg,#f0cf5e 0%,#d4a017 55%,#a97e10 100%)` chữ `#3a2a06` · tối `linear-gradient(180deg,#181b27,#0d0f17)` |
-| `executive` | Bàn làm việc lãnh đạo | `#0284c7` · `#38bdf8` | `#38bdf8` · `#7dd3fc` | `#f8fafc` · `#050811` | `#ffffff` · `#0e1526` | `#0f172a` · `#f8fafc` | `#64748b` · `#94a3b8` | `#cbd5e1` · `#1e293b` | 12 / 14 / 8 | `linear-gradient(135deg,#0f172a,#1e293b)` · tối `#080d1a` |
-| `clinical` | Y tế, khảo sát (AAA) | `#0f766e` · `#2dd4bf` | `#0d9488` · `#5eead4` | `#f8fafc` · `#031313` | `#ffffff` · `#092020` | `#042f2e` · `#f0fdfa` | `#335c57` · `#99f6e4` | `#b2eae2` · `#134e4a` | 16 / 20 / 12 | `linear-gradient(135deg,#115e59,#042f2e)` · tối `#031414` |
-| `growth` | Tuyển sinh, bán hàng | `#7c3aed` · `#a855f7` | `#f97316` · `#fb923c` | `#faf5ff` · `#0e0517` | `#ffffff` · `#1c0d2e` | `#3b0764` · `#faf5ff` | `#7e22ce` · `#d8b4fe` | `#f3e8ff` · `#3b1763` | 18 / 22 / 12 | `linear-gradient(135deg,#6b21a8,#3b0764)` · tối `#120422` |
-| `nordic` | Tri thức, SOP | `#475569` · `#94a3b8` | `#0ea5e9` · `#38bdf8` | `#f8fafc` · `#090d16` | `#ffffff` · `#111827` | `#0f172a` · `#f1f5f9` | `#64748b` · `#94a3b8` | `#e2e8f0` · `#1e293b` | 10 / 14 / 8 | `linear-gradient(135deg,#334155,#1e293b)` · tối `#0a0e17` |
-| `cyber` (luôn tối) | Giám sát, quản trị | `#10b981` | `#06b6d4` | `#04090b` | `#081418` | `#ecfdf5` | `#6ee7b7` | `#10383b` | 8 / 10 / 6 | `#020608` |
-| `crimson` | Kiểm soát, kỷ luật | `#991b1b` · `#f87171` | `#ea580c` · `#fb923c` | `#fff1f2` · `#110507` | `#ffffff` · `#1f0a0e` | `#4c0519` · `#ffe4e6` | `#9f1239` · `#fda4af` | `#fecdd3` · `#4c0d18` | 12 / 16 / 8 | `linear-gradient(135deg,#881337,#4c0519)` · tối `#140407` |
-| `mocha` | Nhân sự, lịch trực | `#854d0e` · `#facc15` | `#ca8a04` · `#fde047` | `#fefce8` · `#120e03` | `#ffffff` · `#211907` | `#422006` · `#fefce8` | `#854d0e` · `#fef08a` | `#fef08a` · `#3d300b` | 14 / 18 / 10 | `linear-gradient(135deg,#713f12,#422006)` · tối `#140f03` |
-
-Quy ước cho các biến còn lại:
-- `--primary-soft` / `--accent-soft`: lấy màu đó với độ trong 0,12–0,20.
-- `--on-primary`: `#fff` ở bản sáng; ở bản tối lấy màu nền đậm của palette.
-- `--sidebar-text`: `#f8fafc` (trừ `gold` sáng là `#3a2a06`).
-- `--sidebar-border`: `rgba(255,255,255,.12)`.
-
-### 2.3 Màu ngữ nghĩa (chung mọi palette)
-
-| Biến | Sáng | Tối | Nền nhạt `-soft` (sáng / tối) |
-|---|---|---|---|
-| `--c-red` | `#dc2626` | `#f87171` | 0,15 / 0,20 |
-| `--c-yellow` | `#b45309` | `#f59e0b` | 0,15 / 0,20 |
-| `--c-green` | `#15803d` | `#4ade80` | 0,15 / 0,20 |
-| `--c-blue` | `#2563eb` | `#60a5fa` | 0,14 / 0,20 |
-| `--c-gray` | `#6b7280` | `#9ca3af` | 0,14 / 0,18 |
-
-### 2.4 Chế độ hiển thị (4 nút trong Cài đặt)
-
-- ☀️ **Sáng** và 🌙 **Tối**: cố định.
-- 💻 **Theo máy**: theo `prefers-color-scheme`.
-- 🕕 **Theo giờ**: 06:00–18:00 sáng, còn lại tối.
-- Lưu trên máy (`localStorage`).
+1. [Chương 1: 10 Nguyên Tắc Bất Biến (Immutable Laws)](#chương-1-10-nguyên-tắc-bất-biến-immutable-laws)
+2. [Chương 2: Hệ Thống Màu Sắc & Design Tokens (8 Palettes)](#chương-2-hệ-thống-màu-sắc--design-tokens-8-palettes)
+3. [Chương 3: Typography, Khoảng Cách & Động Lực Học (Motion System)](#chương-3-typography-khoảng-cách--động-lực-học-motion-system)
+4. [Chương 4: Bố Cục Khung Trang & Đáp Ứng Thiết Bị (Shell Architecture)](#chương-4-bố-cục-khung-trang--đáp-ứng-thiết-bị-shell-architecture)
+5. [Chương 5: Danh Mục Thành Phần Chuẩn (Component Catalog & Classes)](#chương-5-danh-mục-thành-phần-chuẩn-component-catalog--classes)
+6. [Chương 6: Hệ Thống Phòng Ngự Triệt Tiêu 12 Lỗi Vặt (Zero-Bug Defense Guide)](#chương-6-hệ-thống-phòng-ngự-triệt-tiêu-12-lỗi-vặt-zero-bug-defense-guide)
+7. [Chương 7: Thư Viện Hàm Tiện Ích JavaScript (Helper Toolkit)](#chương-7-thư-viện-hàm-tiện-ích-javascript-helper-toolkit)
+8. [Chương 8: Bộ Khung Mã Nguồn Chép Dùng Ngay (Starter Boilerplate)](#chương-8-bộ-khung-mã-nguồn-chép-dùng-ngay-starter-boilerplate)
+9. [Chương 9: Quy Trình Kiểm Thử & Tiêu Chí Nghiệm Thu (DoD Gate)](#chương-9-quy-trình-kiểm-thử--tiêu-chí-nghiệm-thu-dod-gate)
 
 ---
 
-## 3. Chữ, khoảng cách, chuyển động
+## CHƯƠNG 1: 10 NGUYÊN TẮC BẤT BIẾN (IMMUTABLE LAWS)
 
-**Font hệ thống:** `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif`. Chữ gốc 15px, `line-height: 1.5`.
-
-**Cỡ chữ người dùng:** mọi cỡ nhân `var(--font-scale)`, cho 3 mức `[data-cochu]`: thường 1 · lớn 1,1 · rất lớn 1,2.
-
-| Vai trò | Cỡ | Đậm |
-|---|---|---|
-| Lời chào Hero | 20 | 800 |
-| Số lớn trong ô số | 22 (≤ 360px: 19) | 800 |
-| Tiêu đề trang | 18 | 800 |
-| Tên dòng / tên thẻ | 15 | 700 |
-| Nút chính | 15 | 800 |
-| Chữ thường / chữ phụ / badge / nút phụ | 14 | 400–700 |
-| Phụ đề, nhãn ô số | 12–13 | 400–600 |
-| Nhãn thanh đáy | 11 | 600 (đang chọn 800) |
-| Nhãn nhóm | 14, IN HOA, `letter-spacing .04em`, màu `--text-muted` | 700 |
-
-**Khoảng cách** theo bước 2–4–6–8–10–12–14–16–18:
-- lề nội dung 14px (điện thoại 10–12px);
-- khoảng giữa các thẻ 12–16px;
-- đệm thẻ 14–16px, đệm Hero 18px.
-
-**Chuyển động:**
-- Bấm: thu nhỏ (`scale(.94–.99)`) trong 0,1s.
-- Mở / đóng thanh trái và tấm Cài đặt: 0,22–0,3s với `cubic-bezier(0.16, 1, 0.3, 1)`.
-- Toast trượt xuống 0,2s, có thanh đếm ngược 6s ở đáy.
+1. **Ưu tiên Điện thoại trước (Mobile First 320px – 414px):**
+   * Mọi màn hình phải hiển thị hoàn hảo ở chiều rộng nhỏ nhất là **320px**.
+   * **Cấm tuyệt đối cuộn ngang** ở mọi độ phân giải (`body { overflow-x: hidden; width: 100%; }`). Văn bản dài phải tự động xuống dòng hoặc cắt bằng dấu ba chấm `…` (`text-overflow: ellipsis; white-space: nowrap; overflow: hidden;`).
+2. **Kiến trúc 3 Khung Cố Định & Tấm Cài Đặt Bắt Buộc (Fixed Shell & Universal Settings):**
+   * **Header (Topbar) ghim đỉnh:** Cao chính xác `56px`, có logo, tiêu đề, badge phiên bản nhỏ (20px) và nút hành động đơn.
+   * **Thanh đáy (Bottom Navigation) ghim đáy:** Cao chính xác `64px`, chứa đúng 5 nút điều hướng chính, luôn cố định ở chân màn hình trên di động (có thể bật/tắt trong Cài đặt).
+   * **Thanh trái (Decagon Rail / Drawer):** Mặc định mở rộng 248px trên Desktop (≥ 1024px); chuyển thành dạng **Mấu mép trái di động** ở 66% chiều cao trên màn hình nhỏ (< 768px).
+   * **Vùng nội dung cuộn ở giữa:** Độc lập, căn giữa, giới hạn chiều rộng tối đa (di động 100%, tablet max 760px, desktop max 960px).
+   * **LUÔN CÓ TẤM / TRANG CÀI ĐẶT (Bắt buộc):** Mọi ứng dụng bắt buộc phải tích hợp Tấm Cài Đặt (Settings Sheet), trong đó **bắt buộc có phần chọn định dạng thanh mép trái (Tự động / Hàng icon / Mép trái 66%)** và **công tắc BẬT / TẮT thanh điều hướng đáy (Nav Bar)** để người dùng tùy biến không gian xem.
+3. **Vùng Bấm Công Thái Học Chuẩn Quốc Tế (Touch Target Size ≥ 44 × 44px):**
+   * Mọi thành phần người dùng có thể chạm/bấm (nút, icon, ô chọn checkbox, dòng danh sách, switch gạt, tab, nút đóng modal `✕`) **bắt buộc phải có diện tích chạm tối thiểu 44 × 44px**.
+   * Nếu icon chỉ có kích thước 18–24px, phải sử dụng vùng đệm `padding` hoặc đặt `min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;`.
+4. **Ô Nhập Liệu Chống Phóng To iOS (iOS Auto-Zoom Defense):**
+   * Trên điện thoại, mọi ô nhập (`<input>`, `<select>`, `<textarea>`) bắt buộc phải có `font-size: 16px` (hoặc `font-size: max(16px, calc(14px * var(--font-scale)))`).
+   * *Lý do:* iOS Safari tự động phóng to toàn bộ trang web nếu người dùng chạm vào ô nhập có cỡ chữ < 16px, làm vỡ khung hiển thị.
+5. **Cấu Trúc Mở Màn Hero Card Chuẩn Mực:**
+   * Mỗi màn hình/phân hệ bắt buộc mở đầu bằng **1 Hero Card duy nhất**:
+     * Lời chào thông minh theo thời gian + tên người dùng (VD: *Chào buổi sáng, Tâm ☀️*).
+     * Ngày tháng tiếng Việt định dạng `Thứ, dd/mm/yyyy`.
+     * **Tối đa 3 ô số liệu tổng quan (`.tq-3so`)**: Chữ số lớn (22px/800), có màu ngữ nghĩa, bấm được để kích hoạt lọc danh sách bên dưới.
+     * **1 nút hành động chính (Primary CTA)**: To, cao 48px, rộng hết thẻ (100%), nền `--primary`, chữ đậm.
+6. **Xóa Bỏ Triệt Để Hộp Thoại Xác Nhận Cũ Kỹ ("Bạn có chắc?"):**
+   * Nghiêm cấm dùng `window.confirm()` hoặc `window.alert()` vì gây gián đoạn tâm lý và trải nghiệm người dùng.
+   * **Việc có thể hoàn tác (Undoable):** Thực hiện ngay trên giao diện và hiển thị Toast **Hoàn tác 6 giây** có thanh tiến trình đếm ngược; chỉ gửi tín hiệu về máy chủ sau khi hết 6 giây.
+   * **Việc nguy hiểm không thể hoàn tác (Destructive):** Áp dụng cơ chế **Bấm 2 lần trong 5 giây (Double-tap Confirmation)**: Lần 1 hiện toast vàng nhắc nhở kèm rung cảnh báo, bấm lại lần 2 trong vòng 5 giây mới thực thi.
+7. **Thông Báo Toast Chỉ Khi Kết Quả Không Thấy Trực Tiếp:**
+   * Không bật toast khi kết quả thao tác đã hiển thị rõ ràng trên màn hình (đổi theme, chuyển tab, chọn filter). Khi đó chỉ phản hồi bằng rung nhẹ (Haptic feedback) hoặc chuyển đổi trạng thái nút.
+   * Chỉ bật Toast khi: Báo lỗi mạng/máy chủ, tác vụ chạy ngầm hoàn tất, hoặc kích hoạt thanh Hoàn tác 6 giây.
+8. **Bản Địa Hóa Tiếng Việt Tuyệt Đối (Localization & Numbering):**
+   * 100% giao diện sử dụng Tiếng Việt trong sáng, ngắn gọn, hướng dẫn hành động cụ thể.
+   * **Quy chuẩn số kiểu Việt Nam:** Dùng dấu chấm `.` để phân tách hàng nghìn, dấu phẩy `,` cho phần thập phân (VD: `1.250.000 đ`, `86,5%`, `12,5 tr`, `1,2 tỷ`).
+   * **Quy chuẩn ngày giờ:** Luôn là `dd/mm/yyyy` (VD: `01/11/2026`) và giờ `HH:mm` (VD: `18:30`).
+9. **Màu Sắc Mang Ngữ Nghĩa Cố Định (Semantic Color Integrity):**
+   * **Đỏ (`--c-red`):** Quá hạn, lỗi, điểm liệt, cảnh báo khẩn cấp, xóa dữ liệu.
+   * **Vàng (`--c-yellow`):** Chờ duyệt, sắp tới hạn, cần lưu ý, dữ liệu MẪU (Demo).
+   * **Xanh lá (`--c-green`):** Đạt chuẩn, hoàn thành, doanh thu dương, hệ thống trực tuyến (`Live`).
+   * **Xanh dương (`--c-blue`):** Thông tin điều hướng, liên kết, dữ liệu tiến độ.
+   * **Xám (`--c-gray`):** Trạng thái tắt, vô hiệu hóa, thứ yếu.
+   * Cả chế độ Sáng (Light) và Tối (Dark) đều phải đạt độ tương phản chuẩn WCAG 2.1 AA (≥ 4.5:1). Ở chế độ Tối, triệt tiêu toàn bộ bóng đổ (`--shadow: none;`).
+10. **Bảo Mật Hiển Thị & Toàn Vẹn Dữ Liệu (Security & Anti-XSS):**
+    * Mọi dữ liệu biến từ máy chủ hoặc người dùng nhập phải đi qua hàm `esc()` trước khi ghép chuỗi HTML.
+    * Tuyệt đối không bao giờ hiển thị token, mật khẩu, API key, hoặc link chứa mã định danh bí mật ra màn hình.
+    * Các ô nhập bí mật bắt buộc dùng `type="password"`, sau khi lưu thành công phải xóa rỗng giá trị khỏi DOM.
 
 ---
 
-## 4. Khung trang & bố cục đáp ứng
+## CHƯƠNG 2: HỆ THỐNG MÀU SẮC & DESIGN TOKENS (8 PALETTES)
 
-```
-┌──────────────────────── Header 56px (gradient --sidebar-bg) ────────────────────────┐
-│ [logo 36px] TÊN APP  [pill Live/Demo vX]          (1 nút icon 44px, vd ⚡ + số đỏ)   │
-├──────┬──────────────────────────────────────────────────────────────────────────────┤
-│ Rail │   Nội dung (max 760px; desktop 960px) căn giữa phần còn lại                  │
-│ 56px │   ▌Tiêu đề trang (vạch trái 4px --accent)                    [↻ / ＋]         │
-│ icon │   ┌ HERO: chào · ngày · [số][số][số] · [  NÚT CHÍNH  ] ┐                     │
-│  »   │   NHÃN NHÓM IN HOA · số lượng                                               │
-│ 🏢   │   [dòng: icon · tên / phụ · badge ›] …                                      │
-│ 🧭   │   ▸ khối gập (chi tiết ít dùng)                                             │
-│ …    │                                                                              │
-│ ⚙️   │                                                                              │
-├──────┴──────────────── Thanh đáy 64px · 5 nút: icon 20px + nhãn 11px ───────────────┤
+Mọi thành phần giao diện **chỉ được phép sử dụng biến CSS Tokens**, tuyệt đối không viết mã màu Hex/RGB trực tiếp trong component.
+
+### 2.1 Bảng Biến Cốt Lõi Của 1 Palette
+
+```css
+:root {
+  /* Màu chính & Trạng thái tương tác */
+  --primary: #0284c7;           /* Màu thương hiệu chính (Nút chính, mục đang chọn, border active) */
+  --primary-hover: #0369a1;     /* Màu khi rê chuột / active */
+  --primary-soft: rgba(2, 132, 199, 0.15); /* Nền nhạt 12-18% cho badge, item active */
+  --on-primary: #ffffff;        /* Màu chữ hiển thị trên nền --primary */
+
+  /* Màu nhấn (Accent) */
+  --accent: #38bdf8;            /* Vạch tiêu đề trang, viền focus ô nhập */
+  --accent-soft: rgba(56, 189, 248, 0.15);
+
+  /* Nền, Thẻ & Đường viền */
+  --bg: #f8fafc;                /* Nền toàn trang */
+  --bg-sub: #f1f5f9;            /* Nền rất nhạt cho thanh tiến độ, nhật ký, ô phụ */
+  --card: #ffffff;              /* Nền thẻ nội dung, modal, bảng */
+  --border: #cbd5e1;            /* Đường viền thẻ, khung phân cách chính */
+  --border-soft: #e2e8f0;       /* Đường viền kẻ dòng nhạt danh sách */
+
+  /* Văn bản (Typography) */
+  --text: #0f172a;              /* Màu chữ chính (độ tương phản cao) */
+  --text-muted: #64748b;        /* Màu chữ phụ, nhãn, mô tả ngắn */
+
+  /* Header & Thanh bên */
+  --sidebar-bg: linear-gradient(135deg, #0f172a, #1e293b); /* Gradient nền header */
+  --sidebar-text: #f8fafc;      /* Chữ trên header */
+  --sidebar-text-muted: #94a3b8;
+  --sidebar-border: rgba(255, 255, 255, 0.12);
+
+  /* Bo góc (Radii) */
+  --card-radius: 14px;          /* Bo góc thẻ nội dung */
+  --hero-radius: 18px;          /* Bo góc Hero Card mở màn */
+  --btn-radius: 10px;           /* Bo góc nút bấm, ô nhập liệu */
+
+  /* Bóng đổ & Tỷ lệ font */
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.08); /* Chế độ tối tự động gán none */
+  --font-scale: 1.0;            /* Tỷ lệ cỡ chữ: 1.0 (vừa) - 1.1 (lớn) - 1.2 (rất lớn) */
+}
 ```
 
-**Thanh trái (rail):**
-- Luôn có, chỉ icon, rộng 56px.
-- Nút `»` ở đầu bung ra 248px có tên nhóm và tên mảng; ⚙️ Cài đặt và 📲 Cài app nằm ở chân.
-- Mảng được chia **nhóm**; nhóm thu gọn thì chỉ còn một vạch kẻ 1px ngăn giữa.
-- Mục đang chọn có nền `--primary-soft`. Số chờ là chấm đỏ góc trên.
+### 2.2 Ma Trận 8 Bảng Màu Chuẩn Hóa Theo Ngành
 
-| Bề rộng | Rail | Nội dung | Ghi chú |
+| ID Palette (`data-palette`) | Ứng Dụng Nghiệp Vụ | `--primary` (Sáng · Tối) | `--accent` (Sáng · Tối) | `--bg` (Sáng · Tối) | `--card` (Sáng · Tối) | Bo góc (Thẻ / Hero / Nút) | Đặc tính nhận diện Header |
+|---|---|---|---|---|---|---|---|
+| `gold` *(Mặc định)* | Hành chính, Quản trị tổng thể, PTKH | `#dc2626` · `#ef4444` | `#d4a017` · `#f59e0b` | `#f4f5f7` · `#0c0d12` | `#ffffff` · `#161822` | 14px / 18px / 10px | Vàng Hoàng Kim `linear-gradient(165deg, #f0cf5e, #d4a017, #a97e10)` chữ `#3a2a06` |
+| `executive` | Bàn làm việc Lãnh đạo, Điều hành Hub | `#0284c7` · `#38bdf8` | `#38bdf8` · `#7dd3fc` | `#f8fafc` · `#050811` | `#ffffff` · `#0e1526` | 12px / 14px / 8px | Xanh Navy Đậm `linear-gradient(135deg, #0f172a, #1e293b)` |
+| `clinical` | Y tế, Khám chữa bệnh ngoại trú, ACHSI | `#0f766e` · `#2dd4bf` | `#0d9488` · `#5eead4` | `#f8fafc` · `#031313` | `#ffffff` · `#092020` | 16px / 20px / 12px | Xanh Ngọc Y Tế Teal 700 đạt chuẩn siêu tương phản WCAG AAA |
+| `growth` | Tuyển sinh, CRM Khách hàng, Bán hàng | `#7c3aed` · `#a855f7` | `#f97316` · `#fb923c` | `#faf5ff` · `#0e0517` | `#ffffff` · `#1c0d2e` | 18px / 22px / 12px | Tím Tăng Trưởng kết hợp Cam Năng Động |
+| `nordic` | Thư viện Tri thức, Second Brain, Quy trình SOP | `#475569` · `#94a3b8` | `#0ea5e9` · `#38bdf8` | `#f8fafc` · `#090d16` | `#ffffff` · `#111827` | 10px / 14px / 8px | Phong cách Tối giản Bắc Âu thanh lịch, tập trung đọc |
+| `cyber` *(Chuyên Tối)* | Giám sát kỹ thuật, Automation, Terminal AI | `#10b981` · `#10b981` | `#06b6d4` · `#06b6d4` | `#04090b` · `#04090b` | `#081418` · `#081418` | 8px / 10px / 6px | Đen Huyền Ảo phối Neon Green / Neon Cyan |
+| `crimson` | Ban Kiểm soát, Kỷ luật, Quản trị rủi ro | `#991b1b` · `#f87171` | `#ea580c` · `#fb923c` | `#fff1f2` · `#110507` | `#ffffff` · `#1f0a0e` | 12px / 16px / 8px | Đỏ Thẩm Quyền nghiêm ngặt, chỉ số kiểm soát |
+| `mocha` | Nhân sự, Xếp lịch trực tuần, Đời sống nội bộ | `#854d0e` · `#facc15` | `#ca8a04` · `#fde047` | `#fefce8` · `#120e03` | `#ffffff` · `#211907` | 14px / 18px / 10px | Nâu Cafe ấm áp, kết nối con người |
+
+### 2.3 Hệ Thống Màu Ngữ Nghĩa (Semantic Fixed Colors)
+
+```css
+:root {
+  --c-red: #dc2626;         --c-red-soft: rgba(220, 38, 38, 0.15);     /* Lỗi, khẩn cấp */
+  --c-yellow: #b45309;      --c-yellow-soft: rgba(180, 83, 9, 0.15);   /* Chờ duyệt, chú ý */
+  --c-green: #15803d;       --c-green-soft: rgba(21, 128, 61, 0.15);   /* Hoàn tất, đạt */
+  --c-blue: #2563eb;        --c-blue-soft: rgba(37, 99, 235, 0.14);    /* Thông tin, link */
+  --c-gray: #6b7280;        --c-gray-soft: rgba(107, 114, 128, 0.14);  /* Đóng, chưa có */
+}
+[data-theme="dark"] {
+  --c-red: #f87171;         --c-red-soft: rgba(248, 113, 113, 0.20);
+  --c-yellow: #f59e0b;      --c-yellow-soft: rgba(245, 158, 11, 0.20);
+  --c-green: #4ade80;       --c-green-soft: rgba(74, 222, 128, 0.20);
+  --c-blue: #60a5fa;        --c-blue-soft: rgba(96, 165, 250, 0.20);
+  --c-gray: #9ca3af;        --c-gray-soft: rgba(156, 163, 175, 0.18);
+  --shadow: none !important;
+}
+```
+
+### 2.4 Cơ Chế Điều Khiển 4 Chế Độ Hiển Thị & 3 Cỡ Chữ
+
+* **4 Chế độ hiển thị (`data-theme`):**
+  * `light`: Cố định Sáng.
+  * `dark`: Cố định Tối.
+  * `auto`: Tự động đồng bộ theo cấu hình hệ điều hành thiết bị (`prefers-color-scheme`).
+  * `time`: Tự động theo chu kỳ ngày đêm Việt Nam (06:00 – 18:00 bật Sáng, từ 18:01 – 05:59 bật Tối).
+* **3 Mức cỡ chữ (`data-cochu`):**
+  * `vua` (Mặc định): `--font-scale: 1.0` (Phù hợp mắt thanh niên, giao diện sắc nét).
+  * `lon`: `--font-scale: 1.1` (Tăng 10% kích thước chữ toàn diện).
+  * `rat_lon`: `--font-scale: 1.2` (Tăng 20% kích thước chữ, tối ưu cho lãnh đạo lớn tuổi).
+
+---
+
+## CHƯƠNG 3: TYPOGRAPHY, KHOẢNG CÁCH & ĐỘNG LỰC HỌC (MOTION SYSTEM)
+
+### 3.1 Bảng Phân Tầng Typography Chuẩn Mực
+
+Phông chữ tiêu chuẩn: `'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`. Chữ số liệu dùng kèm font số đơn cách `'JetBrains Mono', monospace`.
+
+| Cấp Bậc / Thành Phần | Cỡ Chữ CSS (`calc(...)`) | Độ Đậm (Font Weight) | Quy Cách Trình Bày & Ứng Dụng |
 |---|---|---|---|
-| ≥ 1024px (desktop) | **Mặc định bung 248px**, không che nội dung, header, thanh đáy | Lùi sang phải, max 960px | Nhớ lựa chọn thu / bung trên máy |
-| 768–1023px | 56px, bung ra thì nổi trên nội dung + lớp mờ | max 760px | Chọn mảng xong tự thu |
-| < 768px (điện thoại) | **Mặc định kiểu "Mép trái"** (chọn được trong Cài đặt: Mép trái · Hàng icon · Tự động) | Rộng gần hết màn | Chi tiết ngay dưới bảng |
-| 361–399px | (kiểu Hàng icon) 48px | | |
-| ≤ 360px | Tự động ➜ Mép trái; Hero số 19px | | |
-| ≤ 340px | | | Thanh đáy chỉ icon |
-| cao ≤ 640px | | | Thanh đáy 52px |
+| Tiêu đề trang (`.page-title`) | `calc(20px * var(--font-scale))` | 800 (Bold Đậm) | Có vạch đứng 4px `--accent` bên trái |
+| Số lớn Hero (`.tq-so`) | `calc(22px * var(--font-scale))` | 800 (Rất đậm) | Chữ số to nổi bật, tô màu ngữ nghĩa |
+| Tiêu đề thẻ (`.card-title`, `.dong-title`)| `calc(15px * var(--font-scale))` | 700 (Đậm) | Tên công việc, tên hồ sơ, tiêu đề ca |
+| Chữ nội dung chính (`body`) | `calc(14px * var(--font-scale))` | 400 – 500 | Văn bản đọc, chi tiết nội dung, mô tả |
+| Chữ phụ, nhãn nhỏ (`.text-muted`) | `calc(12.5px * var(--font-scale))`| 400 – 500 | Thời gian, người gửi, ghi chú phụ |
+| Nhãn nhóm IN HOA (`.hn-tieu`) | `calc(13.5px * var(--font-scale))`| 700 | Chữ IN HOA, `letter-spacing: 0.05em;` |
+| Nhãn thanh đáy (`.bottom-nav-label`) | `calc(11px * var(--font-scale))` | 600 (đang chọn 800)| Ngay dưới icon thanh đáy |
+| Ô nhập liệu di động (`.form-input`) | `max(16px, calc(14px * var(--font-scale)))` | 500 | Bắt buộc ≥ 16px để chống phóng to iOS |
 
-Kiểu **Mép trái** trên điện thoại:
-- Chỉ còn dải màu `--primary` 4px ở mép trái và một mấu `»` 24 × 44px.
-- Mấu mặc định ở **66 % chiều cao**, vừa ngón cái trái. Giữ để kéo lên / xuống; vị trí nhớ trên máy.
-- Vuốt từ mép trái để mở, vuốt sang trái để đóng. Lần đầu mấu nhấp nháy để gợi ý.
+### 3.2 Hệ Thống Khoảng Cách Nhịp Chẵn (Even Spacing Scale)
 
-Quy tắc khác:
-- **Đang gõ form trên điện thoại** thì ẩn thanh đáy.
-- iPhone có tai thỏ: header cộng thêm `env(safe-area-inset-top)`, thanh đáy cộng `env(safe-area-inset-bottom)`.
-- Thanh đáy chạy hết bề ngang (không hở góc dưới trái); các nút căn giữa theo vùng nội dung.
+Khoảng cách tuân thủ nghiêm ngặt bậc bước: **2 – 4 – 6 – 8 – 10 – 12 – 14 – 16 – 18 – 24 – 32px**.
+* Lề nội dung di động: `12px` (màn hình hẹp ≤ 360px dùng `10px`).
+* Khoảng cách giữa các thẻ danh sách: `12px – 14px`.
+* Đệm bên trong thẻ thường (`.card`): `14px – 16px`.
+* Đệm bên trong Hero Card (`.hn-hero`): `18px`.
 
-**Thanh đáy 5 nút:** Hôm nay · Phê duyệt · việc hay dùng · Đối tác · (nút thứ 5 dành cho tác vụ hay dùng nhất của người dùng). Mục đang chọn tô `--primary` và chữ đậm 800. Số chờ hiện bằng huy hiệu đỏ.
+### 3.3 Động Lực Học Chuyển Động (Animate UI Spring Physics)
 
----
+Mọi hiệu ứng chuyển động trong hệ thống đều tuân thủ các nguyên tắc sau:
 
-## 5. Thành phần (class chuẩn)
+```css
+:root {
+  /* Tokens Spring Physics & Asymmetric Timing */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1); /* Chuẩn Apple-like, mượt, nảy nhẹ */
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);      /* Nhanh dứt khoát */
+  --dur-tap: 0.1s;
+  --dur-fast: 0.16s;
+  --dur-normal: 0.25s;
+}
 
-| Thành phần | Class | Thông số chính |
-|---|---|---|
-| Tiêu đề trang | `.page-header > .page-title + .page-sub` | Vạch trái 4px `--accent`, nút icon bên phải |
-| Hero | `.hn-hero` | Nền `linear-gradient(135deg, --primary-soft 0%, --card 75%)`, viền 1px, bo `--hero-radius`, đệm 18, gap 14 |
-| Ô số (≤ 3) | `.tq-3so > .tq-o > .tq-so + .tq-nhan` | Lưới 3 cột, ô cao ≥ 64, số 22/800 tô màu ngữ nghĩa; bấm để lọc |
-| Nút chính | `.btn-primary` | Rộng 100 %, cao 48, nền `--primary`, chữ 15/800, bóng nhẹ |
-| Nút phụ | `.btn-secondary` | Cao 44, nền `--card`, viền; rê chuột ➜ viền + chữ `--primary` |
-| Nút chữ / viền đứt / icon | `.nut-chu` · `.nut-rong` · `.btn-icon` | Gạch chân màu chính · viền đứt màu chính rộng 100 % · 44 × 44 bo 10 |
-| Nút nguy hiểm | thêm `.nut-do` | Chữ + viền `--c-red` (luôn kèm bấm 2 lần) |
-| Nhãn nhóm | `.hn-tieu` | IN HOA 14/700 `--text-muted`, bên phải có nút chữ "Bỏ lọc" |
-| Danh sách | `.hn-list > .hn-dong` | Dòng cao ≥ 60, bo `--card-radius`; gồm `.dong-icon` 40px · `.dong-content` (`.dong-title` 15/700 + `.dong-sub` 13, cắt "…") · `.dong-meta` (badge + `›`) |
-| Chi tiết bung dưới dòng | `.chi-tiet-dong` | Viền **đứt**, bo 12; bấm dòng lần nữa để thu |
-| Thẻ | `.the` (thẻ thường) · `.card` | Nền `--card`, viền 1px, bo 12 / `--card-radius`, đệm 14–16 |
-| Hàng 2 đầu | `.hang-tru` | Trái nhãn, phải số đậm, kẻ dưới `--border-soft` |
-| Khối gập | `details.tq-gon > summary` | Cao 48, mũi tên `▸` xoay 90° khi mở; `.tom-tat` bên phải ẩn khi mở |
-| Badge | `.badge.do / .vang / .xanh / .xam` | Viên thuốc, nền `-soft`, chữ màu đậm, 14/700 |
-| Tab | `.hang-tab > .tab-nut(.dang-chon)` | Viên thuốc cao 44 bo 22; đang chọn nền `--primary` chữ trắng; cuộn ngang ẩn thanh cuộn |
-| Chip lọc | `.hang-chip > .chip-chon(.dang-chon)` | Viên thuốc 44; đang chọn nền `--primary-soft` viền `--primary` |
-| Lưới ô lọc | `.luoi-o-so > .o-so-loc` | `repeat(auto-fit, minmax(96px,1fr))`, ô cao 64, icon + chữ 12 |
-| Thanh tiến độ | `.thanh-tien > div` | Cao 6, bo 3, nền `--bg-sub`, phần chạy `--primary` |
-| Ô nhập | `.form-input` · nhãn `.nhan-o` | Cao 44, nền `--bg`, bo `--btn-radius`; khi gõ viền `--accent` + vòng 3px `--accent-soft`; điện thoại chữ 16px |
-| Form trong thẻ | `.the.form-the` | Viền `--primary`; chi tiết phụ nằm trong `details` "＋ Thêm chi tiết" |
-| Hàng nút | `.hang-nut` | Các nút chia đều, `flex: 1 1 140px`, xuống dòng khi hẹp |
-| Công tắc | `.cong-tac > input + .cong-tac-nen` | Vùng bấm 52 × 44, rãnh 48 × 26, bật = `--primary`; `.khoa` mờ 50 % |
-| Thẻ tin | `.the-tin(.da-xem)` | Vạch trái 4px `--primary`; đã xem ➜ vạch xám, mờ 75 % |
-| Dải nguồn dữ liệu | `.canh-bao-nguon.mau / .loi` | Vàng = đang hiện số MẪU · Đỏ = lỗi máy chủ; luôn ở đầu nội dung |
-| Trống / xong hết | `.trong` · `.hn-xong` | Chữ giữa màu phụ · khối xanh lá icon 44px "Xong hết việc 🎉" |
-| Toast | `.toast.toast-success/info/warn/error` | Trên đỉnh, max 500, vạch trái 5px màu loại, nút "Hoàn tác" gạch chân, thanh đếm 3px |
-| Thanh chờ | `#thanhCho.chay` | Vạch 3px `--primary` chạy trên cùng khi đang gửi máy chủ |
-| Tấm Cài đặt | `.modal-overlay > .modal-sheet` | Trượt từ đáy, max 600, bo trên 20, nền mờ `rgba(0,0,0,.6)` + blur 4 |
-| Pill trạng thái | `.header-status-pill.live / .demo` | Cạnh tên app, 10px/800: xanh "Live vX" · vàng "Demo vX" |
-| Đã làm / đã tắt | `.mo-di` | `opacity: .4` |
+/* 1. Hiệu ứng chạm / bấm vật lý (Haptic Tap Feel) */
+.btn-primary:active, .btn-secondary:active, .btn-icon:active, .hn-dong:active {
+  transform: scale(0.96);
+  transition: transform var(--dur-tap) var(--ease-spring);
+}
 
-**Trạng thái bắt buộc mỗi màn:**
-- **đang tải**: vòng quay + chữ;
-- **trống**: câu hướng dẫn việc cần làm;
-- **lỗi**: dải đỏ + vẫn hiện số mẫu;
-- **chưa có quyền**: màn khóa 🔒.
+/* 2. Hiệu ứng xuất hiện êm ái & Đóng dứt khoát (Asymmetric Timing) */
+.modal-overlay.open .modal-sheet {
+  transform: translateY(0) scale(1);
+  transition: transform var(--dur-normal) var(--ease-spring);
+}
+.modal-overlay:not(.open) .modal-sheet {
+  transform: translateY(20px) scale(0.96);
+  transition: transform var(--dur-fast) var(--ease-exit); /* Ra nhanh 0.16s */
+}
+
+/* 3. Tự động ngắt khi người dùng bật giảm chuyển động (Accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+    scroll-behavior: auto !important;
+  }
+}
+```
 
 ---
 
-## 6. Hành vi & giọng chữ
+## CHƯƠNG 4: BỐ CỤC KHUNG TRANG & ĐÁP ỨNG THIẾT BỊ (SHELL ARCHITECTURE)
 
-- **Nút đang gửi:** khóa nút, đổi chữ thành "⏳ Đang lưu…", chặn bấm 2 lần. Chờ quá 20 giây thì toast vàng "Mạng đang yếu…".
-- **Rung** (máy có hỗ trợ): `nhe` khi chọn, `xong` khi lưu được, `canh` khi xác nhận việc nguy hiểm.
-- **Bộ lọc:** bấm ô số trong Hero để lọc danh sách. Bấm lại ô đó, hoặc bấm "Bỏ lọc", để bỏ lọc.
-- **Chi tiết ít dùng:** để trong khối gập; màn đầu chỉ giữ thứ dùng mỗi ngày.
-- **Câu chữ:** ngắn, nói việc cần làm ("Chưa có việc nào – bấm ＋ để thêm"). Không nói thuật ngữ kỹ thuật. Lỗi thì nói cách sửa.
-- **Nhớ trên máy:** chế độ sáng / tối, palette, cỡ chữ, kiểu thanh trái, vị trí mấu, khối gập đang mở.
-- **PWA:** mọi trang đều cài được như ứng dụng.
-  - Cần `manifest.webmanifest`: `display: standalone`, icon 192 / 512 / maskable, `theme_color` = màu header.
-  - Cần service worker network-first, không đệm dữ liệu khác nguồn và không đệm link có mã đăng nhập.
-  - Nút 📲 ở chân rail; iPhone thì hướng dẫn "Chia sẻ ➜ Thêm vào MH chính".
+### 4.1 Sơ Đồ Khung Màn Hình Tổng Thể
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ TOPBAR HEADER (Cố định 56px + safe-area-inset-top)                           │
+│ [Logo 24px] SHIN AIOS [Pill Live/Demo 20px]           (⚡ Duyệt 1-chạm + [4])│
+├─────────┬───────────────────────────────────────────────────────────────────┤
+│         │ VÙNG NỘI DUNG CUỘN Ở GIỮA (Max 760px di động / 960px Desktop)     │
+│  RAIL   │ ▌Tiêu đề trang (Vạch trái 4px --accent)                  [↻ Làm mới]│
+│  TRÁI   │ ┌ HERO CARD: Chào buổi sáng · Ngày · [3 Số liệu] · [ NÚT CHÍNH ] ┐│
+│  56px   │ └────────────────────────────────────────────────────────────────┘│
+│  (Desktop│ NHÃN NHÓM IN HOA · Số lượng mục                                   │
+│  248px) │ ┌────────────────────────────────────────────────────────────────┐│
+│         │ │ [Icon 40px] Dòng danh sách công việc chính               [Badge]││
+│  Mobile:│ └────────────────────────────────────────────────────────────────┘│
+│  Mấu mép│ ▸ Khối gập chi tiết ít dùng (Accordion Details)                   │
+│  trái » │ (Padding đáy bù 80px để không bị thanh đáy che mất nội dung)      │
+├─────────┴───────────────────────────────────────────────────────────────────┤
+│ FIXED BOTTOM NAV (Cố định 64px + safe-area-inset-bottom · Đúng 5 nút bấm)   │
+│   [🏠 Hôm nay]   [⚡ Phê duyệt]   [🌟 Hay dùng]   [🤝 Đối tác]   [⚙️ Cài đặt]  │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 4.2 Chi Tiết Các Bộ Phận Khung
+
+1. **Thanh Topbar 56px (Sticky Header):**
+   * Bên trái: Logo SVG Shin + Chữ `SHIN AIOS` + Badge trạng thái phiên bản siêu nhỏ (`height: 20px; font-size: 10px; font-weight: 800; border-radius: 999px;`). Bấm vào mở modal kết nối Token.
+   * Bên phải: **DUY NHẤT 1 nút tia sét `⚡`** mở Trung tâm Phê duyệt 1-chạm (`#countPendingApproval` hiện số lượng đỏ nổi góc trên).
+2. **Thanh Decagon Rail (Thập Diện 10 Mảng Nghiệp Vụ):**
+   * **Trên Desktop (≥ 1024px):** Mặc định bung rộng 248px hiển thị đầy đủ tên nhóm và tên mảng. Nhớ trạng thái thu/bung vào `localStorage`.
+   * **Trên Tablet (768px – 1023px):** Thu gọn 56px chỉ hiện icon, bấm vào thì trượt đè lên nội dung có kèm lớp mờ `backdrop`.
+   * **Trên Điện thoại (< 768px):** Mặc định kích hoạt kiểu **Mấu mép trái di động (`body.kieu-mep`)**:
+     * Thanh rail thu lại thành 1 vạch màu `--primary` mảnh 4px ở mép trái màn hình.
+     * Mấu kéo `»` có kích thước `24 × 44px` (nằm gọn trong vùng bấm 44 × 52px), mặc định đặt ở vị trí **66% chiều cao màn hình** (vừa tầm ngón tay cái bên trái).
+     * Mấu có thể giữ để kéo rê lên/xuống; vị trí lưu tự động vào `localStorage`. Khi có thông báo mới, mấu hiển thị chấm đỏ nhấp nháy thu hút sự chú ý.
+     * Chân rail có 2 nút tiện ích cố định: `📲 Cài PWA` và `⚙️ Cài đặt`.
+3. **Thanh Fixed Bottom Navigation 64px (Thanh Đáy):**
+   * Ghim cố định ở chân màn hình, có đúng **5 nút bấm** đều nhau.
+   * Mỗi nút gồm: Icon 20px ở trên + Nhãn chữ 11px ở dưới. Vùng bấm chiếm trọn chiều cao 64px.
+   * **Quy tắc bắt buộc 1 (Tự động ẩn khi gõ form):** Khi người dùng đang focus gõ form nhập liệu trên điện thoại, thanh đáy phải **tự động ẩn đi** để tránh bàn phím ảo đẩy bung giao diện.
+   * **Quy tắc bắt buộc 2 (Cho phép Tắt hoàn toàn trong Cài đặt):** Cung cấp công tắc Bật/Tắt trong Cài đặt để người dùng chuyển sang chế độ xem toàn màn hình (Full-screen view).
+
+### 4.3 Quy Chuẩn Tấm Cài Đặt Bắt Buộc (Universal Settings Sheet)
+
+Mọi app và module thuộc hệ thống SHIN bắt buộc phải có nút mở **Tấm Cài Đặt (`#settingsModal`)**. Trong tấm cài đặt phải có đầy đủ 5 khối tùy biến chuẩn mực:
+
+1. **Chế độ Hiển Thị (Theme Mode):** 4 nút chọn (`Sáng` · `Tối` · `Theo máy` · `Theo giờ`).
+2. **Phong cách Giao diện (8 Palettes):** Lưới chọn bảng màu (`gold`, `executive`, `clinical`, `growth`, `nordic`, `cyber`, `crimson`, `mocha`).
+3. **Cỡ chữ Toàn Ứng Dụng:** 3 mức chọn (`Vừa 1.0` · `Lớn 1.1` · `Rất lớn 1.2`).
+4. **Định Dạng Thanh Danh Mục Mép Trái (Decagon Rail Format):**
+   * `✨ Tự động`: Thiết bị ≤ 360px dùng Mép trái, màn hình lớn hơn dùng Hàng icon.
+   * `▥ Hàng icon`: Giữ thanh rail 56px hiển thị icon cố định bên trái.
+   * `⟫ Mép trái`: Thu thanh rail thành vạch 4px ở mép trái; hiển thị mấu kéo `»` (24 × 44px) đặt ở vị trí **66% chiều cao màn hình** (vừa tầm ngón tay cái bên trái). Cho phép giữ và kéo rê mấu dọc mép màn hình để đặt vị trí vừa tay nhất, vị trí lưu tự động vào `localStorage` (`shin_tay_top`).
+5. **Công Tắc Bật / Tắt Thanh Điều Hướng Đáy (Bottom Nav Bar Toggle):**
+   * Tích hợp công tắc chuyển mạch `.cong-tac`:
+     * Khi **BẬT (Mặc định)**: Thanh đáy hiển thị bình thường, vùng nội dung có đệm đáy bù `80px`.
+     * Khi **TẮT (Ẩn Nav Bar)**: Thêm class `.an-navbar` lên `<html>` và `<body>`, thanh đáy ẩn hoàn toàn (`display: none !important;`), vùng nội dung co khoảng đệm đáy về `16px + env(safe-area-inset-bottom)` mang lại trải nghiệm xem toàn màn hình tối đa.
+     * Trạng thái lưu bền vững vào `localStorage` (`shin_navbar: '1' | '0'`).
+     * Khi thanh đáy tắt, người dùng vẫn điều hướng dễ dàng qua: Mấu mép trái `rail-tay`, nút trên Header hoặc mở lại Cài đặt từ Header/Rail.
 
 ---
 
-## 7. Bộ khung chép dùng ngay
+## CHƯƠNG 5: DANH MỤC THÀNH PHẦN CHUẨN (COMPONENT CATALOG & CLASSES)
 
-### 7.1 HTML
+Mọi app và module thuộc hệ thống SHIN bắt buộc phải sử dụng chính xác các tên class và cấu trúc HTML chuẩn dưới đây:
+
+### 5.1 Hero Card Chuẩn Mở Màn (`.hn-hero`)
 
 ```html
-<!doctype html>
-<html lang="vi" data-palette="gold" data-theme="light">
+<section class="hn-hero">
+  <div class="hn-hero-top">
+    <div>
+      <div class="hn-chao" id="lblLoiChao">Chào buổi sáng, Sếp ☀️</div>
+      <div class="hn-ngay" id="lblNgayThang">T2, 01/11/2026</div>
+    </div>
+    <div class="status-badge live">🟢 Trực tiếp</div>
+  </div>
+
+  <!-- Lưới tối đa 3 ô số liệu tổng quan -->
+  <div class="tq-3so">
+    <div class="tq-o" onclick="ShinApp.locDanhSach('tat-ca')">
+      <div class="tq-so" style="color:var(--primary);">18</div>
+      <div class="tq-nhan">Tổng việc</div>
+    </div>
+    <div class="tq-o" onclick="ShinApp.locDanhSach('khan')">
+      <div class="tq-so" style="color:var(--c-red);">4</div>
+      <div class="tq-nhan">Việc khẩn</div>
+    </div>
+    <div class="tq-o" onclick="ShinApp.locDanhSach('cho-duyet')">
+      <div class="tq-so" style="color:var(--c-yellow);">2</div>
+      <div class="tq-nhan">Chờ duyệt</div>
+    </div>
+  </div>
+
+  <!-- Nút hành động chính Primary to 100% -->
+  <button class="btn-primary" onclick="ShinApp.moModalThem()">
+    <span>＋ Thêm Đề Xuất / Công Việc Mới</span>
+  </button>
+</section>
+```
+
+### 5.2 Danh Sách Dòng Thẻ Tương Tác (`.hn-list` > `.hn-dong`)
+
+```html
+<div class="hn-list">
+  <div class="hn-dong" onclick="ShinApp.xemChiTiet('ID_123', this)">
+    <div class="dong-icon" style="background:var(--primary-soft); color:var(--primary);">📋</div>
+    <div class="dong-content">
+      <div class="dong-title">Báo cáo nghiệm thu phòng khám quý 3</div>
+      <div class="dong-sub">Phòng PTKH · Cập nhật 15 phút trước</div>
+    </div>
+    <div class="dong-meta">
+      <span class="badge vang">Chờ duyệt</span>
+      <span class="dong-arrow">›</span>
+    </div>
+  </div>
+  <!-- Chi tiết bung ngay bên dưới dòng khi bấm -->
+  <div class="chi-tiet-dong" id="detail_ID_123" hidden>
+    <p>Nội dung chi tiết báo cáo và các nút duyệt nhanh 1-chạm...</p>
+  </div>
+</div>
+```
+
+### 5.3 Nút Bấm & Phân Cấp Hành Động (Buttons)
+
+* `.btn-primary`: Nút chính nổi bật (Nền `--primary`, chữ trắng/on-primary, cao 48px, chữ 15px đậm 800, bóng nhẹ).
+* `.btn-secondary`: Nút phụ (Nền `--card`, viền 1px `--border`, cao 44px; rê chuột đổi viền `--primary`).
+* `.btn-icon`: Nút bấm dạng biểu tượng tròn/bo nhẹ (Cao và rộng tối thiểu `44 × 44px`).
+* `.nut-do`: Nút hành động xóa/nguy hiểm (Chữ và viền `--c-red`, luôn bắt buộc đi kèm xác nhận bấm 2 lần).
+* `.nut-chu`: Nút liên kết dạng chữ gạch chân (Cao 44px, chữ màu `--primary`).
+
+### 5.4 Form Nhập Liệu Chuẩn Chống Lỗi Phóng To iOS
+
+```html
+<div class="the form-the">
+  <div class="form-group">
+    <label class="nhan-o" for="txtTieuDe">Tiêu đề công việc <span class="dau-sao">*</span></label>
+    <input type="text" class="form-input" id="txtTieuDe" required placeholder="Nhập tên việc ngắn gọn...">
+  </div>
+
+  <!-- Chi tiết phụ đưa vào khối gập để màn hình ban đầu luôn tinh gọn -->
+  <details class="tq-gon" style="margin-top:12px;">
+    <summary>＋ Thêm thông tin chi tiết (Tùy chọn)</summary>
+    <div style="padding-top:10px;">
+      <label class="nhan-o" for="txtGhiChu">Ghi chú bổ sung</label>
+      <textarea class="form-input" id="txtGhiChu" rows="3" placeholder="Chi tiết..."></textarea>
+    </div>
+  </details>
+
+  <div class="hang-nut" style="margin-top:16px;">
+    <button type="button" class="btn-secondary" onclick="ShinApp.dongModal()">Hủy</button>
+    <button type="submit" class="btn-primary" id="btnLuuForm">Lưu Dữ Liệu</button>
+  </div>
+</div>
+```
+
+### 5.5 Bảng Checklist Đánh Giá Hành Vi 5T & Biểu Đồ Radar SVG (v2.6.4 Mới)
+
+* **Khung bảng cuộn an toàn (`.checklist-table-wrapper`):** Bọc ngoài bảng dài, có `overflow-x: auto; -webkit-overflow-scrolling: touch;`.
+* **Huy hiệu mức đạt (`.muc-pill`):**
+  * `.m1`: Đỏ (`#dc2626`) – Cảnh báo điểm liệt Mức 1.
+  * `.m2`: Cam (`#d97706`) – Nền tảng.
+  * `.m3`: Xanh dương (`#0284c7`) – Thành thục.
+  * `.m4`: Xanh ngọc (`#0f766e`) – Gương mẫu.
+  * `.m5`: Tím (`#7c3aed`) – Xuất sắc / Lan tỏa.
+* **Radar Spider Chart SVG:** 5 trục đối xứng tạo bằng thẻ `<polygon>` với tọa độ tính toán động trên viewBox `0 0 300 300`.
+
+---
+
+## CHƯƠNG 6: HỆ THỐNG PHÒNG NGỰ TRIỆT TIÊU 12 LỖI VẶT (ZERO-BUG DEFENSE GUIDE)
+
+Đây là bảng cẩm nang chẩn đoán và điều trị dứt điểm 12 lỗi vặt mà mọi lập trình viên và AI thường xuyên mắc phải:
+
+| STT | Tên Lỗi Vặt | Nguyên Nhân Kỹ Thuật | Phương Thuốc Trị Dứt Điểm (Code Mẫu Bắt Buộc) |
+|---|---|---|---|
+| **1** | **Vùng bấm < 44px** (Touch Target Bug) | Nút đóng `✕`, icon nhỏ, tab chỉ gán padding theo text khiến kích thước thực tế chỉ 30–38px, trượt kiểm định Apple/Google. | Gán cứng: `min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0;` cho mọi nút bấm icon và nút đóng. |
+| **2** | **iOS Safari Auto-Zoom** (Màn hình bị phóng to) | Người dùng chạm vào `<input>`, `<select>`, `<textarea>` có cỡ chữ `< 16px`, iOS tự động zoom to màn hình làm méo giao diện. | Quy định: `.form-input { font-size: max(16px, calc(14px * var(--font-scale))); }`. Tuyệt đối không để cỡ chữ input nhỏ hơn 16px trên mobile. |
+| **3** | **Cuộn ngang ngoài ý muốn** (Horizontal Overflow) | Sử dụng `width: 100vw` (tính luôn thanh cuộn), padding không có `box-sizing: border-box`, hoặc bảng/chữ dài không ngắt dòng. | Bắt buộc khai báo: `* { box-sizing: border-box; }`, `body { overflow-x: hidden; width: 100%; }`. Mọi bảng phải bọc trong thẻ có `overflow-x: auto;`. |
+| **4** | **Xung đột Z-Index** (Header/Modal/Toast che nhau) | Gán giá trị z-index tùy tiện (99, 999, 9999) dẫn đến modal đè toast hoặc header che mất drawer. | Tuân thủ thang Z-index bất biến: Thường: `1–10` · Bottom Nav: `40` · Topbar: `50` · Mấu mép trái: `98` · Drawer: `99` · Modal Sheet: `100` · Toast: `200` · Thanh chờ: `300`. |
+| **5** | **Bottom Nav che khuất nội dung đáy** | Thanh đáy fixed 64px che mất nút submit hoặc dòng dữ liệu cuối cùng của trang. | Vùng cuộn chính bắt buộc có đệm đáy: `.main-container { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }`. |
+| **6** | **Tai thỏ & Thanh vuốt iPhone** (SafeArea Bleed) | Thiếu khai báo `viewport-fit=cover` khiến giao diện bị dính thanh trạng thái hoặc thanh home iPhone. | Bắt buộc thẻ meta: `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">`. Header dùng `padding-top: env(safe-area-inset-top)`. |
+| **7** | **Chớp trắng giao diện** (FOUC Theme Flash) | Trang tải xong CSS mới đọc theme từ `localStorage`, làm nháy sáng màn hình 0.2s khi người dùng đang bật Dark Mode. | Đặt đoạn Script Anti-Flicker đồng bộ ngay dòng đầu tiên của thẻ `<head>` trước mọi link CSS (xem Chương 8). |
+| **8** | **Bàn phím ảo che mất ô nhập** | Trên điện thoại, bàn phím ảo trượt lên che khuất form nhập liệu ở nửa dưới màn hình. | Bắt sự kiện focus: `input.addEventListener('focus', () => { document.body.classList.add('dang-nhap-lieu'); input.scrollIntoView({ behavior: 'smooth', block: 'center' }); });`. Ẩn Bottom Nav khi có class `dang-nhap-lieu`. |
+| **9** | **Format sai số & ngày Việt Nam** | Dùng nhầm chuẩn Mỹ `1,250.00` và `mm/dd/yyyy` thay vì chuẩn kế toán Việt Nam. | 100% số liệu phải đi qua hàm `soVN(n, soLe)` (`1.250.000 đ`) và ngày qua hàm `ngayVN(d)` (`01/11/2026`). |
+| **10**| **Hộp thoại Confirm gây ức chế** | Dùng `confirm('Bạn có chắc chắn muốn xóa?')` làm đứng luồng trình duyệt và trải nghiệm cũ kỹ. | Áp dụng Toast Hoàn tác 6s cho việc sửa/xóa thường. Áp dụng hàm `xacNhan2Lan(khoa, msg, viec)` cho việc nguy hiểm. |
+| **11**| **Giật lag layout chuyển động** | Thay đổi thuộc tính `top`, `left`, `height` gây tính toán lại toàn bộ cây DOM (Reflow/Repaint). | 100% animation chỉ tác động trên `transform` và `opacity` để chạy trực tiếp trên GPU compositor thread. |
+| **12**| **Lỗ hổng XSS & Rò rỉ Token** | Chèn chuỗi trực tiếp vào `innerHTML` khiến kẻ xấu có thể chèn mã độc đánh cắp token Apps Script. | Mọi chuỗi render bắt buộc qua hàm `esc(v)`. Thiết lập thẻ `<meta http-equiv="Content-Security-Policy">` chặn kết nối ra ngoài máy chủ quy định. |
+
+---
+
+## CHƯƠNG 7: THƯ VIỆN HÀM TIỆN ÍCH JAVASCRIPT (HELPER TOOLKIT)
+
+Bộ hàm hạt nhân dùng chung của SHIN AIOS (được đóng gói sẵn trong `ShinApp`):
+
+```javascript
+/* ==========================================================================
+   SHIN HELPER TOOLKIT - CHUẨN HÓA TOÀN HỆ THỐNG
+   ========================================================================== */
+
+/** 1. Chống mã độc XSS - Bắt buộc dùng cho mọi dữ liệu hiển thị */
+function esc(v) {
+  return String(v === undefined || v === null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/** 2. Định dạng số kiểu Việt Nam: 1250000 -> "1.250.000" */
+function soVN(n, soLe) {
+  if (n === null || n === undefined || n === '' || !isFinite(Number(n))) return '-';
+  const x = Number(n), p = Math.pow(10, soLe || 0), lam = Math.round(Math.abs(x) * p) / p;
+  const nguyen = Math.floor(lam), le = Math.round((lam - nguyen) * p);
+  let s = String(nguyen).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  if (le) s += ',' + String(le).padStart(String(p).length - 1, '0').replace(/0+$/, '');
+  return (x < 0 ? '-' : '') + s;
+}
+
+/** 3. Định dạng phần trăm: 0.865 -> "86,5%" */
+function ptVN(v, soLe) {
+  return v === null || v === undefined || !isFinite(Number(v)) ? '-' : soVN(Number(v) * 100, soLe === undefined ? 1 : soLe) + '%';
+}
+
+/** 4. Định dạng ngày tháng tiếng Việt: "T2, 01/11/2026" */
+function ngayVN(d) {
+  d = d ? new Date(d) : new Date();
+  const thu = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'][d.getDay()];
+  const p = x => (x < 10 ? '0' : '') + x;
+  return `${thu}, ${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()}`;
+}
+
+/** 5. Lời chào thông minh theo giờ Việt Nam */
+function loiChao(hoTen) {
+  const g = new Date().getHours();
+  const buoi = g < 11 ? 'buổi sáng' : g < 14 ? 'buổi trưa' : g < 18 ? 'buổi chiều' : 'buổi tối';
+  const tenGoi = String(hoTen || '').trim().split(/\s+/).pop();
+  return `Chào ${buoi}${tenGoi ? ', ' + tenGoi : ''} ☀️`;
+}
+
+/** 5b. Bật / Tắt Thanh Điều Hướng Đáy và Lưu Trạng Thái */
+function apDungNavBar() {
+  const an = (localStorage.getItem('shin_navbar') === '0');
+  document.body.classList.toggle('an-navbar', an);
+  document.documentElement.classList.toggle('an-navbar', an);
+  const chk = document.getElementById('chkNavBar');
+  if (chk) chk.checked = !an;
+  return !an;
+}
+function batTatNavBar(bat) {
+  localStorage.setItem('shin_navbar', bat ? '1' : '0');
+  apDungNavBar();
+  rung('nhe');
+}
+
+/** 6. Rung phản hồi haptic xúc giác (nếu thiết bị hỗ trợ) */
+function rung(kieu) {
+  if (!('vibrate' in navigator)) return;
+  try {
+    if (kieu === 'nhe') navigator.vibrate(5);
+    else if (kieu === 'xong') navigator.vibrate([10, 30, 10]);
+    else if (kieu === 'canh') navigator.vibrate(40);
+  } catch (e) {}
+}
+
+/** 7. Toast thông báo có hỗ trợ HOÀN TÁC 6 GIÂY chuẩn mực */
+function toast(msg, loai = 'success', opts = {}) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return () => {};
+
+  const el = document.createElement('div');
+  const coNut = !!(opts.nhan && opts.bam);
+  el.className = `toast toast-${loai}`;
+  el.innerHTML = `
+    <span class="toast-text">${esc(msg)}</span>
+    ${coNut ? `<button class="toast-btn">${esc(opts.nhan)}</button><div class="toast-bar"></div>` : ''}
+  `;
+  container.appendChild(el);
+
+  let xong = false;
+  const dong = () => {
+    if (!xong) {
+      xong = true;
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(-12px)';
+      setTimeout(() => el.remove(), 160);
+    }
+  };
+
+  if (coNut) {
+    el.querySelector('.toast-btn').onclick = () => {
+      xong = true;
+      el.remove();
+      opts.bam();
+    };
+  }
+
+  const thoiGian = coNut ? 6000 : (loai === 'error' ? 6000 : 3500);
+  setTimeout(() => {
+    if (!xong) {
+      dong();
+      if (opts.khiHet) opts.khiHet();
+    }
+  }, thoiGian);
+
+  return dong;
+}
+
+/** 8. Xác nhận bấm 2 lần trong 5 giây cho các việc nguy hiểm */
+const choXacNhan = {};
+function xacNhan2Lan(khoa, msg, viec) {
+  const bayGio = Date.now();
+  if (choXacNhan[khoa] && bayGio - choXacNhan[khoa] < 5000) {
+    delete choXacNhan[khoa];
+    rung('canh');
+    viec();
+    return;
+  }
+  choXacNhan[khoa] = bayGio;
+  rung('nhe');
+  toast(msg + ' – Bấm lại lần nữa trong 5 giây để xác nhận!', 'warn');
+}
+```
+
+---
+
+## CHƯƠNG 8: BỘ KHUNG MÃ NGUỒN CHÉP DÙNG NGAY (STARTER BOILERPLATE)
+
+Mọi tệp ứng dụng web mới trong hệ sinh thái đều có thể bắt đầu từ bộ khung chuẩn sau:
+
+```html
+<!DOCTYPE html>
+<html lang="vi" data-theme="light" data-palette="gold" data-cochu="vua">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#d4a017">
+  
+  <!-- Content Security Policy an toàn chống rò rỉ token -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com;">
+  
+  <!-- Khai báo PWA chuẩn -->
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="shin.css">
-  <title>Tên App</title>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <title>Tên Ứng Dụng – SHIN AIOS</title>
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- SCRIPT CHỐNG CHỚP MÀN HÌNH (ANTI-FLICKER) BẮT BUỘC ĐẶT ĐẦU HEAD -->
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('shin_theme');
+        var p = localStorage.getItem('shin_palette');
+        var c = localStorage.getItem('shin_cochu');
+        if (t) document.documentElement.setAttribute('data-theme', t);
+        if (p) document.documentElement.setAttribute('data-palette', p);
+        if (c) document.documentElement.setAttribute('data-cochu', c);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
-  <div id="thanhCho"></div>
+  <!-- Thanh chỉ báo gửi dữ liệu máy chủ chạy trên đỉnh -->
+  <div id="thanhCho" aria-hidden="true"></div>
+
+  <!-- 1. HEADER GHIM ĐỈNH (TOPBAR 56PX) -->
   <header class="topbar">
-    <a class="topbar-brand" href="#">
-      <div class="topbar-logo">S</div>
-      <div><div class="topbar-title">TÊN APP <span class="header-status-pill live">Live v1.0</span></div>
-           <div class="topbar-sub">Phụ đề / tên người dùng · vai trò</div></div>
-    </a>
-    <button class="btn-icon" aria-label="Phê duyệt">⚡</button>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <a href="#" class="topbar-brand">
+        <div class="topbar-logo">🌐</div>
+        <div class="topbar-titles">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="topbar-title">SHIN APP</span>
+            <button class="header-status-pill live">Live v2.6.4</button>
+          </div>
+          <div class="topbar-sub">Phân hệ Nghiệp vụ</div>
+        </div>
+      </a>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-icon" title="Duyệt nhanh" style="position:relative;">
+        ⚡<span class="badge-count">2</span>
+      </button>
+    </div>
   </header>
 
-  <nav class="rail" id="rail" aria-label="Danh mục">
-    <button class="rail-nut" onclick="document.body.classList.toggle('rail-mo')" aria-label="Mở rộng">»</button>
-    <div class="rail-nhom">Nhóm 1</div>
-    <a class="rail-muc dang-chon" href="#"><span class="rail-icon">🏢</span><span class="rail-ten">Trang chủ</span></a>
-    <a class="rail-muc" href="#"><span class="rail-icon">📊</span><span class="rail-ten">Báo cáo</span></a>
-    <div class="rail-chan"><button class="rail-nut" aria-label="Cài đặt">⚙️</button></div>
-  </nav>
-
-  <main class="noi-dung">
-    <div class="page-header">
-      <div><div class="page-title">🏠 Hôm nay</div><div class="page-sub">Mô tả ngắn của màn</div></div>
-      <button class="btn-icon nhat" aria-label="Làm mới">↻</button>
-    </div>
-
+  <!-- 2. VÙNG NỘI DUNG CHÍNH CUỘN Ở GIỮA -->
+  <main class="main-container" id="appContent" role="main">
+    <!-- HERO CARD MỞ MÀN BẮT BUỘC -->
     <section class="hn-hero">
-      <div><div class="hero-greet">Chào buổi sáng, anh Tâm 👋</div><div class="hero-date">📅 T7, 31/10/2026</div></div>
-      <div class="tq-3so">
-        <div class="tq-o"><div class="tq-so" style="color:var(--c-blue)">12</div><div class="tq-nhan">Việc cần làm</div></div>
-        <div class="tq-o"><div class="tq-so" style="color:var(--c-red)">2</div><div class="tq-nhan">Quá hạn</div></div>
-        <div class="tq-o"><div class="tq-so" style="color:var(--c-green)">86 %</div><div class="tq-nhan">Hoàn thành</div></div>
+      <div class="hn-hero-top">
+        <div>
+          <div class="hn-chao">Chào buổi sáng, Sếp ☀️</div>
+          <div class="hn-ngay">T2, 01/11/2026</div>
+        </div>
       </div>
-      <button class="btn-primary">⚡ Việc chính của màn</button>
+      <div class="tq-3so">
+        <div class="tq-o">
+          <div class="tq-so" style="color:var(--primary);">12</div>
+          <div class="tq-nhan">Đang chạy</div>
+        </div>
+        <div class="tq-o">
+          <div class="tq-so" style="color:var(--c-yellow);">3</div>
+          <div class="tq-nhan">Chờ duyệt</div>
+        </div>
+        <div class="tq-o">
+          <div class="tq-so" style="color:var(--c-green);">100%</div>
+          <div class="tq-nhan">Tiến độ</div>
+        </div>
+      </div>
+      <button class="btn-primary">＋ Thao Tác Chính 1-Chạm</button>
     </section>
 
-    <div class="hn-tieu"><span>VIỆC HÔM NAY · 3</span><button class="nut-chu">Bỏ lọc</button></div>
-    <div class="hn-list">
+    <!-- NỘI DUNG CHI TIẾT CÁC THẺ TIẾP THEO -->
+    <div class="hn-tieu">DANH SÁCH CÔNG VIỆC CHÍNH</div>
+    <div class="hn-list" id="danhSachChinh">
+      <!-- Dòng danh sách mẫu -->
       <div class="hn-dong">
-        <div class="dong-icon">📝</div>
-        <div class="dong-content"><div class="dong-title">Duyệt 4 báo cáo ngày</div><div class="dong-sub">Hạn 31/10/2026 · PTKH</div></div>
-        <div class="dong-meta"><span class="badge vang">Hôm nay</span><span class="dong-arrow">›</span></div>
+        <div class="dong-icon">📁</div>
+        <div class="dong-content">
+          <div class="dong-title">Kế hoạch triển khai quý 4</div>
+          <div class="dong-sub">Đã xác thực dữ liệu cổng v1</div>
+        </div>
+        <div class="dong-meta">
+          <span class="badge xanh">Đạt</span>
+          <span class="dong-arrow">›</span>
+        </div>
       </div>
     </div>
-
-    <details class="tq-gon"><summary><span>ⓘ Quy ước</span><span class="tom-tat">2 mục</span></summary><p class="chu-phu">Nội dung ít dùng.</p></details>
   </main>
 
+  <!-- 3. THANH ĐÁY ĐIỀU HƯỚNG CỐ ĐỊNH 5 NÚT (64PX) -->
   <nav class="bottom-nav">
-    <button class="nav-item active"><span class="nav-icon">🏠</span><span class="nav-nhan">Hôm nay</span></button>
-    <button class="nav-item"><span class="nav-icon">⚡</span><span class="nav-nhan">Phê duyệt</span></button>
-    <button class="nav-item"><span class="nav-icon">📌</span><span class="nav-nhan">Dự án</span></button>
-    <button class="nav-item"><span class="nav-icon">👥</span><span class="nav-nhan">Đối tác</span></button>
-    <button class="nav-item"><span class="nav-icon">🧭</span><span class="nav-nhan">Điều hành</span></button>
+    <button class="nav-item active"><span class="nav-icon">🏠</span><span class="nav-label">Hôm nay</span></button>
+    <button class="nav-item"><span class="nav-icon">⚡</span><span class="nav-label">Phê duyệt</span></button>
+    <button class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Báo cáo</span></button>
+    <button class="nav-item"><span class="nav-icon">🤝</span><span class="nav-label">Đối tác</span></button>
+    <button class="nav-item"><span class="nav-icon">⚙️</span><span class="nav-label">Cài đặt</span></button>
   </nav>
-  <div class="toast-container" id="toast" aria-live="polite"></div>
-  <script>if (matchMedia('(min-width:1024px)').matches) document.body.classList.add('rail-mo');</script>
+
+  <!-- Khung chứa Toast thông báo có hoàn tác 6s -->
+  <div class="toast-container" id="toastContainer"></div>
 </body>
 </html>
 ```
 
-### 7.2 CSS lõi (`shin.css`)
+---
 
-Chỉ kèm palette `gold`. Palette khác: copy khối `:root` / `[data-theme="dark"]` rồi thay giá trị theo bảng 2.2.
+## CHƯƠNG 9: QUY TRÌNH KIỂM THỬ & TIÊU CHÍ NGHIỆM THU (DOD GATE)
 
-```css
-/* ---------- Biến ---------- */
-:root{--font-scale:1;--header-height:56px;--nav-height:64px;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
-  --rail-thu:56px;--rail-mo:248px;--rail-w:var(--rail-thu);--noi-max:760px;
-  --primary:#dc2626;--primary-hover:#b91c1c;--primary-soft:rgba(212,160,23,.15);--accent:#d4a017;--accent-soft:rgba(212,160,23,.15);--on-primary:#fff;
-  --bg:#f4f5f7;--card:#fff;--border:#e5e7eb;--border-soft:#f1f2f4;--bg-sub:var(--border-soft);--text:#1f2937;--text-muted:#6b7280;
-  --sidebar-bg:linear-gradient(165deg,#f0cf5e 0%,#d4a017 55%,#a97e10 100%);--sidebar-text:#3a2a06;--sidebar-border:rgba(0,0,0,.1);
-  --card-radius:14px;--hero-radius:18px;--btn-radius:10px;--shadow:0 2px 10px rgba(0,0,0,.04);
-  --c-gray:#6b7280;--c-gray-soft:rgba(107,114,128,.14);--c-blue:#2563eb;--c-blue-soft:rgba(37,99,235,.14);--c-yellow:#b45309;--c-yellow-soft:rgba(180,83,9,.15);
-  --c-green:#15803d;--c-green-soft:rgba(21,128,61,.15);--c-red:#dc2626;--c-red-soft:rgba(220,38,38,.15)}
-[data-theme="dark"]{--primary:#ef4444;--primary-hover:#dc2626;--primary-soft:rgba(245,158,11,.18);--accent:#f59e0b;--accent-soft:rgba(245,158,11,.18);--on-primary:#161822;
-  --bg:#0c0d12;--card:#161822;--border:#25293a;--border-soft:#1d212f;--text:#f8fafc;--text-muted:#94a3b8;
-  --sidebar-bg:linear-gradient(180deg,#181b27 0%,#0d0f17 100%);--sidebar-text:#f8fafc;--sidebar-border:rgba(245,158,11,.25);--shadow:none;
-  --c-gray:#9ca3af;--c-gray-soft:rgba(156,163,175,.18);--c-blue:#60a5fa;--c-blue-soft:rgba(96,165,250,.2);--c-yellow:#f59e0b;--c-yellow-soft:rgba(245,158,11,.2);
-  --c-green:#4ade80;--c-green-soft:rgba(74,222,128,.2);--c-red:#f87171;--c-red-soft:rgba(248,113,113,.2)}
-[data-cochu="lon"]{--font-scale:1.1}[data-cochu="ratlon"]{--font-scale:1.2}
-@media(min-width:1024px){:root{--noi-max:960px}body.rail-mo{--rail-w:var(--rail-mo)}}
-@media(max-height:640px){:root{--nav-height:52px}}
+Mọi website hoặc phân hệ trước khi giao cho Sếp hoặc triển khai lên Production bắt buộc phải vượt qua danh sách kiểm định 15 điểm (Definition of Done Gate):
 
-/* ---------- Nền ---------- */
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:calc(15px*var(--font-scale));line-height:1.5;
-  background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;padding-bottom:calc(var(--nav-height) + var(--safe-bottom) + 24px)}
-[hidden]{display:none!important}
-
-/* ---------- Header ---------- */
-.topbar{position:sticky;top:0;z-index:100;height:calc(var(--header-height) + var(--safe-top));padding:var(--safe-top) 14px 0;display:flex;align-items:center;
-  justify-content:space-between;background:var(--sidebar-bg);color:var(--sidebar-text);box-shadow:0 2px 10px rgba(0,0,0,.15)}
-.topbar-brand{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none}
-.topbar-logo{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:800}
-.topbar-title{font-size:calc(15px*var(--font-scale));font-weight:800;letter-spacing:-.2px;line-height:1.2}
-.topbar-sub{font-size:calc(12px*var(--font-scale));opacity:.8;white-space:nowrap}
-.header-status-pill{display:inline-flex;align-items:center;height:20px;padding:2px 7px;border-radius:12px;font-size:10px;font-weight:800;vertical-align:middle}
-.header-status-pill.live{background:rgba(22,163,74,.12);color:#16a34a;border:1px solid rgba(22,163,74,.4)}
-.header-status-pill.demo{background:rgba(217,119,6,.12);color:#d97706;border:1px solid rgba(217,119,6,.4)}
-.btn-icon{position:relative;width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.15);border:1px solid var(--sidebar-border);color:inherit;
-  font-size:18px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .1s}
-.btn-icon:active{transform:scale(.94)}
-.btn-icon.nhat{background:transparent;border-color:var(--border);color:var(--text)}
-
-/* ---------- Thanh trái (rail) ---------- */
-.rail{position:fixed;left:0;top:calc(var(--header-height) + var(--safe-top));bottom:calc(var(--nav-height) + var(--safe-bottom));width:var(--rail-w);
-  z-index:97;background:var(--card);box-shadow:1px 0 0 var(--border);display:flex;flex-direction:column;gap:4px;padding:6px;overflow:hidden auto;
-  transition:width .22s cubic-bezier(.16,1,.3,1)}
-.rail-nut{width:44px;height:44px;border:none;border-radius:10px;background:transparent;color:var(--text);font-size:20px;cursor:pointer;align-self:center}
-.rail-nut:hover{background:var(--primary-soft);color:var(--primary)}
-.rail-nhom{height:1px;margin:4px 6px;background:var(--border);font-size:0}
-.rail-muc{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 6px;border-radius:8px;color:var(--text);text-decoration:none;
-  justify-content:center;font-size:calc(13.5px*var(--font-scale));font-weight:700}
-.rail-icon{font-size:20px;width:28px;text-align:center;flex-shrink:0}
-.rail-ten{display:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rail-muc:hover,.rail-muc.dang-chon{background:var(--primary-soft);color:var(--primary)}
-.rail-chan{margin-top:auto;border-top:1px solid var(--border);padding-top:6px;display:flex;justify-content:center}
-body.rail-mo .rail{width:var(--rail-mo)}
-body.rail-mo .rail-muc{justify-content:flex-start;padding:0 10px}
-body.rail-mo .rail-ten{display:inline}
-body.rail-mo .rail-nhom{height:auto;background:none;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted);margin:10px 8px 4px}
-@media(max-width:1023px){body.rail-mo .rail{width:var(--rail-mo);box-shadow:6px 0 30px rgba(0,0,0,.25)}
-  .noi-dung{padding-left:10px!important;padding-right:10px!important}}
-
-/* ---------- Nội dung + thanh đáy (căn giữa phần còn lại sau rail) ---------- */
-.noi-dung{max-width:var(--noi-max);margin-left:calc(var(--rail-w) + max(0px,(100% - var(--rail-w) - var(--noi-max))/2));margin-right:auto;padding:14px 14px 30px;
-  transition:margin-left .22s cubic-bezier(.16,1,.3,1)}
-@media(max-width:1023px){.noi-dung{margin-left:var(--rail-thu)}}
-.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:95;height:calc(var(--nav-height) + var(--safe-bottom));padding-bottom:var(--safe-bottom);
-  padding-left:calc(var(--rail-w) + max(0px,(100vw - var(--rail-w) - var(--noi-max))/2));padding-right:max(0px,calc((100vw - var(--rail-w) - var(--noi-max))/2));
-  display:flex;background:var(--card);border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.05)}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;font:inherit;
-  font-size:calc(11px*var(--font-scale));font-weight:600;color:var(--text-muted);cursor:pointer;position:relative}
-.nav-item.active{color:var(--primary);font-weight:800}
-.nav-icon{font-size:20px;line-height:1}
-@media(max-width:340px){.nav-nhan{display:none}.nav-icon{font-size:22px}}
-
-/* ---------- Tiêu đề, Hero, ô số, nút ---------- */
-.page-header{display:flex;align-items:center;justify-content:space-between;margin:4px 0 14px;padding-left:10px;border-left:4px solid var(--accent)}
-.page-title{font-size:calc(18px*var(--font-scale));font-weight:800;line-height:1.2}
-.page-sub{font-size:calc(13px*var(--font-scale));color:var(--text-muted);margin-top:2px}
-.hn-hero{display:flex;flex-direction:column;gap:14px;padding:18px;margin-bottom:16px;border:1px solid var(--border);border-radius:var(--hero-radius);
-  background:linear-gradient(135deg,var(--primary-soft) 0%,var(--card) 75%);box-shadow:var(--shadow)}
-.hero-greet{font-size:calc(20px*var(--font-scale));font-weight:800}
-.hero-date{font-size:calc(13px*var(--font-scale));color:var(--text-muted)}
-.tq-3so{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.tq-o{min-height:64px;padding:10px 12px;display:flex;flex-direction:column;justify-content:center;background:var(--card);border:1px solid var(--border);
-  border-radius:var(--card-radius);cursor:pointer;transition:transform .1s,border-color .15s}
-.tq-o:hover{border-color:var(--primary)}.tq-o:active{transform:scale(.97)}
-.tq-so{font-size:calc(22px*var(--font-scale));font-weight:800;line-height:1.1}
-.tq-nhan{font-size:calc(12px*var(--font-scale));color:var(--text-muted);margin-top:4px;overflow-wrap:anywhere}
-@media(max-width:360px){.tq-3so{gap:6px}.tq-o{padding:8px}.tq-so{font-size:calc(19px*var(--font-scale))}}
-.btn-primary{width:100%;min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:var(--btn-radius);
-  background:var(--primary);color:var(--on-primary);font:inherit;font-size:calc(15px*var(--font-scale));font-weight:800;cursor:pointer;
-  box-shadow:0 4px 14px rgba(0,0,0,.12);transition:transform .1s}
-.btn-primary:hover{background:var(--primary-hover)}.btn-primary:active{transform:scale(.98)}
-.btn-secondary{min-height:44px;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--border);
-  border-radius:var(--btn-radius);background:var(--card);color:var(--text);font:inherit;font-size:calc(14px*var(--font-scale));font-weight:700;cursor:pointer}
-.btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
-.nut-chu{min-height:44px;padding:0 4px;border:none;background:none;color:var(--primary);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
-.nut-rong{width:100%;min-height:44px;margin-top:10px;border:1px dashed var(--primary);border-radius:8px;background:none;color:var(--primary);font:inherit;font-weight:700}
-.nut-do{color:var(--c-red)!important;border-color:var(--c-red)!important}
-.hang-nut{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}.hang-nut>*{flex:1 1 140px}
-
-/* ---------- Danh sách, thẻ, khối gập ---------- */
-.hn-tieu{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:18px 4px 8px;font-size:calc(14px*var(--font-scale));
-  font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em}
-.hn-list{display:flex;flex-direction:column;gap:8px}
-.hn-dong{min-height:60px;padding:10px 14px;display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);
-  border-radius:var(--card-radius);box-shadow:var(--shadow);cursor:pointer;color:inherit;text-decoration:none;transition:transform .1s,border-color .15s}
-.hn-dong:hover{border-color:var(--primary)}.hn-dong:active{transform:scale(.99)}
-.dong-icon{width:40px;height:40px;min-width:40px;border-radius:11px;background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:19px}
-.dong-content{flex:1;min-width:0}
-.dong-title{font-size:calc(15px*var(--font-scale));font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dong-sub{font-size:calc(13px*var(--font-scale));color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dong-meta{display:flex;align-items:center;gap:8px}.dong-arrow{color:var(--text-muted);font-size:18px;font-weight:700}
-.chi-tiet-dong{margin:-2px 0 8px;padding:10px 14px;background:var(--card);border:1px dashed var(--border);border-radius:12px;font-size:calc(14px*var(--font-scale))}
-.the{padding:14px;margin-bottom:12px;background:var(--card);border:1px solid var(--border);border-radius:12px}
-.the.form-the{border-color:var(--primary)}
-.hang-tru{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-soft);font-size:calc(14px*var(--font-scale))}
-.hang-tru:last-child{border-bottom:none}
-.chu-phu{font-size:calc(14px*var(--font-scale));color:var(--text-muted)}
-.trong{text-align:center;color:var(--text-muted);padding:24px 8px}
-.mo-di{opacity:.4}
-details.tq-gon{margin-bottom:12px;background:var(--card);border:1px solid var(--border);border-radius:12px}
-details.tq-gon>summary{min-height:48px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none;cursor:pointer;font-weight:700}
-details.tq-gon>summary::-webkit-details-marker{display:none}
-details.tq-gon>summary::after{content:'▸';color:var(--text-muted);transition:transform .15s}
-details.tq-gon[open]>summary{border-bottom:1px solid var(--border-soft)}
-details.tq-gon[open]>summary::after{transform:rotate(90deg)}
-details.tq-gon .tom-tat{margin-left:auto;color:var(--text-muted);font-weight:600}
-details.tq-gon[open] .tom-tat{display:none}
-details.tq-gon>:not(summary){margin:10px 12px 12px}
-
-/* ---------- Badge, tab, chip, ô lọc, tiến độ, form, công tắc ---------- */
-.badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:999px;font-size:calc(14px*var(--font-scale));font-weight:700;white-space:nowrap}
-.badge.do{background:var(--c-red-soft);color:var(--c-red)}.badge.vang{background:var(--c-yellow-soft);color:var(--c-yellow)}
-.badge.xanh{background:var(--c-green-soft);color:var(--c-green)}.badge.xam{background:var(--c-gray-soft);color:var(--c-gray)}
-.hang-tab{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:10px 0 12px}.hang-tab::-webkit-scrollbar{display:none}
-.tab-nut{flex:0 0 auto;min-height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--border);background:var(--card);color:var(--text);font:inherit;font-weight:700;cursor:pointer}
-.tab-nut.dang-chon{background:var(--primary);border-color:var(--primary);color:#fff}
-.hang-chip{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
-.chip-chon{min-height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--border);background:var(--bg);color:var(--text);font:inherit;font-weight:600;cursor:pointer}
-.chip-chon.dang-chon{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
-.luoi-o-so{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:6px;margin-bottom:10px}
-.o-so-loc{min-height:64px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1px solid var(--border);
-  border-radius:10px;background:var(--card);color:var(--text);font:inherit;font-size:calc(12px*var(--font-scale));text-align:center;cursor:pointer}
-.o-so-loc.dang-chon{border-color:var(--primary);background:var(--primary-soft)}
-.thanh-tien{height:6px;border-radius:3px;background:var(--bg-sub);overflow:hidden;margin:6px 0}.thanh-tien>div{height:100%;background:var(--primary)}
-.nhan-o{display:block;margin:10px 0 4px;font-size:calc(14px*var(--font-scale));font-weight:600}
-.form-input{width:100%;min-height:44px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--btn-radius);background:var(--bg);color:var(--text);
-  font:inherit;font-size:calc(14px*var(--font-scale))}
-.form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-@media(max-width:767px){.form-input{font-size:16px}}
-.cong-tac{position:relative;flex:0 0 52px;height:44px;display:inline-flex;align-items:center;cursor:pointer}
-.cong-tac input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.cong-tac-nen{position:relative;width:48px;height:26px;border-radius:13px;background:var(--border);transition:background .15s}
-.cong-tac-nen::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
-.cong-tac input:checked+.cong-tac-nen{background:var(--primary)}.cong-tac input:checked+.cong-tac-nen::after{left:25px}
-
-/* ---------- Dải nguồn, toast, thanh chờ, tấm cài đặt ---------- */
-.canh-bao-nguon{padding:10px 14px;margin-bottom:12px;border-radius:12px;font-size:calc(14px*var(--font-scale));font-weight:600}
-.canh-bao-nguon.mau{background:var(--c-yellow-soft);color:var(--c-yellow)}.canh-bao-nguon.loi{background:var(--c-red-soft);color:var(--c-red)}
-.toast-container{position:fixed;top:14px;left:var(--rail-w);right:14px;max-width:500px;margin:0 auto;z-index:300;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast{pointer-events:auto;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;
-  background:var(--card);color:var(--text);border:1px solid var(--border);border-left:5px solid var(--primary);border-radius:10px;
-  box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:calc(14px*var(--font-scale));animation:tTruot .2s ease-out}
-.toast-success{border-left-color:var(--c-green)}.toast-info{border-left-color:var(--c-blue)}.toast-warn{border-left-color:var(--c-yellow)}.toast-error{border-left-color:var(--c-red)}
-.toast-btn{min-height:44px;border:none;background:none;color:var(--primary);font:inherit;font-weight:800;text-decoration:underline;cursor:pointer}
-.toast-bar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--primary);animation:tDem 6s linear forwards}
-@keyframes tTruot{from{transform:translateY(-20px);opacity:0}to{transform:none;opacity:1}}
-@keyframes tDem{from{width:100%}to{width:0}}
-#thanhCho{position:fixed;top:0;left:0;height:3px;width:0;background:var(--primary);z-index:400}
-#thanhCho.chay{width:100%;animation:tCho 1.2s ease-in-out infinite}
-@keyframes tCho{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-.modal-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
-  opacity:0;pointer-events:none;transition:opacity .2s}
-.modal-overlay.open{opacity:1;pointer-events:auto}
-.modal-sheet{width:100%;max-width:600px;max-height:85vh;overflow-y:auto;padding:20px;background:var(--card);border-radius:20px 20px 0 0;
-  transform:translateY(100%);transition:transform .25s cubic-bezier(.16,1,.3,1)}
-.modal-overlay.open .modal-sheet{transform:none}
-```
-
-### 7.3 Ba hàm hành vi tối thiểu (JS)
-
-```js
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const soVN = (n, le = 0) => Number(n || 0).toLocaleString('vi-VN', { minimumFractionDigits: le, maximumFractionDigits: le });
-
-/** Toast; opts {nhan:'Hoàn tác', bam, khiHet} ➜ có nút + thanh đếm 6s, hết giờ mới chạy khiHet (gửi máy chủ). */
-function toast(msg, loai = 'success', opts = {}) {
-  const el = document.createElement('div'), coNut = opts.nhan && opts.bam;
-  el.className = 'toast toast-' + loai;
-  el.innerHTML = `<span>${esc(msg)}</span>${coNut ? `<button class="toast-btn">${esc(opts.nhan)}</button><div class="toast-bar"></div>` : ''}`;
-  document.getElementById('toast').appendChild(el);
-  let xong = false;
-  const dong = () => { if (!xong) { xong = true; el.remove(); } };
-  if (coNut) el.querySelector('button').onclick = () => { xong = true; el.remove(); opts.bam(); };
-  setTimeout(() => { if (!xong) { dong(); opts.khiHet && opts.khiHet(); } }, coNut ? 6000 : (loai === 'error' ? 6000 : 3500));
-}
-
-/** Việc không hoàn tác được: bấm lần 2 trong 5 giây mới làm. */
-const cho = {};
-function xacNhan2Lan(khoa, msg, viec) {
-  if (cho[khoa] && Date.now() - cho[khoa] < 5000) { delete cho[khoa]; viec(); return; }
-  cho[khoa] = Date.now(); toast(msg + ' – bấm lại lần nữa trong 5 giây để làm.', 'warn');
-}
-```
+- [ ] **1. Màn hình hẹp 320px & 360px:** Mở Chrome DevTools co về 320px và 360px. **Không có thanh cuộn ngang**, mọi khối co giãn tự nhiên.
+- [ ] **2. Kiểm định Vùng Bấm Touch Target:** 100% các nút, tab, icon, ô checkbox, nút đóng `✕` đạt diện tích chạm **≥ 44 × 44px**.
+- [ ] **3. Chống Phóng To iOS Safari:** Kiểm tra toàn bộ thẻ `<input>`, `<select>`, `<textarea>` đều có `font-size ≥ 16px`.
+- [ ] **4. Khung 3 Tầng Chuẩn:** Header 56px ghim đỉnh, Bottom Nav 64px ghim đáy (đúng 5 nút), nội dung cuộn độc lập ở giữa.
+- [ ] **5. Padding Đáy An Toàn:** Main container có `padding-bottom: calc(80px + env(safe-area-inset-bottom))` để không bị thanh đáy che mất phần tử cuối.
+- [ ] **6. Cấu Trúc Hero Mở Màn:** Có đầy đủ lời chào theo giờ, ngày tháng tiếng Việt, ≤ 3 ô số liệu và 1 nút chính to 100%.
+- [ ] **7. Đủ 4 Trạng Thái Màn Hình:** Mỗi phân hệ đều xử lý đủ 4 trạng thái: Đang tải (Spinner) · Trống (Empty có câu hướng dẫn) · Lỗi (Báo dải đỏ kèm nút thử lại) · Khóa quyền (Màn hình 🔒).
+- [ ] **8. Độ Tương Phản Màu (WCAG 2.1 AA):** Kiểm tra cả 8 palettes ở cả 2 chế độ Sáng và Tối, chữ đọc rõ ràng (tương phản ≥ 4.5:1). Ở chế độ tối không còn bóng đổ (`--shadow: none;`).
+- [ ] **9. Chuyển Động Vật Lý & Thoát Nhanh:** Áp dụng chuẩn Spring `cubic-bezier(0.16, 1, 0.3, 1)`, thời gian đóng modal ≤ 0.18s, tự tắt khi bật `prefers-reduced-motion`.
+- [ ] **10. Định Dạng Số & Ngày Tiếng Việt:** 100% hiển thị số theo định dạng `1.250.000 đ`, ngày `dd/mm/yyyy`.
+- [ ] **11. Không Hộp Thoại Confirm Cũ:** Áp dụng Toast Hoàn tác 6 giây hoặc Bấm 2 lần trong 5 giây cho các thao tác xóa/sửa.
+- [ ] **12. Không Toast Rác:** Không bật toast khi đổi theme, đổi palette, bấm tab hay các thao tác đã thấy rõ kết quả trên màn.
+- [ ] **13. Phòng Ngự XSS & Bảo Mật:** 100% biến chèn vào HTML đi qua hàm `esc()`. Không để lộ token hay mật khẩu ra giao diện.
+- [ ] **14. Chống Chớp Trắng (Anti-Flicker):** Có đoạn script đồng bộ đọc theme ở đầu `<head>`, F5 không bị nháy trắng khi dùng Dark Mode.
+- [ ] **15. Chuẩn PWA & Safe Area:** Có `manifest.webmanifest`, `sw.js`, `viewport-fit=cover`, cài đặt được như app độc lập trên iOS và Android.
 
 ---
 
-## 8. Kiểm trước khi giao
-
-- [ ] Thử 320 · 360 · 375 · 414 · 768 · 1280px: **không cuộn ngang**, chữ không tràn khung.
-- [ ] Mọi nút / dòng / ô ≥ 44px. Ô nhập trên điện thoại 16px.
-- [ ] Mỗi màn có Hero ≤ 3 số + 1 nút chính; có đủ 4 trạng thái: tải, trống, lỗi, chưa có quyền.
-- [ ] Sáng và tối đều dễ đọc (độ tương phản chữ ≥ 4,5 : 1); thử ít nhất 2 palette.
-- [ ] Desktop: rail bung sẵn, không che header / nội dung / thanh đáy; nội dung và thanh đáy giới hạn bề rộng, căn giữa.
-- [ ] Điện thoại: kiểu Mép trái, mấu kéo được, vuốt mép mở được; đang gõ form thì ẩn thanh đáy.
-- [ ] Số kiểu Việt Nam, ngày `dd/mm/yyyy`, toàn tiếng Việt.
-- [ ] Không có hộp "Bạn có chắc?": dùng Hoàn tác 6 giây hoặc bấm 2 lần.
-- [ ] Không toast khi đổi cài đặt / giao diện.
-- [ ] Dữ liệu ngoài đều qua `esc()`; không hiện token / mật khẩu ra màn.
-- [ ] Cài được như ứng dụng: manifest + service worker + icon.
+> **LỜI KẾT TỪ SHIN:**  
+> *"Quy chuẩn này là xương sống kiến trúc số của hệ thống SHIN. Khi mọi ứng dụng và phân hệ tuân thủ chính xác 100% tài liệu này, toàn bộ trải nghiệm người dùng sẽ đạt độ tinh tế, mượt mà và đẳng cấp chuẩn Apple-like, giải phóng hoàn toàn thời gian của Sếp khỏi những lỗi vặt không đáng có."*

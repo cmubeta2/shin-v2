@@ -1630,6 +1630,18 @@ body.kieu-mep .main-container { padding-left: 12px; padding-right: 10px; }
   .nav-item { gap: 1px; }
 }
 
+/* Tùy chọn Bật/Tắt Thanh Điều Hướng Đáy trong Cài Đặt (Sếp 01/11/2026) */
+html.an-navbar .bottom-nav, body.an-navbar .bottom-nav {
+  display: none !important;
+}
+html.an-navbar .main-container, body.an-navbar .main-container {
+  padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+}
+html.an-navbar .decagon-drawer, html.an-navbar .decagon-overlay,
+body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
+  bottom: 0 !important;
+}
+
 /* Đang gõ form trên điện thoại: ẩn thanh đáy, rail chạy tới đáy */
 @media (max-width: 1023px) {
   body.dang-go .bottom-nav { display: none; }
