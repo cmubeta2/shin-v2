@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.8] – 04/11/2026 (KPI – NHÁP AOP NĂM SAU)
+
+### Mới
+- 🎯 AOP › 🗓 Nháp năm sau: xem và (Admin) chỉnh % tăng trưởng từng đơn vị qua `webNhap2027` / `webLuuTangTruong`; Demo có dữ liệu giả.
+
 ## [2.6.7] – 04/11/2026 (TELEGRAM MINI APP)
 
 ### Mới

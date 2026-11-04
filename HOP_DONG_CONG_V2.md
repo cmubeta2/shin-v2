@@ -64,7 +64,13 @@ webNhanSu({tim}) · webHoSoNhanSu({ma}) · webDuyetSuaHoSo({id, dongY, lyDo}) �
 
 ### KPI – thêm `webNhap2027` vào `congWeb_()`
 
-Hàm `webNhap2027` đã có sẵn. v2 cần nó để đọc nháp AOP năm sau trước khi gọi `webLuuTangTruong`. Chỉ cần thêm 1 dòng, không đổi logic.
+Hàm `webNhap2027` đã có sẵn. v2 cần nó để đọc nháp AOP năm sau trước khi gọi `webLuuTangTruong`. Chỉ cần thêm 1 dòng, không đổi logic. **KPI L10 (v1.8.2) đã code – chờ lên app.**
+
+```js
+webNhap2027()  (du.a = [])  → { nam, namGoc, suaDuoc /*Admin KPI*/, vien:{khoa, muc2026, g /*0.15 = 15%*/, nguon:'tay'|'thucDat'|'macDinh', macDinh, muc2027}|null, khoa:[…cùng dạng] } | { loi }
+webLuuTangTruong(khoa, g)  (du.a = [khoa, g]; g = '' ➜ về mặc định; −0,5 … 2) → { … } | { xoa:true }
+```
+- **v2.6.8:** màn 🎯 AOP › 🗓 Nháp năm sau đọc / lưu bằng 2 cổng trên; cổng chưa lên app ➜ dải vàng + nút mở app KPI v1.
 
 ---
 

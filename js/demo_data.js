@@ -497,6 +497,14 @@ window.SHIN_DEMO_DATA.dieuhanh = {
 
 // v2.3.0 – KPI: Soát lỗi · AOP · Báo cáo quý (khuôn webSoatLoi / webAOP / webBaoCaoQuy – dữ liệu GIẢ)
 window.SHIN_DEMO_DATA.kpiPhu = {
+  // v2.6.8 – khuôn webNhap2027 (dữ liệu GIẢ)
+  nhap2027: { nam: 2027, namGoc: 2026, suaDuoc: true,
+    vien: { khoa: 'Toàn phòng khám', muc2026: 100e9, g: 0.15, nguon: 'macDinh', macDinh: true, muc2027: 115e9 },
+    khoa: [
+      { khoa: 'Khoa Mẫu A', muc2026: 30e9, g: 0.2, nguon: 'tay', macDinh: false, muc2027: 36e9 },
+      { khoa: 'Khoa Mẫu B', muc2026: 25e9, g: 0.1, nguon: 'thucDat', macDinh: false, muc2027: 27.5e9 },
+      { khoa: 'Khoa Mẫu C', muc2026: 12e9, g: 0.15, nguon: 'macDinh', macDinh: true, muc2027: 13.8e9 }
+    ] },
   soatloi: { quy: '3', capNhatLuc: '06:00 30/10/2026', laAdmin: true, khoa: [
     { tab: 'NOI', ten: 'Khoa Nội', chuaCoQuy: false, soLoi: 2, loi: [{ loai: 'trong', chu: 'C2: chưa nhập KQ' }, { loai: 'ts_nhom', chu: 'Nhóm F: trọng số các chỉ tiêu cộng 95% (cần 100%)' }] },
     { tab: 'NGOAI', ten: 'Khoa Ngoại', chuaCoQuy: false, soLoi: 0, loi: [] },

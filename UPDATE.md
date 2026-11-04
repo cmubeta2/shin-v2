@@ -26,6 +26,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.8 ✅ – KPI › NHÁP AOP NĂM SAU (04/11/2026)
+- 🎯 AOP › 🗓 Nháp AOP năm sau: mở mục ➜ đọc `webNhap2027`; mỗi đơn vị hiện kế hoạch năm gốc → năm sau, % tăng trưởng và nguồn (Admin chỉnh / theo thực đạt / mặc định). Admin KPI sửa % rồi Lưu (`webLuuTangTruong`, để trống = về mặc định, kiểm −50% … 200% trước khi gửi).
+- Cổng chưa lên app ➜ dải vàng + mở app KPI v1, không hiện số mẫu ở Live.
+- Còn chờ v1: KPI L10 (v1.8.2 – thêm `webNhap2027` vào cổng web) lên app.
+
 ### PHIÊN BẢN v2.6.7 ✅ – TELEGRAM MINI APP (04/11/2026)
 - Mở v2 từ nút Menu bot Telegram: đọc `Telegram.WebApp.initData` (hoặc `#tgWebAppData=` Telegram gắn trên địa chỉ) ➜ Hub `webTelegram` (HUB L8, không token) ➜ lưu token Hub 12 giờ ➜ vào Live. Đọc xong xóa `#tgWebApp…` khỏi địa chỉ.
 - Lỗi (chưa cài bot, sai chữ ký, hết hạn, Telegram chưa gắn người dùng) ➜ toast đỏ đúng chữ Hub trả, giữ token cũ nếu có.
