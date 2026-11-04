@@ -44,11 +44,59 @@ const SHIN_API = (function() {
       window.history.replaceState({}, document.title, u.toString());
       return urlToken;
     }
+    const tg = tokenTG();
+    if (tg) return tg;
     try { return localStorage.getItem('shin_token') || ''; } catch (e) { return ''; }
   }
 
+  /* ---------- Telegram Mini App (HUB L8 – Hub v1.13.3: cổng webTelegram, KHÔNG token) ----------
+   * Mở trong Telegram ➜ đọc initData (Telegram.WebApp.initData hoặc #tgWebAppData của Telegram) ➜ đổi lấy token Hub hạn 12 giờ.
+   * Token này chỉ giữ ở sessionStorage (hết phiên là mất), KHÔNG ghi đè token lâu dài ở localStorage. */
+  const KHOA_TG = 'shin_token_tg';
+
+  function tokenTG() {
+    try {
+      const o = JSON.parse(sessionStorage.getItem(KHOA_TG) || 'null');
+      if (o && o.token && (!o.hetHan || Number(o.hetHan) > Date.now())) return o.token;
+    } catch (e) {}
+    return '';
+  }
+
+  /** THUẦN-ish. initData Telegram: ưu tiên Telegram.WebApp, không có thì đọc #tgWebAppData=… Telegram gắn vào link. */
+  function docInitDataTG() {
+    try {
+      const w = window.Telegram && window.Telegram.WebApp;
+      if (w && w.initData) return String(w.initData);
+      const h = String(window.location.hash || '').replace(/^#/, '');
+      return h ? (new URLSearchParams(h).get('tgWebAppData') || '') : '';
+    } catch (e) { return ''; }
+  }
+
+  /**
+   * Gọi lúc khởi động. Không ở trong Telegram / đã có token link (?t=) / token Telegram còn hạn ➜ null (không làm gì).
+   * Ngược lại trả Promise {ok:true, nguoi} | {ok:false, msg}.
+   */
+  function dangNhapTelegram() {
+    const initData = docInitDataTG();
+    if (!initData) return null;
+    if (new URLSearchParams(window.location.search).get('t') || tokenTG()) return null;
+    const boHash = () => { try { const u = new URL(window.location.href); u.hash = ''; window.history.replaceState({}, document.title, u.toString()); } catch (e) {} };
+    return fetch(ENDPOINTS.HUB, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ hanh: 'webTelegram', du: { initData: initData } }) })
+      .then(r => r.json())
+      .then(res => {
+        const du = res && res.du;
+        boHash();
+        if (res && res.ok && du && du.ok && du.token) {
+          try { sessionStorage.setItem(KHOA_TG, JSON.stringify({ token: du.token, hetHan: du.hetHan || 0 })); } catch (e) {}
+          return { ok: true, nguoi: du.nguoi || {} };
+        }
+        return { ok: false, msg: (du && du.msg) || 'Chưa đăng nhập được qua Telegram – mở link đăng nhập từ Hub.' };
+      })
+      .catch(() => ({ ok: false, msg: LOI_VN.mang }));
+  }
+
   function xoaToken() {
-    try { localStorage.removeItem('shin_token'); } catch (e) {}
+    try { localStorage.removeItem('shin_token'); sessionStorage.removeItem(KHOA_TG); } catch (e) {}
     const u = new URL(window.location.href);
     u.searchParams.delete('t');
     window.history.replaceState({}, document.title, u.toString());
@@ -151,6 +199,7 @@ const SHIN_API = (function() {
     luuToken,
     xoaToken,
     laCheDoLive,
+    dangNhapTelegram,
     coMayChu,
     goi,
     goiCong,

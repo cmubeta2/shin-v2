@@ -4,7 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
-## [2.6.6] – 04/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG THẬT CỦA KS v1.4.3)
+## [2.6.7] – 04/11/2026 (TELEGRAM MINI APP – HUB L8)
+- Mở SHIN v2 từ nút Menu bot Telegram: v2 đọc `initData` (`Telegram.WebApp.initData` hoặc `#tgWebAppData` Telegram gắn vào link) ➜ gửi Hub `{hanh:'webTelegram', du:{initData}}` (không token) ➜ nhận token Hub hạn 12 giờ.
+- Token Telegram chỉ giữ trong `sessionStorage` (đóng Mini App là mất), không ghi đè token lâu dài; link `?t=` vẫn được ưu tiên. Xóa `#tgWebAppData` khỏi thanh địa chỉ sau khi đổi.
+- Hub trả lỗi (chưa nối Telegram, sai chữ ký, hết hạn…) ➜ toast vàng nói rõ, vẫn mở bản trình diễn.
+
+ – 04/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG THẬT CỦA KS v1.4.3)
 - KS v1 không có `webTongQuan` ➜ màn 🩺 đọc `webDsKhaoSat` (danh sách + đếm Đang mở / Nháp) và `webKetQuaKS` của tối đa 3 KS đang mở (số phiếu hợp lệ, chờ xác minh, điểm TB từng câu 5 mức, % hài lòng 4–5★).
 - Không hiện ý kiến chữ / liên hệ người trả lời. KS nào lỗi kết quả ➜ dải vàng nói rõ, không thay bằng số mẫu.
 - Sửa cách gọi: KS nhận `ham(token, du)` (du là object), thôi bọc `du.a`.

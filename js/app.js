@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.6.6';
+  const PHIEN_BAN = 'v2.6.7';
 
   const MODULES = [
     ModuleHub,
@@ -448,9 +448,15 @@ const ShinApp = (function() {
     ganCuChiMayNho();
     if (MQ_DESKTOP.addEventListener) MQ_DESKTOP.addEventListener('change', () => apDungRail(railMacDinh()));
     veMenuDay();
-    capNhatBannerTrangThai();
-    if (SHIN_API.laCheDoLive()) khoiDongLive();
-    chuyenModule(currentModule);
+    const batDau = () => {
+      capNhatBannerTrangThai();
+      if (SHIN_API.laCheDoLive()) khoiDongLive();
+      chuyenModule(currentModule);
+    };
+    // v2.6.7 – Telegram Mini App (HUB L8): mở từ nút Menu bot ➜ đổi initData lấy token Hub 12 giờ trước khi vẽ
+    const tg = SHIN_API.dangNhapTelegram();
+    if (tg) tg.then(kq => { if (!kq.ok) toast(kq.msg, 'warn', { thoiGian: 8000 }); batDau(); });
+    else batDau();
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {

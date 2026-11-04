@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.7 ✅ – TELEGRAM MINI APP (04/11/2026)
+- v2 tự đăng nhập khi mở trong Telegram qua cổng Hub `webTelegram` (HUB L8, Hub v1.13.3).
+- **Chờ anh (V20):** @BotFather ➜ bot Shin ➜ Bot Settings ➜ Menu Button ➜ URL `https://cmubeta2.github.io/shin-v2/`; người dùng phải đã nối Telegram ở Hub (ChatTelegram) và Hub đã lưu khóa bot (TG_KHOA).
+
 ### PHIÊN BẢN v2.6.6 ✅ – KHẢO SÁT ĐÚNG CỔNG THẬT (04/11/2026)
 - Màn 🩺 dùng `webDsKhaoSat` + `webKetQuaKS` (KS v1.4.3 không có `webTongQuan`); HOP_DONG_CONG_V2.md mục KS đã sửa theo mã v1.
 - Còn chờ v1: khối "Ý kiến ≤ 2★ cần xử lý" (KS chưa có cổng gom ý kiến thấp sao không kèm liên hệ) và tổng hợp 5 trụ ACHSI toàn viện.
