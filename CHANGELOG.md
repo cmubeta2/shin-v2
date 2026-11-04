@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.8] – 04/11/2026 (PTKH GỐC ĐỌC THẲNG TỔNG QUAN THÁNG)
+
+### 🟢 PTKH gốc
+- `js/modules/ptkh.js`: thêm khối 📊 Tổng quan tháng đọc thẳng app PTKH qua cổng `webGoi` (L148) ➜ `webDashboard('thang')`: báo cáo đúng hạn / trễ, việc đang làm / quá hạn / xong, chuỗi nộp đúng hạn, từng chỉ tiêu (thực hiện / kế hoạch, % đạt, dự báo cuối kỳ, màu đèn).
+- `js/api.js`: `goiPTKH(link, ham, thamSo)` – địa chỉ lấy từ link PTKH Hub cấp, chỉ chấp nhận `script.google.com/macros/s/…/exec`; lỗi báo riêng ở khối này (không thay số mẫu).
+- Demo: `SHIN_DEMO_DATA.ptkh.dash` (dữ liệu giả).
+
 ## [2.6.7] – 04/11/2026 (TELEGRAM MINI APP – ĐĂNG NHẬP BẰNG TELEGRAM)
 
 ### ⭐ Mở Shin v2 trong Telegram tự đăng nhập

@@ -143,11 +143,13 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 
 **`webLuuUngDung(token, {ma, bat})`**: chỉ Admin, đổi cột BatTat; trả lại dạng `webCaiDat`.
 
-### PTKH gốc (20_PTKH) – mở cổng web cho v2 (chỉ đọc trước)
+### PTKH gốc (20_PTKH) – cổng `webGoi` (L148, PTKH v1.294.29+, trên app v1.297.18) – v2.6.8 dùng
 
-- `doPost` hiện chỉ gọi `xuLyLTHub_` ➜ đổi sang `cuaWebPost_(e, congWeb_(), {tomTat, viec, thongBao})` của Lõi (Loi_Web.gs) – nhánh liên thông giữ nguyên.
-- `congWeb_()` bảng trắng chỉ đọc: `webKhoiDong`, `webDashboard`. Hai hàm đã có, nhận `(token, …du.a)` như KPI/TS/KS/PK.
-- Token: `xacThucWeb_` nhận token Hub (đã có từ L36a); lỗi xác thực ném `loiQuyen_` để v2 hiện "chưa có quyền".
+> **Sửa 04/11 theo mã v1:** PTKH không mở `congWeb_` riêng mà có **1 cổng** `webGoi`: POST text/plain `{hanh:'webGoi', token, du:{ham, thamSo:[]}}` ➜ `{ok, du}` / `{ok:false, loi}`; `ham` phải trong `HAM_WEBGOI_` (152 hàm WebApp.html gọi; bỏ cài đặt / chạy lệnh / khóa bí mật); token Hub đứng đầu tham số.
+
+- Địa chỉ máy chủ: v2 lấy **động** từ link PTKH trong `webKhoiDong.lienKet` của Hub (chỉ nhận `https://script.google.com/macros/s/…/exec`), không chép link vào mã.
+- **v2 đang dùng (v2.6.8):** `webDashboard(token, 'thang')` ➜ `{homNay, nopBC, chuoiDH, thang:{tenKy, nhan, toi:{bc:{tong, dungHan, tre, khongNop}, viec:{dangLam, quaHan, xong}}, mucTieu:{ptThoiGian, ngayConLai, chiTieu:[{ten, dvt, th, kh, pt, den, duBao}]}}}`.
+- Sau: báo cáo / lịch (`webLichTo`, `webBangLichNghi`, `webGuiNghiPhep`) – cũng là đường ghi xin nghỉ cho màn Phòng PTKH.
 - **Cấm trả:** thông tin người bệnh, nội dung khiếu nại có tên / SĐT khách.
 
 ---

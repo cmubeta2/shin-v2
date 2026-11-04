@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.8 ✅ – PTKH GỐC: TỔNG QUAN THÁNG SỐ THẬT (04/11/2026, lượt tự động ⑤)
+- Màn PTKH gốc đọc `webDashboard` qua `webGoi` của PTKH (đã lên app v1.297.18).
+- Lượt sau: Báo cáo / Lịch PTKH qua `webGoi`; dùng `webGuiNghiPhep` để màn Phòng PTKH xin nghỉ ngay trên v2.
+
 ### PHIÊN BẢN v2.6.7 ✅ – TELEGRAM MINI APP (04/11/2026, lượt tự động ⑤)
 - v2 tự đăng nhập khi mở trong Telegram (initData ➜ `webTelegram` của Hub ➜ token Hub).
 - Còn chờ anh (V20): đặt nút Menu bot Shin trỏ `https://cmubeta2.github.io/shin-v2/` (BotFather ➜ Bot Settings ➜ Menu Button), và người dùng cần có ChatTelegram trong sheet NguoiDung của Hub.
