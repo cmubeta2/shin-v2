@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.6.6';
+  const PHIEN_BAN = 'v2.6.7';
 
   const MODULES = [
     ModuleHub,
@@ -449,8 +449,16 @@ const ShinApp = (function() {
     if (MQ_DESKTOP.addEventListener) MQ_DESKTOP.addEventListener('change', () => apDungRail(railMacDinh()));
     veMenuDay();
     capNhatBannerTrangThai();
-    if (SHIN_API.laCheDoLive()) khoiDongLive();
-    chuyenModule(currentModule);
+    const batDauLive = () => { if (SHIN_API.laCheDoLive()) khoiDongLive(); chuyenModule(currentModule); };
+    // v2.6.7 – mở trong Telegram (nút Menu bot): đổi initData lấy token Hub trước khi tải màn
+    const tg = SHIN_API.layInitDataTG();
+    if (tg) {
+      document.body.classList.add('trong-telegram');
+      SHIN_API.doiTokenTelegram(tg).then(kq => {
+        if (kq.ok) datLaiLive();
+        else toast((kq.msg || 'Không đăng nhập được qua Telegram') + (SHIN_API.laCheDoLive() ? ' – dùng phiên đã lưu trên máy.' : ' – đang chạy dữ liệu MẪU.'), 'warn', { thoiGian: 7000 });
+      }).finally(batDauLive);
+    } else batDauLive();
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {

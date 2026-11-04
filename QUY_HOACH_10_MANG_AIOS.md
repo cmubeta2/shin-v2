@@ -98,7 +98,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M1.1 | Bàn làm việc Hero Card 3 số + Việc hôm nay (`webHomNay`, `webLamMoi`) + 🔔 (`webThongBao`) + 📝 Việc riêng (`webViecRieng`) | 🟢 | – |
 | M1.2 | Bàn điều hành 2 chiều 🧭 (`webDieuHanh`, `webHopThu`) | 🟢 | – |
 | M1.3 | KPI Toàn Viện: bản tin tạm tính (`webBanTin`) · soát lỗi (`webSoatLoi`) · AOP (`webAOP`) · báo cáo quý (`webBaoCaoQuy`) | 🟢 / 🟡 nháp AOP năm sau chờ `webNhap2027` | – |
-| M1.4 | Trung tâm Telegram Bot (sự kiện `muc:'gap'`) | ⬜ (chạy phía Apps Script v1) | v2.4.0 |
+| M1.4 | Trung tâm Telegram Bot (sự kiện `muc:'gap'`) | ⬜ bot gửi tin (phía Apps Script v1) · 🟢 v2.6.7 mở v2 trong Telegram tự đăng nhập (`webTelegram`) | v2.6.7 |
 | M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟢 v2.6.6 – danh sách + kết quả theo câu + xuất CSV (`webDsKhaoSat`, `webKetQuaKS`, `webXuatKS`) / ⬜ radar ≤ 2★ (KS chưa có cổng tổng hợp) | v2.6.6 |
 | M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ⬜ | v2.4.0 |
 

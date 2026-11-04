@@ -113,6 +113,47 @@ const SHIN_API = (function() {
     }
   }
 
+  /**
+   * v2.6.7 – Telegram Mini App (HUB L8, Hub v1.13.3): mở trong Telegram thì có initData đã ký.
+   * Lấy từ Telegram.WebApp.initData (nếu có SDK) hoặc #tgWebAppData trên URL (Telegram tự gắn) – không nạp script ngoài (CSP giữ nguyên).
+   * Đọc xong xóa hash khỏi thanh địa chỉ (dữ liệu đã ký, không để lộ khi chụp / chia sẻ).
+   */
+  function layInitDataTG() {
+    let d = '';
+    try { d = (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) || ''; } catch (e) {}
+    try {
+      const h = new URLSearchParams(String(window.location.hash || '').replace(/^#/, ''));
+      if (!d) d = h.get('tgWebAppData') || '';
+      if (h.has('tgWebAppData')) {
+        const u = new URL(window.location.href); u.hash = '';
+        window.history.replaceState({}, document.title, u.toString());
+      }
+    } catch (e) {}
+    return d;
+  }
+
+  /** Đổi initData ➜ token Hub qua cổng webTelegram (KHÔNG token). Trả {ok, token, nguoi} | {ok:false, loi, msg}. */
+  async function doiTokenTelegram(initData) {
+    if (!initData || !ENDPOINTS.HUB) return { ok: false, loi: 'thieu_hash', msg: '' };
+    const batDau = Date.now();
+    try {
+      const r = await fetch(ENDPOINTS.HUB, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ hanh: 'webTelegram', du: { initData: initData } })
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = await r.json();
+      const du = j && j.ok ? (j.du || {}) : { ok: false, loi: (j && j.loi) || 'loi' };
+      ghiSucKhoe('HUB', batDau, du.ok ? '' : 'loi');
+      if (du.ok && du.token) luuToken(du.token);
+      return du;
+    } catch (err) {
+      ghiSucKhoe('HUB', batDau, 'mang');
+      return { ok: false, loi: 'mang', msg: LOI_VN.mang };
+    }
+  }
+
   /** Cổng nhận tham số rời (KPI, TS, KS, PK – bocCong…_): goiCong('TS', 'webLeadCD', 'CD03'). */
   function goiCong(appKey, hanh, ...thamSo) {
     return goi(appKey, hanh, { a: thamSo });
@@ -154,6 +195,8 @@ const SHIN_API = (function() {
     coMayChu,
     goi,
     goiCong,
+    layInitDataTG,
+    doiTokenTelegram,
     laySucKhoe,
     moTaLoi
   };

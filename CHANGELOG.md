@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.7] – 04/11/2026 (TELEGRAM MINI APP – ĐĂNG NHẬP BẰNG TELEGRAM)
+
+### ⭐ Mở Shin v2 trong Telegram tự đăng nhập
+- Mở từ nút Menu bot (HUB L8 – Hub v1.13.3): v2 đọc `initData` (từ `Telegram.WebApp.initData` hoặc `#tgWebAppData` Telegram gắn trên URL – không nạp script ngoài, CSP giữ nguyên), gửi cổng Hub `webTelegram` (không token) ➜ nhận token Hub ➜ chạy Live như đăng nhập link Hub.
+- Đọc xong xóa `#tgWebAppData` khỏi thanh địa chỉ. Đổi không được (chưa gắn Telegram với người dùng, chữ ký sai, hết hạn) ➜ báo rõ lý do của Hub, giữ phiên cũ nếu có, không thì chạy MẪU.
+- `js/api.js`: thêm `layInitDataTG`, `doiTokenTelegram`.
+
 ## [2.6.6] – 04/11/2026 (KHẢO SÁT NỐI THẬT APP KS v1.4.3)
 
 ### 🟢 Khảo sát chạy số thật
