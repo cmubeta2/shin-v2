@@ -67,7 +67,7 @@ const ModuleKPI = {
   render: function(container, data) {
     const d = data || window.SHIN_DEMO_DATA.kpi;
     this._d = d;
-    this._phu = {};
+    this._phu = {}; this._nhap = null;
     const xemAOP = !SHIN_API.laCheDoLive() || d.xemAOP;
     if (!xemAOP) this._xem = 'bantin';
     const the = [['bantin', '📰 Bản tin'], ['soatloi', '🔎 Soát lỗi'], ['aop', '🎯 AOP'], ['baocao', '📄 Báo cáo quý']];
@@ -300,11 +300,70 @@ const ModuleKPI = {
           </div>`).join('')}
       </div>
       ${(du.chung || []).length ? `<p class="chu-phu">Dùng số doanh thu chung toàn viện (không cộng vào tổng): ${du.chung.map(e).join(', ')}.</p>` : ''}
-      <details class="tq-gon">
+      <details class="tq-gon" ontoggle="if(this.open) ModuleKPI.taiNhap()">
         <summary><span>🗓 Nháp AOP ${e(Number(du.nam || 0) + 1 || '')}</span></summary>
-        <p class="chu-phu">Chỉnh % tăng trưởng nháp năm sau cần cổng đọc nháp (webNhap2027) – v1 chưa mở cho cửa web. Tạm thời chỉnh trên app KPI v1.</p>
-        <button class="nut-chu" onclick="ShinApp.moV1('KPI', 'Nháp AOP năm sau')">Mở app KPI v1 ›</button>
+        <div id="kpiNhap"><div class="chu-phu">Đang đọc nháp…</div></div>
       </details>`;
+  },
+
+  /* ---------- 🗓 Nháp AOP năm sau (v2.6.9 – webNhap2027 đọc · webLuuTangTruong ghi, chỉ Admin) ---------- */
+
+  taiNhap: async function(lamMoi) {
+    const o = document.getElementById('kpiNhap');
+    if (!o) return;
+    if (this._nhap && !lamMoi) { o.innerHTML = this.veNhap(this._nhap); return; }
+    let du;
+    if (!SHIN_API.laCheDoLive()) du = (window.SHIN_DEMO_DATA.kpiPhu || {}).nhap2027 || {};
+    else {
+      o.innerHTML = '<div class="chu-phu">Đang đọc nháp…</div>';
+      du = await ShinApp.goiBat('KPI', 'webNhap2027').catch(err => ({ _loi: err.message }));
+    }
+    if (du._loi || du.loi) {
+      o.innerHTML = `<div class="canh-bao-nguon loi"><span>Chưa đọc được nháp năm sau: ${ShinApp.esc(du._loi || du.loi)}</span></div>
+        <button class="nut-chu" onclick="ShinApp.moV1('KPI', 'Nháp AOP năm sau')">Mở app KPI v1 ›</button>`;
+      return;
+    }
+    this._nhap = du;
+    o.innerHTML = this.veNhap(du);
+  },
+
+  veNhap: function(du) {
+    const e = ShinApp.esc;
+    const ty = v => v === null || v === undefined ? '–' : ShinApp.soVN(v / 1e9, 2) + ' tỷ';
+    const pt = g => (g >= 0 ? '+' : '') + ShinApp.soVN(Math.round(g * 1000) / 10, 1) + '%';
+    const NGUON = { anh: ['Đã chỉnh', 'xanh'], thucDat: ['Theo thực đạt', 'vang'], macDinh: ['Mặc định', 'xam'] };
+    const ds = (du.vien ? [du.vien] : []).concat(du.khoa || []);
+    return `
+      <p class="chu-phu">Mục tiêu ${e(du.nam || '')} = mục tiêu ${e(du.namGoc || '')} × (1 + tăng trưởng). Tăng trưởng: anh chỉnh ‖ theo thực đạt ‖ mặc định 10%. Chỉ ghi nháp, không sửa file AOP.${du.suaDuoc ? '' : ' Chỉ Admin được chỉnh.'}</p>
+      ${ds.map((k, i) => `
+        <div class="the">
+          <div class="the-tin-dau"><b>${e(k.khoa)}</b><span class="badge ${(NGUON[k.nguon] || NGUON.macDinh)[1]}">${(NGUON[k.nguon] || NGUON.macDinh)[0]}</span></div>
+          <div class="chu-phu">${ty(k.muc2026)} → <b>${ty(k.muc2027)}</b> · ${pt(Number(k.g) || 0)}</div>
+          ${du.suaDuoc ? `<div class="hang-nhap">
+            <input class="form-input" id="kpiG${i}" inputmode="decimal" aria-label="% tăng trưởng ${e(k.khoa)}" placeholder="% (trống = mặc định)" value="${k.nguon === 'anh' ? e(String(Math.round(k.g * 1000) / 10).replace('.', ',')) : ''}">
+            <button class="btn-secondary" onclick="ModuleKPI.luuNhap(${i}, this)">Lưu</button>
+          </div>` : ''}
+        </div>`).join('')}
+      ${ds.length ? '' : '<div class="trong">Chưa có khoa nào có doanh thu AOP.</div>'}`;
+  },
+
+  luuNhap: async function(i, nut) {
+    const du = this._nhap || {};
+    const k = (du.vien ? [du.vien] : []).concat(du.khoa || [])[i];
+    const o = document.getElementById('kpiG' + i);
+    if (!k || !o) return;
+    const chu = o.value.trim().replace('%', '').replace(/^([-+]?\d+)\.(\d+)$/, '$1,$2');   // 12.5 ➜ 12,5 (docSoVN coi dấu chấm là ngăn nghìn)
+    const so = chu === '' ? '' : ShinApp.docSoVN(chu);
+    if (so === null || (so !== '' && (so < -50 || so > 200))) { ShinApp.toast('Tăng trưởng nhập từ −50 đến 200 (%), để trống = mặc định.', 'warn'); return; }
+    const g = so === '' ? '' : so / 100;
+    if (!SHIN_API.laCheDoLive()) {
+      if (g === '') { k.nguon = 'macDinh'; k.g = 0.1; } else { k.nguon = 'anh'; k.g = g; }
+      k.muc2027 = Math.round(k.muc2026 * (1 + k.g));
+      document.getElementById('kpiNhap').innerHTML = this.veNhap(du);
+      return;
+    }
+    const kq = await ShinApp.goiNut(nut, 'Đang lưu', () => ShinApp.goiBat('KPI', 'webLuuTangTruong', k.khoa, g), 'kpiNhap' + i);
+    if (kq) { this._nhap = null; this.taiNhap(true); }
   },
 
   moAOPKhoa: function(i) {

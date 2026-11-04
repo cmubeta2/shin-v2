@@ -535,3 +535,14 @@ window.SHIN_DEMO_DATA.ptkh.dash = {
       { ma: 'CT3', ten: 'Gọi lại sau khám', dvt: 'cuộc', coKH: true, th: 3, kh: 120, pt: 0.025, den: 'do', duBao: 0.2 }
     ] } }
 };
+
+// v2.6.9 – 🗓 Nháp AOP năm sau (khuôn webNhap2027 – dữ liệu GIẢ)
+window.SHIN_DEMO_DATA.kpiPhu.nhap2027 = {
+  nam: 2027, namGoc: 2026, suaDuoc: true,
+  vien: { khoa: 'Toàn phòng khám', muc2026: 120e9, g: 0.12, nguon: 'thucDat', macDinh: false, muc2027: 134.4e9 },
+  khoa: [
+    { khoa: 'Khoa A', muc2026: 40e9, g: 0.15, nguon: 'anh', macDinh: false, muc2027: 46e9 },
+    { khoa: 'Khoa B', muc2026: 30e9, g: 0.1, nguon: 'macDinh', macDinh: true, muc2027: 33e9 },
+    { khoa: 'Khoa C', muc2026: 25e9, g: 0.08, nguon: 'thucDat', macDinh: false, muc2027: 27e9 }
+  ]
+};

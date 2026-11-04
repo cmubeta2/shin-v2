@@ -55,11 +55,14 @@ webHoSo() · webDeNghiSuaHoSo(...) · QUẢN LÝ: webChoDuyet({loai}) · webDuye
 - **v2 đang dùng (v2.6.5):** mọi cổng đọc trên + ghi `webNopBaoCao`, `webThemViecCaNhan`, `webDaDocThongBao`, `webGuiGopY`, `webDuyet`.
 - **Chưa có cổng ghi ở PK:** xin nghỉ / đổi ca (`webGuiDonNghi` trong hợp đồng giao diện nhưng chưa vào `congWeb_`), xếp lịch (`webLuuXepLich`) – v2 mở app v1.
 
-### KPI – thêm `webNhap2027` vào `congWeb_()`
+### KPI – `webNhap2027` (KPI L10, đã code v1.8.2 – app đang v1.8.1) – v2.6.9 dựng màn
 
-Hàm `webNhap2027` đã có sẵn. v2 cần nó để đọc nháp AOP năm sau trước khi gọi `webLuuTangTruong`. Chỉ cần thêm 1 dòng, không đổi logic.
+```js
+webNhap2027()  → { nam, namGoc, suaDuoc /*Admin*/, vien:{khoa, muc2026, g, nguon:'anh'|'thucDat'|'macDinh', macDinh, muc2027} | null, khoa:[ …cùng khuôn ] } | { loi }
+webLuuTangTruong(khoa, g /*phân số −0,5…2; '' = về mặc định*/) → { luu:true } | { xoa:true }   // chỉ Admin, chỉ ghi ScriptProperties
+```
 
----
+- KPI gọi kiểu `bocCong` (tham số rời trong `du.a`) ➜ v2 dùng `SHIN_API.goiCong('KPI', …)`.
 
 ## v2.5.0 – Dịch vụ chung và mảng mới trên máy chủ Hub (Q1)
 
