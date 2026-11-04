@@ -12,7 +12,8 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Gắn hàm:** thêm hàm vào bảng trắng `congWeb_()` của app.
 - **Cách nhận tham số:**
   - Hub nhận `ham(token, du)`.
-  - KPI, TS, KS, PK nhận `ham(token, ...du.a)` qua `bocCong…_`.
+  - KPI, TS, KS nhận `ham(token, ...du.a)` qua `bocCong…_`.
+  - **PK (`21_PhongPTKH`) nhận `ham(token, du)` – du là đối tượng** (theo mã v1.0.7, sửa 04/11 v2.7.0).
 - **Kiểm quyền:** từ chối thì ném `loiQuyen_()` để v2 hiện "chưa có quyền".
 - **Lỗi khác:** ném `Error` có câu tiếng Việt, v2 hiện nguyên câu đó.
 - **Tiền:** là số đồng (number). Không gửi chuỗi đã định dạng; v2 tự định dạng kiểu Việt Nam.
@@ -35,16 +36,25 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Quyền:** Admin và "Quản lý khảo sát".
 - **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
 
-### PK – `21_PhongPTKH` · `webHomNay(token)` (chỉ đọc, dùng chung file PTKH qua DB_ID)
+### PK – `21_PhongPTKH` (app PK v1.0.7, L1–L5 ✅ – sửa theo mã thật 04/11)
+
+Nguồn chuẩn: `He sinh thai Shin/21_PhongPTKH/KE_HOACH_GIAO_DIEN_PK_AGY.md` mục 4. Gọi `SHIN_API.goi('PK', hanh, {…})`.
 
 ```js
-{ ngay: 'dd/mm/yyyy', baoCao: { daNop, tong }, minhChung /*số ảnh hôm nay*/, doiCa /*đơn chờ*/,
-  nhanSu: [{ ten, viTri, ca, trangThai: 'da_nop'|'dang_truc'|'chua_toi_ca'|'chua_nop' }],
-  viecCa: [{ tieuDe, han, xong }] }
+webKhoiDong()  → { nguoi:{hoTen, vaiTro, to, viTri, quyen:['nv'|'totruong'|'lanhdao'|'admin'|'xemthu']}, app, mo, dem:{thongBao, choDuyet} }
+webHomNay()    → { ngay, viecQuaHan, viecHomNay, baoCaoHomNay:'da_nop'|'chua_nop'|'nghi', canXuLy:[{id, ten, nguon, han, muc, tab}], thongBaoMoi, choDuyet }
+webCongViec({loc}) → { dangLam, quaHan, xongTuan, viec:[{id, ten, loai, han, tienDo, nguoiGiao, muc}] }
+webCapNhatViec({id, tienDo?}) → { ok }      webThemViecCaNhan({ten, han}) → { ok, id }
+webBaoCao({thang}) → { soDaNop, soChuaNop, soChoDuyet, mau:[{ma, nhan, kieu, batBuoc}], lichSu:[…] }
+webNopBaoCao({ngay, noiDung, anh:[{ten, kieu, base64}]}) → { ok, ngay, loiAnh? }
+webChoDuyet() → { baoCao:[…], nghi:[…] }    webDuyet({loai:'baocao', ids, ketQua:'dat'|'tra_lai', lyDo} | {loai:'tatca', muc, ketQua:'dat'}) → { ok, so }
+webLichTuan({tuan}) → { tuan, ngay:[…], phepCon, nghiBuCon, donNghi:[…] }   (chỉ đọc; xin nghỉ qua webGoi PTKH)
+webThongBao() → { ds:[…] }   webDaDocThongBao({id:'tatca'}) → { ok }
+webGopYCuaToi() → { ds:[…] } webGuiGopY({loai, noiDung, anh}) → { ok }   webHoSo() → {…}   webNhanSu({tim}) → { dangLam, moiVao, choSua, ds, yeuCauSua }
 ```
 
-- **Quyền:** lãnh đạo phòng và tổ trưởng xem cả phòng; nhân viên chỉ thấy dòng của mình.
-- **Thuộc dòng:** PK L1–L3.
+- **Quyền:** duyệt / xếp lịch = tổ trưởng, admin; nhân sự = lãnh đạo; còn lại mọi nhân viên.
+- **v2 dùng (v2.7.0):** tất cả hàm trên. Chưa dùng: duyệt đơn nghỉ (PK bỏ qua – làm trên PTKH), webBangXepLich, webDeNghiSuaHoSo, webHoSoNhanSu, webDuyetSuaHoSo.
 
 ### KPI – thêm `webNhap2027` vào `congWeb_()`
 

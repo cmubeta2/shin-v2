@@ -512,3 +512,47 @@ window.SHIN_DEMO_DATA.ptkh = {
   ],
   capNhatLuc: '07:30 31/10'
 };
+
+// v2.7.0: dữ liệu GIẢ theo đúng khuôn các cổng web* của app PK v1 (21_PhongPTKH) – chỉ dùng ở chế độ Demo
+window.SHIN_DEMO_DATA.phongkhamV1 = {
+  khoiDong: { nguoi: { hoTen: 'Nhân viên Mẫu', vaiTro: 'Tổ trưởng', to: 'Tổ Tiếp đón', viTri: 'Tiếp đón', quyen: ['nv', 'totruong'] }, dem: { thongBao: 2, choDuyet: 2 } },
+  homNay: { ngay: '04/11/2026', viecQuaHan: 1, viecHomNay: 2, baoCaoHomNay: 'chua_nop', choDuyet: 2, thongBaoMoi: [],
+    canXuLy: [
+      { id: 'PC|1', ten: 'Gọi lại khách hẹn tái khám tuần này', nguon: 'Được giao', han: '03/11/2026', muc: 'do', tab: 'congviec' },
+      { id: 'PC|2', ten: 'Cập nhật bảng giá gói khám mới', nguon: 'Được giao', han: '04/11/2026', muc: 'do', tab: 'congviec' },
+      { id: 'CN|3', ten: 'Soạn kịch bản tư vấn KSK doanh nghiệp', nguon: 'Việc của tôi', han: '06/11/2026', muc: 'vang', tab: 'congviec' }
+    ] },
+  congViec: { dangLam: 3, quaHan: 1, xongTuan: 4, viec: [
+    { id: 'PC|1', ten: 'Gọi lại khách hẹn tái khám tuần này', loai: 'giao', han: '03/11/2026', tienDo: 50, nguoiGiao: 'Trưởng phòng Mẫu', muc: 'do' },
+    { id: 'PC|2', ten: 'Cập nhật bảng giá gói khám mới', loai: 'giao', han: '04/11/2026', tienDo: 25, nguoiGiao: 'Trưởng phòng Mẫu', muc: 'do' },
+    { id: 'CN|3', ten: 'Soạn kịch bản tư vấn KSK doanh nghiệp', loai: 'canhan', han: '06/11/2026', tienDo: 0, nguoiGiao: '', muc: 'vang' }
+  ] },
+  baoCao: { soDaNop: 18, soChuaNop: 3, soChoDuyet: 2,
+    mau: [{ ma: 'luotTiepDon', nhan: 'Lượt tiếp đón', kieu: 'so', batBuoc: true }, { ma: 'cuocGoi', nhan: 'Cuộc gọi chăm sóc', kieu: 'so', batBuoc: false }, { ma: 'ghiChu', nhan: 'Việc nổi bật / vướng mắc', kieu: 'chu', batBuoc: false }],
+    lichSu: [
+      { ngay: '03/11/2026', trangThai: 'da_duyet', tomTat: 'Tiếp đón 42 lượt · 15 cuộc gọi', soAnh: 2, lyDoTraLai: '' },
+      { ngay: '02/11/2026', trangThai: 'tra_lai', tomTat: 'Tiếp đón 38 lượt', soAnh: 0, lyDoTraLai: 'Bổ sung ảnh bảng trực' }
+    ] },
+  lichTuan: { tuan: 'T2 02/11 – CN 08/11', phepCon: 8, nghiBuCon: 1, donNghi: [{ id: 'N1', loai: 'nghi_tuan', tuNgay: '08/11/2026', denNgay: '08/11/2026', trangThai: 'cho', lyDo: 'Việc gia đình', lyDoTraLai: '' }],
+    ngay: [
+      { ngay: '02/11/2026', thu: 'T2', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false }, { ngay: '03/11/2026', thu: 'T3', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false },
+      { ngay: '04/11/2026', thu: 'T4', viTri: 'Tổng đài', ca: 'Chiều', nghi: false, le: false }, { ngay: '05/11/2026', thu: 'T5', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false },
+      { ngay: '06/11/2026', thu: 'T6', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false }, { ngay: '07/11/2026', thu: 'T7', viTri: 'Tổng đài', ca: 'Sáng', nghi: false, le: false },
+      { ngay: '08/11/2026', thu: 'CN', viTri: '', ca: '', nghi: true, le: false }
+    ] },
+  thongBao: { ds: [
+    { id: 'TB1', tieuDe: 'Báo cáo ngày 02/11 bị trả lại', noiDung: 'Bổ sung ảnh bảng trực', luc: '02/11/2026 18:10', daDoc: false, tab: 'baocao' },
+    { id: 'TB2', tieuDe: 'Việc mới được giao', noiDung: 'Cập nhật bảng giá gói khám mới', luc: '01/11/2026 08:00', daDoc: false, tab: 'congviec' }
+  ] },
+  choDuyet: { baoCao: [
+    { id: 'BC1', nguoi: 'Nhân viên A', ngay: '04/11/2026', tomTat: 'Tiếp đón 40 lượt · 12 cuộc gọi', anh: [] },
+    { id: 'BC2', nguoi: 'Nhân viên B', ngay: '04/11/2026', tomTat: 'Tổng đài 85 cuộc', anh: [] }
+  ], nghi: [{ id: 'N9', nguoi: 'Nhân viên C', loai: 'nghi_tuan', tuNgay: '07/11/2026', denNgay: '07/11/2026', lyDo: 'Khám sức khỏe' }], lichTuan: [] },
+  nhanSu: { dangLam: 21, moiVao: 2, choSua: 1, yeuCauSua: [], ds: [
+    { ma: 'NV01', hoTen: 'Nhân viên A', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', trangThai: 'Đang làm' },
+    { ma: 'NV02', hoTen: 'Nhân viên B', viTri: 'Tổng đài', to: 'Tổ CSKH', trangThai: 'Đang làm' },
+    { ma: 'NV03', hoTen: 'Nhân viên C', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', trangThai: 'Thử việc' }
+  ] },
+  gopY: { ds: [{ id: 'G1', loai: 'gop_y', noiDung: 'Nên thêm mẫu tin nhắn nhắc lịch', luc: '30/10/2026', trangThai: 'dang_xu_ly', traLoi: '', soAnh: 0 }] },
+  hoSo: { hoTen: 'Nhân viên Mẫu', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', ngayVao: '01/03/2024', email: 'mau@example.com', dienThoai: '' }
+};

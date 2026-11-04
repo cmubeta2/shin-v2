@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.0] – 04/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
+
+### 🏥 Mảng 5 – Phòng PTKH chạy số thật
+- `js/modules/phongkham.js` viết lại: 9 thẻ Hôm nay · Công việc · Báo cáo ngày + minh chứng ảnh · Lịch tuần · Thông báo · Duyệt · Nhân sự · Góp ý · Hồ sơ, mỗi thẻ gọi đúng cổng PK (`webHomNay`, `webCongViec`, `webCapNhatViec`, `webThemViecCaNhan`, `webBaoCao`, `webNopBaoCao`, `webChoDuyet`, `webDuyet`, `webLichTuan`, `webThongBao`, `webDaDocThongBao`, `webNhanSu`, `webGopYCuaToi`, `webGuiGopY`, `webHoSo`).
+- Gọi PK bằng `SHIN_API.goi('PK', hanh, {…})` (PK nhận đối tượng, không phải `du.a`); sửa HOP_DONG_CONG_V2.md mục PK theo mã thật.
+- Ảnh minh chứng nén JPEG ≤ 1600px, ≤ 6 ảnh; báo lỗi ảnh riêng (`loiAnh`) khi báo cáo đã ghi.
+- Demo: dữ liệu giả `phongkhamV1` trong `js/demo_data.js`.
+
+---
+
 ## [2.6.5] – 01/11/2026 (XUẤT BẢN QUY CHUẨN MASTER UX/UI v2.6.4 & HỆ PHÒNG NGỰ 12 LỖI VẶT)
 
 ### 📘 Chuẩn Hóa & Xuất Bản Master UX/UI Specification
