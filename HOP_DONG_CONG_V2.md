@@ -23,17 +23,21 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 
 ## v2.4.0 – App đã có, cần thêm cổng
 
-### KS – `70_KhaoSat` · `webTongQuan(token)` (chỉ đọc)
+### KS – `70_KhaoSat` · v1.4.3 (L2–L4 đã lên app) – v2.6.6 nối thật
+
+> **Sửa 04/11 theo mã v1 (trọng tài):** KS **không có** `webTongQuan`. Máy chủ nhận `(token, du)` với `du` là đối tượng. Quyền: Admin / Quản lý khảo sát.
 
 ```js
-{ thang: { soPhieu, haiLong /*0..1|null*/, canXuLy },
-  tru: [{ ma:'A', ten, diem /*1..5|null*/, tyLe /*0..1|null*/ }],          // 5 trụ ACHSI
-  khaoSat: [{ ma, ten, trangThai, soPhieu, moTu, dongLuc }],
-  canXuLy: [{ ma, khaoSat, cau, diem /*≤2*/, ngay, noiDung }] }            // KHÔNG có SĐT / tên người trả lời (QK4)
+webDsKhaoSat({})  → { ok, ds:[{maKS, tieuDe, moTa, doiTuong, trangThai:'Nháp'|'Đang mở'|'Đã đóng', han, soCau, cauHinh, ngayTao}], dem:{dangMo, nhap, daDong} }
+webKetQuaKS({maKS, nguon, tu, den}) → { ok, maKS, tieuDe, soPhieu, choXacMinh, theoNgay:[{ngay, n}],
+                                       cau:[{maCH, phienBan, loai, noiDung, n, tb?, tyLe?:{lựa chọn: %}, nps?, yKien?:[≤50 chữ], anLienHe?}] }
+webXuatKS({maKS, kieu:'csv'|'sheet', nguon, tu, den}) → csv: { ok, csv, tenTep, msg } · sheet: { ok, link, msg }
+// Công khai (không token): webCongKhaiDocKS({ma}) · webCongKhaiGuiPhieu({...}) – v2 chưa dùng
+// Liên thông Hub: ksSoLieu (không có thông tin liên hệ – QK4)
 ```
 
-- **Quyền:** Admin và "Quản lý khảo sát".
-- **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
+- **v2 đang dùng (v2.6.6):** `webDsKhaoSat`, `webKetQuaKS`, `webXuatKS` (csv). Soạn / mở / đóng khảo sát vẫn trên app KS.
+- **Còn thiếu cho radar ≤ 2★ toàn viện:** chưa có cổng gom ý kiến ≤ 2★ của mọi khảo sát (v2 hiện xem từng khảo sát).
 
 ### PK – `21_PhongPTKH` · đã lên app v1.0.7 (L1–L5) – v2.6.5 nối thật
 

@@ -99,7 +99,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M1.2 | Bàn điều hành 2 chiều 🧭 (`webDieuHanh`, `webHopThu`) | 🟢 | – |
 | M1.3 | KPI Toàn Viện: bản tin tạm tính (`webBanTin`) · soát lỗi (`webSoatLoi`) · AOP (`webAOP`) · báo cáo quý (`webBaoCaoQuy`) | 🟢 / 🟡 nháp AOP năm sau chờ `webNhap2027` | – |
 | M1.4 | Trung tâm Telegram Bot (sự kiện `muc:'gap'`) | ⬜ (chạy phía Apps Script v1) | v2.4.0 |
-| M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟡 màn xong, chờ KS mở `webTongQuan` | v2.4.0 |
+| M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟢 v2.6.6 – danh sách + kết quả theo câu + xuất CSV (`webDsKhaoSat`, `webKetQuaKS`, `webXuatKS`) / ⬜ radar ≤ 2★ (KS chưa có cổng tổng hợp) | v2.6.6 |
 | M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ⬜ | v2.4.0 |
 
 ### 👥 MẢNG 2 – KHÁCH HÀNG & ĐỐI TÁC (CRM) · `crm`
@@ -204,7 +204,7 @@ const ModuleX = {
 Gửi : POST text/plain  { hanh: "web<Tên>", token: "h1.<ma>.0.<chuKy>", du: {...} }
 Nhận: { ok: true,  du: <kết quả> }   |   { ok: false, loi: "dang"|"hanh"|"token"|"quyen"|"loi", chiTiet: "..." }
 ```
-- `hanh` phải nằm trong bảng trắng `congWeb_()` của từng app. **Hub** gọi `ham(token, du)`; **KPI, TS, KS, PK** gọi `ham(token, ...du.a)` ➜ v2 dùng `SHIN_API.goiCong('TS', 'webLeadCD', maCD)`.
+- `hanh` phải nằm trong bảng trắng `congWeb_()` của từng app. **Hub** gọi `ham(token, du)`; **KPI, TS** gọi `ham(token, ...du.a)` (KS, PK nhận `du` là đối tượng như Hub – sửa 04/11 theo mã v1) ➜ v2 dùng `SHIN_API.goiCong('TS', 'webLeadCD', maCD)`.
 - Không token, hoặc mảng chưa có máy chủ ➜ dữ liệu mẫu (có dải báo vàng). Lỗi mạng / máy chủ ➜ dải báo đỏ, **không thay lặng lẽ bằng số mẫu**. `quyen` ➜ màn "Chưa vào được".
 - **Chống ghi trùng:** máy chủ v1 không nhận mã yêu cầu, nên v2 chặn ở phía trang (`ShinApp.goiNut`: khóa nút, chặn cùng lệnh khi đang chờ). Máy chủ mới ở v2.5.0 sẽ nhận `du.maYeuCau`.
 - **Hoàn tác 6s:** `ShinApp.hanhDongHoanTac` – đổi giao diện ngay, chỉ gửi máy chủ khi hết 6 giây.

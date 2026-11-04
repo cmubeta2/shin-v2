@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.6] – 04/11/2026 (KHẢO SÁT NỐI THẬT APP KS v1.4.3)
+
+### 🟢 Khảo sát chạy số thật
+- `js/modules/khaosat.js` bỏ cổng không tồn tại `webTongQuan`, dùng cổng thật `webDsKhaoSat` (đếm Đang mở / Nháp / Đã đóng + danh sách lọc theo trạng thái), `webKetQuaKS` (bấm 1 khảo sát ➜ phiếu hợp lệ, chờ xác minh, phiếu theo ngày, từng câu: điểm TB / NPS / tỉ lệ lựa chọn / ý kiến), `webXuatKS` (tải CSV về máy).
+- Câu liên hệ: chỉ hiện khi app KS cho phép (QK4), v2 không hiện thêm.
+- `demo_data.js` mục `khaosat` đổi theo khuôn cổng thật (dữ liệu giả); `HOP_DONG_CONG_V2.md` mục KS sửa theo mã v1.
+
 ## [2.6.5] – 04/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
 
 ### 🟢 Mảng 5 – Phòng PTKH chạy số thật

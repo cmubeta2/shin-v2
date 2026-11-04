@@ -78,24 +78,24 @@ window.SHIN_DEMO_DATA = {
     ]
   },
 
+  // v2.6.6: khuôn đúng cổng thật app KS v1.4.3 (webDsKhaoSat + webKetQuaKS) – toàn bộ là dữ liệu GIẢ
   khaosat: {
-    hero: {
-      chao: "Khảo Sát Trải Nghiệm Người Bệnh 🩺",
-      ngay: "Chuẩn chất lượng ACHSI & FMFT",
-      so: [
-        { nhan: "Hài lòng chung", giaTri: "96,4", dvt: "%", mau: "var(--c-green)" },
-        { nhan: "Phiếu tháng 10", giaTri: "1.428", dvt: "lượt", mau: "var(--c-blue)" },
-        { nhan: "Ý kiến cần xử lý", giaTri: "4", dvt: "góp ý", mau: "var(--c-yellow)" }
-      ],
-      nutChinh: { nhan: "📝 Gửi Phiếu Khảo Sát Mới", hanhDong: "guiKhaoSat" }
-    },
-    chiSoNhom: [
-      { nhan: "A. Khả năng tiếp cận & Thủ tục", diem: 4.85, tyLe: "97.0%", mau: "var(--c-green)" },
-      { nhan: "B. Cơ sở vật chất & Tiện nghi", diem: 4.78, tyLe: "95.6%", mau: "var(--c-green)" },
-      { nhan: "C. Kỹ năng & Thái độ Bác sĩ", diem: 4.92, tyLe: "98.4%", mau: "var(--c-green)" },
-      { nhan: "D. Thái độ Điều dưỡng & Nhân viên", diem: 4.80, tyLe: "96.0%", mau: "var(--c-green)" },
-      { nhan: "E. Kết quả & Hướng dẫn sau khám", diem: 4.75, tyLe: "95.0%", mau: "var(--c-green)" }
-    ]
+    dem: { dangMo: 2, nhap: 1, daDong: 1 },
+    ds: [
+      { maKS: "KS01", tieuDe: "Hài lòng khách hàng ngoại trú T11", doiTuong: "Khách ngoại trú", trangThai: "Đang mở", han: "30/11/2026", soCau: 6, ngayTao: "01/11/2026" },
+      { maKS: "KS02", tieuDe: "Trải nghiệm đặt lịch qua tổng đài", doiTuong: "Khách đặt lịch", trangThai: "Đang mở", han: "15/11/2026", soCau: 4, ngayTao: "28/10/2026" },
+      { maKS: "KS03", tieuDe: "Ý kiến nhân viên về ca trực", doiTuong: "Nhân viên", trangThai: "Nháp", han: "", soCau: 5, ngayTao: "03/11/2026" },
+      { maKS: "KS00", tieuDe: "Hài lòng khách hàng ngoại trú T10", doiTuong: "Khách ngoại trú", trangThai: "Đã đóng", han: "31/10/2026", soCau: 6, ngayTao: "01/10/2026" }
+    ],
+    ketQua: { soPhieu: 128, choXacMinh: 3,
+      theoNgay: [ { ngay: "29/10/2026", n: 14 }, { ngay: "30/10/2026", n: 22 }, { ngay: "31/10/2026", n: 9 }, { ngay: "01/11/2026", n: 18 }, { ngay: "02/11/2026", n: 25 }, { ngay: "03/11/2026", n: 21 }, { ngay: "04/11/2026", n: 19 } ],
+      cau: [
+        { maCH: "C1", phienBan: 1, loai: "5muc", noiDung: "Mức hài lòng chung", n: 128, tb: 4.62, tyLe: { "5": 70.3, "4": 23.4, "3": 4.7, "2": 1.6 } },
+        { maCH: "C2", phienBan: 1, loai: "nps", noiDung: "Khả năng giới thiệu cho người thân (0–10)", n: 120, nps: 58 },
+        { maCH: "C3", phienBan: 1, loai: "chon1", noiDung: "Thời gian chờ", n: 126, tyLe: { "Dưới 15 phút": 61.1, "15–30 phút": 30.2, "Trên 30 phút": 8.7 } },
+        { maCH: "C4", phienBan: 1, loai: "chudai", noiDung: "Góp ý thêm", n: 31, yKien: [ "Nhân viên tiếp đón nhiệt tình.", "Mong có thêm ghế ở khu chờ.", "Quầy thu ngân hơi đông giờ trưa." ] },
+        { maCH: "C5", phienBan: 1, loai: "lienhe", noiDung: "Liên hệ (nếu cần phản hồi)", n: 12, anLienHe: true }
+      ] }
   },
 
   // ==========================================
@@ -484,7 +484,6 @@ window.SHIN_DEMO_DATA.taichinh = {
   ]
 };
 
-window.SHIN_DEMO_DATA.khaosat.canXuLy = [{ ma: 'P0412', khaoSat: 'Hài lòng ngoại trú T10', cau: 'Thời gian chờ khám', diem: 2, ngay: '29/10/2026', noiDung: 'Chờ hơn 1 tiếng ở quầy thu ngân.' }];
 
 /* v2.6.0 – MẪU (tên giả) cho 🛡️ Người dùng & App và 📋 PTKH gốc */
 window.SHIN_DEMO_DATA.quantri = {

@@ -26,6 +26,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.6 ✅ – KHẢO SÁT NỐI THẬT (04/11/2026, lượt tự động ⑤)
+- Màn Khảo sát dùng `webDsKhaoSat` / `webKetQuaKS` / `webXuatKS` của KS v1.4.3 (v1 không có `webTongQuan`).
+- Còn chờ v1: radar ý kiến ≤ 2★ gom mọi khảo sát cần 1 cổng tổng hợp ở KS (chưa có dòng KE_HOACH).
+- Còn chờ anh: PR tự trộn bị bộ lọc quyền tự động chặn (`gh pr merge`) – anh trộn tay PR #14 hoặc cho phép lệnh này.
+
 ### PHIÊN BẢN v2.6.5 ✅ – PHÒNG PTKH NỐI THẬT (04/11/2026, lượt tự động ⑤)
 - Màn Phòng PTKH dùng 14 cổng thật của app PK v1.0.7 (đọc 11, ghi 5) – xem CHANGELOG.
 - Còn chờ v1: PK chưa có cổng ghi xin nghỉ / đổi ca (`webGuiDonNghi`, `webHuyDonNghi`) và xếp lịch (`webLuuXepLich`) trong `congWeb_` – v2 tạm mở app v1.
