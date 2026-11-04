@@ -47,7 +47,7 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 - Ghi thật: nộp báo cáo ngày + ảnh minh chứng (nén JPEG ≤1600px), cập nhật / thêm việc, trả lại báo cáo, góp ý, đề nghị sửa hồ sơ, duyệt sửa hồ sơ. **Hoàn tác 6s** (không gửi gì trước 6s, gửi đúng 1 lần): duyệt đạt báo cáo, đọc hết thông báo.
 - Sửa lỗi gọi: cổng PK nhận `(token, du)` – bản cũ gửi `du.a` và đọc khuôn `baoCao.daNop` không có thật. HOP_DONG_CONG_V2.md mục PK sửa theo mã v1.
 - Lỗi cổng ở từng thẻ ➜ khung đỏ + nút Thử lại, không thay bằng số mẫu. Demo: dữ liệu giả mới trong `demo_data.js`.
-- Còn chờ v1: cổng PK cho xin nghỉ / đổi ca / duyệt đơn nghỉ / xếp lịch (hiện ghi qua webGoi PTKH) – v2 tạm mở app PK.
+- Còn làm lượt sau (v2, không chờ v1): xin nghỉ / đổi ca / duyệt đơn nghỉ / xếp lịch gọi thẳng `webGoi` PTKH (theo PK L5) – `webGuiNghiPhep` có 3 loại (Lịch nghỉ tuần chọn ngày trong các tuần tới, Nghỉ ốm từ–đến, Đổi ca cần người nhận), `webDuyetNghiPhep(maDon, ketQua, ghiChu)`; endpoint PTKH lấy từ Hub `lienKet`. Tạm thời v2 mở app PK.
 
 ### PHIÊN BẢN v2.6.4 ✅ – MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T (01/11/2026)
 - **Mục tiêu:** Xây dựng module đánh giá văn hóa hành vi 5T cốt lõi tham chiếu phương pháp luận Bộ 83 Tiêu chí Chất lượng Bộ Y tế, số hóa trên SHIN AIOS và tích hợp Second Brain.
