@@ -36,6 +36,15 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Quyền:** Admin và "Quản lý khảo sát".
 - **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
 
+### HUB – Telegram Mini App `webTelegram` (HUB L8, Hub v1.13.3 ✅)
+
+```js
+POST Hub {hanh:'webTelegram', du:{initData}}   // KHÔNG token – nhánh riêng trước cuaWebPost_
+→ {ok:true, du:{ok:true, token /*token Hub 12 giờ*/, hetHan, nguoi:{ma, hoTen}}} | {ok:true, du:{ok:false, loi, msg}}
+```
+
+- **v2 dùng (v2.7.1):** `SHIN_API.dangNhapTelegram()` khi trang mở có `Telegram.WebApp.initData` hoặc `#tgWebAppData`; lưu token như `?t=`; xóa hash. Telegram Web (web.telegram.org) được phép nhúng khung.
+
 ### PK – `21_PhongPTKH` (app PK v1.0.7, L1–L5 ✅ – sửa theo mã thật 04/11)
 
 Nguồn chuẩn: `He sinh thai Shin/21_PhongPTKH/KE_HOACH_GIAO_DIEN_PK_AGY.md` mục 4. Gọi `SHIN_API.goi('PK', hanh, {…})`.

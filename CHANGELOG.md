@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.1] – 04/11/2026 (TELEGRAM MINI APP)
+
+### 📱 Mở Shin v2 ngay trong Telegram
+- Đọc `Telegram.WebApp.initData` / `#tgWebAppData` ➜ cổng Hub `webTelegram` (HUB L8) ➜ token Hub 12 giờ, xóa hash khỏi thanh địa chỉ.
+- Chống nhúng khung: chỉ cho phép `web.telegram.org`.
+- Việc của anh (V20): đặt Menu Button của bot trỏ https://cmubeta2.github.io/shin-v2/.
+
+---
+
 ## [2.7.0] – 04/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
 
 ### 🏥 Mảng 5 – Phòng PTKH chạy số thật

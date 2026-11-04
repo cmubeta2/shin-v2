@@ -145,8 +145,34 @@ const SHIN_API = (function() {
     return allDemo[key] || null;
   }
 
+  /** v2.7.1 (HUB L8): mở trong Telegram Mini App ➜ initData từ Telegram.WebApp hoặc #tgWebAppData của link mở. */
+  function docInitDataTelegram() {
+    try { const w = window.Telegram && window.Telegram.WebApp; if (w && w.initData) return w.initData; } catch (e) {}
+    try { return new URLSearchParams(String(location.hash || '').replace(/^#/, '')).get('tgWebAppData') || ''; } catch (e) { return ''; }
+  }
+
+  /** Đổi initData lấy token Hub 12 giờ qua cổng Hub webTelegram (không token, Hub kiểm chữ ký bot). */
+  async function dangNhapTelegram(initData) {
+    const endpoint = ENDPOINTS.HUB;
+    if (!initData || !endpoint) return { ok: false, loi: 'thieu', msg: '' };
+    const batDau = Date.now();
+    try {
+      const r = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ hanh: 'webTelegram', du: { initData: initData } }) });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json(), d = j && j.du;
+      ghiSucKhoe('HUB', batDau, j && j.ok ? '' : 'loi');
+      if (j && j.ok && d && d.ok && d.token) { luuToken(d.token); return { ok: true, nguoi: d.nguoi || null, hetHan: d.hetHan }; }
+      return { ok: false, loi: (d && d.loi) || (j && j.loi) || 'loi', msg: (d && d.msg) || (j && j.chiTiet) || '' };
+    } catch (err) {
+      ghiSucKhoe('HUB', batDau, 'mang');
+      return { ok: false, loi: 'mang', msg: '' };
+    }
+  }
+
   return {
     TEN_MAY_CHU,
+    docInitDataTelegram,
+    dangNhapTelegram,
     layToken,
     luuToken,
     xoaToken,

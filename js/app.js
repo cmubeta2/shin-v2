@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.7.0';
+  const PHIEN_BAN = 'v2.7.1';
 
   const MODULES = [
     ModuleHub,
@@ -465,8 +465,12 @@ const ShinApp = (function() {
     if (MQ_DESKTOP.addEventListener) MQ_DESKTOP.addEventListener('change', () => apDungRail(railMacDinh()));
     veMenuDay();
     capNhatBannerTrangThai();
-    if (SHIN_API.laCheDoLive()) khoiDongLive();
-    chuyenModule(currentModule);
+    const tg = SHIN_API.docInitDataTelegram();
+    if (tg) moTrongTelegram(tg);
+    else {
+      if (SHIN_API.laCheDoLive()) khoiDongLive();
+      chuyenModule(currentModule);
+    }
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -480,6 +484,21 @@ const ShinApp = (function() {
         if (currentThemeMode === 'system') apDungThemeMode('system');
       });
     }
+  }
+
+  /**
+   * v2.7.1 – Telegram Mini App (HUB L8): nút Menu bot mở https://cmubeta2.github.io/shin-v2/ ➜ initData đổi lấy token Hub
+   * (webTelegram), xóa #tgWebAppData khỏi thanh địa chỉ. Không nhận ra người ➜ giữ token cũ (nếu có), báo vàng.
+   */
+  async function moTrongTelegram(tg) {
+    try { history.replaceState({}, document.title, location.pathname + location.search); } catch (e) {}
+    document.documentElement.classList.add('trong-telegram');
+    try { const w = window.Telegram && window.Telegram.WebApp; if (w) { w.ready(); w.expand(); } } catch (e) {}
+    const kq = await SHIN_API.dangNhapTelegram(tg);
+    if (!kq.ok) toast(kq.msg || (kq.loi === 'mang' ? 'Không gọi được Hub để đăng nhập bằng Telegram – kiểm tra mạng.' : 'Telegram chưa gắn với tài khoản Shin – dán token ở ⚙️ Cài đặt.'), 'warn');
+    capNhatBannerTrangThai();
+    if (SHIN_API.laCheDoLive()) khoiDongLive();
+    chuyenModule(currentModule);
   }
 
   /**

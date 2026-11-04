@@ -24,7 +24,9 @@
   <link rel="stylesheet" href="css/styles.css">
   <script>
     // Chống nhúng trang vào khung của web khác (clickjacking) – GitHub Pages không cho đặt header X-Frame-Options
-    if (window.top !== window.self) { try { window.top.location = window.self.location.href; } catch (e) { document.documentElement.style.display = 'none'; } }
+    // v2.7.1: cho phép đúng Telegram Web (web.telegram.org) nhúng Mini App
+    var nhungTG = false; try { var ao = location.ancestorOrigins; nhungTG = !!(ao && ao.length && Array.prototype.every.call(ao, function (o) { return /^https:\/\/web\.telegram\.org$/.test(o); })); } catch (e) {}
+    if (window.top !== window.self && !nhungTG) { try { window.top.location = window.self.location.href; } catch (e) { document.documentElement.style.display = 'none'; } }
     // Chống chớp giao diện (Anti-Flicker Script)
     (function() {
       try {
@@ -59,7 +61,7 @@
             <span class="topbar-title">SHIN AIOS</span>
             <!-- Thẻ trạng thái nhỏ gọn nằm ngay kế bên chữ SHIN AIOS -->
             <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat(); event.stopPropagation();" title="Bấm để quản lý kết nối Token">
-              Demo v2.7.0
+              Demo v2.7.1
             </button>
           </div>
           <div class="topbar-sub">Hệ thống Quản trị AI</div>
