@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.6] – 04/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG THẬT)
+
+### Sửa
+- 🩺 Khảo sát: bỏ cổng `webTongQuan` không có thật ➜ `webDsKhaoSat` + `webKetQuaKS` của app KS v1.4.3; chọn khảo sát để xem điểm từng câu, NPS, phiếu hợp lệ. HOP_DONG_CONG_V2.md mục KS theo mã v1.
+
 ## [2.6.5] – 04/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
 
 ### Mới

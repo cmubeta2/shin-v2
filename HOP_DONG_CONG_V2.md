@@ -23,17 +23,19 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 
 ## v2.4.0 – App đã có, cần thêm cổng
 
-### KS – `70_KhaoSat` · `webTongQuan(token)` (chỉ đọc)
+### KS – `70_KhaoSat` (app KS v1.4.3) – cổng nhận `(token, du)` như Hub
+
+> **Sửa 04/11 theo mã v1 (trọng tài):** KS KHÔNG có `webTongQuan`. `ksSoLieu` chỉ đi qua liên thông Hub (ký HMAC) – trình duyệt không gọi được. v2 dùng 2 cổng có thật trong `congWeb_()`:
 
 ```js
-{ thang: { soPhieu, haiLong /*0..1|null*/, canXuLy },
-  tru: [{ ma:'A', ten, diem /*1..5|null*/, tyLe /*0..1|null*/ }],          // 5 trụ ACHSI
-  khaoSat: [{ ma, ten, trangThai, soPhieu, moTu, dongLuc }],
-  canXuLy: [{ ma, khaoSat, cau, diem /*≤2*/, ngay, noiDung }] }            // KHÔNG có SĐT / tên người trả lời (QK4)
+webDsKhaoSat({})   → { ok, ds:[{ maKS, tieuDe, moTa, doiTuong, trangThai:'Nháp'|'Đang mở'|'Đã đóng', han, nhieuLan, soCau, cauHinh, ngayTao }], dem:{ dangMo, nhap, daDong } }
+webKetQuaKS({maKS, nguon?, tu?, den?}) → { ok, maKS, tieuDe, soPhieu, choXacMinh, theoNgay:[{ngay, n}],
+                     cau:[{ maCH, phienBan, loai, noiDung, n, tb?, tyLe?, nps?, yKien? }] }   // màn v2 KHÔNG hiện câu liên hệ / ý kiến chữ (QK4)
+webXuatKS({maKS, kieu:'csv'|'sheet', …}) → { csv, tenTep } | { link }   // chưa dùng ở v2 – mở app KS
 ```
 
-- **Quyền:** Admin và "Quản lý khảo sát".
-- **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
+- **Quyền:** Admin và "Quản lý khảo sát" (chỉ KS của mình).
+- **Còn chờ v1:** tổng hợp 5 trụ ACHSI toàn viện + danh sách ý kiến ≤ 2★ cần xử lý (không kèm liên hệ) – chưa có cổng web.
 
 ### PK – `21_PhongPTKH` (app PK v1.0.7, L1–L5 ĐÃ LÊN APP) – cổng nhận `(token, du)` như Hub
 

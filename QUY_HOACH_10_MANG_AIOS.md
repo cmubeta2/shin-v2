@@ -99,7 +99,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M1.2 | Bàn điều hành 2 chiều 🧭 (`webDieuHanh`, `webHopThu`) | 🟢 | – |
 | M1.3 | KPI Toàn Viện: bản tin tạm tính (`webBanTin`) · soát lỗi (`webSoatLoi`) · AOP (`webAOP`) · báo cáo quý (`webBaoCaoQuy`) | 🟢 / 🟡 nháp AOP năm sau chờ `webNhap2027` | – |
 | M1.4 | Trung tâm Telegram Bot (sự kiện `muc:'gap'`) | ⬜ (chạy phía Apps Script v1) | v2.4.0 |
-| M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟡 màn xong, chờ KS mở `webTongQuan` | v2.4.0 |
+| M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟢 v2.6.6 – danh sách KS + điểm từng câu / NPS thật (`webDsKhaoSat`, `webKetQuaKS`) · 🟡 5 trụ toàn viện + ≤ 2★ chờ cổng v1 | v2.6.6 |
 | M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ⬜ | v2.4.0 |
 
 ### 👥 MẢNG 2 – KHÁCH HÀNG & ĐỐI TÁC (CRM) · `crm`

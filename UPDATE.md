@@ -26,6 +26,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.6 ✅ – KHẢO SÁT GỌI ĐÚNG CỔNG THẬT APP KS v1.4.3 (04/11/2026)
+- `js/modules/khaosat.js`: bỏ `webTongQuan` (KS không có cổng này) ➜ `webDsKhaoSat` + `webKetQuaKS` (gọi `(token, du)`); tự chọn KS đang mở, bấm tên KS để xem KS khác; Hero: điểm TB / phiếu hợp lệ / NPS (hoặc chờ xác minh).
+- Không hiện câu liên hệ / ý kiến chữ (QK4). HOP_DONG_CONG_V2.md mục KS sửa theo mã v1.
+- Còn chờ v1: cổng web tổng hợp 5 trụ ACHSI toàn viện + ý kiến ≤ 2★ cần xử lý (không kèm liên hệ).
+- Còn làm lượt sau (v2): PTKH gốc qua `webGoi` (khuôn `webKhoiDong` / `webDashboard` PTKH rất lớn – cần đối chiếu kỹ).
+
 ### PHIÊN BẢN v2.6.5 ✅ – PHÒNG PTKH NỐI THẬT APP PK v1.0.7 (04/11/2026)
 - **Màn 🏥 Phòng PTKH** (`js/modules/phongkham.js`) viết lại theo hợp đồng PK mục 4: 9 thẻ Hôm nay · Báo cáo · Công việc · Lịch · Thông báo · Duyệt · Nhân sự · Góp ý · Hồ sơ; thẻ hiện theo `mo` của `webKhoiDong` (quyền thật).
 - Ghi thật: nộp báo cáo ngày + ảnh minh chứng (nén JPEG ≤1600px), cập nhật / thêm việc, trả lại báo cáo, góp ý, đề nghị sửa hồ sơ, duyệt sửa hồ sơ. **Hoàn tác 6s** (không gửi gì trước 6s, gửi đúng 1 lần): duyệt đạt báo cáo, đọc hết thông báo.
