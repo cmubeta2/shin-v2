@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.3] – 04/11/2026 (M9.2 TÌM KIẾM TRI THỨC)
+
+- `trithuc.js`: tìm kiếm toàn văn phía trình duyệt (không dấu, nhiều từ, lọc lĩnh vực, tô đậm); sửa chữ < 14px, nút < 44px, thêm esc.
+
+---
+
 ## [2.7.2] – 04/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG KS v1.4.3)
 
 - `khaosat.js` bỏ `webTongQuan` (v1 không có) ➜ `webDsKhaoSat` + `webKetQuaKS` + xuất CSV `webXuatKS`; KS nhận du đối tượng.
