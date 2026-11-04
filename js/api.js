@@ -113,6 +113,33 @@ const SHIN_API = (function() {
     }
   }
 
+  /**
+   * v2.7.5 – PTKH gốc (20_PTKH L148 `webGoi`): {hanh:'webGoi', token, du:{ham, thamSo:[]}} ➜ {ok, du}.
+   * Địa chỉ máy chủ lấy ĐỘNG từ link PTKH Hub cấp (webKhoiDong.lienKet) – không chép link /exec vào mã; chỉ nhận https://script.google.com/macros/s/…/exec.
+   */
+  async function goiPTKH(linkPTKH, ham, thamSo) {
+    const token = layToken();
+    let endpoint = '';
+    try { const u = new URL(linkPTKH); if (u.origin === 'https://script.google.com' && /^\/macros\/s\/[\w-]+\/exec$/.test(u.pathname)) endpoint = u.origin + u.pathname; } catch (e) {}
+    if (!token) return { ok: false, loi: 'token' };
+    if (!endpoint) return { ok: false, loi: 'loi', chiTiet: 'Hub chưa cấp link app PTKH cho anh/chị' };
+    const batDau = Date.now();
+    try {
+      const r = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ hanh: 'webGoi', token: token, du: { ham: ham, thamSo: thamSo || [] } })
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = await r.json();
+      sucKhoe.PTKH = { ms: Date.now() - batDau, ok: !!j.ok, loi: j.ok ? '' : (j.loi || 'loi'), luc: new Date() };
+      return j.ok ? { ok: true, data: j.du } : { ok: false, loi: LOI_VN[j.loi] ? j.loi : 'loi', chiTiet: LOI_VN[j.loi] ? '' : String(j.loi || '') };
+    } catch (err) {
+      sucKhoe.PTKH = { ms: Date.now() - batDau, ok: false, loi: 'mang', luc: new Date() };
+      return { ok: false, loi: 'mang', chiTiet: err.message };
+    }
+  }
+
   /** Cổng nhận tham số rời (KPI, TS, KS, PK – bocCong…_): goiCong('TS', 'webLeadCD', 'CD03'). */
   function goiCong(appKey, hanh, ...thamSo) {
     return goi(appKey, hanh, { a: thamSo });
@@ -180,6 +207,7 @@ const SHIN_API = (function() {
     coMayChu,
     goi,
     goiCong,
+    goiPTKH,
     laySucKhoe,
     moTaLoi
   };

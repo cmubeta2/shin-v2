@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.5] – 04/11/2026 (PTKH GỐC ĐỌC THẲNG TỔNG QUAN THÁNG)
+
+### 🟢 PTKH gốc
+- `js/modules/ptkh.js`: thêm khối 📊 Tổng quan tháng đọc thẳng app PTKH qua cổng `webGoi` (L148) ➜ `webDashboard('thang')`: báo cáo đúng hạn / trễ, việc đang làm / quá hạn / xong, chuỗi nộp đúng hạn, từng chỉ tiêu (thực hiện / kế hoạch, % đạt, dự báo cuối kỳ, màu đèn).
+- `js/api.js`: `goiPTKH(link, ham, thamSo)` – địa chỉ lấy từ link PTKH Hub cấp, chỉ chấp nhận `script.google.com/macros/s/…/exec`; lỗi báo riêng ở khối này (không thay số mẫu).
+- Demo: `SHIN_DEMO_DATA.ptkh.dash` (dữ liệu giả).
+
 ## [2.7.4] – 04/11/2026 (RÀ UX ĐO ĐƯỢC)
 
 - `duan.js`: nút 36px ➜ 44px, chữ 10–12px ➜ 13–14px. Ghi lại phần 5T và chữ phụ 12–13px dùng chung để lượt sau.

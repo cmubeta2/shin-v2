@@ -18,7 +18,40 @@ const ModulePTKH = {
   taiLive: async function() {
     const kq = await SHIN_API.goi('HUB', 'webHomNay', {});
     if (!kq.ok) return kq;
-    return { ok: true, data: this.tuHub(kq.data) };
+    const d = this.tuHub(kq.data);
+    // v2.7.5: Tổng quan tháng đọc THẲNG PTKH qua webGoi (L148) – lỗi thì báo riêng ở khối này, không thay bằng số mẫu
+    const link = ShinApp.linkV1('PTKH') || d.linkThe || '';
+    const db = await SHIN_API.goiPTKH(link, 'webDashboard', ['thang']);
+    if (db.ok) d.dash = db.data || {}; else d.dashLoi = SHIN_API.moTaLoi(db);
+    return { ok: true, data: d };
+  },
+
+  /** Khối 📊 Tổng quan tháng từ webDashboard(token, 'thang') của PTKH. */
+  veDash: function(d) {
+    const e = ShinApp.esc, so = ShinApp.soVN;
+    if (d.dashLoi) return `<div class="canh-bao-nguon loi">⚠️ Tổng quan PTKH: ${e(d.dashLoi)}</div>`;
+    const x = d.dash;
+    if (!x) return '';
+    const k = x.thang || {}, toi = k.toi || {}, bc = toi.bc, viec = toi.viec || {}, mt = k.mucTieu || {};
+    const ct = (mt.chiTieu || []).filter(c => c.coKH !== false);
+    const pt = v => v === null || v === undefined ? '–' : ShinApp.ptVN(v);
+    return `
+      <div class="hn-tieu"><span>📊 ${e(k.tenKy || 'Tháng này')}${k.nhan ? ' · ' + e(k.nhan) : ''}${x.live === false ? ' (mẫu)' : ''}</span></div>
+      <div class="luoi-o-so">
+        ${bc ? `<div class="o-so-loc"><b style="color:var(--c-green)">${so(bc.dungHan || 0)}/${so(bc.tong || 0)}</b>BC đúng hạn</div>
+        <div class="o-so-loc"><b style="color:${bc.tre || bc.khongNop ? 'var(--c-red)' : 'var(--c-gray)'}">${so((bc.tre || 0) + (bc.khongNop || 0))}</b>BC trễ / không nộp</div>` : ''}
+        <div class="o-so-loc"><b style="color:var(--c-blue)">${so(viec.dangLam || 0)}</b>Việc đang làm</div>
+        <div class="o-so-loc"><b style="color:${viec.quaHan ? 'var(--c-red)' : 'var(--c-green)'}">${so(viec.quaHan || 0)}</b>Việc quá hạn</div>
+        <div class="o-so-loc"><b style="color:var(--c-green)">${so(viec.xong || 0)}</b>Việc xong</div>
+        ${x.chuoiDH ? `<div class="o-so-loc"><b>🔥 ${so(Number(x.chuoiDH) || 0)}</b>Chuỗi nộp đúng hạn</div>` : ''}
+      </div>
+      ${ct.length ? `<div class="the">
+        <div class="chu-phu">Mục tiêu · thời gian đã qua ${pt(mt.ptThoiGian)}${mt.ngayConLai !== undefined ? ' · còn ' + so(mt.ngayConLai) + ' ngày' : ''}</div>
+        ${ct.map(c => `
+          <div class="hang-tru"><span>${e(c.ten)}</span><b style="color:${this.MAU_DEN[c.den] || 'var(--c-blue)'}">${pt(c.pt)}</b></div>
+          <div class="chu-phu">${so(c.th || 0)} / ${so(c.kh || 0)} ${e(c.dvt || '')}${c.duBao !== null && c.duBao !== undefined ? ' · dự báo cuối kỳ ' + pt(c.duBao) : ''}</div>
+          <div class="thanh-tien"><div style="width:${Math.max(0, Math.min(100, Math.round((Number(c.pt) || 0) * 100)))}%"></div></div>`).join('')}
+      </div>` : ''}`;
   },
 
   /** THUẦN. webHomNay ➜ phần của PTKH (thẻ tieuDe 'PTKH' + việc cùng tên app). */
@@ -71,6 +104,8 @@ const ModulePTKH = {
         <button class="btn-primary" onclick="ModulePTKH.moApp()">📋 Mở app PTKH${coLink ? '' : ' (cần token Hub)'}</button>
       </div>
 
+      ${this.veDash(d.live ? d : Object.assign({}, d, { dash: d.dash ? Object.assign({ live: false }, d.dash) : null }))}
+
       <div class="hn-tieu"><span>VIỆC TỪ PTKH · ${viec.length}</span></div>
       ${viec.length ? `<div class="hn-list">${viec.map((v, i) => `
         <div class="hn-dong" onclick="ModulePTKH.moViec(${i})">
@@ -88,7 +123,7 @@ const ModulePTKH = {
 
       <details class="tq-gon">
         <summary><span>ⓘ Kết nối với app PTKH gốc</span></summary>
-        <p class="chu-phu">Số và việc ở đây do Hub kéo từ app PTKH (khoảng 90 phút / lần; bấm ↻ trên 🏠 Hôm nay để kéo ngay). Các nút mở thẳng app PTKH bằng token Hub của anh/chị – không cần link PTKH riêng. Khi PTKH mở cổng web cho v2 (đã ghi trong hợp đồng cổng), màn này sẽ đọc thẳng Tổng quan phòng.</p>
+        <p class="chu-phu">Số và việc ở đây do Hub kéo từ app PTKH (khoảng 90 phút / lần; bấm ↻ trên 🏠 Hôm nay để kéo ngay). Các nút mở thẳng app PTKH bằng token Hub của anh/chị – không cần link PTKH riêng. Khối 📊 Tổng quan tháng đọc thẳng app PTKH qua cổng webGoi (v2.7.5).</p>
       </details>
     `;
   },

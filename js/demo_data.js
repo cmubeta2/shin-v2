@@ -556,3 +556,15 @@ window.SHIN_DEMO_DATA.phongkhamV1 = {
   gopY: { ds: [{ id: 'G1', loai: 'gop_y', noiDung: 'Nên thêm mẫu tin nhắn nhắc lịch', luc: '30/10/2026', trangThai: 'dang_xu_ly', traLoi: '', soAnh: 0 }] },
   hoSo: { hoTen: 'Nhân viên Mẫu', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', ngayVao: '01/03/2024', email: 'mau@example.com', dienThoai: '' }
 };
+
+// v2.7.5 – 📊 Tổng quan tháng PTKH (khuôn webDashboard(token,'thang') qua webGoi – dữ liệu GIẢ)
+window.SHIN_DEMO_DATA.ptkh.dash = {
+  homNay: '04/11/2026', nopBC: true, chuoiDH: 6,
+  thang: { ky: 'thang', tenKy: 'Tháng này', nhan: 'T11/2026',
+    toi: { bc: { tong: 3, dungHan: 3, tre: 0, khongNop: 0, canBoSung: 0 }, viec: { dangLam: 4, quaHan: 1, xong: 7, xongDungHan: 6 } },
+    mucTieu: { ptThoiGian: 0.12, ngayConLai: 22, ngayDaQua: 3, ngayKy: 25, chiTieu: [
+      { ma: 'CT1', ten: 'Khách mới tư vấn', dvt: 'khách', coKH: true, th: 41, kh: 300, pt: 0.137, den: 'xanh', duBao: 1.1 },
+      { ma: 'CT2', ten: 'Khách hẹn đến khám', dvt: 'khách', coKH: true, th: 12, kh: 150, pt: 0.08, den: 'vang', duBao: 0.67 },
+      { ma: 'CT3', ten: 'Gọi lại sau khám', dvt: 'cuộc', coKH: true, th: 3, kh: 120, pt: 0.025, den: 'do', duBao: 0.2 }
+    ] } }
+};
