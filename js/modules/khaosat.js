@@ -1,9 +1,10 @@
 /**
- * SHIN v2 – Mảng 1: Khảo sát hài lòng (máy chủ 70_KhaoSat)
- * Live (v2.4.0 – HOP_DONG_CONG_V2.md mục KS): webTongQuan() ➜
- *   {thang: {soPhieu, haiLong, canXuLy}, tru: [{ma, ten, diem, tyLe}], khaoSat: [{ma, ten, trangThai, soPhieu, moTu, dongLuc}],
- *    canXuLy: [{ma, khaoSat, cau, diem, ngay, noiDung}]}   – không có thông tin liên hệ người trả lời (QK4).
- * App KS v1 chưa mở cổng ➜ máy chủ trả 'hanh' ➜ màn hiện MẪU (dải vàng).
+ * SHIN v2 – Mảng 1: Khảo sát hài lòng (máy chủ 70_KhaoSat, app KS v1.4.3 – L1–L4 ✅)
+ * v2.7.2: KS KHÔNG có webTongQuan ➜ gọi đúng cổng thật (du là đối tượng – SHIN_API.goi):
+ *   webDsKhaoSat({}) ➜ {ok, ds:[{maKS, tieuDe, trangThai, han, soCau…}], dem:{dangMo, nhap, daDong}}
+ *   webKetQuaKS({maKS}) ➜ {ok, maKS, tieuDe, soPhieu, choXacMinh, theoNgay, cau:[{maCH, loai, noiDung, n, tb?, nps?}]}
+ *   webXuatKS({maKS, kieu:'csv'}) ➜ {ok, csv, tenTep}
+ * Màn không hiện thông tin liên hệ người trả lời (QK4) – chỉ đọc số tổng hợp theo câu.
  */
 
 const ModuleKhaoSat = {
@@ -12,39 +13,71 @@ const ModuleKhaoSat = {
   bieuTuong: '🩺',
   paletteMacDinh: 'clinical',
   mayChu: 'KS',
+  TOI_DA_KQ: 6,
 
   taiLive: async function() {
-    const kq = await SHIN_API.goiCong('KS', 'webTongQuan');
-    if (!kq.ok) return kq;
-    return { ok: true, data: this.tuV1(kq.data) };
+    const ds = await SHIN_API.goi('KS', 'webDsKhaoSat', {});
+    if (!ds.ok) return ds;
+    const tatCa = (ds.data && ds.data.ds) || [];
+    const mo = tatCa.filter(k => k.trangThai === 'Đang mở').concat(tatCa.filter(k => k.trangThai !== 'Đang mở')).slice(0, this.TOI_DA_KQ);
+    const kq = await Promise.all(mo.map(k => SHIN_API.goi('KS', 'webKetQuaKS', { maKS: k.maKS })));
+    const loi = kq.filter(x => !x.ok).length;
+    const data = this.tuV1(ds.data, mo.map((k, i) => kq[i].ok ? kq[i].data : null));
+    return { ok: true, data, ghiChu: loi ? `${loi} khảo sát không đọc được kết quả (${SHIN_API.moTaLoi(kq.find(x => !x.ok))}) – các số khác là số thật.` : '' };
+  },
+
+  /** THUẦN. webDsKhaoSat + webKetQuaKS[] ➜ khuôn màn. */
+  tuV1: function(dsKS, ketQua) {
+    dsKS = dsKS || {}; ketQua = ketQua || [];
+    const ds = dsKS.ds || [], dem = dsKS.dem || {};
+    const theoMa = {};
+    ketQua.forEach(k => { if (k && k.maKS) theoMa[k.maKS] = k; });
+    let tongPhieu = 0, choXM = 0;
+    const chiSo = [], canXuLy = [];
+    ketQua.forEach(k => {
+      if (!k) return;
+      tongPhieu += k.soPhieu || 0; choXM += k.choXacMinh || 0;
+      const nam = (k.cau || []).filter(c => c.loai === '5muc' && c.tb !== null && c.tb !== undefined);
+      if (nam.length) {
+        const tb = nam.reduce((a, c) => a + Number(c.tb), 0) / nam.length;
+        chiSo.push({ nhan: k.tieuDe || k.maKS, diem: ShinApp.soVN(tb, 2), tyLe: ShinApp.ptVN(tb / 5), mau: this.mau(tb / 5) });
+      }
+      nam.filter(c => Number(c.tb) <= 2).forEach(c => canXuLy.push({ cau: c.noiDung, khaoSat: k.tieuDe, diem: ShinApp.soVN(c.tb, 1), ngay: '', noiDung: `${c.n || 0} lượt trả lời – điểm TB thấp` }));
+    });
+    return {
+      live: true,
+      tieuDeChiSo: 'ĐIỂM TB CÂU 5 MỨC · THEO KHẢO SÁT',
+      hero: {
+        so: [
+          { nhan: 'Khảo sát đang mở', giaTri: ShinApp.soVN(dem.dangMo || 0), mau: 'var(--c-blue)' },
+          { nhan: 'Phiếu hợp lệ', giaTri: ShinApp.soVN(tongPhieu), mau: 'var(--c-green)' },
+          { nhan: 'Chờ xác minh', giaTri: ShinApp.soVN(choXM), mau: choXM ? 'var(--c-yellow)' : 'var(--c-gray)' }
+        ]
+      },
+      chiSoNhom: chiSo,
+      khaoSat: ds.map(k => ({ ma: k.maKS, ten: k.tieuDe, trangThai: k.trangThai, soPhieu: theoMa[k.maKS] ? theoMa[k.maKS].soPhieu : null, moTu: '', dongLuc: k.han || '' })),
+      canXuLy
+    };
+  },
+
+  /** Xuất CSV 1 khảo sát (webXuatKS) ➜ tải tệp về máy. */
+  xuatCSV: async function(maKS, nut) {
+    if (!SHIN_API.laCheDoLive()) { ShinApp.toast('Demo: xuất CSV chạy khi có token.', 'info'); return; }
+    const kq = await ShinApp.goiNut(nut, 'Đang xuất…', async () => {
+      const r = await SHIN_API.goi('KS', 'webXuatKS', { maKS, kieu: 'csv' });
+      if (!r.ok) throw new Error(SHIN_API.moTaLoi(r));
+      return r.data;
+    }, 'ks-xuat-' + maKS);
+    if (!kq || !kq.csv) return;
+    const url = URL.createObjectURL(new Blob([kq.csv], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url; a.download = kq.tenTep || ('khao-sat-' + maKS + '.csv');
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
   },
 
   mau: function(tyLe) {
     return tyLe === null || tyLe === undefined ? 'var(--c-gray)' : tyLe >= 0.9 ? 'var(--c-green)' : tyLe >= 0.8 ? 'var(--c-yellow)' : 'var(--c-red)';
-  },
-
-  /** THUẦN. Cổng webTongQuan ➜ khuôn màn. */
-  tuV1: function(k) {
-    k = k || {};
-    const t = k.thang || {};
-    return {
-      live: true,
-      hero: {
-        so: [
-          { nhan: 'Hài lòng chung', giaTri: ShinApp.ptVN(t.haiLong), mau: this.mau(t.haiLong) },
-          { nhan: 'Phiếu tháng này', giaTri: ShinApp.soVN(t.soPhieu || 0), mau: 'var(--c-blue)' },
-          { nhan: 'Ý kiến cần xử lý', giaTri: ShinApp.soVN(t.canXuLy || 0), mau: t.canXuLy ? 'var(--c-yellow)' : 'var(--c-green)' }
-        ]
-      },
-      chiSoNhom: (k.tru || []).map(x => ({
-        nhan: (x.ma ? x.ma + '. ' : '') + (x.ten || ''),
-        diem: x.diem === null || x.diem === undefined ? '–' : ShinApp.soVN(x.diem, 2),
-        tyLe: ShinApp.ptVN(x.tyLe),
-        mau: this.mau(x.tyLe)
-      })),
-      khaoSat: k.khaoSat || [],
-      canXuLy: k.canXuLy || []
-    };
   },
 
   render: function(container, data) {
@@ -86,15 +119,15 @@ const ModuleKhaoSat = {
             ${x.noiDung ? `<p class="chu-phu">💬 ${e(x.noiDung)}</p>` : ''}
           </div>`).join('')}` : ''}
 
-      <div class="hn-tieu"><span>5 TRỤ CHẤT LƯỢNG · ACHSI</span></div>
+      <div class="hn-tieu"><span>${e(d.tieuDeChiSo || '5 TRỤ CHẤT LƯỢNG · ACHSI')}</span></div>
       <div class="hn-list">
         ${tru.map(cs => `
           <div class="hn-dong">
             <div class="dong-content">
               <div class="dong-title">${e(cs.nhan)}</div>
-              <div class="dong-sub">Điểm trung bình ${e(String(cs.diem).replace('.', ','))}/5</div>
+              <div class="dong-sub">Điểm trung bình ${e(cs.diem)}/5</div>
             </div>
-            <div class="dong-meta"><div class="dong-so" style="color:${cs.mau}">${e(String(cs.tyLe).replace('.', ','))}</div></div>
+            <div class="dong-meta"><div class="dong-so" style="color:${cs.mau}">${e(cs.tyLe)}</div></div>
           </div>`).join('')}
       </div>
       ${tru.length ? '' : '<div class="trong">Chưa có phiếu nào trong tháng.</div>'}
@@ -102,7 +135,7 @@ const ModuleKhaoSat = {
       ${ks.length ? `
         <details class="tq-gon">
           <summary><span>📋 Các khảo sát</span><span class="tom-tat">${ks.length}</span></summary>
-          ${ks.map(x => `<div class="hang-tru"><span>${e(x.ten)}<br><span class="chu-phu">${e([x.trangThai, x.moTu ? 'từ ' + x.moTu : '', x.dongLuc ? 'đến ' + x.dongLuc : ''].filter(Boolean).join(' · '))}</span></span><b>${ShinApp.soVN(x.soPhieu || 0)} phiếu</b></div>`).join('')}
+          ${ks.map(x => `<div class="hang-tru"><span>${e(x.ten)}<br><span class="chu-phu">${e([x.trangThai, x.moTu ? 'từ ' + x.moTu : '', x.dongLuc ? 'đến ' + x.dongLuc : ''].filter(Boolean).join(' · '))}</span></span><span style="display:flex;align-items:center;gap:6px;"><b>${x.soPhieu === null || x.soPhieu === undefined ? '–' : ShinApp.soVN(x.soPhieu)} phiếu</b>${x.ma && d.live ? `<button class="btn-secondary" style="min-height:44px;" onclick="ModuleKhaoSat.xuatCSV('${e(x.ma)}', this)" aria-label="Xuất CSV">⬇ CSV</button>` : ''}</span></div>`).join('')}
         </details>` : ''}
 
       <details class="tq-gon">

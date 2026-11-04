@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.2] – 04/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG KS v1.4.3)
+
+- `khaosat.js` bỏ `webTongQuan` (v1 không có) ➜ `webDsKhaoSat` + `webKetQuaKS` + xuất CSV `webXuatKS`; KS nhận du đối tượng.
+- HOP_DONG_CONG_V2.md mục KS sửa theo mã thật.
+
+---
+
 ## [2.7.1] – 04/11/2026 (TELEGRAM MINI APP)
 
 ### 📱 Mở Shin v2 ngay trong Telegram

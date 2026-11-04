@@ -12,7 +12,8 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Gắn hàm:** thêm hàm vào bảng trắng `congWeb_()` của app.
 - **Cách nhận tham số:**
   - Hub nhận `ham(token, du)`.
-  - KPI, TS, KS nhận `ham(token, ...du.a)` qua `bocCong…_`.
+  - KPI, TS nhận `ham(token, ...du.a)` qua `bocCong…_`.
+  - **KS (`70_KhaoSat`) cũng nhận `ham(token, du)` đối tượng** (theo mã v1.4.3, sửa 04/11 v2.7.2).
   - **PK (`21_PhongPTKH`) nhận `ham(token, du)` – du là đối tượng** (theo mã v1.0.7, sửa 04/11 v2.7.0).
 - **Kiểm quyền:** từ chối thì ném `loiQuyen_()` để v2 hiện "chưa có quyền".
 - **Lỗi khác:** ném `Error` có câu tiếng Việt, v2 hiện nguyên câu đó.
@@ -24,17 +25,17 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 
 ## v2.4.0 – App đã có, cần thêm cổng
 
-### KS – `70_KhaoSat` · `webTongQuan(token)` (chỉ đọc)
+### KS – `70_KhaoSat` (app KS v1.4.3, L1–L4 ✅ – sửa theo mã thật 04/11; KHÔNG có `webTongQuan`)
 
 ```js
-{ thang: { soPhieu, haiLong /*0..1|null*/, canXuLy },
-  tru: [{ ma:'A', ten, diem /*1..5|null*/, tyLe /*0..1|null*/ }],          // 5 trụ ACHSI
-  khaoSat: [{ ma, ten, trangThai, soPhieu, moTu, dongLuc }],
-  canXuLy: [{ ma, khaoSat, cau, diem /*≤2*/, ngay, noiDung }] }            // KHÔNG có SĐT / tên người trả lời (QK4)
+webDsKhaoSat({})        → { ok, ds:[{maKS, tieuDe, moTa, doiTuong, trangThai:'Nháp'|'Đang mở'|'Đã đóng', han, nhieuLan, soCau, ngayTao}], dem:{dangMo, nhap, daDong} }
+webKetQuaKS({maKS, nguon?, tu?, den?}) → { ok, maKS, tieuDe, soPhieu, choXacMinh, theoNgay:[{ngay, n}], cau:[{maCH, phienBan, loai, noiDung, n, tb?, nps?, yKien?}] }
+webXuatKS({maKS, kieu:'csv'|'sheet'}) → { ok, csv, tenTep } | { ok, link }
+liên thông ksSoLieu (Hub ký HMAC – trình duyệt không gọi được)   ·   webCongKhai* (điền phiếu công khai, không token)
 ```
 
-- **Quyền:** Admin và "Quản lý khảo sát".
-- **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
+- **Quyền:** Admin và "Quản lý khảo sát" (QuanLyKS chỉ thấy KS của mình).
+- **v2 dùng (v2.7.2):** webDsKhaoSat + webKetQuaKS (≤ 6 KS, ưu tiên Đang mở) + webXuatKS csv. Màn KHÔNG hiện câu loại `lienhe` / ý kiến (QK4). 5 trụ ACHSI chưa có ở v1 ➜ v2 hiện điểm TB câu 5 mức theo từng khảo sát.
 
 ### HUB – Telegram Mini App `webTelegram` (HUB L8, Hub v1.13.3 ✅)
 
@@ -168,7 +169,7 @@ Dán vào tab **🧭 Điều hành → ⚡ Giao việc** của v2. Máy sẽ th�
 
 | App | Nội dung giao |
 |---|---|
-| KS | Mở cổng `webTongQuan` theo HOP_DONG_CONG_V2.md (repo shin-v2) mục KS – chỉ đọc, không trả thông tin liên hệ; thêm vào congWeb_; kiểm thử 90_KiemThuApp. |
+| KS | ~~Mở cổng `webTongQuan`~~ – bỏ (04/11): v2 dùng webDsKhaoSat + webKetQuaKS + webXuatKS đã có ở v1.4.3. |
 | PK | Mở cổng `webHomNay` theo HOP_DONG_CONG_V2.md mục PK – chỉ đọc file PTKH qua DB_ID, không sửa cấu trúc PTKH; thêm vào congWeb_. |
 | KPI | Thêm `webNhap2027` vào congWeb_ (hàm đã có) để v2 sửa nháp AOP năm sau. |
 | HUB | 0B Phê duyệt: sheet PhieuDuyet + Log_Duyet, cổng `webPheDuyet` / `webDuyet` theo HOP_DONG_CONG_V2.md; Hoàn tác do v2 giữ 6 giây, máy chủ ghi đúng 1 lần theo mã. |
