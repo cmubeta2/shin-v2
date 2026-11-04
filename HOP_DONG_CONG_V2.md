@@ -35,16 +35,23 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Quyền:** Admin và "Quản lý khảo sát".
 - **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
 
-### PK – `21_PhongPTKH` · `webHomNay(token)` (chỉ đọc, dùng chung file PTKH qua DB_ID)
+### PK – `21_PhongPTKH` (app PK v1.0.7, L1–L5 ĐÃ LÊN APP) – cổng nhận `(token, du)` như Hub
+
+> **Sửa 04/11 theo mã v1 (trọng tài):** cổng PK KHÔNG nhận `du.a`; v2 gọi `SHIN_API.goi('PK', 'web…', du)`. Dạng dữ liệu đầy đủ: `He sinh thai Shin/21_PhongPTKH/KE_HOACH_GIAO_DIEN_PK_AGY.md` mục 4.
 
 ```js
-{ ngay: 'dd/mm/yyyy', baoCao: { daNop, tong }, minhChung /*số ảnh hôm nay*/, doiCa /*đơn chờ*/,
-  nhanSu: [{ ten, viTri, ca, trangThai: 'da_nop'|'dang_truc'|'chua_toi_ca'|'chua_nop' }],
-  viecCa: [{ tieuDe, han, xong }] }
+webKhoiDong()  → { nguoi:{hoTen, vaiTro, to, viTri, quyen:[]}, app:{…}, mo:['homnay','baocao','congviec','lich','thongbao','gopy','toi',('duyet','xeplich'),('nhansu')], dem:{thongBao, choDuyet} }
+webHomNay()    → { ngay, viecQuaHan, viecHomNay, baoCaoHomNay:'da_nop'|'chua_nop'|'nghi', canXuLy:[{id, ten, nguon, han, muc, tab}], thongBaoMoi:[], choDuyet }
+webBaoCao({thang}) · webNopBaoCao({ngay:'dd/mm/yyyy', noiDung:{ca, phatSinh, vuongMac}, anh:[{ten, kieu, base64}] ≤6}) → {ok, ngay, loiAnh?}
+webCongViec({loc:''|'giao'|'canhan'|'nhogiup'}) · webChiTietViec({id}) · webCapNhatViec({id, tienDo?, viecConXong?, traoDoiMoi?}) · webThemViecCaNhan({ten, han})
+webLichTuan({tuan}) (chỉ đọc) · webThongBao() · webDaDocThongBao({id|'tatca'}) · webGopYCuaToi() · webGuiGopY({loai, noiDung, anh ≤3})
+webHoSo() · webDeNghiSuaHoSo({truong:'hoTen'|'dienThoai'|'ngayVao', giaTriMoi, lyDo})
+webChoDuyet({loai}) · webDuyet({loai:'baocao', ids, ketQua:'dat'|'tra_lai', lyDo}) – tổ trưởng / admin
+webNhanSu({tim}) · webHoSoNhanSu({ma}) · webDuyetSuaHoSo({id, dongY, lyDo}) – lãnh đạo / admin
 ```
 
-- **Quyền:** lãnh đạo phòng và tổ trưởng xem cả phòng; nhân viên chỉ thấy dòng của mình.
-- **Thuộc dòng:** PK L1–L3.
+- **Ghi qua webGoi PTKH (chưa có cổng PK cho v2):** xin nghỉ / đổi ca (`webGuiDonNghi`), duyệt đơn nghỉ, xếp lịch (`webLuuXepLich`) → v2 mở app PK v1.
+- **Thuộc dòng:** PK L1–L5 (✅ lên app v1.0.7 @3).
 
 ### KPI – thêm `webNhap2027` vào `congWeb_()`
 

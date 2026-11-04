@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.5] – 04/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
+
+### Mới
+- 🏥 Phòng PTKH: 9 thẻ (Hôm nay, Báo cáo, Công việc, Lịch, Thông báo, Duyệt, Nhân sự, Góp ý, Hồ sơ) gọi thật 21 cổng của app PK v1.0.7; thẻ theo quyền `webKhoiDong.mo`.
+- Nộp báo cáo ngày kèm ảnh minh chứng nén; duyệt đạt / trả lại; cập nhật việc, việc con, trao đổi; thêm việc cá nhân; góp ý / báo lỗi kèm ảnh; đề nghị và duyệt sửa hồ sơ.
+- Hoàn tác 6 giây cho duyệt đạt và đọc hết thông báo.
+
+### Sửa
+- Cổng PK nhận `(token, du)` (không phải `du.a`); bỏ khuôn `webHomNay` cũ không khớp máy chủ. HOP_DONG_CONG_V2.md mục PK theo mã v1.
+
 ## [2.6.4] – 01/11/2026 (MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
 
 ### ⭐ Mới: Module Đánh Giá Văn Hóa Hành Vi 5T Bậc Thang
