@@ -25,6 +25,7 @@ const SHIN_API = (function() {
   const sucKhoe = {};
 
   const LOI_VN = {
+    khongduavao: 'Không gửi: nội dung có dữ liệu cấm theo KHONG_DUA_VAO.md (định danh người bệnh / khóa bí mật).',
     dang: 'Máy chủ không hiểu yêu cầu.',
     hanh: 'Máy chủ v1 chưa mở cổng này.',
     token: 'Thiếu token đăng nhập.',
@@ -80,7 +81,43 @@ const SHIN_API = (function() {
    * Trả {ok:true, isDemo:false, data} | {ok:false, loi, chiTiet} khi đang Live;
    * {ok:true, isDemo:true, data: mẫu} khi chưa có token hoặc mảng chưa có máy chủ.
    */
+  /**
+   * v2.8.9 – M9.5 Tường lửa KHONG_DUA_VAO.md phía trình duyệt (THUẦN): soát mọi chuỗi trong `du` của cổng GHI
+   * trước khi gửi. Chặn: số CCCD 12 chữ số, mã thẻ BHYT (2 chữ + 13 số), khóa / token bí mật (Anthropic, OpenAI,
+   * Google API, Telegram Bot, chuỗi token Hub h1.…). KHÔNG chặn số điện thoại (CRM cần SĐT người liên hệ đối tác).
+   * Trả null nếu sạch, hoặc {loai, truong} – không bao giờ trả lại giá trị vi phạm.
+   */
+  const MAU_CAM = [
+    { loai: 'số CCCD', re: /(^|[^\d])\d{12}(?!\d)/ },
+    { loai: 'mã thẻ BHYT', re: /\b[A-Z]{2}[1-5]\d{12}\b/ },
+    { loai: 'khóa API', re: /\bsk-(ant-)?[A-Za-z0-9_-]{24,}|\bAIza[0-9A-Za-z_-]{35}\b/ },
+    { loai: 'token Telegram Bot', re: /\b\d{8,10}:[A-Za-z0-9_-]{35}\b/ },
+    { loai: 'token đăng nhập', re: /\bh1\.[\w-]+\.[\w-]+\.[\w-]{16,}/ }
+  ];
+  const CONG_GHI = /^web(Luu|Ghi|Nop|Gui|Them|Sua|Tao|Duyet|Xoa|Dang|Cap)/;
+  function soatKhongDuaVao(du, truong, sau) {
+    sau = sau || 0;
+    if (du === null || du === undefined || sau > 6) return null;
+    if (typeof du === 'string') {
+      for (const m of MAU_CAM) if (m.re.test(du)) return { loai: m.loai, truong: truong || '' };
+      return null;
+    }
+    if (typeof du !== 'object') return null;
+    for (const k of Object.keys(du)) {
+      const r = soatKhongDuaVao(du[k], Array.isArray(du) ? truong : k, sau + 1);
+      if (r) return r;
+    }
+    return null;
+  }
+
   async function goi(appKey, hanh, du = {}) {
+    if (CONG_GHI.test(String(hanh || ''))) {
+      const vp = soatKhongDuaVao(du);
+      if (vp) {
+        console.warn(`[Shin API] Chặn ${hanh}: ô "${vp.truong}" có ${vp.loai} (KHONG_DUA_VAO.md).`);
+        return { ok: false, loi: 'khongduavao', chiTiet: `Ô "${vp.truong}" có ${vp.loai} – xóa đi rồi lưu lại.` };
+      }
+    }
     const token = layToken();
     const khoa = khoaMayChu(appKey);
     const endpoint = ENDPOINTS[khoa];
@@ -156,7 +193,7 @@ const SHIN_API = (function() {
   function moTaLoi(kq) {
     if (!kq) return LOI_VN.loi;
     const goc = LOI_VN[kq.loi] || LOI_VN.loi;
-    return kq.loi === 'loi' && kq.chiTiet ? `${goc} (${kq.chiTiet})` : goc;
+    return (kq.loi === 'loi' || kq.loi === 'khongduavao') && kq.chiTiet ? `${goc} (${kq.chiTiet})` : goc;
   }
 
   function layDuLieuMau(appKey, hanh) {
@@ -209,6 +246,7 @@ const SHIN_API = (function() {
     goiCong,
     goiPTKH,
     laySucKhoe,
-    moTaLoi
+    moTaLoi,
+    soatKhongDuaVao
   };
 })();

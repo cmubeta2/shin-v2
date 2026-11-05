@@ -174,7 +174,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M9.2 | Tìm kiếm toàn văn (lọc phía trình duyệt trước, FTS5 sau) | ✅ v2.7.3 phía trình duyệt (không dấu, nhiều từ, lọc lĩnh vực, tô đậm) / ⬜ FTS5 máy chủ | v2.3.0 |
 | M9.3 | Đồ thị liên kết `[[wiki-links]]` | ✅ v2.8.3 phía trình duyệt (liên kết ra / ngược / treo, SVG) – dữ liệu MẪU tới khi v1 có máy chủ kho tri thức | v2.6.0 |
 | M9.4 | Trích bài học kinh nghiệm từ báo cáo ca / Flash Report | ⬜ | v2.6.0 |
-| M9.5 | Tường lửa `KHONG_DUA_VAO.md` – chặn dữ liệu bệnh nhân vào AI | ⬜ (quy tắc đã có) | v2.4.0 |
+| M9.5 | Tường lửa `KHONG_DUA_VAO.md` – chặn dữ liệu bệnh nhân vào AI | ✅ v2.8.9 chặn sớm phía trình duyệt mọi cổng ghi (CCCD · BHYT · khóa · token) / ⬜ chặn phía máy chủ v1 | v2.4.0 |
 
 ### 💼 TẦNG 3 – GÓI GIẢI PHÁP TƯ VẤN SỐ *(không có màn hình riêng trong app)*
 G1 Chẩn đoán sức khỏe quy trình · G2 Bộ chuẩn hóa SOP ACHSI/FMFT · G3 Offer Stack · G4 Lộ trình CĐS 3 giai đoạn.

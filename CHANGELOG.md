@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.9] – 05/11/2026 (TƯỜNG LỬA KHONG_DUA_VAO M9.5)
+
+### 🔒 Bảo mật
+- `js/api.js`: `soatKhongDuaVao` (thuần), `MAU_CAM`, `CONG_GHI`; `goi` chặn cổng ghi có CCCD / BHYT / khóa / token trước khi gửi, lỗi `khongduavao` có câu Việt.
+
 ## [2.8.8] – 05/11/2026 (RÀ UX ĐÁNH GIÁ 5T)
 
 ### 🎨 Giao diện
