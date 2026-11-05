@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.10] – 05/11/2026 (TRI THỨC – TÌM TOÀN VĂN)
+
+### ⭐ Mới
+- `js/modules/trithuc.js`: tìm toàn văn phía trình duyệt (M9.2) – bỏ dấu, nhiều từ, khớp tài liệu + mảng; nút 🔍 đưa con trỏ vào ô tìm.
+
+### 🛠 Sửa
+- Màn Tri thức: chữ ≥ 14px (bỏ cỡ 10–12px), escape mọi trường, bỏ toast giả "Thêm tài liệu".
+
 ## [2.6.9] – 05/11/2026 (KPI – NHÁP AOP NĂM SAU)
 
 ### 🟢 Nối thật

@@ -171,7 +171,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M9.1 | Kho SOP 3 tầng: HowTos → Runbooks → References | ✅ xem | – |
-| M9.2 | Tìm kiếm toàn văn (lọc phía trình duyệt trước, FTS5 sau) | 🟡 | v2.3.0 |
+| M9.2 | Tìm kiếm toàn văn (lọc phía trình duyệt trước, FTS5 sau) | 🟡 v2.6.10 lọc phía trình duyệt (bỏ dấu, nhiều từ) tài liệu + mảng; FTS5 / kho thật chờ máy chủ | v2.3.0 |
 | M9.3 | Đồ thị liên kết `[[wiki-links]]` | ⬜ | v2.6.0 |
 | M9.4 | Trích bài học kinh nghiệm từ báo cáo ca / Flash Report | ⬜ | v2.6.0 |
 | M9.5 | Tường lửa `KHONG_DUA_VAO.md` – chặn dữ liệu bệnh nhân vào AI | ⬜ (quy tắc đã có) | v2.4.0 |

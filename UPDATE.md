@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.6.9** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.6.10** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.6.10 ✅ – TRI THỨC: TÌM TOÀN VĂN PHÍA TRÌNH DUYỆT (05/11/2026)
+- **Nội dung (M9.2):** ô tìm ở 🧠 Thư viện Tri thức lọc ngay trên máy (bỏ dấu tiếng Việt, mọi từ phải khớp) theo mã / tên / lĩnh vực tài liệu và tên mảng (bấm để nhảy tới mảng). Sửa chữ < 14px, escape dữ liệu, bỏ nút "Thêm tài liệu" giả.
+- **Còn chờ:** kho tài liệu thật (05_TriThuc) chưa có cổng máy chủ – danh sách vẫn là mẫu.
 
 ### PHIÊN BẢN v2.6.9 ✅ – KPI: NHÁP AOP NĂM SAU (05/11/2026)
 - **Nội dung:** màn 🎯 AOP, mục "🗓 Nháp AOP" đọc `webNhap2027` (KPI L10, v1.8.2) khi mở: mức năm gốc ➜ mức năm sau từng khoa + toàn phòng khám; Admin KPI sửa % tăng trưởng (−50% … 200%, trống = mặc định) lưu bằng `webLuuTangTruong`, mỗi dòng 1 nút, khóa bấm 2 lần. Người không phải Admin chỉ xem.

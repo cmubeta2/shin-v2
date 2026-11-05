@@ -28,7 +28,7 @@ const ModuleTriThuc = {
       <div class="hn-hero">
         <div class="hero-head">
           <div>
-            <div class="hero-greet">${hero.chao || 'Thư Viện Tri Thức & Second Brain 🧠'}</div>
+            <div class="hero-greet">${ShinApp.esc(hero.chao) || 'Thư Viện Tri Thức & Second Brain 🧠'}</div>
             <div class="hero-date">📅 ${hero.ngay || 'Đồng bộ tự động cùng Obsidian Vault'}</div>
           </div>
         </div>
@@ -36,8 +36,8 @@ const ModuleTriThuc = {
         <div class="tq-3so">
           ${(hero.so || []).map(s => `
             <div class="tq-o">
-              <div class="tq-so" style="color: ${s.mau}">${s.giaTri}</div>
-              <div class="tq-nhan">${s.nhan}</div>
+              <div class="tq-so" style="color: ${s.mau}">${ShinApp.esc(s.giaTri)}</div>
+              <div class="tq-nhan">${ShinApp.esc(s.nhan)}</div>
             </div>
           `).join('')}
         </div>
@@ -47,47 +47,51 @@ const ModuleTriThuc = {
         </button>
       </div>
 
-      <!-- Danh Sách Quy Trình SOP & Tri Thức Trọng Tâm -->
-      <div class="section-title">
-        <span>TÀI LIỆU QUY TRÌNH SOP & HỆ THỐNG · ${taiLieu.length}</span>
-        <button class="btn-secondary" style="min-height:36px; padding:0 10px; font-size:12px;" onclick="ShinApp.toast('Tải tài liệu tri thức mới')">
-          ＋ Thêm tài liệu
-        </button>
+      <div class="form-group" style="margin-top:12px">
+        <input id="ttTim" class="form-input pk-nhap" type="search" placeholder="🔍 Tìm toàn văn: tên, mã, lĩnh vực, mảng…" aria-label="Tìm trong thư viện tri thức"
+          oninput="ModuleTriThuc.loc(this.value)" value="${ShinApp.esc(this._tim || '')}">
       </div>
-
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        ${taiLieu.map(t => `
-          <div class="card" onclick="ModuleTriThuc.xemTaiLieu('${t.ma}', '${t.ten}')" style="cursor:pointer;">
-            <div class="card-header">
-              <div>
-                <span class="status-pill live" style="font-size:10px; padding:2px 6px; margin-bottom:4px; display:inline-block;">
-                  ${t.linhVuc}
-                </span>
-                <div class="card-title" style="font-size:14px;">${t.ten}</div>
-              </div>
-              <span class="dong-arrow">›</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--text-muted); margin-top:8px;">
-              <span>Mã: <strong>${t.ma}</strong> · Định dạng: ${t.dinhDang}</span>
-              <span>Cập nhật: ${t.capNhat}</span>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-
-      <div style="margin-top:20px; background:var(--bg-sub); padding:12px; border-radius:8px; border:1px solid var(--border); font-size:12px; color:var(--text-muted); line-height:1.4;">
-        📂 <strong>Đường dẫn Obsidian Vault:</strong> Kho tài liệu được đồng bộ trực tiếp tại <code>Thiện Phúc Cloud/He sinh thai Shin/05_TriThuc</code>, kết nối liền mạch cùng MCP Obsidian Second Brain của Shin.
-      </div>
+      <div id="ttKetQua"></div>
     `;
 
     container.innerHTML = html;
+    this.loc(this._tim || '');
   },
 
-  xemTaiLieu: function(ma, ten) {
-    ShinApp.toast(`Mở tài liệu: [${ma}] ${ten}`, 'info');
+  /* ---------- M9.2 (v2.6.10) – tìm toàn văn phía trình duyệt: bỏ dấu tiếng Việt, mọi từ phải khớp ---------- */
+  _tim: '',
+  boDau: function(s) {
+    return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
+  },
+  khop: function(chu, tu) { const c = this.boDau(chu); return tu.every(t => c.indexOf(t) >= 0); },
+
+  loc: function(q) {
+    this._tim = q || '';
+    const el = document.getElementById('ttKetQua');
+    if (!el) return;
+    const e = ShinApp.esc, tu = this.boDau(q).split(/\s+/).filter(Boolean);
+    const tl = ((window.SHIN_DEMO_DATA.trithuc || {}).taiLieu || []).filter(t => !tu.length || this.khop([t.ma, t.ten, t.linhVuc, t.dinhDang].join(' '), tu));
+    const mang = tu.length ? (ShinApp.MODULES || []).filter(m => this.khop([m.ma, m.ten].join(' '), tu)) : [];
+    el.innerHTML = `
+      ${mang.length ? `<div class="hn-tieu"><span>MẢNG KHỚP · ${mang.length}</span></div>
+        <div class="hn-list">${mang.map(m => `<div class="hn-dong" role="button" tabindex="0" onclick="ShinApp.chuyenModule('${e(m.ma)}')">
+          <div class="dong-content"><div class="dong-title">${e(m.icon || m.bieuTuong || '')} ${e(m.ten)}</div></div><span class="dong-arrow">›</span></div>`).join('')}</div>` : ''}
+      <div class="hn-tieu"><span>TÀI LIỆU QUY TRÌNH SOP & HỆ THỐNG · ${tl.length}</span></div>
+      <div class="hn-list">${tl.map(t => `<div class="hn-dong" role="button" tabindex="0" onclick="ModuleTriThuc.xemTaiLieu('${e(t.ma)}')">
+        <div class="dong-content"><div class="dong-title">${e(t.ten)}</div>
+          <div class="dong-sub">${e(t.ma)} · ${e(t.linhVuc)} · cập nhật ${e(t.capNhat)}</div></div>
+        <span class="dong-arrow">›</span></div>`).join('')}</div>
+      ${tl.length || mang.length ? '' : `<div class="trong">Không tìm thấy "${e(q)}".</div>`}
+      <p class="chu-phu">📂 Kho tài liệu đồng bộ tại <code>He sinh thai Shin/05_TriThuc</code> (Second Brain). Tìm ở đây lọc ngay trên máy, không gửi từ khóa đi đâu.</p>`;
+  },
+
+  xemTaiLieu: function(ma) {
+    const t = ((window.SHIN_DEMO_DATA.trithuc || {}).taiLieu || []).find(x => x.ma === ma);
+    ShinApp.toast(t ? `[${t.ma}] ${t.ten} – mở trong Second Brain (05_TriThuc).` : 'Không thấy tài liệu.', 'info');
   },
 
   moTimKiem: function() {
-    ShinApp.toast('Mở công cụ tìm kiếm toàn văn FTS5 trong Second Brain', 'info');
+    const o = document.getElementById('ttTim');
+    if (o) { o.focus(); o.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
   }
 };
