@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.6 ✅ – PTKH GỐC ĐỌC THẲNG (05/11/2026)
+- Màn PTKH Gốc đọc thẳng app PTKH v1.299 qua `webGoi` (chỉ đọc): `webKhoiDong` (tóm tắt 14 ngày, lịch tuần, việc tuần) + `webDashboard(ky)` (Tuần / Tháng / Quý).
+- Thao tác ghi PTKH (nộp báo cáo, duyệt, xếp lịch) vẫn mở app PTKH. Khuôn `webDashboard` dài và đổi theo phiên bản PTKH ➜ v2 chỉ hiện các trường số của `toi` / `to` / `phong` – cần đối chiếu lại với số thật khi anh mở bằng token.
+
 ### PHIÊN BẢN v2.6.5 ✅ – PHÒNG PTKH NỐI THẬT APP PK v1.0.7 (05/11/2026)
 - Màn 🏥 Phòng PTKH thành 9 tab theo `webKhoiDong().mo`: Hôm nay · Báo cáo ngày (nộp + ảnh minh chứng) · Công việc (chi tiết, báo tiến độ, thêm việc cá nhân) · Lịch tuần (chỉ đọc) · Thông báo (đánh dấu đã đọc) · Góp ý · Hồ sơ · ⚡ Duyệt (Hoàn tác 6s) · Nhân sự.
 - Sửa cách gọi: máy chủ PK nhận `du` đối tượng (không phải `du.a`); khuôn `webHomNay` theo mã v1 thật – HOP_DONG_CONG_V2.md mục PK viết lại.

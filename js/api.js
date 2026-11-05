@@ -118,6 +118,30 @@ const SHIN_API = (function() {
     return goi(appKey, hanh, { a: thamSo });
   }
 
+  /**
+   * v2.6.6 – Cổng webGoi của PTKH gốc (20_PTKH L148, app v1.294+): POST {hanh:'webGoi', token, du:{ham, thamSo}} ➜ {ok, du} | {ok:false, loi: chữ}.
+   * Địa chỉ /exec lấy lúc chạy từ link PTKH Hub trả (webKhoiDong.lienKet) – không ghi cứng; chỉ nhận https://script.google.com/macros/s/…/exec.
+   */
+  async function goiPTKH(linkPTKH, ham, thamSo = []) {
+    const token = layToken();
+    if (!token) return { ok: true, isDemo: true, data: null };
+    let endpoint = '';
+    try { const u = new URL(linkPTKH || ''); if (u.protocol === 'https:' && u.hostname === 'script.google.com' && /^\/macros\/s\/[\w-]+\/exec$/.test(u.pathname)) endpoint = u.origin + u.pathname; } catch (e) {}
+    if (!endpoint) return { ok: false, loi: 'hanh', chiTiet: 'Chưa có link app PTKH từ Hub.' };
+    const batDau = Date.now();
+    try {
+      const r = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ hanh: 'webGoi', token, du: { ham, thamSo } }) });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = await r.json();
+      ghiSucKhoe('PTKH', batDau, j.ok ? '' : 'loi');
+      if (!j.ok) return { ok: false, loi: j.loi === 'token' ? 'token' : j.loi === 'ham' ? 'hanh' : 'loi', chiTiet: j.loi || '' };
+      return { ok: true, isDemo: false, data: j.du };
+    } catch (err) {
+      ghiSucKhoe('PTKH', batDau, 'mang');
+      return { ok: false, loi: 'mang', chiTiet: err.message };
+    }
+  }
+
   function ghiSucKhoe(khoa, batDau, loi) {
     sucKhoe[khoa] = { ms: Date.now() - batDau, ok: !loi || loi === 'quyen', loi: loi || '', luc: new Date() };
   }
@@ -154,6 +178,7 @@ const SHIN_API = (function() {
     coMayChu,
     goi,
     goiCong,
+    goiPTKH,
     laySucKhoe,
     moTaLoi
   };

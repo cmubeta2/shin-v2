@@ -135,7 +135,7 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 ### PTKH gốc (20_PTKH) – mở cổng web cho v2 (chỉ đọc trước)
 
 - `doPost` hiện chỉ gọi `xuLyLTHub_` ➜ đổi sang `cuaWebPost_(e, congWeb_(), {tomTat, viec, thongBao})` của Lõi (Loi_Web.gs) – nhánh liên thông giữ nguyên.
-- `congWeb_()` bảng trắng chỉ đọc: `webKhoiDong`, `webDashboard`. Hai hàm đã có, nhận `(token, …du.a)` như KPI/TS/KS/PK.
+- **ĐÃ CÓ (PTKH L148, app v1.294+ – v2.6.6 dùng):** cổng `webGoi` – POST `{hanh:'webGoi', token, du:{ham, thamSo:[…]}}` ➜ `{ok, du}` / `{ok:false, loi:'token'|'ham'|'thamSo'|chữ lỗi}`; hàm trong `HAM_WEBGOI_` (37_LienThongHub.gs). v2 dùng `webKhoiDong()` và `webDashboard(ky)` (ky: tuan / thang / quy). Địa chỉ = link PTKH Hub trả (bỏ `?t=`). Đề xuất `congWeb_()` cũ ở trên **không cần nữa**.
 - Token: `xacThucWeb_` nhận token Hub (đã có từ L36a); lỗi xác thực ném `loiQuyen_` để v2 hiện "chưa có quyền".
 - **Cấm trả:** thông tin người bệnh, nội dung khiếu nại có tên / SĐT khách.
 

@@ -500,6 +500,11 @@ window.SHIN_DEMO_DATA.quantri = {
 };
 
 window.SHIN_DEMO_DATA.ptkh = {
+  // v2.6.6: phần "đọc thẳng app PTKH" (webGoi) – dữ liệu giả
+  ptkh: { daNop: false, khongNopBC: false, phienBan: 'v1.299 (mẫu)', tomTat: { dungHan14: 9, veSom14: 1, tre14: 2, canBoSung14: 1, choDuyet: 0 },
+    lichTuan: [{ ngay: '2026-11-02', vt: 'Tiếp đón', ca: 'Sáng' }, { ngay: '2026-11-03', vt: 'CSKH', ca: 'Chiều' }, { ngay: '2026-11-04', nghi: 'Nghỉ tuần' }],
+    viec: [{ noiDung: 'Gọi lại khách hẹn tái khám (mẫu)', trangThai: 'Đang làm' }] },
+  tongQuan: { nhan: 'Tháng 11/2026 (mẫu)', toi: { bc: { nop: 4, phaiNop: 5, dungHan: 3 }, minhChung: 6 }, phong: { ten: 'Phòng PTKH (mẫu)', nop: 80, phaiNop: 92 } },
   so: [
     { nhan: '% hoàn thành phòng (tháng)', chu: '86 %', den: 'vang' },
     { nhan: 'Báo cáo chờ duyệt', chu: '4 báo cáo', den: 'vang' },

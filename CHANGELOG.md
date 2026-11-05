@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.6] – 05/11/2026 (PTKH GỐC ĐỌC THẲNG QUA CỔNG webGoi)
+
+### Mới
+- `SHIN_API.goiPTKH(link, ham, thamSo)`: gọi cổng `webGoi` của app PTKH gốc (20_PTKH L148, app v1.294+). Địa chỉ /exec lấy lúc chạy từ link PTKH do Hub trả, chỉ nhận `https://script.google.com/macros/s/…/exec` – không ghi cứng link mới vào mã.
+- Màn 📋 PTKH Gốc thêm khối "Đọc thẳng app PTKH": báo cáo hôm nay, đúng hạn / trễ 14 ngày, chờ duyệt, cần bổ sung (`webKhoiDong.tomTat`), lịch làm việc tuần, việc tuần này, Tổng quan Tuần / Tháng / Quý (`webDashboard`). Lỗi cổng ➜ báo rõ, phần số Hub vẫn giữ.
+
 ## [2.6.5] – 05/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
 
 ### Mới
