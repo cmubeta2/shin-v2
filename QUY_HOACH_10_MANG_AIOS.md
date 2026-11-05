@@ -133,9 +133,9 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 ### 🏥 MẢNG 5 – NHÂN SỰ & VẬN HÀNH PHÒNG KHÁM · `phongkham` · Hoàng Kim
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
-| M5.1 | Báo cáo ca ngày (lượt khám, doanh thu, tồn đọng) | 🟡 màn xong, chờ PK mở `webHomNay` | v2.4.0 |
-| M5.2 | Minh chứng ảnh nén → Drive (Base64 qua `21_PhongPTKH`) | ⬜ | v2.4.0 (v1 mở cổng trước) |
-| M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | ✅ xem / ⬜ đổi ca | v2.3.0 |
+| M5.1 | Báo cáo ca ngày (lượt khám, doanh thu, tồn đọng) | 🟢 số thật – app PK `webHomNay`/`webBaoCao`/`webNopBaoCao` | v2.6.5 |
+| M5.2 | Minh chứng ảnh nén → Drive (Base64 qua `21_PhongPTKH`) | 🟢 JPEG ≤1600px, ≤6 ảnh qua `webNopBaoCao` | v2.6.5 |
+| M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | 🟢 xem (`webLichTuan`) + duyệt (`webDuyet`) / ⬜ xin nghỉ – đổi ca (mở app PK) | v2.6.5 |
 | M5.4 | Bóc tách tăng ca & bù giờ TC-NS | ⬜ (logic có ở M-PTKH-03) | v2.4.0 |
 | M5.5 | Kiểm soát vi phạm NTC (> 3 lần trễ → trừ 0,5 công) | ⬜ (M-PTKH-04) | v2.4.0 |
 | M5.6 | Team Morale Index – cảm nhận sau ca 1–5★ | ⬜ (M-PTKH-01) | v2.4.0 |

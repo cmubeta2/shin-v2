@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.5] – 05/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
+
+### Mới
+- `js/modules/phongkham.js` viết lại: 9 tab theo quyền máy chủ (`webKhoiDong().mo`), đọc thật `webHomNay`, `webBaoCao`, `webCongViec`, `webChiTietViec`, `webLichTuan`, `webThongBao`, `webGopYCuaToi`, `webHoSo`, `webChoDuyet`, `webNhanSu`.
+- Ghi thật: nộp báo cáo ngày + ảnh minh chứng (nén JPEG ≤1600px, ≤6 ảnh), báo tiến độ việc, thêm việc cá nhân, đánh dấu đã đọc thông báo, gửi góp ý, duyệt / trả lại (Hoàn tác 6s, chỉ gửi 1 lần khi hết giờ).
+
+### Sửa
+- Gọi máy chủ PK đúng giao thức `ham(token, du)` (du đối tượng) thay vì `du.a`; khuôn dữ liệu theo mã v1 thật.
+
 ## [2.6.4] – 01/11/2026 (MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
 
 ### ⭐ Mới: Module Đánh Giá Văn Hóa Hành Vi 5T Bậc Thang

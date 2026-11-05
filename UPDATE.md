@@ -26,6 +26,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.5 ✅ – PHÒNG PTKH NỐI THẬT APP PK v1.0.7 (05/11/2026)
+- Màn 🏥 Phòng PTKH thành 9 tab theo `webKhoiDong().mo`: Hôm nay · Báo cáo ngày (nộp + ảnh minh chứng) · Công việc (chi tiết, báo tiến độ, thêm việc cá nhân) · Lịch tuần (chỉ đọc) · Thông báo (đánh dấu đã đọc) · Góp ý · Hồ sơ · ⚡ Duyệt (Hoàn tác 6s) · Nhân sự.
+- Sửa cách gọi: máy chủ PK nhận `du` đối tượng (không phải `du.a`); khuôn `webHomNay` theo mã v1 thật – HOP_DONG_CONG_V2.md mục PK viết lại.
+- Lỗi cổng ➜ báo trong tab + nút Thử lại, không thay bằng số mẫu. Demo dùng dữ liệu giả đúng dạng hợp đồng.
+- Còn chờ v1 / để sau: xin nghỉ – xếp lịch – sửa hồ sơ vẫn mở app PK (cổng ghi đi qua `webGoi` PTKH); bản đổi v2.6.5 cũ (lượt 04/11) không còn trong thư mục – không khôi phục.
+
 ### PHIÊN BẢN v2.6.4 ✅ – MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T (01/11/2026)
 - **Mục tiêu:** Xây dựng module đánh giá văn hóa hành vi 5T cốt lõi tham chiếu phương pháp luận Bộ 83 Tiêu chí Chất lượng Bộ Y tế, số hóa trên SHIN AIOS và tích hợp Second Brain.
 - **Nội dung hoàn tất:**

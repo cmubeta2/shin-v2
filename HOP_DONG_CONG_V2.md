@@ -35,16 +35,14 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Quyền:** Admin và "Quản lý khảo sát".
 - **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
 
-### PK – `21_PhongPTKH` · `webHomNay(token)` (chỉ đọc, dùng chung file PTKH qua DB_ID)
+### PK – `21_PhongPTKH` (app PK v1.0.7 – ĐÃ LÊN APP, v2.6.5 nối thật)
 
-```js
-{ ngay: 'dd/mm/yyyy', baoCao: { daNop, tong }, minhChung /*số ảnh hôm nay*/, doiCa /*đơn chờ*/,
-  nhanSu: [{ ten, viTri, ca, trangThai: 'da_nop'|'dang_truc'|'chua_toi_ca'|'chua_nop' }],
-  viecCa: [{ tieuDe, han, xong }] }
-```
-
-- **Quyền:** lãnh đạo phòng và tổ trưởng xem cả phòng; nhân viên chỉ thấy dòng của mình.
-- **Thuộc dòng:** PK L1–L3.
+- **Trọng tài:** mã v1 `21_PhongPTKH/10_WebApp.gs` `congWeb_()` + hợp đồng `21_PhongPTKH/KE_HOACH_GIAO_DIEN_PK_AGY.md` mục 4. Khuôn cũ `{baoCao:{daNop,tong}, nhanSu, viecCa}` của bản nháp 30/10 **bỏ** – v1 không có.
+- **Cách gọi:** máy chủ PK nhận `ham(token, du)` với `du` là ĐỐI TƯỢNG ➜ v2 gọi `SHIN_API.goi('PK', 'webX', {...})` (KHÔNG dùng `goiCong`/`du.a`).
+- **Đọc:** `webKhoiDong()` (nguoi, app, mo[], dem) · `webHomNay()` · `webBaoCao({thang})` · `webCongViec({loc})` · `webChiTietViec({id})` · `webLichTuan({tuan})` · `webThongBao()` · `webGopYCuaToi()` · `webHoSo()` · `webChoDuyet({loai})` · `webNhanSu({tim})`.
+- **Ghi v2 dùng:** `webNopBaoCao({ngay, noiDung, anh:[{ten,kieu,base64}]})` (JPEG ≤1600px, ≤6 ảnh; trả `loiAnh` nếu ảnh lỗi) · `webCapNhatViec({id, tienDo})` · `webThemViecCaNhan({ten, han})` · `webDaDocThongBao({id|'tatca'})` · `webGuiGopY({loai, noiDung, anh})` · `webDuyet({loai, ids, ketQua, lyDo})` (Hoàn tác 6s – chỉ gửi khi hết giờ).
+- **Chưa dùng ở v2 (mở app PK):** xin nghỉ / xếp lịch (`webGoi` PTKH), `webDeNghiSuaHoSo`, `webDuyetSuaHoSo`, `webBangXepLich`.
+- **Quyền:** tab theo `mo[]` máy chủ trả (duyet: tổ trưởng / admin; nhansu: lãnh đạo / admin; Xem thử chỉ xem).
 
 ### KPI – thêm `webNhap2027` vào `congWeb_()`
 
