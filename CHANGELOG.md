@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.0] – 05/11/2026 (RÀ UX TOÀN MÀN 375 / 1280)
+
+### 🎨 Giao diện
+- `css/styles.css`: `.chi-tiet-gon summary` 32 → 44px. Đo 16 màn + 18 tab con: 0 chữ < 14px, 0 vùng bấm < 44px, 0 cuộn ngang.
+
 ## [2.8.9] – 05/11/2026 (TƯỜNG LỬA KHONG_DUA_VAO M9.5)
 
 ### 🔒 Bảo mật

@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.8.9** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.9.0** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.9.0 ✅ – RÀ UX TOÀN BỘ 16 MÀN + 18 TAB CON Ở 375 / 1280 (05/11/2026, lượt tự động ⑤)
+- **Nội dung:** đo tự động (mở hết khối gập) mọi màn trong menu và các tab con (5T Thư viện; Dự án Danh sách / Flash / Ma trận; Quản trị Người dùng / App / Mảng / Ma trận quyền; KPI Soát lỗi / AOP / Báo cáo quý; PK Công việc / Báo cáo / Lịch / Góp ý / Hồ sơ / Thông báo / Nhân sự): còn đúng 1 lỗi – thẻ gập "Chi tiết" ở Điều hành cao 32px → 44px. Kết quả sau sửa: **0 chữ < 14px, 0 vùng bấm < 44px, 0 cuộn ngang, 0 lỗi console** (Demo).
+- Còn chờ v1: M5.4 bóc tách tăng ca, M5.5 vi phạm NTC, M5.6 Team Morale – danh sách `HAM_WEBGOI_` của PTKH chưa có hàm chỉ đọc trả các số này (chỉ có `webXuatTCNS` ghi bảng TC-NS, Admin) → cần dòng v1 mới nếu Sếp muốn hiện trên v2.
 
 ### PHIÊN BẢN v2.8.9 ✅ – TƯỜNG LỬA KHONG_DUA_VAO PHÍA TRÌNH DUYỆT M9.5 (05/11/2026, lượt tự động ⑤)
 - **Nội dung:** `js/api.js` soát MỌI chuỗi trong dữ liệu gửi của cổng GHI (`webLuu…`, `webGhi…`, `webNop…`, `webGui…`, `webThem…`, `webSua…`, `webTao…`, `webDuyet…`, `webXoa…`, `webDang…`, `webCap…`) trước khi gửi – kể cả qua `goiCong`/`goiBat`. Chặn số CCCD 12 chữ số, mã thẻ BHYT, khóa API (Anthropic / OpenAI / Google), token Telegram Bot, chuỗi token Hub; báo "Ô …có … – xóa đi rồi lưu lại", KHÔNG gửi gì, không in lại giá trị vi phạm. Không chặn số điện thoại (CRM cần SĐT người liên hệ đối tác), số kiểu number, số tiền có dấu chấm, cổng đọc.

@@ -1918,3 +1918,6 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .muc-pill.m1 { background: var(--c-red-soft); color: var(--c-red); border-color: var(--c-red-soft); }
 .chk-vung-5t { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; cursor: pointer; }
 #appContent .form-label { font-size: calc(14px * var(--font-scale)); }
+
+/* v2.9.0 – rà UX toàn màn: thẻ gập "Chi tiết" đủ vùng bấm 44px */
+.chi-tiet-gon summary { min-height: 44px; }
