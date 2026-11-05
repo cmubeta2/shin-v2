@@ -67,7 +67,7 @@ webGopYCuaToi() → { ds:[…] } webGuiGopY({loai, noiDung, anh}) → { ok }   w
 - **Quyền:** duyệt / xếp lịch = tổ trưởng, admin; nhân sự = lãnh đạo; còn lại mọi nhân viên.
 - **v2 dùng (v2.7.0):** tất cả hàm trên. Chưa dùng: duyệt đơn nghỉ (PK bỏ qua – làm trên PTKH), webBangXepLich, webDeNghiSuaHoSo, webHoSoNhanSu, webDuyetSuaHoSo.
 
-### KPI – `webNhap2027` (KPI L10, đã code v1.8.2 – app đang v1.8.1) – v2.7.6 dựng màn
+### KPI – `webNhap2027` (KPI L10, v1.8.2 đã lên app @9 05/11) – v2.7.6 dựng màn
 
 ```js
 webNhap2027()  → { nam, namGoc, suaDuoc /*Admin*/, vien:{khoa, muc2026, g, nguon:'anh'|'thucDat'|'macDinh', macDinh, muc2027} | null, khoa:[ …cùng khuôn ] } | { loi }

@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.8] – 05/11/2026 (RÀ UX ĐÁNH GIÁ 5T)
+
+### 🎨 Giao diện
+- `js/modules/danhgia5t.js`: chữ nội tuyến ≥ 14px, nút phụ ≥ 44px, ô tick bọc `.chk-vung-5t`, màu theo biến (`color-mix` cho nhãn mức).
+- `css/styles.css`: khối bù v2.8.8 cho bảng 5T, chip lọc, pill, ô ghi chú 16px, `.form-label`.
+- `QUY_HOACH_10_MANG_AIOS.md`, `HOP_DONG_CONG_V2.md`: KPI `webNhap2027` đã lên app (v1.8.2 @9).
+
 ## [2.8.7] – 05/11/2026 (KHẢO SÁT – 5 TRỤ ACHSI THEO THÁNG)
 
 ### 🟢 Khảo sát

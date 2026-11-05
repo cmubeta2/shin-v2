@@ -1903,3 +1903,18 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 /* v2.8.7 – Khảo sát: chọn tháng tổng hợp 5 trụ ACHSI */
 .ks-thang { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 6px 14px; margin-bottom: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; font-size: calc(14px * var(--font-scale)); font-weight: 700; color: var(--text); }
 .ks-thang input { min-height: 44px; font-size: 16px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); max-width: 60%; }
+
+/* v2.8.8 – Rà UX màn ⭐ Đánh giá 5T: chữ ≥ 14px, ô nhập 16px, vùng bấm ≥ 44px, màu mức theo biến */
+.tab-btn-5t { font-size: calc(14px * var(--font-scale)); }
+.filter-chip { min-height: 44px; font-size: calc(14px * var(--font-scale)); }
+.filter-chip-sm { min-height: 44px; font-size: calc(14px * var(--font-scale)); padding: 6px 12px; }
+.bang-diem-5t, .bang-checklist-5t { font-size: calc(14px * var(--font-scale)); }
+.bang-diem-5t th, .bang-checklist-5t th { font-size: calc(14px * var(--font-scale)); }
+.diem-pill, .muc-pill { font-size: calc(14px * var(--font-scale)); }
+.bang-checklist-5t { min-width: 680px; }
+.chk-5t { width: 28px; height: 28px; }
+.chk-5t.ql { accent-color: var(--c-teal, var(--primary)); }
+.note-input-5t { font-size: 16px; min-height: 44px; }
+.muc-pill.m1 { background: var(--c-red-soft); color: var(--c-red); border-color: var(--c-red-soft); }
+.chk-vung-5t { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; cursor: pointer; }
+#appContent .form-label { font-size: calc(14px * var(--font-scale)); }
