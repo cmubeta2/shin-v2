@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.5] – 05/11/2026 (QUẢN TRỊ – MA TRẬN QUYỀN M0.2)
+
+### ✅ Quản trị
+- `js/modules/quantri.js`: tab 🔑 Ma trận, `maTranQuyen` (thuần, theo chốt chặn quyền của mã v1), `veQuyen`.
+- `css/styles.css`: `.qt-quyen` (table-layout fixed, chữ ≥ 14px, chỉ biến màu), `.qt-chu-giai`.
+
 ## [2.8.4] – 05/11/2026 (CÔNG VIỆC – ĐÈN SLA M7.4)
 
 ### ✅ Công việc

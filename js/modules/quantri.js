@@ -17,6 +17,47 @@ const ModuleQuanTri = {
 
   _d: null,
   _tab: 'nguoi',
+
+  /* v2.8.5 (M0.2) – Ma trận quyền Vai trò × Mảng, CHỈ XEM, tính phía trình duyệt theo đúng chốt chặn của mã v1:
+     Hub 80–82_*.gs + 30_CaiDat: canAdmin_ ➜ chỉ Admin; 83_TaiChinh: Admin hoặc người phụ trách mảng 'TC';
+     app có máy chủ riêng (KPI, TS, KS, PK, PTKH) ➜ theo danh sách người dùng của chính app đó; mảng chưa có máy chủ ➜ mọi người. */
+  CHI_ADMIN_HUB: ['dieuhanh', 'quantri', 'pheduyet', 'crm', 'duan'],
+  PT_HUB: { taichinh: 'TC' },
+
+  /** THUẦN. mods: [{ma, ten, bieuTuong, mayChu}], pt: [{ma, ten, dsMa}] ➜ [{ma, ten, icon, o:{Admin, 'Quản lý', 'Người dùng'}, ghi}]
+   *  o[x] ∈ 'co' | 'khong' | 'pt' (chỉ khi là người phụ trách mảng) | 'app' (theo danh sách người dùng của app v1). */
+  maTranQuyen: function(mods, pt) {
+    const VAI = this.VAI, ra = [];
+    (mods || []).forEach(m => {
+      const o = {}; let ghi = '';
+      if (this.CHI_ADMIN_HUB.indexOf(m.ma) >= 0) { VAI.forEach(v => o[v] = v === 'Admin' ? 'co' : 'khong'); ghi = 'Hub: chỉ Admin'; }
+      else if (this.PT_HUB[m.ma]) {
+        const mm = (pt || []).find(x => x.ma === this.PT_HUB[m.ma]);
+        VAI.forEach(v => o[v] = v === 'Admin' ? 'co' : 'pt');
+        ghi = 'Hub: Admin hoặc người phụ trách mảng ' + this.PT_HUB[m.ma] + (mm ? ' (' + (mm.dsMa.length ? mm.dsMa.join(', ') : 'chưa có người') + ')' : '');
+      }
+      else if (m.ma === 'ptkh' || (m.mayChu && m.mayChu !== 'HUB')) { VAI.forEach(v => o[v] = 'app'); ghi = 'Theo danh sách người dùng của app ' + (m.ma === 'ptkh' ? 'PTKH (liên kết qua Hub)' : m.mayChu); }
+      else { VAI.forEach(v => o[v] = 'co'); ghi = m.mayChu === 'HUB' ? 'Mọi người có tài khoản Hub' : 'Chưa có máy chủ – mọi người (lưu trên máy)'; }
+      ra.push({ ma: m.ma, ten: m.ten, icon: m.bieuTuong || '', o, ghi });
+    });
+    return ra;
+  },
+
+  veQuyen: function(d) {
+    const e = ShinApp.esc, KH = { co: '✅', khong: '⛔', pt: '👤', app: '🔸' };
+    const MOTA = { co: 'được vào', khong: 'không', pt: 'nếu phụ trách mảng', app: 'theo app v1' };
+    const hang = this.maTranQuyen((typeof ShinApp !== 'undefined' && ShinApp.MODULES) || [], d.phuTrach || []);
+    return `
+      <p class="chu-phu">Chỉ xem – suy từ chốt chặn quyền trong mã v1 (Hub, app riêng). Đổi vai trò ở tab 👤 Người dùng; quyền vào app riêng do Admin của app đó cấp.</p>
+      <div class="qt-chu-giai chu-phu">${Object.keys(KH).map(k => `<span>${KH[k]} ${MOTA[k]}</span>`).join('')}</div>
+      <table class="qt-quyen">
+        <thead><tr><th scope="col">Mảng</th>${this.VAI.map(v => `<th scope="col">${e(v)}</th>`).join('')}</tr></thead>
+        <tbody>${hang.map(h => `<tr>
+          <th scope="row"><span class="qt-q-ten">${e(h.icon)} ${e(h.ten)}</span><span class="qt-q-ghi">${e(h.ghi)}</span></th>
+          ${this.VAI.map(v => `<td title="${e(v + ': ' + MOTA[h.o[v]])}" aria-label="${e(v + ': ' + MOTA[h.o[v]])}">${KH[h.o[v]]}</td>`).join('')}
+        </tr>`).join('')}</tbody>
+      </table>`;
+  },
   _tim: '',
   _link: null,   // link vừa cấp – chỉ giữ trong bộ nhớ 2 phút, không vẽ ra màn
   _hetLink: 0,
@@ -87,11 +128,11 @@ const ModuleQuanTri = {
       </div>
 
       <div class="hang-tab" role="tablist">
-        ${[['nguoi', '👤 Người dùng'], ['app', '📱 Ứng dụng'], ['mang', '🧭 Phụ trách']].map(([k, t]) =>
+        ${[['nguoi', '👤 Người dùng'], ['app', '📱 Ứng dụng'], ['mang', '🧭 Phụ trách'], ['quyen', '🔑 Ma trận']].map(([k, t]) =>
           `<button class="tab-nut ${tab === k ? 'dang-chon' : ''}" role="tab" aria-selected="${tab === k}" onclick="ModuleQuanTri.chonTab('${k}')">${t}</button>`).join('')}
       </div>
 
-      <div id="qtNoiDung">${tab === 'app' ? this.veApp(d) : tab === 'mang' ? this.veMang(d) : this.veNguoi(d)}</div>
+      <div id="qtNoiDung">${tab === 'app' ? this.veApp(d) : tab === 'mang' ? this.veMang(d) : tab === 'quyen' ? this.veQuyen(d) : this.veNguoi(d)}</div>
     `;
   },
 

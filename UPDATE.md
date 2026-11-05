@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.8.4** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.8.5** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.8.5 ✅ – QUẢN TRỊ: MA TRẬN QUYỀN VAI TRÒ × MẢNG M0.2 (05/11/2026, lượt tự động ⑤)
+- **Nội dung:** màn 🛡️ Người dùng & App thêm tab 🔑 Ma trận – bảng 16 mảng × 3 vai trò (Admin · Quản lý · Người dùng), suy đúng chốt chặn của mã v1: Phê duyệt / CRM / Dự án / Điều hành / Quản trị chỉ Admin (`canAdmin_`), Tài chính = Admin hoặc người phụ trách mảng TC (`83_TaiChinh.gs`), KPI / TS / KS / PK / PTKH theo danh sách người dùng của app đó, mảng chưa có máy chủ mở cho mọi người. Chỉ xem, không gửi gì; bảng cố định cột, không cuộn ngang ở 320px.
+- Còn chờ v1: chiều Khoa/Phòng và sửa quyền theo từng ô cần cổng mới ở Hub – chưa ghi dòng v1, để Sếp chốt có cần không (vai trò đổi được ở tab 👤 Người dùng qua `webLuuNguoiDung`).
 
 ### PHIÊN BẢN v2.8.4 ✅ – CÔNG VIỆC: ĐÈN SLA XANH → VÀNG → ĐỎ M7.4 (05/11/2026, lượt tự động ⑤)
 - **Nội dung:** màn 📋 Công việc tính đèn SLA cho từng thẻ theo hạn (Hôm nay · HH:MM · dd/mm[/yyyy]; quá hạn = 🔴, còn ≤ 4 giờ hoặc "đang diễn ra" = 🟡, còn lại 🟢, không đọc được = ⚪), dải chip đếm + lọc theo đèn, nút 📋 Sao chép cảnh báo (đỏ trước, vàng sau) để dán Telegram. Sửa chữ thẻ Kanban từ 10–13px lên ≥ 14px, thoát HTML nội dung thẻ.
