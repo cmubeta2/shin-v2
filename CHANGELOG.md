@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.0] – 05/11/2026 (M9.2 TÌM KIẾM TOÀN VĂN TRI THỨC · SỬA GỌI CỔNG PK/KS)
+
+### Mới
+- 🧠 Tri thức: ô tìm kiếm toàn văn chạy phía trình duyệt – không dấu, nhiều từ (mọi từ phải khớp) trên mã / tên / lĩnh vực / định dạng / mô tả; đếm "x/y tài liệu khớp". Nút 🔍 trên đầu trang đưa tới ô tìm.
+
+### Sửa
+- `ShinApp.goiBat`: máy chủ PK và KS nhận `du` đối tượng như Hub (trước đây bọc `du.a` – sai giao thức).
+- Tri thức: thoát ký tự (esc) khi vẽ tài liệu; nút "＋ Thêm tài liệu" cao 44px, chữ 14px, báo đúng cách thêm thay vì hứa "Tải tài liệu mới".
+
 ## [2.6.9] – 05/11/2026 (KPI – CHỈNH NHÁP AOP NĂM SAU)
 
 ### Mới

@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.6.9';
+  const PHIEN_BAN = 'v2.7.0';
 
   const MODULES = [
     ModuleHub,
@@ -259,7 +259,8 @@ const ShinApp = (function() {
 
   /** Gọi máy chủ và ném lỗi tiếng Việt nếu không được – dùng trong goiNut / hanhDongHoanTac. */
   async function goiBat(appKey, hanh, ...thamSo) {
-    const kq = appKey === 'HUB' ? await SHIN_API.goi(appKey, hanh, thamSo[0] || {}) : await SHIN_API.goiCong(appKey, hanh, ...thamSo);
+    // v2.7.0: Hub, PK, KS nhận ham(token, du) với du đối tượng; KPI / TS nhận tham số rời qua du.a
+    const kq = ['HUB', 'PK', 'KS', 'PHONGKHAM', 'KHAOSAT'].includes(String(appKey).toUpperCase()) ? await SHIN_API.goi(appKey, hanh, thamSo[0] || {}) : await SHIN_API.goiCong(appKey, hanh, ...thamSo);
     if (!kq.ok) throw new Error(SHIN_API.moTaLoi(kq));
     return kq.data;
   }

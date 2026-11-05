@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.7.0 ✅ – M9.2 TÌM KIẾM TOÀN VĂN (05/11/2026)
+- Tìm kiếm toàn văn phía trình duyệt cho Thư viện Tri thức (M9.2 🟢 bản trình duyệt; FTS5 phía máy chủ để sau).
+- Sửa `goiBat` cho PK / KS (du đối tượng).
+
 ### PHIÊN BẢN v2.6.9 ✅ – KPI CHỈNH NHÁP AOP NĂM SAU (05/11/2026)
 - Màn chỉnh nháp AOP năm sau trong tab 🎯 AOP (đọc `webNhap2027`, ghi `webLuuTangTruong`).
 - Còn chờ v1: KPI v1.8.2 (L10 – thêm `webNhap2027` vào `congWeb_`) chưa lên app (app đang v1.8.1) ➜ tới khi lên app, mục nháp báo "chưa lên bản".
