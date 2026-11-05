@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="SHIN AIOS v2 – Hệ thống điều hành hợp nhất đa module dành cho Doanh nghiệp & Y tế">
   <!-- Bảo mật (v2.5.5): chỉ được gọi mạng tới máy chủ v1 (Apps Script) – chặn đường gửi token ra nơi khác nếu có mã lạ chèn vào trang -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://drive.google.com https://*.googleusercontent.com; font-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#0f172a">
   <!-- PWA: cài như ứng dụng trên Android, iPhone/iPad, Windows, macOS, Linux, ChromeOS -->
@@ -57,7 +57,7 @@
             <span class="topbar-title">SHIN AIOS</span>
             <!-- Thẻ trạng thái nhỏ gọn nằm ngay kế bên chữ SHIN AIOS -->
             <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat(); event.stopPropagation();" title="Bấm để quản lý kết nối Token">
-              Demo v2.6.7
+              Demo v2.6.8
             </button>
           </div>
           <div class="topbar-sub">Hệ thống Quản trị AI</div>

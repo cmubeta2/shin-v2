@@ -58,6 +58,10 @@ Hàm `webNhap2027` đã có sẵn. v2 cần nó để đọc nháp AOP năm sau 
 
 ---
 
+## HUB L8 – Telegram Mini App (đã lên Hub v1.13.3) – v2.6.8 dùng
+
+`POST {hanh:'webTelegram', du:{initData}}` (KHÔNG token) ➜ `{ok:true, du:{ok:true, token, hetHan, nguoi:{ma, hoTen}}}` | `{ok:true, du:{ok:false, loi:'chua_cai_bot'|'thieu_hash'|'sai_chu_ky'|'het_han'|'thieu_user'|…, msg}}`.
+
 ## v2.5.0 – Dịch vụ chung và mảng mới trên máy chủ Hub (Q1)
 
 Mỗi mảng có 1 sheet mới trong file Hub, tạo tự động như `bangHopThu_()`. Mọi ghi đều qua `LockService`. Mỗi lệnh có mã riêng để bấm 2 lần không bị ghi trùng.

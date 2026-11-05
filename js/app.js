@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.6.7';
+  const PHIEN_BAN = 'v2.6.8';
 
   const MODULES = [
     ModuleHub,
@@ -450,6 +450,7 @@ const ShinApp = (function() {
     veMenuDay();
     capNhatBannerTrangThai();
     if (SHIN_API.laCheDoLive()) khoiDongLive();
+    else if (SHIN_API.layInitTelegram()) dangNhapTelegram();   // v2.6.8 – HUB L8: mở từ nút Menu bot Telegram
     chuyenModule(currentModule);
 
     document.addEventListener('keydown', (e) => {
@@ -464,6 +465,18 @@ const ShinApp = (function() {
         if (currentThemeMode === 'system') apDungThemeMode('system');
       });
     }
+  }
+
+  /** v2.6.8 – Telegram Mini App: đổi initData lấy token Hub rồi chạy Live; lỗi ➜ báo rõ, ở lại chế độ trình diễn. */
+  async function dangNhapTelegram() {
+    try { const tg = window.Telegram && window.Telegram.WebApp; if (tg) { tg.ready(); tg.expand(); } } catch (e) {}
+    toast('Đang đăng nhập bằng Telegram…', 'info');
+    const kq = await SHIN_API.dangNhapTelegram();
+    if (!kq.ok) { toast(kq.msg || 'Không đăng nhập được bằng Telegram.', 'error'); return; }
+    capNhatBannerTrangThai();
+    khoiDongLive();
+    chuyenModule(currentModule);
+    toast(kq.nguoi && kq.nguoi.hoTen ? `Chào ${kq.nguoi.hoTen} 👋` : 'Đã đăng nhập bằng Telegram.', 'success');
   }
 
   /**

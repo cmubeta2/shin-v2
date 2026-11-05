@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.8] – 05/11/2026 (TELEGRAM MINI APP)
+
+### ⭐ Mới
+- `js/api.js`: `layInitTelegram()` + `dangNhapTelegram()` – POST `{hanh:'webTelegram', du:{initData}}` tới Hub (không token) ➜ lưu token Hub.
+- `js/app.js`: chưa có token mà mở trong Telegram ➜ tự đăng nhập, `Telegram.WebApp.ready()/expand()` nếu có SDK.
+
+### 🛠 Sửa
+- `index.html` CSP `img-src` cho ảnh Drive (minh chứng PK).
+
 ## [2.6.7] – 05/11/2026 (KHẢO SÁT – ĐÚNG CỔNG v1)
 
 ### 🛠 Sửa

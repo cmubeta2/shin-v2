@@ -119,6 +119,38 @@ const SHIN_API = (function() {
   }
 
   /**
+   * v2.6.8 – Telegram Mini App (HUB L8, Hub v1.13.3): mở trong Telegram ➜ initData lấy từ Telegram.WebApp (nếu có)
+   * hoặc tham số tgWebAppData trên hash URL (Telegram tự gắn – không cần tải SDK ngoài, CSP giữ 'self').
+   */
+  function layInitTelegram() {
+    try {
+      const tg = window.Telegram && window.Telegram.WebApp;
+      if (tg && tg.initData) return tg.initData;
+      const h = new URLSearchParams(String(location.hash || '').replace(/^#/, ''));
+      return h.get('tgWebAppData') || '';
+    } catch (e) { return ''; }
+  }
+
+  /** Đổi initData ➜ token Hub: POST {hanh:'webTelegram', du:{initData}} (không token) ➜ {ok, du:{ok, token, hetHan, nguoi} | {ok:false, loi, msg}}. */
+  async function dangNhapTelegram() {
+    const initData = layInitTelegram();
+    if (!initData) return { ok: false, loi: 'khong_tg' };
+    try {
+      const r = await fetch(ENDPOINTS.HUB, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ hanh: 'webTelegram', du: { initData: initData } }) });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = await r.json(), d = (j && j.du) || {};
+      if (!j.ok || !d.ok || !d.token) return { ok: false, loi: d.loi || j.loi || 'loi', msg: d.msg || 'Telegram chưa liên kết với tài khoản Shin – mở Hub v1 ➜ ⚙️ ➜ Telegram để liên kết.' };
+      luuToken(d.token);
+      // Bỏ dữ liệu Telegram khỏi thanh địa chỉ (không để lộ khi chụp / chia sẻ)
+      history.replaceState({}, document.title, location.pathname + location.search);
+      return { ok: true, nguoi: d.nguoi || null };
+    } catch (err) {
+      return { ok: false, loi: 'mang', msg: LOI_VN.mang };
+    }
+  }
+
+  /**
    * v2.6.6 – PTKH gốc (20_PTKH, L148): POST {hanh:'webGoi', token, du:{ham, thamSo:[…]}} tới /exec của PTKH.
    * Địa chỉ /exec lấy từ link app PTKH Hub trả trong webKhoiDong.lienKet (không ghi cứng). Chỉ gọi hàm chỉ đọc.
    */
@@ -178,6 +210,8 @@ const SHIN_API = (function() {
     goi,
     goiCong,
     goiWebGoi,
+    layInitTelegram,
+    dangNhapTelegram,
     laySucKhoe,
     moTaLoi
   };
