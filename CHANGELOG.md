@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.7.9] – 05/11/2026 (CSP ẢNH MINH CHỨNG)
+
+### 🛠 Sửa
+- `index.html`: CSP `img-src` cho ảnh Drive (`drive.google.com`, `*.googleusercontent.com`) để màn Duyệt PK hiện ảnh minh chứng.
+
 ## [2.7.8] – 05/11/2026 (DỰ ÁN – MA TRẬN VƯỚNG MẮC M6.3)
 
 ### ✅ Dự án
