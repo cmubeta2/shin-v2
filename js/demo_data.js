@@ -484,11 +484,11 @@ window.SHIN_DEMO_DATA.quantri = {
     { ma: '90005', hoTen: 'Hoàng Văn E', vaiTro: 'Người dùng', trangThai: 'Ngưng' }
   ],
   ungDung: [
-    { ten: 'PTKH – Hiệu suất phòng', bat: true, loiCuoi: '' },
-    { ten: 'KPI toàn viện', bat: true, loiCuoi: '' },
-    { ten: 'Tuyển sinh', bat: true, loiCuoi: 'Hết thời gian chờ lúc 07:30 31/10' },
-    { ten: 'Khảo sát hài lòng', bat: true, loiCuoi: '' },
-    { ten: 'Phòng PTKH (PK)', bat: false, loiCuoi: '' }
+    { ma: 'PTKH', ten: 'PTKH – Hiệu suất phòng', bat: true, loiCuoi: '' },
+    { ma: 'KPI', ten: 'KPI toàn viện', bat: true, loiCuoi: '' },
+    { ma: 'TS', ten: 'Tuyển sinh', bat: true, loiCuoi: 'Hết thời gian chờ lúc 07:30 31/10' },
+    { ma: 'KS', ten: 'Khảo sát hài lòng', bat: true, loiCuoi: '' },
+    { ma: 'PK', ten: 'Phòng PTKH (PK)', bat: false, loiCuoi: '' }
   ],
   phuTrach: [
     { ma: 'PTKH', ten: 'Phòng PTKH', dsMa: ['90001', '90002'], nguoi: ['Nguyễn Văn A', 'Trần Thị B'] },

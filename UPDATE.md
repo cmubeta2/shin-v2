@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.7.9** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.8.0** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.8.0 ✅ – QUẢN TRỊ: THÊM / SỬA / NGƯNG NGƯỜI DÙNG + BẬT / TẮT APP (05/11/2026, lượt tự động ⑤)
+- **Nội dung:** HUB L22–L25 đã «KIỂM ĐẠT v1.13.5–v1.13.8» ➜ màn 🛡️ Người dùng & App gọi `webLuuNguoiDung({nguoi})` (➕ Thêm, ✏️ Sửa vai trò / trạng thái, kiểm trước "không ngưng Admin cuối", Hub kiểm lại) và `webLuuUngDung({ma, bat})` (nút Bật / Tắt từng app: hiện ngay, gửi sau 6 giây, Hoàn tác không gửi gì). CRM (`webCRM` / `webLuuDoiTac`), Dự án (`webDuAn`), Tài chính (`webTaiChinh`) đã gọi đúng cổng thật từ v2.5.x – rà lại khớp khuôn trả của mã v1.
+- Còn chờ v1: Hub trên app vẫn v1.13.3 (L21–L25 chưa lên app) ➜ Live hiện dải vàng "chưa mở cổng" + số MẪU cho CRM / Dự án / Tài chính và nút lưu Quản trị báo lỗi cho tới khi lên app. L21 (0B Phê duyệt) còn «ĐÃ CODE v1.13.9», chưa «KIỂM ĐẠT».
 
 ### PHIÊN BẢN v2.7.9 ✅ – CSP CHO ẢNH MINH CHỨNG DRIVE (05/11/2026, lượt tự động ⑤)
 - **Nội dung:** `index.html` CSP `img-src` thêm `drive.google.com`, `*.googleusercontent.com` – trước đó ảnh minh chứng (URL Drive từ `webChoDuyet`) bị trình duyệt chặn ở màn ⚡ Duyệt PK.

@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.0] – 05/11/2026 (QUẢN TRỊ – NGƯỜI DÙNG & APP GHI THẬT)
+
+### 🟢 Quản trị (Tầng 0A)
+- `js/modules/quantri.js`: ➕ Thêm người dùng, ✏️ Sửa vai trò / trạng thái qua `webLuuNguoiDung` (HUB L25); kiểm phía trình duyệt mã, họ tên, trùng mã, Admin cuối cùng. Nút Bật / Tắt app qua `webLuuUngDung` – Hoàn tác 6 giây, ghi đúng 1 lần.
+- `js/demo_data.js`: thêm `ma` cho app mẫu để Demo bấm Bật / Tắt được.
+
 ## [2.7.9] – 05/11/2026 (CSP ẢNH MINH CHỨNG)
 
 ### 🛠 Sửa

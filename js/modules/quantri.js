@@ -4,7 +4,8 @@
  *   webCaiDat() ➜ {danhBa:[{ma, hoTen, vaiTro, trangThai}], ungDung:[{ten, bat, loiCuoi}], phuTrach:[{ma, ten, dsMa, nguoi}], bot:{coKhoa, chu}}
  *   webLuuPhuTrach({maMang, dsMa, hoanTac}) ➜ {cu:[mã…]}   – mỗi mảng 1–2 người đang dùng trong danh bạ
  *   webCapLink({maNguoi}) ➜ {hoTen, link, linkDuPhong}      – link chứa token Hub KHÔNG thời hạn: không hiện chữ, chỉ chép / gửi
- * Thêm / sửa / ngưng người dùng và bật / tắt app: CHƯA có cổng (HOP_DONG_CONG_V2.md mục v2.6) ➜ nút mở Hub v1.
+ *   v2.8.0 (HUB L25 «KIỂM ĐẠT v1.13.8»): webLuuNguoiDung({nguoi:{ma, hoTen, vaiTro, trangThai}}) ➜ webCaiDat (thêm / sửa / ngưng; Hub chặn ngưng Admin cuối)
+ *   webLuuUngDung({ma, bat}) ➜ webCaiDat (bật / tắt app: hiện ngay, gửi sau 6 giây Hoàn tác).
  */
 
 const ModuleQuanTri = {
@@ -122,10 +123,8 @@ const ModuleQuanTri = {
           <div class="chi-tiet-dong" id="qtNg${i}" hidden></div>`).join('')}
       </div>
       ${ds.length ? '' : '<div class="trong">Danh bạ Hub chưa có ai.</div>'}
-      <div class="the">
-        <p class="chu-phu">➕ Thêm người, đổi vai trò, ngưng dùng: Hub chưa mở cổng cho v2 (đã ghi trong hợp đồng cổng v2.6) – tạm làm trên Hub v1.</p>
-        <button class="btn-secondary" onclick="ShinApp.moV1('HUB', 'Cài đặt người dùng')">⚙️ Mở Cài đặt trên Hub v1</button>
-      </div>`;
+      <div class="hang-nut"><button class="btn-primary" onclick="ModuleQuanTri.moForm(-1)">➕ Thêm người dùng</button></div>
+      <div id="qtForm"></div>`;
   },
 
   tim: function(chu) {
@@ -153,7 +152,60 @@ const ModuleQuanTri = {
         <div class="hang-nut">
           <button class="btn-secondary" onclick="ModuleQuanTri.capLink(this, ${i})">🔗 Cấp link vào Hub</button>
         </div>
-        <div id="qtLink${i}"></div>` : '<p class="chu-phu">Người này đã ngưng – không cấp link.</p>'}`;
+        <div id="qtLink${i}"></div>` : '<p class="chu-phu">Người này đã ngưng – không cấp link.</p>'}
+      <div class="hang-nut"><button class="btn-secondary" onclick="ModuleQuanTri.moForm(${i})">✏️ Sửa vai trò / trạng thái</button></div>`;
+  },
+
+  VAI: ['Admin', 'Quản lý', 'Người dùng'],
+  TRANG_THAI: ['Đang dùng', 'Ngưng'],
+
+  /** Form thêm (i = -1) / sửa 1 người. Mã không đổi khi sửa. */
+  moForm: function(i) {
+    const khung = document.getElementById('qtForm') || document.getElementById('qtNg' + i);
+    const n = i >= 0 ? (this._d.danhBa || [])[i] : { ma: '', hoTen: '', vaiTro: 'Người dùng', trangThai: 'Đang dùng' };
+    if (!khung || !n) return;
+    const e = ShinApp.esc;
+    const chon = (id, ds, v) => `<select id="${id}" class="form-input">${ds.map(x => `<option ${x === v ? 'selected' : ''}>${e(x)}</option>`).join('')}</select>`;
+    khung.hidden = false;
+    khung.innerHTML = `
+      <div class="the" id="qtFormThe">
+        <div class="the-tin-dau"><b>${i >= 0 ? '✏️ Sửa ' + e(n.hoTen) : '➕ Người dùng mới'}</b></div>
+        <label class="nhan-o">Mã người dùng *</label><input id="qfMa" class="form-input" maxlength="40" value="${e(n.ma)}" ${i >= 0 ? 'readonly' : 'placeholder="vd nv_lan (chữ, số, - _)"'}>
+        <label class="nhan-o">Họ tên *</label><input id="qfTen" class="form-input" maxlength="80" value="${e(n.hoTen)}">
+        <label class="nhan-o">Vai trò</label>${chon('qfVai', this.VAI, n.vaiTro)}
+        <label class="nhan-o">Trạng thái</label>${chon('qfTT', this.TRANG_THAI, n.trangThai)}
+        <div class="hang-nut"><button class="btn-primary" onclick="ModuleQuanTri.luuNguoi(this, ${i})">💾 Lưu</button></div>
+      </div>`;
+    khung.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  },
+
+  /** THUẦN. Kiểm phía trình duyệt (Hub kiểm lại) ➜ '' | câu lỗi. */
+  kiemNguoi: function(n, ds, laMoi) {
+    if (!/^[A-Za-z0-9_-]{1,40}$/.test(n.ma)) return 'Mã chỉ gồm chữ, số, dấu - và _ (tối đa 40 ký tự).';
+    if (!n.hoTen) return 'Vui lòng nhập họ tên.';
+    if (laMoi && (ds || []).some(x => x.ma === n.ma)) return 'Mã ' + n.ma + ' đã có trong danh bạ.';
+    const conAdmin = (ds || []).filter(x => x.ma !== n.ma && x.vaiTro === 'Admin' && x.trangThai === 'Đang dùng').length + (n.vaiTro === 'Admin' && n.trangThai === 'Đang dùng' ? 1 : 0);
+    return conAdmin ? '' : 'Không thể hạ / ngưng Admin cuối cùng.';
+  },
+
+  luuNguoi: async function(nut, i) {
+    const v = id => String((document.getElementById(id) || {}).value || '').replace(/\s+/g, ' ').trim();
+    const nguoi = { ma: v('qfMa'), hoTen: v('qfTen'), vaiTro: v('qfVai'), trangThai: v('qfTT') };
+    const loi = this.kiemNguoi(nguoi, this._d.danhBa, i < 0);
+    if (loi) { ShinApp.toast(loi, 'warn'); return; }
+    if (!SHIN_API.laCheDoLive() || !this._d.live) {
+      const ds = this._d.danhBa || (this._d.danhBa = []);
+      if (i >= 0 && ds[i]) Object.assign(ds[i], nguoi); else ds.push(nguoi);
+      this.render(document.getElementById('appContent'), this._d);
+      ShinApp.toast(`Đã lưu ${nguoi.hoTen} (mẫu – không gửi Hub).`, 'info');
+      return;
+    }
+    const kq = await ShinApp.goiNut(nut, 'Đang lưu…', () => ShinApp.goiBat('HUB', 'webLuuNguoiDung', { nguoi }), 'qt-nguoi-' + nguoi.ma);
+    if (kq) {
+      this.render(document.getElementById('appContent'), this.tuV1(kq));
+      ShinApp.toast(`Đã lưu ${nguoi.hoTen}.`, 'success');
+      ShinApp.rung('xong');
+    }
   },
 
   /** Cấp link: KHÔNG vẽ link ra màn (token không thời hạn) – chỉ chép / gửi; link tự quên sau 2 phút. */
@@ -202,21 +254,39 @@ const ModuleQuanTri = {
     const bot = d.bot;
     return `
       <div class="hn-list">
-        ${app.map(u => `
+        ${app.map((u, i) => `
           <div class="hn-dong ${u.bat ? '' : 'mo-di'}">
             <div class="dong-content">
               <div class="dong-title">${e(u.ten)}</div>
               <div class="dong-sub">${u.loiCuoi ? '⚠️ ' + e(u.loiCuoi) : u.bat ? 'Hub kéo số đều' : 'Đang tắt – Hub không kéo số'}</div>
             </div>
-            <div class="dong-meta"><span class="badge ${!u.bat ? 'xam' : u.loiCuoi ? 'do' : 'xanh'}">${!u.bat ? 'Tắt' : u.loiCuoi ? 'Lỗi' : 'Bật'}</span></div>
+            <div class="dong-meta"><span class="badge ${!u.bat ? 'xam' : u.loiCuoi ? 'do' : 'xanh'}">${!u.bat ? 'Tắt' : u.loiCuoi ? 'Lỗi' : 'Bật'}</span>
+              ${u.ma ? `<button class="btn-secondary" style="min-height:44px" onclick="ModuleQuanTri.batTat(${i})">${u.bat ? 'Tắt' : 'Bật'}</button>` : ''}</div>
           </div>`).join('')}
       </div>
       ${app.length ? '' : '<div class="trong">Hub chưa khai báo app nào.</div>'}
       ${bot ? `<div class="hang-tru"><span>🤖 Bot Telegram của Hub</span><b>${e(bot.chu || (bot.coKhoa ? 'Đã có khóa' : 'Chưa có khóa'))}</b></div>` : ''}
       <div class="the">
-        <p class="chu-phu">Bật / tắt app và sửa link máy chủ: Hub chưa mở cổng cho v2 (hợp đồng cổng v2.6) – tạm làm trên Hub v1. App gặp lỗi kéo số: mở app đó kiểm tra rồi bấm ↻ trên 🏠 Hôm nay.</p>
+        <p class="chu-phu">Bật / tắt app: gửi Hub sau 6 giây (bấm Hoàn tác để hủy). Sửa link máy chủ: làm trên Hub v1. App gặp lỗi kéo số: mở app đó kiểm tra rồi bấm ↻ trên 🏠 Hôm nay.</p>
         <button class="btn-secondary" onclick="ShinApp.moV1('HUB', 'Cài đặt ứng dụng')">⚙️ Mở Cài đặt trên Hub v1</button>
       </div>`;
+  },
+
+  /** Bật / tắt app: hiện ngay, gửi sau 6 giây (Hoàn tác không gửi gì), ghi đúng 1 lần. */
+  batTat: function(i) {
+    const u = (this._d.ungDung || [])[i];
+    if (!u || !u.ma) return;
+    const moi = !u.bat;
+    const veLai = () => this.render(document.getElementById('appContent'), this._d);
+    ShinApp.hanhDongHoanTac(`Đã ${moi ? 'bật' : 'tắt'} ${u.ten}`, {
+      lamTruoc: () => { u.bat = moi; veLai(); },
+      traLai: () => { u.bat = !moi; veLai(); },
+      thucHien: async () => {
+        if (!SHIN_API.laCheDoLive() || !this._d.live) return;
+        const kq = await ShinApp.goiBat('HUB', 'webLuuUngDung', { ma: u.ma, bat: moi });
+        if (kq) { this._d = this.tuV1(kq); if (document.getElementById('qtNoiDung')) veLai(); }
+      }
+    });
   },
 
   /* ---------------- 🧭 Người phụ trách mảng ---------------- */
