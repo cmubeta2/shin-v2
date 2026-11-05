@@ -300,11 +300,55 @@ const ModuleKPI = {
           </div>`).join('')}
       </div>
       ${(du.chung || []).length ? `<p class="chu-phu">Dùng số doanh thu chung toàn viện (không cộng vào tổng): ${du.chung.map(e).join(', ')}.</p>` : ''}
-      <details class="tq-gon">
-        <summary><span>🗓 Nháp AOP ${e(Number(du.nam || 0) + 1 || '')}</span></summary>
-        <p class="chu-phu">Chỉnh % tăng trưởng nháp năm sau cần cổng đọc nháp (webNhap2027) – v1 chưa mở cho cửa web. Tạm thời chỉnh trên app KPI v1.</p>
-        <button class="nut-chu" onclick="ShinApp.moV1('KPI', 'Nháp AOP năm sau')">Mở app KPI v1 ›</button>
+      <details class="tq-gon" ontoggle="if (this.open) ModuleKPI.taiNhap()">
+        <summary><span>🗓 Nháp AOP ${e(Number(du.nam || 0) + 1 || 'năm sau')}</span></summary>
+        <div id="kpiNhap"><div class="trong">Đang tải nháp…</div></div>
       </details>`;
+  },
+
+  /* ---------- 🗓 Nháp AOP năm sau (v2.6.9 – KPI L10 v1.8.2: webNhap2027 đọc · webLuuTangTruong lưu, chỉ Admin) ----------
+   * webNhap2027() ➜ {vien:{khoa, muc2026, g, nguon, macDinh, muc2027}|null, khoa:[…], suaDuoc, nam, namGoc} | {loi}
+   * webLuuTangTruong(khoa, g) – g là tỷ lệ (0,12 = 12%), −50% … 200%; trống ➜ về mặc định. */
+  _nhap: null,
+
+  taiNhap: async function() {
+    const el = () => document.getElementById('kpiNhap');
+    if (!el()) return;
+    let d = this._nhap;
+    if (!d) {
+      if (!SHIN_API.laCheDoLive()) d = (window.SHIN_DEMO_DATA.kpi || {}).nhap2027 || {};
+      else {
+        const kq = await SHIN_API.goiCong('KPI', 'webNhap2027');
+        if (!el()) return;
+        if (!kq.ok) { el().innerHTML = `<div class="trong">⚠️ ${ShinApp.esc(SHIN_API.moTaLoi(kq))}</div>`; return; }
+        d = kq.data || {};
+      }
+      if (d.loi) { el().innerHTML = `<div class="trong">⚠️ ${ShinApp.esc(d.loi)}</div>`; return; }
+      this._nhap = d;
+    }
+    const e = ShinApp.esc, ty = v => v === null || v === undefined ? '–' : ShinApp.soVN(v / 1e9, 2) + ' tỷ đ';
+    const ds = (d.vien ? [d.vien] : []).concat(d.khoa || []);
+    el().innerHTML = `<p class="chu-phu">Mức ${e(d.namGoc || '')} × (1 + tăng trưởng) = mức ${e(d.nam || '')}. ${d.suaDuoc ? 'Để trống ô % rồi Lưu = về mặc định.' : 'Chỉ Admin KPI chỉnh được.'}</p>
+      ${ds.map((k, i) => `<div class="hang-tru">
+        <span>${e(k.khoa)}<br><span class="chu-phu">${ty(k.muc2026)} ➜ <b id="kpiN27_${i}">${ty(k.muc2027)}</b>${k.macDinh ? ' · mặc định' : ''}</span></span>
+        ${d.suaDuoc ? `<span class="hang-nhap" style="flex-wrap:nowrap;flex:0 0 auto"><input class="form-input pk-nhap" style="width:80px" inputmode="decimal" id="kpiNG_${i}" value="${k.macDinh ? '' : e(ShinApp.soVN(k.g * 100, 1))}" placeholder="${e(ShinApp.soVN(k.g * 100, 1))}" aria-label="% tăng trưởng ${e(k.khoa)}">
+          <span class="chu-phu" style="align-self:center">%</span><button class="btn-secondary" onclick="ModuleKPI.luuNhap(${i}, this)">Lưu</button></span>` : `<b>${e(ShinApp.ptVN(k.g))}</b>`}
+      </div>`).join('') || '<div class="trong">Chưa có khoa nào có doanh thu AOP.</div>'}`;
+  },
+
+  luuNhap: function(i, nut) {
+    const d = this._nhap || {}, k = (d.vien ? [d.vien] : []).concat(d.khoa || [])[i];
+    if (!k) return;
+    const chu = (document.getElementById('kpiNG_' + i).value || '').trim();
+    const pt = chu === '' ? '' : ShinApp.docSoVN(chu);
+    if (pt !== '' && (pt === null || pt < -50 || pt > 200)) { ShinApp.toast('Tăng trưởng phải trong khoảng −50% … 200%.', 'warn'); return; }
+    const g = pt === '' ? '' : pt / 100;
+    ShinApp.goiNut(nut, 'Đang lưu', async () => {
+      if (SHIN_API.laCheDoLive()) await ShinApp.goiBat('KPI', 'webLuuTangTruong', k.khoa, g);
+      ShinApp.toast(SHIN_API.laCheDoLive() ? `Đã lưu tăng trưởng ${k.khoa}.` : 'Chế độ trình diễn: không gửi gì.', SHIN_API.laCheDoLive() ? 'success' : 'info');
+      this._nhap = null;
+      this.taiNhap();
+    }, 'kpiNhap' + i);
   },
 
   moAOPKhoa: function(i) {

@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.9] – 05/11/2026 (KPI – NHÁP AOP NĂM SAU)
+
+### 🟢 Nối thật
+- `js/modules/kpi.js`: mục Nháp AOP đọc `webNhap2027`, Admin chỉnh % tăng trưởng từng khoa qua `webLuuTangTruong` (tỷ lệ, trống = mặc định). Demo: mẫu `SHIN_DEMO_DATA.kpi.nhap2027`.
+
 ## [2.6.8] – 05/11/2026 (TELEGRAM MINI APP)
 
 ### ⭐ Mới

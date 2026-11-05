@@ -52,7 +52,7 @@ webHomNay() → { ngay, viecQuaHan, viecHomNay, baoCaoHomNay:'da_nop'|'chua_nop'
 - **Quyền:** lãnh đạo phòng và tổ trưởng xem cả phòng; nhân viên chỉ thấy dòng của mình.
 - **Thuộc dòng:** PK L1–L3.
 
-### KPI – thêm `webNhap2027` vào `congWeb_()`
+### KPI – thêm `webNhap2027` vào `congWeb_()` ✅ (KPI v1.8.2 L10 – v2.6.9 đã nối)
 
 Hàm `webNhap2027` đã có sẵn. v2 cần nó để đọc nháp AOP năm sau trước khi gọi `webLuuTangTruong`. Chỉ cần thêm 1 dòng, không đổi logic.
 

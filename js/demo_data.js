@@ -59,6 +59,11 @@ window.SHIN_DEMO_DATA = {
   },
 
   kpi: {
+    // v2.6.9: mẫu dạng webNhap2027 (số GIẢ)
+    nhap2027: { nam: 2027, namGoc: 2026, suaDuoc: true,
+      vien: { khoa: 'Toàn phòng khám', muc2026: 120000000000, g: 0.12, nguon: 'macDinh', macDinh: true, muc2027: 134400000000 },
+      khoa: [{ khoa: 'Khoa Khám bệnh', muc2026: 45000000000, g: 0.15, nguon: 'rieng', macDinh: false, muc2027: 51750000000 },
+        { khoa: 'Khoa Xét nghiệm', muc2026: 30000000000, g: 0.1, nguon: 'macDinh', macDinh: true, muc2027: 33000000000 }] },
     hero: {
       chao: "BKS – Giám sát KPI Toàn Viện 🎯",
       ngay: "Dữ liệu TV3 tháng 10/2026",
