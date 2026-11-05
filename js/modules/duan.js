@@ -77,8 +77,8 @@ const ModuleDuAn = {
           <div class="page-sub">Master Dashboard & Báo Cáo Nhanh Mỗi Ngày (Daily Flash)</div>
         </div>
         <div style="display:flex; gap:6px;">
-          <button class="btn-secondary" style="min-height:36px; padding:0 12px; font-size:12px;" onclick="ModuleDuAn.chuyenTab('flash')">⚡ Flash Report</button>
-          <button class="btn-secondary" style="min-height:36px; padding:0 12px; font-size:12px;" onclick="ModuleDuAn.chuyenTab('danhsach')">📊 Danh Sách</button>
+          <button class="btn-secondary" style="min-height:44px; padding:0 12px; font-size:14px;" onclick="ModuleDuAn.chuyenTab('flash')">⚡ Flash Report</button>
+          <button class="btn-secondary" style="min-height:44px; padding:0 12px; font-size:14px;" onclick="ModuleDuAn.chuyenTab('danhsach')">📊 Danh Sách</button>
         </div>
       </div>
 
@@ -118,10 +118,13 @@ const ModuleDuAn = {
         <button class="module-chip ${this.tabHienTai === 'danhsach' ? 'active' : ''}" style="white-space:normal;" onclick="ModuleDuAn.chuyenTab('danhsach')">
           📊 Master Dashboard (${danhSach.length})
         </button>
+        <button class="module-chip ${this.tabHienTai === 'matran' ? 'active' : ''}" style="white-space:normal;" onclick="ModuleDuAn.chuyenTab('matran')">
+          🧱 Ma Trận Vướng Mắc (${this.maTranVuongMac(d).length})
+        </button>
       </div>
 
       <div id="duAnTabContent">
-        ${this.tabHienTai === 'flash' ? this.renderFlash(flash) : this.renderDanhSach(danhSach)}
+        ${this.tabHienTai === 'flash' ? this.renderFlash(flash) : this.tabHienTai === 'matran' ? this.renderMaTran(this.maTranVuongMac(d)) : this.renderDanhSach(danhSach)}
       </div>
     `;
 
@@ -137,7 +140,7 @@ const ModuleDuAn = {
     return `
       <!-- Khung Flash Report Độc Quyền Theo Yêu Cầu Của Sếp -->
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <div style="font-size:13px; font-weight:700; color:var(--text);">
+        <div style="font-size:14px; font-weight:700; color:var(--text);">
           ⏱️ CHỐT DỮ LIỆU: <span style="color:var(--primary);">${flash.ngay || 'Hôm nay'}</span>
         </div>
         <span class="status-pill live">Tự động tổng hợp 24/7</span>
@@ -150,7 +153,7 @@ const ModuleDuAn = {
             <span class="flash-badge" style="background:#0284c7;">1</span>
             TRẠNG THÁI TIẾN ĐỘ DỰ ÁN
           </div>
-          <span style="font-size:12px; color:var(--text-muted);">${k1.length} điểm tin chính</span>
+          <span style="font-size:14px; color:var(--text-muted);">${k1.length} điểm tin chính</span>
         </div>
         <ul class="flash-list">
           ${k1.map(item => `<li>${item}</li>`).join('')}
@@ -164,15 +167,15 @@ const ModuleDuAn = {
             <span class="flash-badge" style="background:#dc2626;">2</span>
             VƯỚNG MẮC & ĐỀ XUẤT GIẢI PHÁP
           </div>
-          <span class="status-pill danger" style="padding:2px 8px; font-size:11px;">Cần chú ý</span>
+          <span class="status-pill danger" style="padding:2px 8px; font-size:14px;">Cần chú ý</span>
         </div>
         <div style="display:flex; flex-direction:column; gap:10px;">
           ${k2.map((v, i) => `
             <div style="background:var(--bg-card); padding:10px 12px; border-radius:8px; border:1px solid var(--border);">
-              <div style="font-weight:700; font-size:13px; color:var(--text); margin-bottom:4px;">
+              <div style="font-weight:700; font-size:14px; color:var(--text); margin-bottom:4px;">
                 ⚠️ ${v.vanDe}
               </div>
-              <div style="font-size:12px; color:var(--c-green); font-weight:600; line-height:1.4;">
+              <div style="font-size:14px; color:var(--c-green); font-weight:600; line-height:1.4;">
                 💡 <strong>Đề xuất giải pháp:</strong> ${v.deXuat}
               </div>
             </div>
@@ -187,23 +190,23 @@ const ModuleDuAn = {
             <span class="flash-badge" style="background:#16a34a;">3</span>
             TÌNH HÌNH TÀI CHÍNH & PHÁT SINH
           </div>
-          <div style="font-size:12px; font-weight:700; color:var(--text);">
+          <div style="font-size:14px; font-weight:700; color:var(--text);">
             Giải ngân: ${k3.daGiaiNgan || '—'}
           </div>
         </div>
-        <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
+        <div style="font-size:14px; color:var(--text-muted); margin-bottom:8px;">
           Tổng quỹ phê duyệt: <strong>${k3.tongNganSach || '—'}</strong>
         </div>
         <div style="display:flex; flex-direction:column; gap:8px;">
           ${(k3.phatSinhTrongNgay || []).map(p => `
-            <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); padding:8px 12px; border-radius:6px; font-size:12px; border:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); padding:8px 12px; border-radius:6px; font-size:14px; border:1px solid var(--border);">
               <div>
                 <div style="font-weight:600; color:var(--text);">${p.khoanMuc}</div>
-                <div style="color:var(--text-muted); font-size:11px;">Người đề xuất: ${p.nguoiChi}</div>
+                <div style="color:var(--text-muted); font-size:14px;">Người đề xuất: ${p.nguoiChi}</div>
               </div>
               <div style="text-align:right;">
                 <div style="font-weight:700; color:var(--c-red);">${p.soTien}</div>
-                <span class="status-pill ${p.tinhTrang.includes('Chờ') ? 'warn' : 'live'}" style="font-size:10px; padding:2px 6px;">
+                <span class="status-pill ${p.tinhTrang.includes('Chờ') ? 'warn' : 'live'}" style="font-size:14px; padding:2px 6px;">
                   ${p.tinhTrang}
                 </span>
               </div>
@@ -219,21 +222,21 @@ const ModuleDuAn = {
             <span class="flash-badge" style="background:#d97706;">4</span>
             VIỆC ĐANG CHỜ SẾP PHÊ DUYỆT
           </div>
-          <span class="status-pill warn" style="padding:2px 8px; font-size:11px;">${k4.length} mục chờ</span>
+          <span class="status-pill warn" style="padding:2px 8px; font-size:14px;">${k4.length} mục chờ</span>
         </div>
         <div style="display:flex; flex-direction:column; gap:10px;">
           ${k4.map(cd => `
             <div style="background:var(--bg-card); padding:10px 12px; border-radius:8px; border:1px solid var(--border);">
               <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div style="font-weight:700; font-size:13px; color:var(--text);">${cd.tieuDe}</div>
-                <span style="font-size:11px; color:var(--c-red); font-weight:700; white-space:nowrap; margin-left:8px;">${cd.uuTien}</span>
+                <div style="font-weight:700; font-size:14px; color:var(--text);">${cd.tieuDe}</div>
+                <span style="font-size:14px; color:var(--c-red); font-weight:700; white-space:nowrap; margin-left:8px;">${cd.uuTien}</span>
               </div>
-              <div style="font-size:11px; color:var(--text-muted); margin:4px 0 8px 0;">Phân loại: ${cd.loai} · Hạn: ${cd.han}</div>
+              <div style="font-size:14px; color:var(--text-muted); margin:4px 0 8px 0;">Phân loại: ${cd.loai} · Hạn: ${cd.han}</div>
               <div style="display:flex; gap:8px;">
-                <button class="btn-primary" style="flex:1; min-height:36px; padding:0 8px; font-size:12px; background:var(--c-green);" onclick="ModuleDuAn.duyetNhanh('${cd.ma}')">
+                <button class="btn-primary" style="flex:1; min-height:44px; padding:0 8px; font-size:14px; background:var(--c-green);" onclick="ModuleDuAn.duyetNhanh('${cd.ma}')">
                   ✓ Duyệt 1-Chạm
                 </button>
-                <button class="btn-secondary" style="min-height:36px; padding:0 10px; font-size:12px;" onclick="ModuleDuAn.yeuCauSua('${cd.ma}')">
+                <button class="btn-secondary" style="min-height:44px; padding:0 10px; font-size:14px;" onclick="ModuleDuAn.yeuCauSua('${cd.ma}')">
                   Góp ý / Yêu cầu sửa
                 </button>
               </div>
@@ -251,7 +254,7 @@ const ModuleDuAn = {
           <div class="card" style="border-left:4px solid ${da.den};">
             <div class="card-header">
               <div>
-                <div style="font-size:11px; font-weight:700; color:var(--primary);">${da.ma}</div>
+                <div style="font-size:14px; font-weight:700; color:var(--primary);">${da.ma}</div>
                 <div class="card-title" style="font-size:15px; margin-top:2px;">${da.ten}</div>
               </div>
               <span class="status-pill" style="background:${da.den}20; color:${da.den}; font-weight:700;">
@@ -264,22 +267,22 @@ const ModuleDuAn = {
               <div style="background:${da.den}; width:${da.tienDo}%; height:100%;"></div>
             </div>
 
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px; color:var(--text-muted); margin-bottom:10px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:14px; color:var(--text-muted); margin-bottom:10px;">
               <div>👤 Phụ trách: <strong>${da.quanLy}</strong></div>
               <div>📅 Hạn: <strong>${da.hanChot}</strong></div>
               <div>💰 Ngân sách: <strong>${da.nganSach}</strong></div>
               <div>💳 Đã chi: <strong>${da.daChi}</strong></div>
             </div>
 
-            <div style="font-size:12px; color:var(--text); background:var(--bg-sub); padding:6px 10px; border-radius:6px; margin-bottom:10px;">
+            <div style="font-size:14px; color:var(--text); background:var(--bg-sub); padding:6px 10px; border-radius:6px; margin-bottom:10px;">
               📌 <strong>Trạng thái:</strong> ${da.trangThai}
             </div>
 
             <div style="display:flex; gap:8px;">
-              <button class="btn-secondary" style="flex:1; min-height:36px; font-size:12px;" onclick="ShinApp.toast('Mở chi tiết dự án: ${da.ma}')">
+              <button class="btn-secondary" style="flex:1; min-height:44px; font-size:14px;" onclick="ShinApp.toast('Mở chi tiết dự án: ${da.ma}')">
                 Chi tiết WBS
               </button>
-              <button class="btn-primary" style="min-height:36px; font-size:12px; padding:0 12px;" onclick="ShinApp.toast('Cập nhật tiến độ dự án: ${da.ma}')">
+              <button class="btn-primary" style="min-height:44px; font-size:14px; padding:0 12px;" onclick="ShinApp.toast('Cập nhật tiến độ dự án: ${da.ma}')">
                 Cập nhật
               </button>
             </div>
@@ -287,6 +290,72 @@ const ModuleDuAn = {
         `).join('')}
       </div>
     `;
+  },
+
+  /**
+   * M6.3 Blocker Matrix (v2.7.8) – THUẦN, chạy hoàn toàn phía trình duyệt trên dữ liệu màn đang có
+   * (Live: webDuAn đã thoát HTML trong tuV1; Demo: demo_data). Gom 3 nguồn:
+   *  ① Khối 2 Flash (vướng mắc + đề xuất), ② dự án đèn đỏ / vàng, ③ dự án quá hạn mà chưa 100%.
+   * Trả [{vanDe, nguon, muc:'cao'|'vua'|'thap', nguoiXuLy, han, deXuat, quaHan}] xếp Cao → Thấp, quá hạn lên trước.
+   */
+  maTranVuongMac: function(d, homNay) {
+    d = d || {};
+    const nay = homNay instanceof Date ? homNay : new Date();
+    const moc = new Date(nay.getFullYear(), nay.getMonth(), nay.getDate()).getTime();
+    const docNgay = s => { const m = String(s || '').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? new Date(+m[3], +m[2] - 1, +m[1]).getTime() : null; };
+    const mucTu = s => { const t = String(s || '').toLowerCase(); return /cao|đỏ|gấp|khẩn|nghiêm/.test(t) ? 'cao' : /vừa|trung|vàng/.test(t) ? 'vua' : 'thap'; };
+    const flash = d.flashReport || {};
+    const ds = d.danhSachDuAn || [];
+    const kq = [];
+    (flash.khoi2_vuongMac || []).forEach(v => kq.push({ vanDe: v.vanDe || '', nguon: 'Flash hôm nay', muc: mucTu(v.mucDo), nguoiXuLy: flash.nguoiBaoCao || '', han: '', deXuat: v.deXuat || '', quaHan: false }));
+    ds.forEach(da => {
+      const t = docNgay(da.hanChot), quaHan = t !== null && t < moc && Number(da.tienDo) < 100;
+      const den = String(da.den || '');
+      const muc = quaHan || den.indexOf('red') >= 0 ? 'cao' : den.indexOf('yellow') >= 0 ? 'vua' : null;
+      if (!muc) return;
+      kq.push({ vanDe: (quaHan ? 'Quá hạn ' : 'Chậm tiến độ ') + (da.ma || '') + ' – ' + (da.ten || ''), nguon: 'Dự án · ' + (Number(da.tienDo) || 0) + '%', muc, nguoiXuLy: da.quanLy || '', han: da.hanChot || '', deXuat: da.trangThai || '', quaHan });
+    });
+    const thuTu = { cao: 0, vua: 1, thap: 2 };
+    return kq.sort((a, b) => thuTu[a.muc] - thuTu[b.muc] || (b.quaHan - a.quaHan));
+  },
+
+  renderMaTran: function(ds) {
+    if (!ds.length) return `<div class="card" style="text-align:center; padding:24px; font-size:14px; color:var(--text-muted);">✅ Không có vướng mắc nào cần gỡ.</div>`;
+    const NHOM = [['cao', '🔴 Cao – gỡ trong ngày', 'var(--c-red)'], ['vua', '🟡 Vừa – gỡ trong tuần', 'var(--c-yellow)'], ['thap', '🟢 Thấp – theo dõi', 'var(--c-green)']];
+    this._maTran = ds;
+    return NHOM.map(([k, nhan, mau]) => {
+      const nhom = ds.map((x, i) => ({ x, i })).filter(o => o.x.muc === k);
+      if (!nhom.length) return '';
+      return `
+        <div style="margin-bottom:14px;">
+          <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:8px;">${nhan} · ${nhom.length}</div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            ${nhom.map(({ x, i }) => `
+              <div class="card" style="border-left:4px solid ${mau}; padding:12px;">
+                <div style="font-size:14px; font-weight:700; color:var(--text); line-height:1.4; overflow-wrap:anywhere;">${x.quaHan ? '⏰ ' : '⚠️ '}${x.vanDe}</div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px 14px; font-size:14px; color:var(--text-muted); margin:6px 0;">
+                  <span>📍 ${x.nguon}</span>
+                  <span>👤 ${x.nguoiXuLy || '<em>chưa giao</em>'}</span>
+                  ${x.han ? `<span>📅 Hạn: <strong>${x.han}</strong></span>` : ''}
+                </div>
+                ${x.deXuat ? `<div style="font-size:14px; color:var(--text); background:var(--bg-sub); padding:6px 10px; border-radius:6px; line-height:1.4; overflow-wrap:anywhere;">💡 ${x.deXuat}</div>` : ''}
+                <button class="btn-secondary" style="margin-top:8px; min-height:44px; font-size:14px; width:100%;" onclick="ModuleDuAn.saoChepVuongMac(${i})">📋 Sao chép để giao việc</button>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    }).join('');
+  },
+
+  /** Task Bus (M7.1) chưa có máy chủ ➜ sao chép nội dung để dán vào ⚡ Giao việc / Telegram. Không gửi gì đi. */
+  saoChepVuongMac: function(i) {
+    const x = (this._maTran || [])[i];
+    if (!x) return;
+    const tmp = document.createElement('div');
+    tmp.innerHTML = [x.vanDe, x.nguoiXuLy && ('Người xử lý: ' + x.nguoiXuLy), x.han && ('Hạn: ' + x.han), x.deXuat && ('Đề xuất: ' + x.deXuat)].filter(Boolean).join('\n');
+    const txt = tmp.textContent;
+    const xong = () => ShinApp.toast('Đã sao chép – dán vào ⚡ Giao việc hoặc Telegram.');
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(xong, () => ShinApp.toast('Trình duyệt chặn sao chép.', 'info'));
+    else ShinApp.toast('Trình duyệt chặn sao chép.', 'info');
   },
 
   chuyenTab: function(tab) {

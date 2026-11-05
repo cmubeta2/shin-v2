@@ -4,6 +4,159 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.0] – 05/11/2026 (RÀ UX TOÀN MÀN 375 / 1280)
+
+### 🎨 Giao diện
+- `css/styles.css`: `.chi-tiet-gon summary` 32 → 44px. Đo 16 màn + 18 tab con: 0 chữ < 14px, 0 vùng bấm < 44px, 0 cuộn ngang.
+
+## [2.8.9] – 05/11/2026 (TƯỜNG LỬA KHONG_DUA_VAO M9.5)
+
+### 🔒 Bảo mật
+- `js/api.js`: `soatKhongDuaVao` (thuần), `MAU_CAM`, `CONG_GHI`; `goi` chặn cổng ghi có CCCD / BHYT / khóa / token trước khi gửi, lỗi `khongduavao` có câu Việt.
+
+## [2.8.8] – 05/11/2026 (RÀ UX ĐÁNH GIÁ 5T)
+
+### 🎨 Giao diện
+- `js/modules/danhgia5t.js`: chữ nội tuyến ≥ 14px, nút phụ ≥ 44px, ô tick bọc `.chk-vung-5t`, màu theo biến (`color-mix` cho nhãn mức).
+- `css/styles.css`: khối bù v2.8.8 cho bảng 5T, chip lọc, pill, ô ghi chú 16px, `.form-label`.
+- `QUY_HOACH_10_MANG_AIOS.md`, `HOP_DONG_CONG_V2.md`: KPI `webNhap2027` đã lên app (v1.8.2 @9).
+
+## [2.8.7] – 05/11/2026 (KHẢO SÁT – 5 TRỤ ACHSI THEO THÁNG)
+
+### 🟢 Khảo sát
+- `js/modules/khaosat.js`: `taiLive` gọi thêm `webTongHopKS` (KS L6, v1.4.4); `ghepTongHop` (thuần), `doiThang`, `giaTriThang`, `thangHienTai`; khối gập điểm theo khảo sát; bỏ `noiDung` (QK4).
+- `css/styles.css`: `.ks-thang` (ô chọn tháng 16px, vùng bấm ≥ 44px, chỉ biến màu).
+- `HOP_DONG_CONG_V2.md`: thêm `webTongHopKS`.
+
+## [2.8.6] – 05/11/2026 (RÀ UX 375 – CHỮ ≥ 14PX)
+
+### 🎨 Giao diện
+- `css/styles.css`: `.page-sub`, `.hero-date`, `.dong-sub`, `.tq-nhan` lên 14px; khối bù cuối tệp cho `.kanban-header`, `.o-so-loc`, `.flash-*`, `.module-chip`, `#appContent .status-pill`.
+- `js/modules/duan.js`, `js/modules/congviec.js`: cỡ chữ nội tuyến 10–13px ➜ 14px.
+
+## [2.8.5] – 05/11/2026 (QUẢN TRỊ – MA TRẬN QUYỀN M0.2)
+
+### ✅ Quản trị
+- `js/modules/quantri.js`: tab 🔑 Ma trận, `maTranQuyen` (thuần, theo chốt chặn quyền của mã v1), `veQuyen`.
+- `css/styles.css`: `.qt-quyen` (table-layout fixed, chữ ≥ 14px, chỉ biến màu), `.qt-chu-giai`.
+
+## [2.8.4] – 05/11/2026 (CÔNG VIỆC – ĐÈN SLA M7.4)
+
+### ✅ Công việc
+- `js/modules/congviec.js`: `docHan`, `mucSla`, `tinCanhBao` (thuần), dải chip lọc SLA, nút sao chép cảnh báo; thẻ Kanban thoát HTML.
+- `css/styles.css`: `.cv-*` – viền trái theo đèn, chữ ≥ 14px.
+
+## [2.8.3] – 05/11/2026 (TRI THỨC – ĐỒ THỊ LIÊN KẾT M9.3)
+
+### ✅ Tri thức
+- `js/modules/trithuc.js`: `phanTichLienKet` (thuần: liên kết ra / ngược / treo, khớp mã hoặc tên không dấu, bỏ #mục, |nhãn, tự liên kết, trùng), `veSvg` (đồ thị vòng tròn, nút to theo bậc), khung chi tiết tài liệu với chip liên kết ≥ 44px.
+- `js/demo_data.js`: tài liệu mẫu có `tomTat` chứa `[[…]]` + `lienKet`.
+- `css/styles.css`: `.tt-dothi`, `.tt-xem`, `.tt-chips` (chỉ biến màu).
+
+## [2.8.2] – 05/11/2026 (CRM – PIPELINE B2B M2.3)
+
+### ✅ CRM
+- `js/modules/crm.js`: khối 📈 Pipeline B2B 5 giai đoạn (suy từ Trạng thái), bấm để lọc; nút Bỏ lọc chung.
+- `css/styles.css`: `.crm-pipe*` (lưới tự xuống dòng, ô ≥ 56px, chỉ dùng biến màu).
+
+## [2.8.1] – 05/11/2026 (PK – NHÂN SỰ: HỒ SƠ + DUYỆT SỬA HỒ SƠ)
+
+### 🟢 Phòng PTKH (PK)
+- `js/modules/phongkham.js`: thẻ 👥 Nhân sự – mở hồ sơ từng người (`webHoSoNhanSu`), duyệt / không duyệt yêu cầu sửa hồ sơ (`webDuyetSuaHoSo`, không duyệt bắt buộc lý do). Lỗi cổng hiện ngay dưới dòng, không thay bằng số mẫu.
+- `js/demo_data.js`: 1 yêu cầu sửa hồ sơ mẫu (dữ liệu giả).
+
+## [2.8.0] – 05/11/2026 (QUẢN TRỊ – NGƯỜI DÙNG & APP GHI THẬT)
+
+### 🟢 Quản trị (Tầng 0A)
+- `js/modules/quantri.js`: ➕ Thêm người dùng, ✏️ Sửa vai trò / trạng thái qua `webLuuNguoiDung` (HUB L25); kiểm phía trình duyệt mã, họ tên, trùng mã, Admin cuối cùng. Nút Bật / Tắt app qua `webLuuUngDung` – Hoàn tác 6 giây, ghi đúng 1 lần.
+- `js/demo_data.js`: thêm `ma` cho app mẫu để Demo bấm Bật / Tắt được.
+
+## [2.7.9] – 05/11/2026 (CSP ẢNH MINH CHỨNG)
+
+### 🛠 Sửa
+- `index.html`: CSP `img-src` cho ảnh Drive (`drive.google.com`, `*.googleusercontent.com`) để màn Duyệt PK hiện ảnh minh chứng.
+
+## [2.7.8] – 05/11/2026 (DỰ ÁN – MA TRẬN VƯỚNG MẮC M6.3)
+
+### ✅ Dự án
+- `js/modules/duan.js`: tab mới 🧱 Ma Trận Vướng Mắc (M6.3 Blocker Matrix) – chạy hoàn toàn phía trình duyệt trên dữ liệu màn đang có: gom Khối 2 Flash + dự án đèn đỏ / vàng + dự án quá hạn chưa 100%, xếp Cao → Vừa → Thấp (quá hạn lên đầu), hiện nguồn, người xử lý, hạn gỡ, đề xuất. Nút 📋 Sao chép để giao việc (Task Bus M7.1 chưa có máy chủ – không gửi gì đi).
+- Live dùng lại dữ liệu `webDuAn` đã thoát HTML; Demo dùng `demo_data.js`.
+
+## [2.7.7] – 05/11/2026 (PTKH GỐC – BÁO CÁO 14 NGÀY + LỊCH TỔ)
+
+### 🟢 PTKH gốc
+- `js/modules/ptkh.js`: thêm 📝 Báo cáo 14 ngày của tôi (`webLichSu`: ngày, ca, số chính, trạng thái duyệt, trễ hạn) và 📅 Lịch tổ tuần này (`webLichTo`: ca / vị trí của tôi theo ngày + ai nghỉ, không lý do) – đọc qua cổng `webGoi` (L148), gọi song song với Tổng quan tháng; lỗi khối nào báo dải đỏ ở khối đó, không thay bằng số mẫu.
+- Demo: `SHIN_DEMO_DATA.ptkh.lichSu`, `.lichTo` (dữ liệu giả).
+
+## [2.7.6] – 04/11/2026 (KPI – NHÁP AOP NĂM SAU)
+
+### ⭐ Màn chỉnh nháp AOP năm sau
+- `js/modules/kpi.js` › 🎯 AOP › 🗓 Nháp AOP năm sau: đọc `webNhap2027` (mục tiêu năm gốc → năm sau, % tăng trưởng, nguồn: đã chỉnh / theo thực đạt / mặc định); Admin nhập % (−50…200, trống = về mặc định) ➜ `webLuuTangTruong` rồi đọc lại.
+- Cổng lỗi (KPI v1.8.2 chưa lên app) ➜ dải đỏ báo rõ + nút mở app KPI v1, không hiện số mẫu.
+- Demo: `SHIN_DEMO_DATA.kpiPhu.nhap2027` (dữ liệu giả).
+
+## [2.7.5] – 04/11/2026 (PTKH GỐC ĐỌC THẲNG TỔNG QUAN THÁNG)
+
+### 🟢 PTKH gốc
+- `js/modules/ptkh.js`: thêm khối 📊 Tổng quan tháng đọc thẳng app PTKH qua cổng `webGoi` (L148) ➜ `webDashboard('thang')`: báo cáo đúng hạn / trễ, việc đang làm / quá hạn / xong, chuỗi nộp đúng hạn, từng chỉ tiêu (thực hiện / kế hoạch, % đạt, dự báo cuối kỳ, màu đèn).
+- `js/api.js`: `goiPTKH(link, ham, thamSo)` – địa chỉ lấy từ link PTKH Hub cấp, chỉ chấp nhận `script.google.com/macros/s/…/exec`; lỗi báo riêng ở khối này (không thay số mẫu).
+- Demo: `SHIN_DEMO_DATA.ptkh.dash` (dữ liệu giả).
+
+## [2.7.4] – 04/11/2026 (RÀ UX ĐO ĐƯỢC)
+
+- `duan.js`: nút 36px ➜ 44px, chữ 10–12px ➜ 13–14px. Ghi lại phần 5T và chữ phụ 12–13px dùng chung để lượt sau.
+
+---
+
+## [2.7.3] – 04/11/2026 (M9.2 TÌM KIẾM TRI THỨC)
+
+- `trithuc.js`: tìm kiếm toàn văn phía trình duyệt (không dấu, nhiều từ, lọc lĩnh vực, tô đậm); sửa chữ < 14px, nút < 44px, thêm esc.
+
+---
+
+## [2.7.2] – 04/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG KS v1.4.3)
+
+- `khaosat.js` bỏ `webTongQuan` (v1 không có) ➜ `webDsKhaoSat` + `webKetQuaKS` + xuất CSV `webXuatKS`; KS nhận du đối tượng.
+- HOP_DONG_CONG_V2.md mục KS sửa theo mã thật.
+
+---
+
+## [2.7.1] – 04/11/2026 (TELEGRAM MINI APP)
+
+### 📱 Mở Shin v2 ngay trong Telegram
+- Đọc `Telegram.WebApp.initData` / `#tgWebAppData` ➜ cổng Hub `webTelegram` (HUB L8) ➜ token Hub 12 giờ, xóa hash khỏi thanh địa chỉ.
+- Chống nhúng khung: chỉ cho phép `web.telegram.org`.
+- Việc của anh (V20): đặt Menu Button của bot trỏ https://cmubeta2.github.io/shin-v2/.
+
+---
+
+## [2.7.0] – 04/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
+
+### 🏥 Mảng 5 – Phòng PTKH chạy số thật
+- `js/modules/phongkham.js` viết lại: 9 thẻ Hôm nay · Công việc · Báo cáo ngày + minh chứng ảnh · Lịch tuần · Thông báo · Duyệt · Nhân sự · Góp ý · Hồ sơ, mỗi thẻ gọi đúng cổng PK (`webHomNay`, `webCongViec`, `webCapNhatViec`, `webThemViecCaNhan`, `webBaoCao`, `webNopBaoCao`, `webChoDuyet`, `webDuyet`, `webLichTuan`, `webThongBao`, `webDaDocThongBao`, `webNhanSu`, `webGopYCuaToi`, `webGuiGopY`, `webHoSo`).
+- Gọi PK bằng `SHIN_API.goi('PK', hanh, {…})` (PK nhận đối tượng, không phải `du.a`); sửa HOP_DONG_CONG_V2.md mục PK theo mã thật.
+- Ảnh minh chứng nén JPEG ≤ 1600px, ≤ 6 ảnh; báo lỗi ảnh riêng (`loiAnh`) khi báo cáo đã ghi.
+- Demo: dữ liệu giả `phongkhamV1` trong `js/demo_data.js`.
+
+---
+
+## [2.6.5] – 01/11/2026 (XUẤT BẢN QUY CHUẨN MASTER UX/UI v2.6.4 & HỆ PHÒNG NGỰ 12 LỖI VẶT)
+
+### 📘 Chuẩn Hóa & Xuất Bản Master UX/UI Specification
+- **Rà soát & Nâng cấp Toàn Diện THIET_KE_GIAO_DIEN_SHIN.md**:
+  - Tích hợp 100% hiện trạng AIOS v2.6.4: Module đánh giá văn hóa 5T, biểu đồ Radar SVG 5 trục, in ấn phiếu A4, PWA offline, Content Security Policy, Script Anti-Flicker.
+  - Đồng bộ chi tiết Topbar 56px tinh gọn (chỉ 1 nút ⚡ bên phải kèm badge đếm đỏ), Fixed Bottom Nav 64px 5 nút, Decagon Rail với mấu mép trái di động 66% (body.kieu-mep), 8 palettes màu, 4 chế độ hiển thị, 3 mức cỡ chữ --font-scale.
+  - Chuẩn hóa động lực học chuyển động Animate UI Spring Physics (cubic-bezier(0.16, 1, 0.3, 1) và Asymmetric Exit nhanh 0.16s).
+- **Quy Chuẩn Tấm Cài Đặt Bắt Buộc & Bật/Tắt Nav Bar (Theo Chỉ Đạo Của Sếp)**:
+  - Bổ sung nguyên tắc bất biến: Mọi app dựng sau này **LUÔN PHẢI CÓ TẤM / TRANG CÀI ĐẶT**.
+  - Tích hợp bộ cấu hình **Định dạng thanh mép trái di động**: 3 chế độ (Tự động · Hàng icon 56px · Mép trái 4px kèm mấu kéo » 66% chiều cao nhớ vị trí kéo).
+  - Tích hợp công tắc **BẬT / TẮT THANH ĐIỀU HƯỚNG ĐÁY (Nav Bar)**: Khi tắt, thanh đáy ẩn hoàn toàn, container co padding đáy về 16px mang lại trải nghiệm xem toàn màn hình tối đa, lưu trạng thái vào localStorage (`shin_navbar`).
+- **Hệ Thống Phòng Ngự Triệt Tiêu 12 Lỗi Vặt (Zero-Bug Defense Guide)**:
+  - Cẩm nang đặc trị 12 lỗi hay gặp: Touch target < 44px, iOS Safari auto-zoom (input font < 16px), cuộn ngang layout overflow, xung đột Z-index 8 tầng, Bottom Nav che nội dung cuối, SafeArea iPhone, chớp trắng màn hình FOUC, bàn phím ảo che form, format số/ngày sai chuẩn VN, hộp confirm phiền toái, lag chuyển động và lỗ hổng XSS.
+- **Đồng bộ hóa 3 điểm**: Cập nhật đồng bộ tại AIOS-v2/THIET_KE_GIAO_DIEN_SHIN.md, THIET_KE_GIAO_DIEN_SHIN.md (root) và He sinh thai Shin/THIET_KE_GIAO_DIEN_SHIN.md.
+
+---
+
 ## [2.6.4] – 01/11/2026 (MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
 
 ### ⭐ Mới: Module Đánh Giá Văn Hóa Hành Vi 5T Bậc Thang

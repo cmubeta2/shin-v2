@@ -19,7 +19,7 @@ const ModuleDanhGia5T = (function() {
       ten: 'TRUNG THỰC',
       tenEn: 'Integrity',
       icon: '🛡️',
-      mau: '#dc2626',
+      mau: 'var(--c-red)',
       moTa: 'Đảm bảo dữ liệu trung thực, báo cáo chuẩn xác, dũng cảm đối diện sai sót và liêm chính trong quyền lợi.',
       tongTM: 15,
       nguong: { m2: 6, m3: 11, m4: 14, m5: 15 },
@@ -365,20 +365,20 @@ const ModuleDanhGia5T = (function() {
             <div class="hero-greet">Bảng Kiểm 5T Bậc Thang Lũy Tiến ⭐</div>
             <div class="hero-date">📅 Kỳ: ${state.hoSo.kyDanhGia} · Nhân sự: ${state.hoSo.hoTen}</div>
           </div>
-          <span class="status-pill live" style="font-size:11px; font-weight:700;">83 TC BYT</span>
+          <span class="status-pill live" style="font-size:14px; font-weight:700;">83 TC BYT</span>
         </div>
 
         <div class="tq-3so">
           <div class="tq-o" style="cursor:pointer;" onclick="ModuleDanhGia5T.chuyenTab('danhgia')">
-            <div class="tq-so" style="color:var(--primary); font-size:24px;">${kq.dtb} <span style="font-size:13px; color:var(--text-muted);">/5.0</span></div>
+            <div class="tq-so" style="color:var(--primary); font-size:24px;">${kq.dtb} <span style="font-size:14px; color:var(--text-muted);">/5.0</span></div>
             <div class="tq-nhan">Điểm Trung Bình (ĐTB)</div>
           </div>
           <div class="tq-o" style="cursor:pointer;" onclick="ModuleDanhGia5T.chuyenTab('danhgia')">
-            <div class="tq-so" style="color:#10b981; font-size:24px;">${kq.tongDiem} <span style="font-size:13px; color:var(--text-muted);">/25</span></div>
+            <div class="tq-so" style="color:var(--c-green); font-size:24px;">${kq.tongDiem} <span style="font-size:14px; color:var(--text-muted);">/25</span></div>
             <div class="tq-nhan">Tổng Điểm 5 Trụ Cột</div>
           </div>
           <div class="tq-o" style="cursor:pointer;" onclick="ModuleDanhGia5T.chuyenTab('danhgia')">
-            <div class="tq-so" style="color:${kq.coDiemLietM1 ? '#dc2626' : '#8b5cf6'}; font-size:14px; font-weight:800; line-height:1.2; padding-top:4px;">
+            <div class="tq-so" style="color:${kq.coDiemLietM1 ? 'var(--c-red)' : '#8b5cf6'}; font-size:14px; font-weight:800; line-height:1.2; padding-top:4px;">
               ${kq.xepLoai.split('(')[0].trim()}
             </div>
             <div class="tq-nhan">Xếp Loại Hiện Tại</div>
@@ -437,11 +437,11 @@ const ModuleDanhGia5T = (function() {
         <div class="card-header">
           <div>
             <div class="card-title">📖 Sổ Tay Thẩm Định Minh Chứng 5T</div>
-            <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+            <div style="font-size:14px; color:var(--text-muted); margin-top:2px;">
               Quy chuẩn 76 tiểu mục theo phương pháp "Nói có sách, mách có chứng"
             </div>
           </div>
-          <button class="btn-secondary" style="font-size:11px; padding:4px 8px; min-height:32px;" onclick="ModuleDanhGia5T.taiTaiLieuMD()">
+          <button class="btn-secondary" style="font-size:14px; padding:6px 10px; min-height:44px;" onclick="ModuleDanhGia5T.taiTaiLieuMD()">
             📥 Tải File MD
           </button>
         </div>
@@ -474,9 +474,9 @@ const ModuleDanhGia5T = (function() {
       </div>
 
       <!-- Danh Sách Tiểu Mục Thư Viện -->
-      <div style="font-size:13px; color:var(--text-muted); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-size:14px; color:var(--text-muted); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
         <span>Hiển thị <strong>${danhSachLoc.length}</strong> / 76 tiểu mục</span>
-        <span style="font-size:11px;">Chuẩn hóa bởi Sếp Huỳnh Trường Thanh Tâm</span>
+        <span style="font-size:14px;">Chuẩn hóa bởi Sếp Huỳnh Trường Thanh Tâm</span>
       </div>
 
       <div class="hn-list" style="gap:12px;">
@@ -487,7 +487,7 @@ const ModuleDanhGia5T = (function() {
         ` : danhSachLoc.map(tm => {
           let badgeColor = '#64748b';
           let badgeText = tm.muc;
-          if (tm.muc === 'M1') { badgeColor = '#dc2626'; badgeText = 'M1 · ĐIỂM LIỆT'; }
+          if (tm.muc === 'M1') { badgeColor = 'var(--c-red)'; badgeText = 'M1 · ĐIỂM LIỆT'; }
           if (tm.muc === 'M2') { badgeColor = '#d97706'; badgeText = 'M2 · NỀN TẢNG'; }
           if (tm.muc === 'M3') { badgeColor = '#0284c7'; badgeText = 'M3 · CHUẨN MỰC'; }
           if (tm.muc === 'M4') { badgeColor = '#0f766e'; badgeText = 'M4 · CẢI TIẾN'; }
@@ -497,12 +497,12 @@ const ModuleDanhGia5T = (function() {
             <div class="card" style="border-left: 4px solid ${tm.tcMau};">
               <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
                 <div style="display:flex; align-items:center; gap:6px;">
-                  <span style="font-size:12px; font-weight:800; color:${tm.tcMau};">${tm.tcIcon} ${tm.tcTen}</span>
-                  <span style="font-size:11px; background:${badgeColor}18; color:${badgeColor}; font-weight:700; padding:2px 6px; border-radius:4px; border:1px solid ${badgeColor}30;">
+                  <span style="font-size:14px; font-weight:800; color:${tm.tcMau};">${tm.tcIcon} ${tm.tcTen}</span>
+                  <span style="font-size:14px; background:color-mix(in srgb, ${badgeColor} 10%, transparent); color:${badgeColor}; font-weight:700; padding:2px 6px; border-radius:4px; border:1px solid color-mix(in srgb, ${badgeColor} 19%, transparent);">
                     ${badgeText}
                   </span>
                 </div>
-                <span style="font-size:12px; font-weight:800; color:var(--text-muted);">Mã: ${tm.ma}</span>
+                <span style="font-size:14px; font-weight:800; color:var(--text-muted);">Mã: ${tm.ma}</span>
               </div>
 
               <!-- Nội dung tiểu mục -->
@@ -511,7 +511,7 @@ const ModuleDanhGia5T = (function() {
               </div>
 
               <!-- Hai khối hướng dẫn: NV chuẩn bị gì & QL kiểm tra gì -->
-              <div style="margin-top:10px; display:grid; grid-template-columns:1fr; gap:8px; font-size:12px;">
+              <div style="margin-top:10px; display:grid; grid-template-columns:1fr; gap:8px; font-size:14px;">
                 <div style="background:var(--bg-sub); padding:8px 10px; border-radius:6px; border:1px solid var(--border);">
                   <strong style="color:var(--primary);">📋 Nhân viên tự chứng minh (Chuẩn bị gì?):</strong>
                   <div style="color:var(--text); margin-top:2px;">${tm.hdNV}</div>
@@ -541,9 +541,9 @@ const ModuleDanhGia5T = (function() {
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px; margin-top:10px; align-items:center;">
           <!-- Biểu đồ Radar SVG 5 Trục Sắc Nét -->
           <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px; background:var(--bg-sub); border-radius:10px; border:1px solid var(--border);">
-            <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">RADAR VĂN HÓA 5 TRỤ CỘT</div>
+            <div style="font-size:14px; font-weight:700; color:var(--text-muted); margin-bottom:4px;">RADAR VĂN HÓA 5 TRỤ CỘT</div>
             ${renderRadarSVG(kq.ketQuaTC)}
-            <div style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:6px;">
+            <div style="font-size:14px; color:var(--text-muted); text-align:center; margin-top:6px;">
               Diện tích đồ thị thể hiện độ cân bằng và mức độ trưởng thành văn hóa
             </div>
           </div>
@@ -566,7 +566,7 @@ const ModuleDanhGia5T = (function() {
                       <div style="font-weight:700; color:${k.mau}; display:flex; align-items:center; gap:4px;">
                         <span>${k.icon}</span> <span>${k.ma}</span>
                       </div>
-                      <div style="font-size:11px; color:var(--text-muted);">${k.ten}</div>
+                      <div style="font-size:14px; color:var(--text-muted);">${k.ten}</div>
                     </td>
                     <td><strong>${k.soTMDuyet}</strong>/${k.tongTM}</td>
                     <td>
@@ -576,9 +576,9 @@ const ModuleDanhGia5T = (function() {
                     </td>
                     <td>
                       ${k.viPhamM1 ? `
-                        <span style="font-size:10px; color:#dc2626; font-weight:700;">🚨 Điểm liệt M1</span>
+                        <span style="font-size:14px; color:var(--c-red); font-weight:700;">🚨 Điểm liệt M1</span>
                       ` : `
-                        <span style="font-size:10px; color:#10b981; font-weight:600;">✓ Hợp lệ</span>
+                        <span style="font-size:14px; color:var(--c-green); font-weight:600;">✓ Hợp lệ</span>
                       `}
                     </td>
                   </tr>
@@ -592,17 +592,17 @@ const ModuleDanhGia5T = (function() {
         <div style="margin-top:16px; padding:12px; border-radius:8px; border:1px solid var(--border); background:${kq.coDiemLietM1 ? 'rgba(220,38,38,0.08)' : 'rgba(2,132,199,0.06)'};">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <div>
-              <div style="font-size:11px; font-weight:800; color:var(--text-muted);">KẾT QUẢ XẾP LOẠI CHUNG CUỘC</div>
-              <div style="font-size:17px; font-weight:800; color:${kq.coDiemLietM1 ? '#dc2626' : 'var(--primary)'}; margin-top:2px;">
+              <div style="font-size:14px; font-weight:800; color:var(--text-muted);">KẾT QUẢ XẾP LOẠI CHUNG CUỘC</div>
+              <div style="font-size:17px; font-weight:800; color:${kq.coDiemLietM1 ? 'var(--c-red)' : 'var(--primary)'}; margin-top:2px;">
                 ${kq.xepLoai}
               </div>
             </div>
             <div style="text-align:right;">
               <span style="font-size:20px; font-weight:900; color:var(--text);">${kq.dtb}</span>
-              <span style="font-size:12px; color:var(--text-muted);">/5.0 ĐTB</span>
+              <span style="font-size:14px; color:var(--text-muted);">/5.0 ĐTB</span>
             </div>
           </div>
-          <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">
+          <div style="font-size:14px; color:var(--text-muted); margin-top:6px;">
             ${kq.xepLoaiMoTa}
           </div>
         </div>
@@ -612,7 +612,7 @@ const ModuleDanhGia5T = (function() {
       <div class="card" style="margin-bottom:16px;">
         <div class="card-header">
           <div class="card-title">👤 Thông Tin Đối Tượng & Kỳ Thẩm Định</div>
-          <button class="btn-secondary" style="font-size:11px; padding:4px 8px; min-height:30px;" onclick="ModuleDanhGia5T.luuThongTinHoSo()">
+          <button class="btn-secondary" style="font-size:14px; padding:6px 10px; min-height:44px;" onclick="ModuleDanhGia5T.luuThongTinHoSo()">
             💾 Lưu Hồ Sơ
           </button>
         </div>
@@ -646,12 +646,12 @@ const ModuleDanhGia5T = (function() {
 
         <!-- Bộ nút chọn nhanh mẫu / đặt lại -->
         <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; padding-top:10px; border-top:1px dashed var(--border);">
-          <span style="font-size:12px; color:var(--text-muted); align-self:center;">Chọn nhanh mức độ thử nghiệm:</span>
-          <button class="btn-secondary" style="font-size:11px; padding:3px 8px; min-height:30px;" onclick="ModuleDanhGia5T.chonNhanhMuc(2)">Nền Tảng (Mức 2)</button>
-          <button class="btn-secondary" style="font-size:11px; padding:3px 8px; min-height:30px;" onclick="ModuleDanhGia5T.chonNhanhMuc(3)">Chuẩn Mực (Mức 3)</button>
-          <button class="btn-secondary" style="font-size:11px; padding:3px 8px; min-height:30px;" onclick="ModuleDanhGia5T.chonNhanhMuc(4)">Vững Mạnh (Mức 4)</button>
-          <button class="btn-secondary" style="font-size:11px; padding:3px 8px; min-height:30px;" onclick="ModuleDanhGia5T.chonNhanhMuc(5)">Tinh Hoa (Mức 5)</button>
-          <button class="btn-secondary" style="font-size:11px; padding:3px 8px; min-height:30px; color:#dc2626;" onclick="ModuleDanhGia5T.xoaTrang()">Đặt lại trắng</button>
+          <span style="font-size:14px; color:var(--text-muted); align-self:center;">Chọn nhanh mức độ thử nghiệm:</span>
+          <button class="btn-secondary" style="font-size:14px; padding:6px 10px; min-height:44px;" onclick="ModuleDanhGia5T.chonNhanhMuc(2)">Nền Tảng (Mức 2)</button>
+          <button class="btn-secondary" style="font-size:14px; padding:6px 10px; min-height:44px;" onclick="ModuleDanhGia5T.chonNhanhMuc(3)">Chuẩn Mực (Mức 3)</button>
+          <button class="btn-secondary" style="font-size:14px; padding:6px 10px; min-height:44px;" onclick="ModuleDanhGia5T.chonNhanhMuc(4)">Vững Mạnh (Mức 4)</button>
+          <button class="btn-secondary" style="font-size:14px; padding:6px 10px; min-height:44px;" onclick="ModuleDanhGia5T.chonNhanhMuc(5)">Tinh Hoa (Mức 5)</button>
+          <button class="btn-secondary" style="font-size:14px; padding:6px 10px; min-height:44px; color:var(--c-red);" onclick="ModuleDanhGia5T.xoaTrang()">Đặt lại trắng</button>
         </div>
       </div>
 
@@ -660,7 +660,7 @@ const ModuleDanhGia5T = (function() {
         <div class="card-header">
           <div>
             <div class="card-title">📝 Bảng Kiểm Thẩm Định Chi Tiết</div>
-            <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+            <div style="font-size:14px; color:var(--text-muted); margin-top:2px;">
               Tiểu mục chỉ ĐẠT khi cả Nhân viên và Quản lý cùng tích xác nhận [x]
             </div>
           </div>
@@ -687,10 +687,10 @@ const ModuleDanhGia5T = (function() {
                 <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; flex-wrap:wrap; gap:8px;">
                   <div>
                     <span style="font-size:15px; font-weight:800; color:${tc.mau};">${tc.icon} TIÊU CHÍ ${tc.id}: ${tc.ten}</span>
-                    <div style="font-size:11px; color:var(--text-muted);">${tc.moTa}</div>
+                    <div style="font-size:14px; color:var(--text-muted);">${tc.moTa}</div>
                   </div>
                   <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="font-size:12px; font-weight:700;">Đạt ${k.soTMDuyet}/${tc.tongTM} TM</span>
+                    <span style="font-size:14px; font-weight:700;">Đạt ${k.soTMDuyet}/${tc.tongTM} TM</span>
                     <span class="diem-pill" style="background:${tc.mau}20; color:${tc.mau};">Mức ${k.mucDiem}</span>
                   </div>
                 </div>
@@ -724,17 +724,17 @@ const ModuleDanhGia5T = (function() {
                               <div style="font-weight:600; color:var(--text); line-height:1.4;">
                                 ${tm.noiDung}
                               </div>
-                              <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">
+                              <div style="font-size:14px; color:var(--text-muted); margin-top:4px;">
                                 <strong>Cách kiểm tra:</strong> ${tm.cachQL}
                               </div>
                             </td>
                             <td style="text-align:center;">
-                              <input type="checkbox" class="chk-5t" ${cur.nv ? 'checked' : ''} 
-                                onchange="ModuleDanhGia5T.capNhatTick('${tm.ma}', 'nv', this.checked)">
+                              <label class="chk-vung-5t" aria-label="Nhân viên tự đánh giá ${tm.ma}"><input type="checkbox" class="chk-5t" ${cur.nv ? 'checked' : ''} 
+                                onchange="ModuleDanhGia5T.capNhatTick('${tm.ma}', 'nv', this.checked)"></label>
                             </td>
                             <td style="text-align:center;">
-                              <input type="checkbox" class="chk-5t ql" ${cur.ql ? 'checked' : ''} 
-                                onchange="ModuleDanhGia5T.capNhatTick('${tm.ma}', 'ql', this.checked)">
+                              <label class="chk-vung-5t" aria-label="Quản lý xác nhận ${tm.ma}"><input type="checkbox" class="chk-5t ql" ${cur.ql ? 'checked' : ''} 
+                                onchange="ModuleDanhGia5T.capNhatTick('${tm.ma}', 'ql', this.checked)"></label>
                             </td>
                             <td>
                               <input type="text" class="note-input-5t" placeholder="Link/Mã minh chứng..." 

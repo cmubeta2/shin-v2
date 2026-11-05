@@ -79,8 +79,8 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 ### ⚙️ TẦNG 0A – QUẢN TRỊ NỀN TẢNG & PHÂN QUYỀN · `caidat` · bộ màu Cyber Terminal
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
-| M0.1 | Bật/Tắt Module (Feature Flags) – ẩn mảng khỏi menu khi tắt | ✅ lưu trên máy (chưa đồng bộ theo người) | v2.6.0 đồng bộ |
-| M0.2 | Ma trận RBAC: Vai trò × Khoa/Phòng × Module | ⬜ | v2.5.0 |
+| M0.1 | Bật/Tắt Module (Feature Flags) – ẩn mảng khỏi menu khi tắt | ✅ lưu trên máy (chưa đồng bộ theo người) · 🟡 bật/tắt app v1 qua `webLuuUngDung` (v2.8.0, chờ Hub lên app) | v2.6.0 đồng bộ |
+| M0.2 | Ma trận RBAC: Vai trò × Khoa/Phòng × Module | 🟡 v2.8.5 xem ma trận Vai trò × Mảng (suy từ chốt chặn quyền mã v1, chỉ xem) / ⬜ chiều Khoa/Phòng + sửa quyền theo ô (cần cổng v1) | v2.5.0 |
 | M0.3 | Cổng cấp Token SSO `h1.<ma>.0.<chuKy>` (dùng lại M-HUB-05 của v1) | 🟢 dùng token Hub, ẩn mảng không có quyền / 🟡 cấp token (`webCapLink`) | v2.3.0 |
 | M0.4 | Giám sát tải & sức khỏe 5 máy chủ /exec (latency, lỗi, fallback) | 🟢 độ trễ + lỗi từng máy chủ | – |
 
@@ -97,9 +97,9 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 |---|---|---|---|
 | M1.1 | Bàn làm việc Hero Card 3 số + Việc hôm nay (`webHomNay`, `webLamMoi`) + 🔔 (`webThongBao`) + 📝 Việc riêng (`webViecRieng`) | 🟢 | – |
 | M1.2 | Bàn điều hành 2 chiều 🧭 (`webDieuHanh`, `webHopThu`) | 🟢 | – |
-| M1.3 | KPI Toàn Viện: bản tin tạm tính (`webBanTin`) · soát lỗi (`webSoatLoi`) · AOP (`webAOP`) · báo cáo quý (`webBaoCaoQuy`) | 🟢 / 🟡 nháp AOP năm sau chờ `webNhap2027` | – |
-| M1.4 | Trung tâm Telegram Bot (sự kiện `muc:'gap'`) | ⬜ (chạy phía Apps Script v1) | v2.4.0 |
-| M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟡 màn xong, chờ KS mở `webTongQuan` | v2.4.0 |
+| M1.3 | KPI Toàn Viện: bản tin tạm tính (`webBanTin`) · soát lỗi (`webSoatLoi`) · AOP (`webAOP`) · báo cáo quý (`webBaoCaoQuy`) | 🟢 / 🟢 nháp AOP năm sau (v2.7.6 – `webNhap2027` + `webLuuTangTruong`; KPI v1.8.2 đã lên app @9 05/11) | – |
+| M1.4 | Trung tâm Telegram Bot (sự kiện `muc:'gap'`) | ⬜ (chạy phía Apps Script v1) · 🟢 v2.7.1 mở v2 trong Telegram Mini App (`webTelegram`, HUB L8) | v2.4.0 |
+| M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟢 v2.7.2 – số phiếu, chờ xác minh, điểm TB câu 5 mức, câu ≤ 2★, xuất CSV (webDsKhaoSat · webKetQuaKS · webXuatKS) · 🟢 v2.8.7 5 trụ ACHSI + hài lòng theo tháng (`webTongHopKS`, KS L6) | v2.4.0 |
 | M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ⬜ | v2.4.0 |
 
 ### 👥 MẢNG 2 – KHÁCH HÀNG & ĐỐI TÁC (CRM) · `crm`
@@ -107,7 +107,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 |---|---|---|---|
 | M2.1 | Danh bạ hợp nhất: KSK Doanh nghiệp, Nhà cung ứng, Học viên, CTV | ✅ | – |
 | M2.2 | Hộp lead mới đổ về từ Web Phễu (M8.3) | ✅ mẫu / 🟡 tiếp nhận | v2.3.0 |
-| M2.3 | Pipeline B2B: Tiếp cận → Báo giá → Hợp đồng → Triển khai → Tái ký | ⬜ | v2.3.0 |
+| M2.3 | Pipeline B2B: Tiếp cận → Báo giá → Hợp đồng → Triển khai → Tái ký | 🟡 v2.8.2 đếm + lọc phía trình duyệt theo Trạng thái (`webCRM`, chờ Hub lên app) | v2.3.0 |
 | M2.4 | Lịch sử tương tác & nhắc chăm sóc (đẩy việc sang Task Bus) | ⬜ | v2.3.0 |
 
 > **Ràng buộc bất biến:** CRM **không lưu bệnh nhân** (tuân thủ `KHONG_DUA_VAO.md`). Lead "đặt lịch khám" đi thẳng về máy chủ PK của Mảng 5.
@@ -133,20 +133,20 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 ### 🏥 MẢNG 5 – NHÂN SỰ & VẬN HÀNH PHÒNG KHÁM · `phongkham` · Hoàng Kim
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
-| M5.1 | Báo cáo ca ngày (lượt khám, doanh thu, tồn đọng) | 🟡 màn xong, chờ PK mở `webHomNay` | v2.4.0 |
-| M5.2 | Minh chứng ảnh nén → Drive (Base64 qua `21_PhongPTKH`) | ⬜ | v2.4.0 (v1 mở cổng trước) |
-| M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | ✅ xem / ⬜ đổi ca | v2.3.0 |
+| M5.1 | Báo cáo ca ngày (lượt khám, doanh thu, tồn đọng) | 🟢 v2.7.0 – Hôm nay + nộp / lịch sử / duyệt báo cáo ngày qua cổng PK thật | v2.4.0 |
+| M5.2 | Minh chứng ảnh nén → Drive (Base64 qua `21_PhongPTKH`) | 🟢 v2.7.0 (nén JPEG ≤ 1600px, ≤ 6 ảnh → `webNopBaoCao`) | v2.4.0 (v1 mở cổng trước) |
+| M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | 🟢 xem lịch tuần + đơn nghỉ (`webLichTuan`) / ⬜ đổi ca (làm trên PTKH) | v2.3.0 |
 | M5.4 | Bóc tách tăng ca & bù giờ TC-NS | ⬜ (logic có ở M-PTKH-03) | v2.4.0 |
 | M5.5 | Kiểm soát vi phạm NTC (> 3 lần trễ → trừ 0,5 công) | ⬜ (M-PTKH-04) | v2.4.0 |
 | M5.6 | Team Morale Index – cảm nhận sau ca 1–5★ | ⬜ (M-PTKH-01) | v2.4.0 |
-| M5.7 | Danh bạ nhân sự khoa/phòng | ⬜ | v2.5.0 (đi cùng RBAC) |
+| M5.7 | Danh bạ nhân sự khoa/phòng | 🟢 v2.7.0 (`webNhanSu`, quản lý) | v2.5.0 (đi cùng RBAC) |
 
 ### 📌 MẢNG 6 – QUẢN LÝ DỰ ÁN · `duan` · Executive Hub
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M6.1 | Master Dashboard đa dự án (`40_DuAnPK`, `50_HoaSua`, cơ sở mới) | ✅ | – |
 | M6.2 | **Daily Flash Report 4 khối** (Tiến độ · Vướng mắc & Đề xuất · Tài chính phát sinh · Chờ Sếp duyệt) | 🟡 màn xong, chờ Hub mở `webDuAn` | v2.5.0 |
-| M6.3 | Blocker Matrix: rủi ro, người xử lý, hạn gỡ → Task Bus | ⬜ | v2.3.0 |
+| M6.3 | Blocker Matrix: rủi ro, người xử lý, hạn gỡ → Task Bus | ✅ v2.7.8 phía trình duyệt (Flash + dự án đỏ / vàng / quá hạn; ➜ Task Bus tạm sao chép) | v2.3.0 |
 | M6.4 | Cổng trình duyệt hạng mục / đề xuất chi → 0B + Mảng 3 | 🟡 | v2.3.0 |
 
 ### 📋 MẢNG 7 – CÔNG VIỆC LIÊN THÔNG (TASK BUS) · `congviec` · Executive Hub
@@ -155,7 +155,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M7.1 | Task Event Bus: nhận sự kiện từ mọi mảng, tự sinh việc | ⬜ | v2.3.0 |
 | M7.2 | Universal Kanban 3 cột đa nguồn | ✅ | – |
 | M7.3 | Phân luồng việc theo RBAC (M0.2) | ⬜ | v2.5.0 |
-| M7.4 | Giám sát SLA Xanh → Vàng → Đỏ + báo Telegram | ⬜ | v2.4.0 |
+| M7.4 | Giám sát SLA Xanh → Vàng → Đỏ + báo Telegram | ✅ v2.8.4 đèn SLA + lọc + sao chép tin cảnh báo phía trình duyệt / ⬜ tự gửi Telegram (cần Task Bus M7.1 phía v1) | v2.4.0 |
 
 ### 🚀 MẢNG 8 – TĂNG TRƯỞNG (MARKETING AI & WEB PHỄU) · `tangtruong` · *(mảng mới – chưa có module)*
 | Mã | Micro-Module | Nguồn tái sử dụng | Phiên bản đích |
@@ -171,10 +171,10 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M9.1 | Kho SOP 3 tầng: HowTos → Runbooks → References | ✅ xem | – |
-| M9.2 | Tìm kiếm toàn văn (lọc phía trình duyệt trước, FTS5 sau) | 🟡 | v2.3.0 |
-| M9.3 | Đồ thị liên kết `[[wiki-links]]` | ⬜ | v2.6.0 |
+| M9.2 | Tìm kiếm toàn văn (lọc phía trình duyệt trước, FTS5 sau) | ✅ v2.7.3 phía trình duyệt (không dấu, nhiều từ, lọc lĩnh vực, tô đậm) / ⬜ FTS5 máy chủ | v2.3.0 |
+| M9.3 | Đồ thị liên kết `[[wiki-links]]` | ✅ v2.8.3 phía trình duyệt (liên kết ra / ngược / treo, SVG) – dữ liệu MẪU tới khi v1 có máy chủ kho tri thức | v2.6.0 |
 | M9.4 | Trích bài học kinh nghiệm từ báo cáo ca / Flash Report | ⬜ | v2.6.0 |
-| M9.5 | Tường lửa `KHONG_DUA_VAO.md` – chặn dữ liệu bệnh nhân vào AI | ⬜ (quy tắc đã có) | v2.4.0 |
+| M9.5 | Tường lửa `KHONG_DUA_VAO.md` – chặn dữ liệu bệnh nhân vào AI | ✅ v2.8.9 chặn sớm phía trình duyệt mọi cổng ghi (CCCD · BHYT · khóa · token) / ⬜ chặn phía máy chủ v1 | v2.4.0 |
 
 ### 💼 TẦNG 3 – GÓI GIẢI PHÁP TƯ VẤN SỐ *(không có màn hình riêng trong app)*
 G1 Chẩn đoán sức khỏe quy trình · G2 Bộ chuẩn hóa SOP ACHSI/FMFT · G3 Offer Stack · G4 Lộ trình CĐS 3 giai đoạn.

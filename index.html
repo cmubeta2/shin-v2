@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="SHIN AIOS v2 – Hệ thống điều hành hợp nhất đa module dành cho Doanh nghiệp & Y tế">
   <!-- Bảo mật (v2.5.5): chỉ được gọi mạng tới máy chủ v1 (Apps Script) – chặn đường gửi token ra nơi khác nếu có mã lạ chèn vào trang -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://drive.google.com https://*.googleusercontent.com; font-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#0f172a">
   <!-- PWA: cài như ứng dụng trên Android, iPhone/iPad, Windows, macOS, Linux, ChromeOS -->
@@ -24,16 +24,20 @@
   <link rel="stylesheet" href="css/styles.css">
   <script>
     // Chống nhúng trang vào khung của web khác (clickjacking) – GitHub Pages không cho đặt header X-Frame-Options
-    if (window.top !== window.self) { try { window.top.location = window.self.location.href; } catch (e) { document.documentElement.style.display = 'none'; } }
+    // v2.7.1: cho phép đúng Telegram Web (web.telegram.org) nhúng Mini App
+    var nhungTG = false; try { var ao = location.ancestorOrigins; nhungTG = !!(ao && ao.length && Array.prototype.every.call(ao, function (o) { return /^https:\/\/web\.telegram\.org$/.test(o); })); } catch (e) {}
+    if (window.top !== window.self && !nhungTG) { try { window.top.location = window.self.location.href; } catch (e) { document.documentElement.style.display = 'none'; } }
     // Chống chớp giao diện (Anti-Flicker Script)
     (function() {
       try {
         var t = localStorage.getItem('shin_theme');
         var p = localStorage.getItem('shin_palette');
         var c = localStorage.getItem('shin_cochu');
+        var nb = localStorage.getItem('shin_navbar');
         if (t) document.documentElement.setAttribute('data-theme', t);
         if (p) document.documentElement.setAttribute('data-palette', p);
         if (c) document.documentElement.setAttribute('data-cochu', c);
+        if (nb === '0') document.documentElement.classList.add('an-navbar');
       } catch (e) {}
     })();
   </script>
@@ -57,7 +61,7 @@
             <span class="topbar-title">SHIN AIOS</span>
             <!-- Thẻ trạng thái nhỏ gọn nằm ngay kế bên chữ SHIN AIOS -->
             <button class="header-status-pill demo" id="headerStatusPill" onclick="ShinApp.moCaiDat(); event.stopPropagation();" title="Bấm để quản lý kết nối Token">
-              Demo v2.6.3
+              Demo v2.9.0
             </button>
           </div>
           <div class="topbar-sub">Hệ thống Quản trị AI</div>
@@ -161,6 +165,34 @@
         </div>
         <p class="chu-phu" style="margin-top:6px;">Mép trái: rộng nội dung nhất – chạm hoặc vuốt mấu » để mở, giữ và kéo mấu lên / xuống để đặt chỗ vừa ngón cái. Mặc định: Mép trái. Tự động: máy ≤ 360px dùng mép trái, máy lớn hơn dùng hàng icon.</p>
       </div>
+
+      <!-- Bật / Tắt Thanh Điều Hướng Đáy (Nav Bar) theo chỉ đạo của Sếp -->
+
+      <div class="form-group" style="margin-top:18px; border-top:1px dashed var(--border); padding-top:16px;">
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+
+          <div>
+
+            <label class="form-label" style="margin-bottom:2px;">THANH ĐIỀU HƯỚNG ĐÁY (NAV BAR)</label>
+
+            <p class="chu-phu" style="margin-top:0;">Bật hoặc tắt thanh 5 nút cố định ở chân màn hình để mở rộng tối đa không gian xem.</p>
+
+          </div>
+
+          <label class="cong-tac" title="Bật / Tắt thanh điều hướng đáy">
+
+            <input type="checkbox" id="chkNavBar" onchange="ShinApp.batTatNavBar(this.checked)" checked>
+
+            <span class="cong-tac-nen"></span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+
 
       <!-- Cài như ứng dụng (PWA) -->
       <div class="form-group" id="khoiCaiApp" style="margin-top:20px; border-top:1px dashed var(--border); padding-top:16px;">

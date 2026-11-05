@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.6.3';
+  const PHIEN_BAN = 'v2.9.0';
 
   const MODULES = [
     ModuleHub,
@@ -284,6 +284,21 @@ const ShinApp = (function() {
     return mep;
   }
 
+  function apDungNavBar() {
+    const an = docLS('shin_navbar') === '0';
+    document.body.classList.toggle('an-navbar', an);
+    document.documentElement.classList.toggle('an-navbar', an);
+    const chk = document.getElementById('chkNavBar');
+    if (chk) chk.checked = !an;
+    return !an;
+  }
+
+  function batTatNavBar(bat) {
+    luuLS('shin_navbar', bat ? '1' : '0');
+    apDungNavBar();
+    rung('nhe');
+  }
+
   function chonKieuRail(k) {
     luuLS('shin_kieu_rail', k);
     const mep = apDungKieuRail();
@@ -354,6 +369,7 @@ const ShinApp = (function() {
       }, 120);
     });
 
+    apDungNavBar();
     apDungKieuRail();
     ganKeoTay();
     goiYTayNam();
@@ -449,8 +465,12 @@ const ShinApp = (function() {
     if (MQ_DESKTOP.addEventListener) MQ_DESKTOP.addEventListener('change', () => apDungRail(railMacDinh()));
     veMenuDay();
     capNhatBannerTrangThai();
-    if (SHIN_API.laCheDoLive()) khoiDongLive();
-    chuyenModule(currentModule);
+    const tg = SHIN_API.docInitDataTelegram();
+    if (tg) moTrongTelegram(tg);
+    else {
+      if (SHIN_API.laCheDoLive()) khoiDongLive();
+      chuyenModule(currentModule);
+    }
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -464,6 +484,21 @@ const ShinApp = (function() {
         if (currentThemeMode === 'system') apDungThemeMode('system');
       });
     }
+  }
+
+  /**
+   * v2.7.1 – Telegram Mini App (HUB L8): nút Menu bot mở https://cmubeta2.github.io/shin-v2/ ➜ initData đổi lấy token Hub
+   * (webTelegram), xóa #tgWebAppData khỏi thanh địa chỉ. Không nhận ra người ➜ giữ token cũ (nếu có), báo vàng.
+   */
+  async function moTrongTelegram(tg) {
+    try { history.replaceState({}, document.title, location.pathname + location.search); } catch (e) {}
+    document.documentElement.classList.add('trong-telegram');
+    try { const w = window.Telegram && window.Telegram.WebApp; if (w) { w.ready(); w.expand(); } } catch (e) {}
+    const kq = await SHIN_API.dangNhapTelegram(tg);
+    if (!kq.ok) toast(kq.msg || (kq.loi === 'mang' ? 'Không gọi được Hub để đăng nhập bằng Telegram – kiểm tra mạng.' : 'Telegram chưa gắn với tài khoản Shin – dán token ở ⚙️ Cài đặt.'), 'warn');
+    capNhatBannerTrangThai();
+    if (SHIN_API.laCheDoLive()) khoiDongLive();
+    chuyenModule(currentModule);
   }
 
   /**
@@ -819,6 +854,7 @@ const ShinApp = (function() {
 
     document.querySelectorAll('.theme-mode-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === currentThemeMode));
     apDungKieuRail();
+    apDungNavBar();
 
     // Không bao giờ điền lại token vào ô – chỉ hiện trạng thái đã ẩn
     const tokenInput = document.getElementById('tokenInput');
@@ -924,6 +960,8 @@ const ShinApp = (function() {
     dangXuat,
     caiUngDung,
     chonKieuRail,
+    batTatNavBar,
+    apDungNavBar,
     dangChayApp,
     toast,
     hanhDongHoanTac,

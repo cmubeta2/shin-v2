@@ -12,7 +12,9 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Gắn hàm:** thêm hàm vào bảng trắng `congWeb_()` của app.
 - **Cách nhận tham số:**
   - Hub nhận `ham(token, du)`.
-  - KPI, TS, KS, PK nhận `ham(token, ...du.a)` qua `bocCong…_`.
+  - KPI, TS nhận `ham(token, ...du.a)` qua `bocCong…_`.
+  - **KS (`70_KhaoSat`) cũng nhận `ham(token, du)` đối tượng** (theo mã v1.4.3, sửa 04/11 v2.7.2).
+  - **PK (`21_PhongPTKH`) nhận `ham(token, du)` – du là đối tượng** (theo mã v1.0.7, sửa 04/11 v2.7.0).
 - **Kiểm quyền:** từ chối thì ném `loiQuyen_()` để v2 hiện "chưa có quyền".
 - **Lỗi khác:** ném `Error` có câu tiếng Việt, v2 hiện nguyên câu đó.
 - **Tiền:** là số đồng (number). Không gửi chuỗi đã định dạng; v2 tự định dạng kiểu Việt Nam.
@@ -23,34 +25,56 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 
 ## v2.4.0 – App đã có, cần thêm cổng
 
-### KS – `70_KhaoSat` · `webTongQuan(token)` (chỉ đọc)
+### KS – `70_KhaoSat` (app KS v1.4.3, L1–L4 ✅ – sửa theo mã thật 04/11; KHÔNG có `webTongQuan`)
 
 ```js
-{ thang: { soPhieu, haiLong /*0..1|null*/, canXuLy },
-  tru: [{ ma:'A', ten, diem /*1..5|null*/, tyLe /*0..1|null*/ }],          // 5 trụ ACHSI
-  khaoSat: [{ ma, ten, trangThai, soPhieu, moTu, dongLuc }],
-  canXuLy: [{ ma, khaoSat, cau, diem /*≤2*/, ngay, noiDung }] }            // KHÔNG có SĐT / tên người trả lời (QK4)
+webDsKhaoSat({})        → { ok, ds:[{maKS, tieuDe, moTa, doiTuong, trangThai:'Nháp'|'Đang mở'|'Đã đóng', han, nhieuLan, soCau, ngayTao}], dem:{dangMo, nhap, daDong} }
+webKetQuaKS({maKS, nguon?, tu?, den?}) → { ok, maKS, tieuDe, soPhieu, choXacMinh, theoNgay:[{ngay, n}], cau:[{maCH, phienBan, loai, noiDung, n, tb?, nps?, yKien?}] }
+webXuatKS({maKS, kieu:'csv'|'sheet'}) → { ok, csv, tenTep } | { ok, link }
+liên thông ksSoLieu (Hub ký HMAC – trình duyệt không gọi được)   ·   webCongKhai* (điền phiếu công khai, không token)
 ```
 
-- **Quyền:** Admin và "Quản lý khảo sát".
-- **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
+- **Quyền:** Admin và "Quản lý khảo sát" (QuanLyKS chỉ thấy KS của mình).
+- **v2 dùng (v2.7.2):** webDsKhaoSat + webKetQuaKS (≤ 6 KS, ưu tiên Đang mở) + webXuatKS csv. Màn KHÔNG hiện câu loại `lienhe` / ý kiến (QK4). 5 trụ ACHSI chưa có ở v1 ➜ v2 hiện điểm TB câu 5 mức theo từng khảo sát.
+- **KS L6 (v1.4.4, lên app @5 05/11):** `webTongHopKS({thang?:'mm/yyyy'})` → `{ ok, thang:{soPhieu, haiLong 0..1|null, canXuLy}, tru:[5 {ma, ten, diem|null, tyLe|null}], canXuLy:[≤ 50 {maPhieu, khaoSat, cau, diem, ngay, noiDung}] }` – chỉ đọc; quản lý chỉ thấy KS mình. **v2.8.7 dùng**: Hero tháng + 5 trụ + ≤ 2★; KHÔNG hiện `noiDung` (ý kiến tự do – QK4).
 
-### PK – `21_PhongPTKH` · `webHomNay(token)` (chỉ đọc, dùng chung file PTKH qua DB_ID)
+### HUB – Telegram Mini App `webTelegram` (HUB L8, Hub v1.13.3 ✅)
 
 ```js
-{ ngay: 'dd/mm/yyyy', baoCao: { daNop, tong }, minhChung /*số ảnh hôm nay*/, doiCa /*đơn chờ*/,
-  nhanSu: [{ ten, viTri, ca, trangThai: 'da_nop'|'dang_truc'|'chua_toi_ca'|'chua_nop' }],
-  viecCa: [{ tieuDe, han, xong }] }
+POST Hub {hanh:'webTelegram', du:{initData}}   // KHÔNG token – nhánh riêng trước cuaWebPost_
+→ {ok:true, du:{ok:true, token /*token Hub 12 giờ*/, hetHan, nguoi:{ma, hoTen}}} | {ok:true, du:{ok:false, loi, msg}}
 ```
 
-- **Quyền:** lãnh đạo phòng và tổ trưởng xem cả phòng; nhân viên chỉ thấy dòng của mình.
-- **Thuộc dòng:** PK L1–L3.
+- **v2 dùng (v2.7.1):** `SHIN_API.dangNhapTelegram()` khi trang mở có `Telegram.WebApp.initData` hoặc `#tgWebAppData`; lưu token như `?t=`; xóa hash. Telegram Web (web.telegram.org) được phép nhúng khung.
 
-### KPI – thêm `webNhap2027` vào `congWeb_()`
+### PK – `21_PhongPTKH` (app PK v1.0.7, L1–L5 ✅ – sửa theo mã thật 04/11)
 
-Hàm `webNhap2027` đã có sẵn. v2 cần nó để đọc nháp AOP năm sau trước khi gọi `webLuuTangTruong`. Chỉ cần thêm 1 dòng, không đổi logic.
+Nguồn chuẩn: `He sinh thai Shin/21_PhongPTKH/KE_HOACH_GIAO_DIEN_PK_AGY.md` mục 4. Gọi `SHIN_API.goi('PK', hanh, {…})`.
 
----
+```js
+webKhoiDong()  → { nguoi:{hoTen, vaiTro, to, viTri, quyen:['nv'|'totruong'|'lanhdao'|'admin'|'xemthu']}, app, mo, dem:{thongBao, choDuyet} }
+webHomNay()    → { ngay, viecQuaHan, viecHomNay, baoCaoHomNay:'da_nop'|'chua_nop'|'nghi', canXuLy:[{id, ten, nguon, han, muc, tab}], thongBaoMoi, choDuyet }
+webCongViec({loc}) → { dangLam, quaHan, xongTuan, viec:[{id, ten, loai, han, tienDo, nguoiGiao, muc}] }
+webCapNhatViec({id, tienDo?}) → { ok }      webThemViecCaNhan({ten, han}) → { ok, id }
+webBaoCao({thang}) → { soDaNop, soChuaNop, soChoDuyet, mau:[{ma, nhan, kieu, batBuoc}], lichSu:[…] }
+webNopBaoCao({ngay, noiDung, anh:[{ten, kieu, base64}]}) → { ok, ngay, loiAnh? }
+webChoDuyet() → { baoCao:[…], nghi:[…] }    webDuyet({loai:'baocao', ids, ketQua:'dat'|'tra_lai', lyDo} | {loai:'tatca', muc, ketQua:'dat'}) → { ok, so }
+webLichTuan({tuan}) → { tuan, ngay:[…], phepCon, nghiBuCon, donNghi:[…] }   (chỉ đọc; xin nghỉ qua webGoi PTKH)
+webThongBao() → { ds:[…] }   webDaDocThongBao({id:'tatca'}) → { ok }
+webGopYCuaToi() → { ds:[…] } webGuiGopY({loai, noiDung, anh}) → { ok }   webHoSo() → {…}   webNhanSu({tim}) → { dangLam, moiVao, choSua, ds, yeuCauSua }
+```
+
+- **Quyền:** duyệt / xếp lịch = tổ trưởng, admin; nhân sự = lãnh đạo; còn lại mọi nhân viên.
+- **v2 dùng (v2.7.0):** tất cả hàm trên. Chưa dùng: duyệt đơn nghỉ (PK bỏ qua – làm trên PTKH), webBangXepLich, webDeNghiSuaHoSo, webHoSoNhanSu, webDuyetSuaHoSo.
+
+### KPI – `webNhap2027` (KPI L10, v1.8.2 đã lên app @9 05/11) – v2.7.6 dựng màn
+
+```js
+webNhap2027()  → { nam, namGoc, suaDuoc /*Admin*/, vien:{khoa, muc2026, g, nguon:'anh'|'thucDat'|'macDinh', macDinh, muc2027} | null, khoa:[ …cùng khuôn ] } | { loi }
+webLuuTangTruong(khoa, g /*phân số −0,5…2; '' = về mặc định*/) → { luu:true } | { xoa:true }   // chỉ Admin, chỉ ghi ScriptProperties
+```
+
+- KPI gọi kiểu `bocCong` (tham số rời trong `du.a`) ➜ v2 dùng `SHIN_API.goiCong('KPI', …)`.
 
 ## v2.5.0 – Dịch vụ chung và mảng mới trên máy chủ Hub (Q1)
 
@@ -134,11 +158,14 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 
 **`webLuuUngDung(token, {ma, bat})`**: chỉ Admin, đổi cột BatTat; trả lại dạng `webCaiDat`.
 
-### PTKH gốc (20_PTKH) – mở cổng web cho v2 (chỉ đọc trước)
+### PTKH gốc (20_PTKH) – cổng `webGoi` (L148, PTKH v1.294.29+, trên app v1.297.18) – v2.7.5 dùng
 
-- `doPost` hiện chỉ gọi `xuLyLTHub_` ➜ đổi sang `cuaWebPost_(e, congWeb_(), {tomTat, viec, thongBao})` của Lõi (Loi_Web.gs) – nhánh liên thông giữ nguyên.
-- `congWeb_()` bảng trắng chỉ đọc: `webKhoiDong`, `webDashboard`. Hai hàm đã có, nhận `(token, …du.a)` như KPI/TS/KS/PK.
-- Token: `xacThucWeb_` nhận token Hub (đã có từ L36a); lỗi xác thực ném `loiQuyen_` để v2 hiện "chưa có quyền".
+> **Sửa 04/11 theo mã v1:** PTKH không mở `congWeb_` riêng mà có **1 cổng** `webGoi`: POST text/plain `{hanh:'webGoi', token, du:{ham, thamSo:[]}}` ➜ `{ok, du}` / `{ok:false, loi}`; `ham` phải trong `HAM_WEBGOI_` (152 hàm WebApp.html gọi; bỏ cài đặt / chạy lệnh / khóa bí mật); token Hub đứng đầu tham số.
+
+- Địa chỉ máy chủ: v2 lấy **động** từ link PTKH trong `webKhoiDong.lienKet` của Hub (chỉ nhận `https://script.google.com/macros/s/…/exec`), không chép link vào mã.
+- **v2 đang dùng (v2.7.5):** `webDashboard(token, 'thang')` ➜ `{homNay, nopBC, chuoiDH, thang:{tenKy, nhan, toi:{bc:{tong, dungHan, tre, khongNop}, viec:{dangLam, quaHan, xong}}, mucTieu:{ptThoiGian, ngayConLai, chiTieu:[{ten, dvt, th, kh, pt, den, duBao}]}}}`.
+- **v2.7.7 dùng thêm:** `webLichSu(token)` ➜ `[{khoa, ngay, thu, ca, dungHan, trangThaiDuyet, ghiChuDuyet, so:[chuỗi], vuongMac, …}]` (14 ngày, chính NV); `webLichTo(token, thuHai)` ➜ `{to, thuHai, nv:[{ma, ten, toi, ngay:[{ngay, ca, vt, nghi, le}]}]}` (cùng tổ, nghỉ đã duyệt, không lý do).
+- Sau: ghi (`webBangLichNghi`, `webGuiNghiPhep`) – cũng là đường ghi xin nghỉ cho màn Phòng PTKH.
 - **Cấm trả:** thông tin người bệnh, nội dung khiếu nại có tên / SĐT khách.
 
 ---
@@ -149,7 +176,7 @@ Dán vào tab **🧭 Điều hành → ⚡ Giao việc** của v2. Máy sẽ th�
 
 | App | Nội dung giao |
 |---|---|
-| KS | Mở cổng `webTongQuan` theo HOP_DONG_CONG_V2.md (repo shin-v2) mục KS – chỉ đọc, không trả thông tin liên hệ; thêm vào congWeb_; kiểm thử 90_KiemThuApp. |
+| KS | ~~Mở cổng `webTongQuan`~~ – bỏ (04/11): v2 dùng webDsKhaoSat + webKetQuaKS + webXuatKS đã có ở v1.4.3. |
 | PK | Mở cổng `webHomNay` theo HOP_DONG_CONG_V2.md mục PK – chỉ đọc file PTKH qua DB_ID, không sửa cấu trúc PTKH; thêm vào congWeb_. |
 | KPI | Thêm `webNhap2027` vào congWeb_ (hàm đã có) để v2 sửa nháp AOP năm sau. |
 | HUB | 0B Phê duyệt: sheet PhieuDuyet + Log_Duyet, cổng `webPheDuyet` / `webDuyet` theo HOP_DONG_CONG_V2.md; Hoàn tác do v2 giữ 6 giây, máy chủ ghi đúng 1 lần theo mã. |

@@ -370,10 +370,14 @@ window.SHIN_DEMO_DATA = {
       nutChinh: { nhan: "🔍 Tra Cứu Tri Thức Nhanh", hanhDong: "traCuuTriThuc" }
     },
     taiLieu: [
-      { ma: "SOP-01", ten: "Quy trình tổ chức Khám sức khỏe lưu động Doanh nghiệp v3.2", linhVuc: "Quản trị Y tế", capNhat: "26/10/2026", dinhDang: "Markdown (.md)" },
-      { ma: "ACHSI-02", ten: "Bộ tiêu chuẩn đánh giá sự hài lòng người bệnh ngoại trú ACHSI", linhVuc: "Chất lượng Y tế", capNhat: "20/10/2026", dinhDang: "Markdown (.md)" },
-      { ma: "PAY-03", ten: "Sổ tay tích hợp cổng thanh toán tự động VietQR SePay & Webhook", linhVuc: "Công nghệ số", capNhat: "28/10/2026", dinhDang: "Markdown (.md)" },
-      { ma: "AIOS-04", ten: "Kiến trúc Thập diện Decagon SHIN v2 & Bộ danh mục 38 Micro-Modules", linhVuc: "Hệ thống AIOS", capNhat: "29/10/2026", dinhDang: "Markdown (.md)" }
+      { ma: "SOP-01", ten: "Quy trình tổ chức Khám sức khỏe lưu động Doanh nghiệp v3.2", linhVuc: "Quản trị Y tế", capNhat: "26/10/2026", dinhDang: "Markdown (.md)",
+        tomTat: "Các bước KSK lưu động; thu phí qua [[PAY-03|VietQR SePay]], khảo sát sau khám theo [[ACHSI-02]], mẫu hợp đồng xem [[HĐ-KSK]]." },
+      { ma: "ACHSI-02", ten: "Bộ tiêu chuẩn đánh giá sự hài lòng người bệnh ngoại trú ACHSI", linhVuc: "Chất lượng Y tế", capNhat: "20/10/2026", dinhDang: "Markdown (.md)",
+        tomTat: "5 trụ cột ACHSI, ngưỡng cảnh báo ≤ 2★; dữ liệu đổ về Mảng 1 theo [[AIOS-04]]." },
+      { ma: "PAY-03", ten: "Sổ tay tích hợp cổng thanh toán tự động VietQR SePay & Webhook", linhVuc: "Công nghệ số", capNhat: "28/10/2026", dinhDang: "Markdown (.md)",
+        tomTat: "Webhook SePay ➜ Mảng 3 Tài chính; kiến trúc chung xem [[AIOS-04]].", lienKet: ["SOP-01"] },
+      { ma: "AIOS-04", ten: "Kiến trúc Thập diện Decagon SHIN v2 & Bộ danh mục 38 Micro-Modules", linhVuc: "Hệ thống AIOS", capNhat: "29/10/2026", dinhDang: "Markdown (.md)",
+        tomTat: "10 mảng + 0A/0B; tường lửa dữ liệu theo [[KHONG_DUA_VAO]]." }
     ]
   },
 
@@ -484,11 +488,11 @@ window.SHIN_DEMO_DATA.quantri = {
     { ma: '90005', hoTen: 'Hoàng Văn E', vaiTro: 'Người dùng', trangThai: 'Ngưng' }
   ],
   ungDung: [
-    { ten: 'PTKH – Hiệu suất phòng', bat: true, loiCuoi: '' },
-    { ten: 'KPI toàn viện', bat: true, loiCuoi: '' },
-    { ten: 'Tuyển sinh', bat: true, loiCuoi: 'Hết thời gian chờ lúc 07:30 31/10' },
-    { ten: 'Khảo sát hài lòng', bat: true, loiCuoi: '' },
-    { ten: 'Phòng PTKH (PK)', bat: false, loiCuoi: '' }
+    { ma: 'PTKH', ten: 'PTKH – Hiệu suất phòng', bat: true, loiCuoi: '' },
+    { ma: 'KPI', ten: 'KPI toàn viện', bat: true, loiCuoi: '' },
+    { ma: 'TS', ten: 'Tuyển sinh', bat: true, loiCuoi: 'Hết thời gian chờ lúc 07:30 31/10' },
+    { ma: 'KS', ten: 'Khảo sát hài lòng', bat: true, loiCuoi: '' },
+    { ma: 'PK', ten: 'Phòng PTKH (PK)', bat: false, loiCuoi: '' }
   ],
   phuTrach: [
     { ma: 'PTKH', ten: 'Phòng PTKH', dsMa: ['90001', '90002'], nguoi: ['Nguyễn Văn A', 'Trần Thị B'] },
@@ -512,3 +516,81 @@ window.SHIN_DEMO_DATA.ptkh = {
   ],
   capNhatLuc: '07:30 31/10'
 };
+
+// v2.7.0: dữ liệu GIẢ theo đúng khuôn các cổng web* của app PK v1 (21_PhongPTKH) – chỉ dùng ở chế độ Demo
+window.SHIN_DEMO_DATA.phongkhamV1 = {
+  khoiDong: { nguoi: { hoTen: 'Nhân viên Mẫu', vaiTro: 'Tổ trưởng', to: 'Tổ Tiếp đón', viTri: 'Tiếp đón', quyen: ['nv', 'totruong'] }, dem: { thongBao: 2, choDuyet: 2 } },
+  homNay: { ngay: '04/11/2026', viecQuaHan: 1, viecHomNay: 2, baoCaoHomNay: 'chua_nop', choDuyet: 2, thongBaoMoi: [],
+    canXuLy: [
+      { id: 'PC|1', ten: 'Gọi lại khách hẹn tái khám tuần này', nguon: 'Được giao', han: '03/11/2026', muc: 'do', tab: 'congviec' },
+      { id: 'PC|2', ten: 'Cập nhật bảng giá gói khám mới', nguon: 'Được giao', han: '04/11/2026', muc: 'do', tab: 'congviec' },
+      { id: 'CN|3', ten: 'Soạn kịch bản tư vấn KSK doanh nghiệp', nguon: 'Việc của tôi', han: '06/11/2026', muc: 'vang', tab: 'congviec' }
+    ] },
+  congViec: { dangLam: 3, quaHan: 1, xongTuan: 4, viec: [
+    { id: 'PC|1', ten: 'Gọi lại khách hẹn tái khám tuần này', loai: 'giao', han: '03/11/2026', tienDo: 50, nguoiGiao: 'Trưởng phòng Mẫu', muc: 'do' },
+    { id: 'PC|2', ten: 'Cập nhật bảng giá gói khám mới', loai: 'giao', han: '04/11/2026', tienDo: 25, nguoiGiao: 'Trưởng phòng Mẫu', muc: 'do' },
+    { id: 'CN|3', ten: 'Soạn kịch bản tư vấn KSK doanh nghiệp', loai: 'canhan', han: '06/11/2026', tienDo: 0, nguoiGiao: '', muc: 'vang' }
+  ] },
+  baoCao: { soDaNop: 18, soChuaNop: 3, soChoDuyet: 2,
+    mau: [{ ma: 'luotTiepDon', nhan: 'Lượt tiếp đón', kieu: 'so', batBuoc: true }, { ma: 'cuocGoi', nhan: 'Cuộc gọi chăm sóc', kieu: 'so', batBuoc: false }, { ma: 'ghiChu', nhan: 'Việc nổi bật / vướng mắc', kieu: 'chu', batBuoc: false }],
+    lichSu: [
+      { ngay: '03/11/2026', trangThai: 'da_duyet', tomTat: 'Tiếp đón 42 lượt · 15 cuộc gọi', soAnh: 2, lyDoTraLai: '' },
+      { ngay: '02/11/2026', trangThai: 'tra_lai', tomTat: 'Tiếp đón 38 lượt', soAnh: 0, lyDoTraLai: 'Bổ sung ảnh bảng trực' }
+    ] },
+  lichTuan: { tuan: 'T2 02/11 – CN 08/11', phepCon: 8, nghiBuCon: 1, donNghi: [{ id: 'N1', loai: 'nghi_tuan', tuNgay: '08/11/2026', denNgay: '08/11/2026', trangThai: 'cho', lyDo: 'Việc gia đình', lyDoTraLai: '' }],
+    ngay: [
+      { ngay: '02/11/2026', thu: 'T2', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false }, { ngay: '03/11/2026', thu: 'T3', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false },
+      { ngay: '04/11/2026', thu: 'T4', viTri: 'Tổng đài', ca: 'Chiều', nghi: false, le: false }, { ngay: '05/11/2026', thu: 'T5', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false },
+      { ngay: '06/11/2026', thu: 'T6', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false }, { ngay: '07/11/2026', thu: 'T7', viTri: 'Tổng đài', ca: 'Sáng', nghi: false, le: false },
+      { ngay: '08/11/2026', thu: 'CN', viTri: '', ca: '', nghi: true, le: false }
+    ] },
+  thongBao: { ds: [
+    { id: 'TB1', tieuDe: 'Báo cáo ngày 02/11 bị trả lại', noiDung: 'Bổ sung ảnh bảng trực', luc: '02/11/2026 18:10', daDoc: false, tab: 'baocao' },
+    { id: 'TB2', tieuDe: 'Việc mới được giao', noiDung: 'Cập nhật bảng giá gói khám mới', luc: '01/11/2026 08:00', daDoc: false, tab: 'congviec' }
+  ] },
+  choDuyet: { baoCao: [
+    { id: 'BC1', nguoi: 'Nhân viên A', ngay: '04/11/2026', tomTat: 'Tiếp đón 40 lượt · 12 cuộc gọi', anh: [] },
+    { id: 'BC2', nguoi: 'Nhân viên B', ngay: '04/11/2026', tomTat: 'Tổng đài 85 cuộc', anh: [] }
+  ], nghi: [{ id: 'N9', nguoi: 'Nhân viên C', loai: 'nghi_tuan', tuNgay: '07/11/2026', denNgay: '07/11/2026', lyDo: 'Khám sức khỏe' }], lichTuan: [] },
+  nhanSu: { dangLam: 21, moiVao: 2, choSua: 1, yeuCauSua: [{ id: 'YC1', ma: 'NV02', hoTen: 'Nhân viên B', truong: 'Email', giaTriCu: 'b@example.com', giaTriMoi: 'b.moi@example.com', lyDo: '', luc: '04/11/2026' }], ds: [
+    { ma: 'NV01', hoTen: 'Nhân viên A', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', ngayVao: '01/03/2024', email: 'a@example.com', trangThai: 'Đang làm' },
+    { ma: 'NV02', hoTen: 'Nhân viên B', viTri: 'Tổng đài', to: 'Tổ CSKH', trangThai: 'Đang làm' },
+    { ma: 'NV03', hoTen: 'Nhân viên C', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', trangThai: 'Thử việc' }
+  ] },
+  gopY: { ds: [{ id: 'G1', loai: 'gop_y', noiDung: 'Nên thêm mẫu tin nhắn nhắc lịch', luc: '30/10/2026', trangThai: 'dang_xu_ly', traLoi: '', soAnh: 0 }] },
+  hoSo: { hoTen: 'Nhân viên Mẫu', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', ngayVao: '01/03/2024', email: 'mau@example.com', dienThoai: '' }
+};
+
+// v2.7.5 – 📊 Tổng quan tháng PTKH (khuôn webDashboard(token,'thang') qua webGoi – dữ liệu GIẢ)
+window.SHIN_DEMO_DATA.ptkh.dash = {
+  homNay: '04/11/2026', nopBC: true, chuoiDH: 6,
+  thang: { ky: 'thang', tenKy: 'Tháng này', nhan: 'T11/2026',
+    toi: { bc: { tong: 3, dungHan: 3, tre: 0, khongNop: 0, canBoSung: 0 }, viec: { dangLam: 4, quaHan: 1, xong: 7, xongDungHan: 6 } },
+    mucTieu: { ptThoiGian: 0.12, ngayConLai: 22, ngayDaQua: 3, ngayKy: 25, chiTieu: [
+      { ma: 'CT1', ten: 'Khách mới tư vấn', dvt: 'khách', coKH: true, th: 41, kh: 300, pt: 0.137, den: 'xanh', duBao: 1.1 },
+      { ma: 'CT2', ten: 'Khách hẹn đến khám', dvt: 'khách', coKH: true, th: 12, kh: 150, pt: 0.08, den: 'vang', duBao: 0.67 },
+      { ma: 'CT3', ten: 'Gọi lại sau khám', dvt: 'cuộc', coKH: true, th: 3, kh: 120, pt: 0.025, den: 'do', duBao: 0.2 }
+    ] } }
+};
+
+// v2.7.6 – 🗓 Nháp AOP năm sau (khuôn webNhap2027 – dữ liệu GIẢ)
+window.SHIN_DEMO_DATA.kpiPhu.nhap2027 = {
+  nam: 2027, namGoc: 2026, suaDuoc: true,
+  vien: { khoa: 'Toàn phòng khám', muc2026: 120e9, g: 0.12, nguon: 'thucDat', macDinh: false, muc2027: 134.4e9 },
+  khoa: [
+    { khoa: 'Khoa A', muc2026: 40e9, g: 0.15, nguon: 'anh', macDinh: false, muc2027: 46e9 },
+    { khoa: 'Khoa B', muc2026: 30e9, g: 0.1, nguon: 'macDinh', macDinh: true, muc2027: 33e9 },
+    { khoa: 'Khoa C', muc2026: 25e9, g: 0.08, nguon: 'thucDat', macDinh: false, muc2027: 27e9 }
+  ]
+};
+
+// v2.7.7 – 📝 Báo cáo 14 ngày (khuôn webLichSu) + 📅 Lịch tổ (khuôn webLichTo) qua webGoi PTKH – dữ liệu GIẢ
+window.SHIN_DEMO_DATA.ptkh.lichSu = [
+  { khoa: '2026-11-04', ngay: '04/11/2026', thu: 'T4', ca: 'Sáng', dungHan: true, trangThaiDuyet: 'Chờ duyệt', ghiChuDuyet: '', so: ['Khách mới: 5', 'Cuộc gọi: 18'] },
+  { khoa: '2026-11-03', ngay: '03/11/2026', thu: 'T3', ca: 'Sáng', dungHan: true, trangThaiDuyet: 'Đã duyệt', ghiChuDuyet: '', so: ['Khách mới: 4', 'Hẹn khám: 2'] },
+  { khoa: '2026-11-02', ngay: '02/11/2026', thu: 'T2', ca: 'Chiều', dungHan: false, trangThaiDuyet: 'Trả lại', ghiChuDuyet: 'Bổ sung ảnh', so: ['Khách mới: 3'] }
+];
+window.SHIN_DEMO_DATA.ptkh.lichTo = { to: 'Tổ Mẫu', thuHai: '2026-11-02', nv: [
+  { ma: 'NV01', ten: 'Nhân viên Mẫu', toi: true, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: i < 6 ? (i % 2 ? 'Chiều' : 'Sáng') : '', vt: i < 6 ? 'Tư vấn' : '', nghi: i === 6 ? 'Nghỉ' : '', le: false })) },
+  { ma: 'NV02', ten: 'Nhân viên A', toi: false, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: 'Sáng', vt: 'Tổng đài', nghi: i === 4 ? 'Nghỉ' : '', le: false })) }
+] };
