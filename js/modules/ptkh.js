@@ -5,7 +5,10 @@
  *   ① Số + việc: Hub kéo từ PTKH qua liên thông (tomTat / viec – 37_LienThongHub.gs) rồi trả trong webHomNay
  *      ➜ thẻ có tieuDe 'PTKH' + các việc cùng tenApp.
  *   ② Mở app: link PTKH trong webKhoiDong.lienKet (Hub gắn sẵn token Hub – PTKH nhận token Hub từ v4.05 / L36a).
- * Cổng đọc thẳng (webKhoiDong, webDashboard… của PTKH) – xem HOP_DONG_CONG_V2.md mục v2.6 PTKH.
+ * v2.6.6: Tổng quan đọc THẲNG PTKH qua cổng webGoi (PTKH L148, v1.292.29) – hàm chỉ đọc webDashboard(token, ky):
+ *   {homNay, kys, [ky]: {tenKy, nhan, toi:{bc:{tong,dungHan,tre,khongNop,canBoSung}, viec:{dangLam,quaHan,xong,xongDungHan}, minhChung, ngayNghi},
+ *    dongGop:[{ten,dvt,toi,ptTo,ptPhong}], to, phong:{ten,soNV,soBC,dungHan(0..1),canBoSung(0..1),vuongMac,viecQuaHan}}}
+ *   Địa chỉ /exec lấy từ link app PTKH Hub trả (webKhoiDong.lienKet) – không ghi cứng.
  */
 
 const ModulePTKH = {
@@ -81,6 +84,10 @@ const ModulePTKH = {
           <div class="dong-meta">${v.quaHan ? '<span class="badge do">Quá hạn</span>' : v.uuTien === 'Khẩn cấp' ? '<span class="badge do">Khẩn</span>' : ''}<span class="dong-arrow">›</span></div>
         </div>`).join('')}</div>` : '<div class="trong">Không có việc PTKH nào đang chờ anh/chị.</div>'}
 
+      <div class="hn-tieu"><span>TỔNG QUAN (ĐỌC THẲNG PTKH)</span></div>
+      <div class="hang-chip">${['tuan', 'thang', 'quy'].map(k => `<button class="chip-chon ${k === this._ky ? 'dang-chon' : ''}" onclick="ModulePTKH.chonKy('${k}')">${{ tuan: 'Tuần này', thang: 'Tháng này', quy: 'Quý này' }[k]}</button>`).join('')}</div>
+      <div id="ptkhTQ"><div class="trong">Đang tải tổng quan…</div></div>
+
       <div class="luoi-o-so">
         ${[['📝', 'Báo cáo ngày'], ['✅', 'Duyệt báo cáo'], ['📊', 'Tổng quan phòng'], ['🗂️', 'Phân công'], ['💬', 'Khiếu nại'], ['🏅', 'Phiếu HTNV']]
           .map(([i, t]) => `<button class="o-so-loc" onclick="ModulePTKH.moApp()"><span>${i}</span><span>${t}</span></button>`).join('')}
@@ -91,6 +98,57 @@ const ModulePTKH = {
         <p class="chu-phu">Số và việc ở đây do Hub kéo từ app PTKH (khoảng 90 phút / lần; bấm ↻ trên 🏠 Hôm nay để kéo ngay). Các nút mở thẳng app PTKH bằng token Hub của anh/chị – không cần link PTKH riêng. Khi PTKH mở cổng web cho v2 (đã ghi trong hợp đồng cổng), màn này sẽ đọc thẳng Tổng quan phòng.</p>
       </details>
     `;
+    this.taiTongQuan();
+  },
+
+  _ky: 'thang',
+  _tq: {},
+
+  chonKy: function(k) {
+    this._ky = k;
+    document.querySelectorAll('#appContent .hang-chip .chip-chon').forEach(b => b.classList.toggle('dang-chon', /onclick/.test(b.outerHTML) && b.getAttribute('onclick').indexOf(`'${k}'`) >= 0));
+    this.taiTongQuan();
+  },
+
+  /** Đọc webDashboard(token, ky) qua webGoi PTKH. Demo ➜ mẫu demo_data.ptkh.tongQuan. Lỗi ➜ báo rõ, không thay số mẫu. */
+  taiTongQuan: async function() {
+    const el = () => document.getElementById('ptkhTQ');
+    if (!el()) return;
+    const ky = this._ky;
+    let d = this._tq[ky];
+    if (!d) {
+      if (!SHIN_API.laCheDoLive()) d = ((window.SHIN_DEMO_DATA.ptkh || {}).tongQuan || {})[ky] || {};
+      else {
+        el().innerHTML = '<div class="trong">Đang tải tổng quan…</div>';
+        const kq = await SHIN_API.goiWebGoi(ShinApp.linkV1('PTKH') || (this._d && this._d.linkThe), 'webDashboard', [ky]);
+        if (!el() || this._ky !== ky) return;
+        if (!kq.ok) {
+          el().innerHTML = `<div class="trong">⚠️ ${ShinApp.esc(kq.loi === 'hanh' ? 'Chưa lấy được địa chỉ máy chủ PTKH từ Hub (cần token Hub và quyền app PTKH).' : SHIN_API.moTaLoi(kq))}</div>`;
+          return;
+        }
+        d = (kq.data || {})[ky] || {};
+      }
+      this._tq[ky] = d;
+    }
+    el().innerHTML = this.veTongQuan(d);
+  },
+
+  /** THUẦN-ish: khối Tổng quan từ 1 kỳ của webDashboard. */
+  veTongQuan: function(k) {
+    const e = ShinApp.esc, so = ShinApp.soVN, toi = k.toi || {}, bc = toi.bc, viec = toi.viec || {}, ph = k.phong, to = k.to;
+    const pt = x => x === null || x === undefined ? '—' : ShinApp.ptVN ? ShinApp.ptVN(x) : Math.round(x * 100) + '%';
+    const o = (nhan, gt, mau) => `<div class="tq-o"><div class="tq-so" style="color:${mau || 'var(--c-blue)'}">${e(gt)}</div><div class="tq-nhan">${e(nhan)}</div></div>`;
+    const cl = c => c ? `<div class="the"><div class="dong-title">${e(c.ten)}</div>
+        <div class="hang-tru"><span>Nhân sự · báo cáo</span><span>${so(c.soNV || 0)} · ${so(c.soBC || 0)}</span></div>
+        <div class="hang-tru"><span>Đúng hạn</span><span>${pt(c.dungHan)}</span></div>
+        <div class="hang-tru"><span>Cần bổ sung</span><span>${pt(c.canBoSung)}</span></div>
+        <div class="hang-tru"><span>Vướng mắc · việc quá hạn</span><span>${so(c.vuongMac || 0)} · ${so(c.viecQuaHan || 0)}</span></div></div>` : '';
+    return `${k.nhan ? `<div class="hero-date">📅 ${e(k.tenKy || '')} · ${e(k.nhan)}</div>` : ''}
+      <div class="tq-3so">${o('Việc đang làm', so(viec.dangLam || 0))}${o('Việc quá hạn', so(viec.quaHan || 0), viec.quaHan ? 'var(--c-red)' : 'var(--c-gray)')}${o('Việc xong', so(viec.xong || 0), 'var(--c-green)')}</div>
+      ${bc ? `<div class="tq-3so">${o('Báo cáo đã nộp', so(bc.tong || 0))}${o('Đúng hạn', so(bc.dungHan || 0), 'var(--c-green)')}${o('Trễ / không nộp', so((bc.tre || 0) + (bc.khongNop || 0)), (bc.tre || bc.khongNop) ? 'var(--c-red)' : 'var(--c-gray)')}</div>` : ''}
+      ${(k.dongGop || []).length ? `<div class="the"><div class="dong-title">Đóng góp của tôi</div>${k.dongGop.map(g => `<div class="hang-tru"><span>${e(g.ten)}</span><span>${so(g.toi || 0)} ${e(g.dvt || '')}${g.ptPhong !== null && g.ptPhong !== undefined ? ' · ' + pt(g.ptPhong) + ' phòng' : ''}</span></div>`).join('')}</div>` : ''}
+      ${cl(to)}${cl(ph)}
+      <p class="chu-phu">Minh chứng: ${so(toi.minhChung || 0)} · Ngày nghỉ: ${so(toi.ngayNghi || 0)}</p>`;
   },
 
   moApp: function() {

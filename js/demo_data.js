@@ -525,6 +525,21 @@ window.SHIN_DEMO_DATA.quantri = {
 };
 
 window.SHIN_DEMO_DATA.ptkh = {
+  // v2.6.6: mẫu dạng webDashboard PTKH (đọc qua webGoi) – số GIẢ
+  tongQuan: {
+    tuan: { tenKy: 'Tuần này', nhan: '02/11 – 08/11', toi: { bc: { tong: 4, dungHan: 3, tre: 1, khongNop: 0, canBoSung: 1 }, viec: { dangLam: 5, quaHan: 1, xong: 3, xongDungHan: 3 }, minhChung: 6, ngayNghi: 1 },
+      dongGop: [{ ten: 'Khách tư vấn', dvt: 'khách', toi: 48, ptTo: 0.21, ptPhong: 0.08 }, { ten: 'Doanh thu KSK', dvt: 'triệu', toi: 35, ptTo: 0.18, ptPhong: 0.06 }],
+      to: { ten: 'Tổ CSKH', soNV: 6, soBC: 24, dungHan: 0.92, canBoSung: 0.05, vuongMac: 2, viecQuaHan: 1 },
+      phong: { ten: 'Phòng PTKH', soNV: 18, soBC: 72, dungHan: 0.89, canBoSung: 0.07, vuongMac: 5, viecQuaHan: 3 } },
+    thang: { tenKy: 'Tháng này', nhan: '01/11 – 30/11', toi: { bc: { tong: 4, dungHan: 3, tre: 1, khongNop: 0, canBoSung: 1 }, viec: { dangLam: 5, quaHan: 1, xong: 4, xongDungHan: 4 }, minhChung: 8, ngayNghi: 1 },
+      dongGop: [{ ten: 'Khách tư vấn', dvt: 'khách', toi: 52, ptTo: 0.21, ptPhong: 0.08 }, { ten: 'Doanh thu KSK', dvt: 'triệu', toi: 38, ptTo: 0.18, ptPhong: 0.06 }],
+      to: { ten: 'Tổ CSKH', soNV: 6, soBC: 26, dungHan: 0.92, canBoSung: 0.05, vuongMac: 2, viecQuaHan: 1 },
+      phong: { ten: 'Phòng PTKH', soNV: 18, soBC: 78, dungHan: 0.89, canBoSung: 0.07, vuongMac: 5, viecQuaHan: 3 } },
+    quy: { tenKy: 'Quý này', nhan: '01/10 – 31/12', toi: { bc: { tong: 26, dungHan: 22, tre: 1, khongNop: 0, canBoSung: 1 }, viec: { dangLam: 5, quaHan: 1, xong: 21, xongDungHan: 19 }, minhChung: 40, ngayNghi: 1 },
+      dongGop: [{ ten: 'Khách tư vấn', dvt: 'khách', toi: 310, ptTo: 0.21, ptPhong: 0.08 }, { ten: 'Doanh thu KSK', dvt: 'triệu', toi: 220, ptTo: 0.18, ptPhong: 0.06 }],
+      to: { ten: 'Tổ CSKH', soNV: 6, soBC: 150, dungHan: 0.92, canBoSung: 0.05, vuongMac: 2, viecQuaHan: 1 },
+      phong: { ten: 'Phòng PTKH', soNV: 18, soBC: 460, dungHan: 0.89, canBoSung: 0.07, vuongMac: 5, viecQuaHan: 3 } },
+  },
   so: [
     { nhan: '% hoàn thành phòng (tháng)', chu: '86 %', den: 'vang' },
     { nhan: 'Báo cáo chờ duyệt', chu: '4 báo cáo', den: 'vang' },

@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.6] – 05/11/2026 (PTKH GỐC – TỔNG QUAN ĐỌC THẲNG)
+
+### 🟢 Nối thật
+- `js/api.js`: `goiWebGoi(execUrl, ham, thamSo)` – gọi cổng `webGoi` của 20_PTKH (L148) bằng token Hub; địa chỉ /exec lấy từ link app PTKH trong Hub, chỉ nhận dạng `script.google.com/macros/s/…/exec`.
+- `js/modules/ptkh.js`: khối Tổng quan Tuần / Tháng / Quý từ `webDashboard(token, ky)`; Demo dùng mẫu `SHIN_DEMO_DATA.ptkh.tongQuan`.
+- HOP_DONG_CONG_V2.md mục PTKH sửa theo mã thật (webGoi, không phải congWeb_).
+
 ## [2.6.5] – 05/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
 
 ### 🟢 Nối thật

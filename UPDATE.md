@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.6.5** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.6.6** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.6.6 ✅ – PTKH GỐC: TỔNG QUAN ĐỌC THẲNG QUA `webGoi` (05/11/2026)
+- **Nội dung:** màn 📋 PTKH Gốc thêm khối Tổng quan (Tuần / Tháng / Quý) đọc thẳng `webDashboard` của 20_PTKH qua cổng `webGoi` (L148): việc của tôi, báo cáo đúng hạn / trễ, đóng góp, chất lượng tổ / phòng (tổng hợp, không tên). `SHIN_API.goiWebGoi()` mới; /exec lấy từ link app PTKH Hub trả. Lỗi → báo rõ, không thay số mẫu.
+- **Còn chờ v1:** Lịch PTKH (`webLichTo`) và báo cáo chi tiết chưa dựng – dạng dữ liệu phức tạp, để lượt sau; cần dữ liệu thật để kiểm dạng `webDashboard` (chưa chạy Live trong lượt tự động).
 
 ### PHIÊN BẢN v2.6.5 ✅ – PHÒNG PTKH NỐI THẬT 19 CỔNG APP PK v1.0.7 (05/11/2026)
 - **Mục tiêu:** màn 🏥 Phòng PTKH chạy số thật trên máy chủ `21_PhongPTKH` (PK L1–L5 đã lên app v1.0.7).
