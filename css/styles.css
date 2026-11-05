@@ -1873,3 +1873,16 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .tt-xem { margin-bottom: 12px; border-color: var(--primary); }
 .tt-nhom { margin-top: 10px; }
 .tt-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+
+/* v2.8.4 – Công việc: đèn SLA M7.4 (chữ thẻ ≥ 14px, chỉ biến màu) */
+.cv-the { border-left: 4px solid var(--border); }
+.cv-the.cv-do { border-left-color: var(--c-red); }
+.cv-the.cv-vang { border-left-color: var(--c-yellow); }
+.cv-the.cv-xanh { border-left-color: var(--c-green); }
+.cv-the.cv-xong { opacity: 0.8; }
+.cv-dau { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+.cv-nguon { font-size: calc(14px * var(--font-scale)); font-weight: 700; color: var(--primary); background: var(--bg-sub); padding: 2px 6px; border-radius: 4px; }
+.cv-sla-nhan { font-size: calc(14px * var(--font-scale)); color: var(--text-muted); white-space: nowrap; }
+.cv-tieu { font-weight: 600; font-size: calc(15px * var(--font-scale)); color: var(--text); line-height: 1.35; margin-bottom: 6px; overflow-wrap: anywhere; }
+.cv-chan { display: flex; justify-content: space-between; gap: 6px; flex-wrap: wrap; font-size: calc(14px * var(--font-scale)); color: var(--text-muted); }
+.cv-sla { flex-wrap: wrap; }

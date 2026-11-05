@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.4] – 05/11/2026 (CÔNG VIỆC – ĐÈN SLA M7.4)
+
+### ✅ Công việc
+- `js/modules/congviec.js`: `docHan`, `mucSla`, `tinCanhBao` (thuần), dải chip lọc SLA, nút sao chép cảnh báo; thẻ Kanban thoát HTML.
+- `css/styles.css`: `.cv-*` – viền trái theo đèn, chữ ≥ 14px.
+
 ## [2.8.3] – 05/11/2026 (TRI THỨC – ĐỒ THỊ LIÊN KẾT M9.3)
 
 ### ✅ Tri thức
