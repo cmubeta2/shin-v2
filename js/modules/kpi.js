@@ -300,11 +300,69 @@ const ModuleKPI = {
           </div>`).join('')}
       </div>
       ${(du.chung || []).length ? `<p class="chu-phu">Dùng số doanh thu chung toàn viện (không cộng vào tổng): ${du.chung.map(e).join(', ')}.</p>` : ''}
-      <details class="tq-gon">
-        <summary><span>🗓 Nháp AOP ${e(Number(du.nam || 0) + 1 || '')}</span></summary>
-        <p class="chu-phu">Chỉnh % tăng trưởng nháp năm sau cần cổng đọc nháp (webNhap2027) – v1 chưa mở cho cửa web. Tạm thời chỉnh trên app KPI v1.</p>
-        <button class="nut-chu" onclick="ShinApp.moV1('KPI', 'Nháp AOP năm sau')">Mở app KPI v1 ›</button>
+      <details class="tq-gon" ontoggle="if(this.open)ModuleKPI.moNhap()">
+        <summary><span>🗓 Nháp AOP năm sau</span></summary>
+        <div id="kpiNhap"><div class="trong">Mở mục này để tải nháp.</div></div>
       </details>`;
+  },
+
+  /* ---------- 🗓 Nháp AOP năm sau (v2.6.9 – webNhap2027 đọc, webLuuTangTruong ghi – Admin) ---------- */
+  _nhap: null,
+  NHAP_MAU: { nam: 2027, namGoc: 2026, suaDuoc: true, vien: { khoa: 'Toàn phòng khám', muc2026: 120e9, g: 0.12, nguon: 'thucDat', muc2027: 134.4e9 },
+    khoa: [{ khoa: 'Khoa mẫu A', muc2026: 40e9, g: 0.15, nguon: 'anh', muc2027: 46e9 }, { khoa: 'Khoa mẫu B', muc2026: 25e9, g: 0.1, nguon: 'macDinh', macDinh: true, muc2027: 27.5e9 }] },
+  NGUON_NHAP: { anh: ['Đã chỉnh', 'xanh'], thucDat: ['Theo thực đạt', 'vang'], macDinh: ['Mặc định 10%', 'xam'] },
+  tienNhap: function(x) { const n = Number(x) || 0; return Math.abs(n) >= 1e6 ? ShinApp.soVN(n / 1e9, 2) + ' tỷ' : ShinApp.soVN(n, 2); },
+
+  moNhap: async function(taiLai) {
+    const o = document.getElementById('kpiNhap');
+    if (!o) return;
+    if (this._nhap && !taiLai) { o.innerHTML = this.veNhap(this._nhap); return; }
+    if (!SHIN_API.laCheDoLive()) { this._nhap = JSON.parse(JSON.stringify(this.NHAP_MAU)); this._nhap.mau = true; o.innerHTML = this.veNhap(this._nhap); return; }
+    o.innerHTML = '<div class="trong">Đang tải nháp…</div>';
+    const kq = await SHIN_API.goiCong('KPI', 'webNhap2027');
+    if (!o.isConnected) return;
+    if (!kq.ok || (kq.data && kq.data.loi)) {
+      const loi = !kq.ok ? (kq.loi === 'hanh' ? 'App KPI chưa lên bản có cổng nháp năm sau (webNhap2027 – KPI v1.8.2).' : SHIN_API.moTaLoi(kq)) : kq.data.loi;
+      o.innerHTML = `<div class="trong">⚠️ ${ShinApp.esc(loi)}</div><button class="nut-chu" onclick="ShinApp.moV1('KPI', 'Nháp AOP năm sau')">Mở app KPI v1 ›</button>`;
+      return;
+    }
+    this._nhap = kq.data || {};
+    o.innerHTML = this.veNhap(this._nhap);
+  },
+
+  veNhap: function(n) {
+    const e = ShinApp.esc, ds = (n.vien ? [n.vien] : []).concat(n.khoa || []);
+    const tong = ds.length ? (n.vien || {}).muc2027 : 0;
+    return `
+      ${n.mau ? '<p class="chu-phu">Chế độ trình diễn – số mẫu.</p>' : ''}
+      <p class="chu-phu">Mục tiêu ${e(n.nam || '')} = mục ${e(n.namGoc || '')} × (1 + % tăng trưởng). % chưa chỉnh lấy theo thực đạt, không có thì 10%.${n.suaDuoc ? ' Để trống rồi Lưu = về mặc định.' : ' Chỉ Admin KPI được chỉnh.'}</p>
+      ${tong ? `<div class="hang-tru"><span><b>Toàn phòng khám ${e(n.nam || '')}</b></span><b>${e(this.tienNhap(tong))}</b></div>` : ''}
+      ${ds.map((k, i) => {
+        const ng = this.NGUON_NHAP[k.nguon] || [k.nguon || '', 'xam'];
+        return `<div class="hn-dong" style="flex-wrap:wrap">
+          <div class="dong-content">
+            <div class="dong-title">${e(k.khoa)}</div>
+            <div class="dong-sub">${e(n.namGoc || '')}: ${e(this.tienNhap(k.muc2026))} → ${e(n.nam || '')}: <b>${e(this.tienNhap(k.muc2027))}</b> · ${e(ShinApp.ptVN(k.g))}</div>
+          </div>
+          <div class="dong-meta"><span class="badge ${ng[1]}">${e(ng[0])}</span></div>
+          ${n.suaDuoc ? `<div style="display:flex;gap:8px;width:100%;margin-top:8px">
+            <input id="kpiG${i}" class="form-input" type="number" inputmode="decimal" step="0.5" min="-50" max="200" placeholder="% (vd 12)" value="${k.nguon === 'anh' ? Math.round(Number(k.g) * 1000) / 10 : ''}" style="flex:1">
+            <button class="btn-secondary" onclick="ModuleKPI.luuNhap(${i}, this)">Lưu</button></div>` : ''}
+        </div>`;
+      }).join('')}`;
+  },
+
+  luuNhap: function(i, nut) {
+    const n = this._nhap || {}, ds = (n.vien ? [n.vien] : []).concat(n.khoa || []), k = ds[i], o = document.getElementById('kpiG' + i);
+    if (!k || !o) return;
+    const chu = o.value.trim(), g = chu === '' ? '' : Number(chu.replace(',', '.')) / 100;
+    if (chu !== '' && !isFinite(g)) { ShinApp.toast('% tăng trưởng phải là số.', 'warn'); return; }
+    if (n.mau) { ShinApp.toast('Chế độ trình diễn – có token Hub (Admin KPI) mới lưu được.', 'info'); return; }
+    ShinApp.goiNut(nut, 'Đang lưu…', async () => {
+      await ShinApp.goiBat('KPI', 'webLuuTangTruong', k.khoa, g);
+      ShinApp.toast(g === '' ? `Đã về mặc định: ${k.khoa}` : `Đã lưu ${ShinApp.soVN(g * 100, 1)}% cho ${k.khoa}`);
+      this.moNhap(true);
+    }, 'kpiLuuNhap');
   },
 
   moAOPKhoa: function(i) {

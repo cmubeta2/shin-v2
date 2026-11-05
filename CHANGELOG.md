@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.9] – 05/11/2026 (KPI – CHỈNH NHÁP AOP NĂM SAU)
+
+### Mới
+- Tab 🎯 AOP của KPI: mục "🗓 Nháp AOP năm sau" đọc `webNhap2027` (mục năm gốc → năm sau, % tăng trưởng, nguồn: Đã chỉnh / Theo thực đạt / Mặc định 10%) và cho Admin KPI chỉnh % từng khoa qua `webLuuTangTruong(khoa, g)` (để trống = về mặc định). Không phải Admin ➜ chỉ xem.
+- Cổng chưa lên app ➜ báo rõ "App KPI chưa lên bản có cổng nháp năm sau" + nút mở app KPI v1, không hiện số mẫu.
+
 ## [2.6.8] – 05/11/2026 (TELEGRAM MINI APP)
 
 ### Mới

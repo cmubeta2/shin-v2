@@ -26,6 +26,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.9 ✅ – KPI CHỈNH NHÁP AOP NĂM SAU (05/11/2026)
+- Màn chỉnh nháp AOP năm sau trong tab 🎯 AOP (đọc `webNhap2027`, ghi `webLuuTangTruong`).
+- Còn chờ v1: KPI v1.8.2 (L10 – thêm `webNhap2027` vào `congWeb_`) chưa lên app (app đang v1.8.1) ➜ tới khi lên app, mục nháp báo "chưa lên bản".
+- Còn chờ v1: HUB L21–L25 (Phê duyệt, CRM, Dự án, Tài chính, Quản trị) mới «ĐÃ CODE v1.13.4–v1.13.8», chưa «KIỂM ĐẠT» ➜ chưa nối pheduyet / crm / duan / taichinh / quantri (mục f).
+
 ### PHIÊN BẢN v2.6.8 ✅ – TELEGRAM MINI APP (05/11/2026)
 - v2 tự đăng nhập khi mở trong Telegram (HUB L8 `webTelegram`). Đăng xuất xóa cả token phiên Telegram.
 - Chờ anh (V20): trong BotFather đặt nút Menu của bot Shin trỏ `https://cmubeta2.github.io/shin-v2/`; Admin lưu khóa bot ở Hub ⚙️ (TG_KHOA) và người dùng đã gắn Telegram (cột ChatTelegram) thì mới vào được.

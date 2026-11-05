@@ -49,7 +49,7 @@ Cổng khác đã có: `webKetQuaKS`, `webXuatKS` (L3), điền công khai `webC
 
 ### KPI – thêm `webNhap2027` vào `congWeb_()`
 
-Hàm `webNhap2027` đã có sẵn. v2 cần nó để đọc nháp AOP năm sau trước khi gọi `webLuuTangTruong`. Chỉ cần thêm 1 dòng, không đổi logic.
+**ĐÃ CODE (KPI L10, v1.8.2 – chưa lên app 05/11):** `webNhap2027()` ➜ `{nam, namGoc, suaDuoc, vien:{khoa, muc2026, g, nguon, muc2027}|null, khoa:[{khoa, muc2026, g /*0.1 = 10%*/, nguon:'anh'|'thucDat'|'macDinh', macDinh, muc2027}]}` (hoặc `{loi}` khi đọc AOP lỗi; chỉ BKS xem). Ghi: `webLuuTangTruong(khoa, g)` (Admin; g trống = về mặc định; KPI nhận tham số rời qua `du.a`). v2.6.9 đã dựng màn.
 
 ---
 
