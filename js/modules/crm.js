@@ -15,6 +15,19 @@ const ModuleCRM = {
 
   _d: null,
   _loc: '',
+  _gd: '',   // v2.8.2: lọc theo giai đoạn pipeline B2B (M2.3)
+  GIAI_DOAN: [['Tiếp cận', '🎯'], ['Báo giá', '💬'], ['Hợp đồng', '✍️'], ['Triển khai', '🚀'], ['Tái ký', '🔁']],
+
+  /** THUẦN. Suy giai đoạn pipeline từ chữ TrangThai (v1 không có cột giai đoạn riêng) ➜ tên giai đoạn | 'Chưa rõ'. */
+  giaiDoan: function(tt) {
+    const t = String(tt || '').normalize('NFC').toLowerCase();
+    if (/tái ký|tai ky|gia hạn|gia han/.test(t)) return 'Tái ký';
+    if (/triển khai|trien khai|đang hợp tác|dang hop tac|đang khám|đang chạy/.test(t)) return 'Triển khai';
+    if (/hợp đồng|hop dong|đã ký|da ky|ký kết/.test(t)) return 'Hợp đồng';
+    if (/báo giá|bao gia|chào giá|đàm phán|dam phan/.test(t)) return 'Báo giá';
+    if (/tiếp cận|tiep can|liên hệ|lien he|tìm hiểu|mới/.test(t)) return 'Tiếp cận';
+    return 'Chưa rõ';
+  },
   LOAI: ['B2B Khám Sức Khỏe', 'Đối tác Đào tạo', 'CTV Tuyển sinh', 'Nhà Cung Ứng'],
   MAU_LOAI: { 'B2B Khám Sức Khỏe': 'xanh', 'Đối tác Đào tạo': 'vang', 'CTV Tuyển sinh': 'vang', 'Nhà Cung Ứng': 'xam' },
 
@@ -42,7 +55,10 @@ const ModuleCRM = {
     const ds = d.danhBa || [];
     const dem = loai => ds.filter(x => x.loai === loai).length;
     const loc = this._loc;
-    const hien = loc ? ds.filter(x => x.loai === loc) : ds;
+    const gd = this._gd;
+    const b2b = ds.filter(x => x.loai === 'B2B Khám Sức Khỏe');
+    const demGD = ten => b2b.filter(x => this.giaiDoan(x.trangThai) === ten).length;
+    const hien = ds.filter(x => (!loc || x.loai === loc) && (!gd || (x.loai === 'B2B Khám Sức Khỏe' && this.giaiDoan(x.trangThai) === gd)));
 
     container.innerHTML = `
       <div class="page-header">
@@ -78,9 +94,18 @@ const ModuleCRM = {
               <span class="chu-phu">${e(l.thoiGian)}</span></div>`).join('')}
         </details>` : ''}
 
+      ${b2b.length ? `
+        <details class="tq-gon" ${gd ? 'open' : ''}>
+          <summary><span>📈 Pipeline B2B (M2.3)</span><span class="tom-tat">${b2b.length} doanh nghiệp</span></summary>
+          <div class="crm-pipe">${this.GIAI_DOAN.map(([ten, bt]) => `
+            <button class="crm-pipe-o ${gd === ten ? 'dang-chon' : ''}" onclick="ModuleCRM.datGD('${ten}')" aria-pressed="${gd === ten}">
+              <span class="crm-pipe-so">${ShinApp.soVN(demGD(ten))}</span><span class="crm-pipe-nhan">${bt} ${ten}</span></button>`).join('')}</div>
+          ${demGD('Chưa rõ') ? `<p class="chu-phu">${demGD('Chưa rõ')} doanh nghiệp chưa ghi giai đoạn trong ô Trạng thái (vd "Đang báo giá", "Đã ký HĐ", "Đang triển khai", "Tái ký").</p>` : ''}
+        </details>` : ''}
+
       <div class="hn-tieu">
-        <span>${loc ? e(loc).toUpperCase() : 'DANH BẠ'} · ${hien.length}</span>
-        ${loc ? '<button class="nut-chu" onclick="ModuleCRM.datLoc(\'\')">Bỏ lọc</button>' : ''}
+        <span>${gd ? 'B2B · ' + e(gd).toUpperCase() : loc ? e(loc).toUpperCase() : 'DANH BẠ'} · ${hien.length}</span>
+        ${loc || gd ? '<button class="nut-chu" onclick="ModuleCRM.boLoc()">Bỏ lọc</button>' : ''}
       </div>
       <input class="form-input" placeholder="🔍 Tìm theo tên, người liên hệ…" oninput="ModuleCRM.tim(this.value)">
       <div class="hn-list" id="crmDs">
@@ -105,9 +130,19 @@ const ModuleCRM = {
 
   datLoc: function(loai) {
     this._loc = this._loc === loai ? '' : loai;
+    this._gd = '';
     ShinApp.rung('nhe');
     this.render(document.getElementById('appContent'), this._d);
   },
+
+  datGD: function(ten) {
+    this._gd = this._gd === ten ? '' : ten;
+    if (this._gd) this._loc = '';
+    ShinApp.rung('nhe');
+    this.render(document.getElementById('appContent'), this._d);
+  },
+
+  boLoc: function() { this._loc = ''; this._gd = ''; this.render(document.getElementById('appContent'), this._d); },
 
   tim: function(chu) {
     const t = String(chu || '').trim().toLowerCase();

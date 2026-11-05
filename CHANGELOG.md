@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.2] – 05/11/2026 (CRM – PIPELINE B2B M2.3)
+
+### ✅ CRM
+- `js/modules/crm.js`: khối 📈 Pipeline B2B 5 giai đoạn (suy từ Trạng thái), bấm để lọc; nút Bỏ lọc chung.
+- `css/styles.css`: `.crm-pipe*` (lưới tự xuống dòng, ô ≥ 56px, chỉ dùng biến màu).
+
 ## [2.8.1] – 05/11/2026 (PK – NHÂN SỰ: HỒ SƠ + DUYỆT SỬA HỒ SƠ)
 
 ### 🟢 Phòng PTKH (PK)
