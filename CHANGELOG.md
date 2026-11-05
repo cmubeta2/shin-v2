@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.3] – 05/11/2026 (TRI THỨC – ĐỒ THỊ LIÊN KẾT M9.3)
+
+### ✅ Tri thức
+- `js/modules/trithuc.js`: `phanTichLienKet` (thuần: liên kết ra / ngược / treo, khớp mã hoặc tên không dấu, bỏ #mục, |nhãn, tự liên kết, trùng), `veSvg` (đồ thị vòng tròn, nút to theo bậc), khung chi tiết tài liệu với chip liên kết ≥ 44px.
+- `js/demo_data.js`: tài liệu mẫu có `tomTat` chứa `[[…]]` + `lienKet`.
+- `css/styles.css`: `.tt-dothi`, `.tt-xem`, `.tt-chips` (chỉ biến màu).
+
 ## [2.8.2] – 05/11/2026 (CRM – PIPELINE B2B M2.3)
 
 ### ✅ CRM

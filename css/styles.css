@@ -1865,3 +1865,11 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .crm-pipe-o.dang-chon { border-color: var(--c-blue); box-shadow: 0 0 0 2px var(--c-blue) inset; }
 .crm-pipe-so { font-size: 20px; font-weight: 700; color: var(--c-blue); }
 .crm-pipe-nhan { font-size: 14px; text-align: center; }
+
+/* v2.8.3 – Tri thức: đồ thị liên kết M9.3 */
+.tt-dothi { display: block; width: 100%; max-width: 420px; height: auto; margin: 8px auto; }
+.tt-nut { cursor: pointer; outline: none; }
+.tt-nut:focus-visible circle:last-of-type { stroke-width: 3; }
+.tt-xem { margin-bottom: 12px; border-color: var(--primary); }
+.tt-nhom { margin-top: 10px; }
+.tt-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }

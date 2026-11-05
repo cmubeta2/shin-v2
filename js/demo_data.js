@@ -370,10 +370,14 @@ window.SHIN_DEMO_DATA = {
       nutChinh: { nhan: "🔍 Tra Cứu Tri Thức Nhanh", hanhDong: "traCuuTriThuc" }
     },
     taiLieu: [
-      { ma: "SOP-01", ten: "Quy trình tổ chức Khám sức khỏe lưu động Doanh nghiệp v3.2", linhVuc: "Quản trị Y tế", capNhat: "26/10/2026", dinhDang: "Markdown (.md)" },
-      { ma: "ACHSI-02", ten: "Bộ tiêu chuẩn đánh giá sự hài lòng người bệnh ngoại trú ACHSI", linhVuc: "Chất lượng Y tế", capNhat: "20/10/2026", dinhDang: "Markdown (.md)" },
-      { ma: "PAY-03", ten: "Sổ tay tích hợp cổng thanh toán tự động VietQR SePay & Webhook", linhVuc: "Công nghệ số", capNhat: "28/10/2026", dinhDang: "Markdown (.md)" },
-      { ma: "AIOS-04", ten: "Kiến trúc Thập diện Decagon SHIN v2 & Bộ danh mục 38 Micro-Modules", linhVuc: "Hệ thống AIOS", capNhat: "29/10/2026", dinhDang: "Markdown (.md)" }
+      { ma: "SOP-01", ten: "Quy trình tổ chức Khám sức khỏe lưu động Doanh nghiệp v3.2", linhVuc: "Quản trị Y tế", capNhat: "26/10/2026", dinhDang: "Markdown (.md)",
+        tomTat: "Các bước KSK lưu động; thu phí qua [[PAY-03|VietQR SePay]], khảo sát sau khám theo [[ACHSI-02]], mẫu hợp đồng xem [[HĐ-KSK]]." },
+      { ma: "ACHSI-02", ten: "Bộ tiêu chuẩn đánh giá sự hài lòng người bệnh ngoại trú ACHSI", linhVuc: "Chất lượng Y tế", capNhat: "20/10/2026", dinhDang: "Markdown (.md)",
+        tomTat: "5 trụ cột ACHSI, ngưỡng cảnh báo ≤ 2★; dữ liệu đổ về Mảng 1 theo [[AIOS-04]]." },
+      { ma: "PAY-03", ten: "Sổ tay tích hợp cổng thanh toán tự động VietQR SePay & Webhook", linhVuc: "Công nghệ số", capNhat: "28/10/2026", dinhDang: "Markdown (.md)",
+        tomTat: "Webhook SePay ➜ Mảng 3 Tài chính; kiến trúc chung xem [[AIOS-04]].", lienKet: ["SOP-01"] },
+      { ma: "AIOS-04", ten: "Kiến trúc Thập diện Decagon SHIN v2 & Bộ danh mục 38 Micro-Modules", linhVuc: "Hệ thống AIOS", capNhat: "29/10/2026", dinhDang: "Markdown (.md)",
+        tomTat: "10 mảng + 0A/0B; tường lửa dữ liệu theo [[KHONG_DUA_VAO]]." }
     ]
   },
 
