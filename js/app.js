@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.6.7';
+  const PHIEN_BAN = 'v2.6.8';
 
   const MODULES = [
     ModuleHub,
@@ -448,9 +448,21 @@ const ShinApp = (function() {
     ganCuChiMayNho();
     if (MQ_DESKTOP.addEventListener) MQ_DESKTOP.addEventListener('change', () => apDungRail(railMacDinh()));
     veMenuDay();
-    capNhatBannerTrangThai();
-    if (SHIN_API.laCheDoLive()) khoiDongLive();
-    chuyenModule(currentModule);
+    // v2.6.8 – mở trong Telegram (nút menu bot Shin) mà máy chưa có token ➜ đổi initData lấy token Hub phiên 12 giờ rồi mới tải
+    const initTG = SHIN_API.layInitDataTG();
+    try { if (window.Telegram && Telegram.WebApp) { Telegram.WebApp.ready(); Telegram.WebApp.expand(); } } catch (e) {}
+    if (initTG && !SHIN_API.coTokenLuu()) {
+      SHIN_API.dangNhapTelegram(initTG).then(kq => {
+        if (!kq.ok) toast(kq.msg, 'warn', { thoiGian: 8000 });
+        capNhatBannerTrangThai();
+        if (SHIN_API.laCheDoLive()) khoiDongLive();
+        chuyenModule(currentModule);
+      });
+    } else {
+      capNhatBannerTrangThai();
+      if (SHIN_API.laCheDoLive()) khoiDongLive();
+      chuyenModule(currentModule);
+    }
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {

@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.8] – 05/11/2026 (TELEGRAM MINI APP)
+
+### Mới
+- Mở v2 từ nút menu bot Shin trong Telegram: đọc `Telegram.WebApp.initData` (hoặc `#tgWebAppData` trên địa chỉ – không nạp SDK ngoài, CSP giữ nguyên) ➜ gửi cổng `webTelegram` của Hub (HUB L8, Hub v1.13.3) ➜ nhận token Hub 12 giờ, chỉ giữ ở `sessionStorage` (không ghi đè token Hub lâu dài), xóa `#tgWebAppData` khỏi địa chỉ.
+- Máy đã có token (link Hub `?t=` / đã đăng nhập) ➜ dùng token đó, không đổi. Lỗi (chưa cài khóa bot, chưa gắn Telegram với người dùng, phiên cũ) ➜ thông báo tiếng Việt của Hub, màn vẫn mở ở chế độ trình diễn.
+
 ## [2.6.7] – 05/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG THẬT)
 
 ### Sửa

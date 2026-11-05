@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.8 ✅ – TELEGRAM MINI APP (05/11/2026)
+- v2 tự đăng nhập khi mở trong Telegram (HUB L8 `webTelegram`). Đăng xuất xóa cả token phiên Telegram.
+- Chờ anh (V20): trong BotFather đặt nút Menu của bot Shin trỏ `https://cmubeta2.github.io/shin-v2/`; Admin lưu khóa bot ở Hub ⚙️ (TG_KHOA) và người dùng đã gắn Telegram (cột ChatTelegram) thì mới vào được.
+
 ### PHIÊN BẢN v2.6.7 ✅ – KHẢO SÁT GỌI ĐÚNG CỔNG THẬT (05/11/2026)
 - Màn 🩺 Khảo sát gọi `webTongHopKS` + `webDsKhaoSat` (theo `congWeb_()` thật của 70_KhaoSat); HOP_DONG_CONG_V2.md mục KS sửa cho khớp mã v1.
 - Còn chờ v1: KS L6 (`webTongHopKS`) «ĐÃ CODE v1.4.4» – chờ kiểm + đưa lên app thì hero / 5 trụ / ý kiến ≤ 2★ có số thật.
