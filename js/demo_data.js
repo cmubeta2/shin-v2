@@ -538,7 +538,8 @@ window.SHIN_DEMO_DATA.phongkhamV1 = {
       { ngay: '03/11/2026', trangThai: 'da_duyet', tomTat: 'Tiếp đón 42 lượt · 15 cuộc gọi', soAnh: 2, lyDoTraLai: '' },
       { ngay: '02/11/2026', trangThai: 'tra_lai', tomTat: 'Tiếp đón 38 lượt', soAnh: 0, lyDoTraLai: 'Bổ sung ảnh bảng trực' }
     ] },
-  lichTuan: { tuan: 'T2 02/11 – CN 08/11', phepCon: 8, nghiBuCon: 1, donNghi: [{ id: 'N1', loai: 'nghi_tuan', tuNgay: '08/11/2026', denNgay: '08/11/2026', trangThai: 'cho', lyDo: 'Việc gia đình', lyDoTraLai: '' }],
+  lichTuan: { tuan: 'T2 02/11 – CN 08/11', phepCon: 8, nghiBuCon: 1, donNghi: [{ id: 'N1', loai: 'nghi_tuan', tuNgay: '08/11/2026', denNgay: '08/11/2026', trangThai: 'cho', lyDo: 'Việc gia đình', lyDoTraLai: '' },
+      { id: 'N2', loai: 'nghi_om', tuNgay: '07/11/2026', denNgay: '07/11/2026', trangThai: 'da_duyet', lyDo: 'Khám sức khỏe định kỳ (MẪU)', lyDoTraLai: '' }],
     ngay: [
       { ngay: '02/11/2026', thu: 'T2', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false }, { ngay: '03/11/2026', thu: 'T3', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false },
       { ngay: '04/11/2026', thu: 'T4', viTri: 'Tổng đài', ca: 'Chiều', nghi: false, le: false }, { ngay: '05/11/2026', thu: 'T5', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false },

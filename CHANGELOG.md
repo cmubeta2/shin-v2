@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.5] – 06/11/2026 (KIỂM TRA TRÙNG LỊCH M5.3)
+
+### ✨ Tính năng
+- `js/modules/phongkham.js`: hàm thuần `xungDotLich(ngay, donNghi)` – ngày đang xếp ca nằm trong đơn nghỉ (chờ duyệt / đã duyệt, không tính đổi ca) ➜ thẻ ⚠️ TRÙNG LỊCH đầu tab 📅 Lịch tuần và dấu ⚠️ trên dòng ngày.
+- `js/demo_data.js`: thêm 1 đơn nghỉ MẪU (07/11, đã duyệt) để Demo thấy cảnh báo. `sw.js`: shin-v2.9.5.
+
 ## [2.9.4] – 06/11/2026 (ĐỒNG BỘ CẤU HÌNH M0.1)
 
 ### ✨ Tính năng

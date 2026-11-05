@@ -135,7 +135,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 |---|---|---|---|
 | M5.1 | Báo cáo ca ngày (lượt khám, doanh thu, tồn đọng) | 🟢 v2.7.0 – Hôm nay + nộp / lịch sử / duyệt báo cáo ngày qua cổng PK thật | v2.4.0 |
 | M5.2 | Minh chứng ảnh nén → Drive (Base64 qua `21_PhongPTKH`) | 🟢 v2.7.0 (nén JPEG ≤ 1600px, ≤ 6 ảnh → `webNopBaoCao`) | v2.4.0 (v1 mở cổng trước) |
-| M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | 🟢 xem lịch tuần + đơn nghỉ (`webLichTuan`) / ⬜ đổi ca (làm trên PTKH) | v2.3.0 |
+| M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | 🟢 xem lịch tuần + đơn nghỉ (`webLichTuan`) · 🟢 v2.9.5 cảnh báo trùng lịch cá nhân (ca ↔ đơn nghỉ) / ⬜ trùng cả tổ · đổi ca (làm trên PTKH) | v2.3.0 |
 | M5.4 | Bóc tách tăng ca & bù giờ TC-NS | ⬜ (logic có ở M-PTKH-03) | v2.4.0 |
 | M5.5 | Kiểm soát vi phạm NTC (> 3 lần trễ → trừ 0,5 công) | ⬜ (M-PTKH-04) | v2.4.0 |
 | M5.6 | Team Morale Index – cảm nhận sau ca 1–5★ | ⬜ (M-PTKH-01) | v2.4.0 |

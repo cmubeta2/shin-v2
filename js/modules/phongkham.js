@@ -272,13 +272,33 @@ const ModulePhongKham = {
   },
 
   /* ---------- 📅 Lịch tuần + đơn nghỉ (webLichTuan – chỉ đọc) ---------- */
+  /** v2.9.5 – M5.3 hàm thuần: ngày đang xếp ca (không nghỉ / lễ) nằm trong đơn nghỉ chờ duyệt / đã duyệt (bỏ đổi ca, trả lại). */
+  xungDotLich: function(ngay, donNghi) {
+    const so = s => { const m = String(s || '').match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? +m[3] * 10000 + +m[2] * 100 + +m[1] : 0; };
+    const don = (donNghi || []).filter(x => (x.trangThai === 'cho' || x.trangThai === 'da_duyet') && x.loai !== 'doi_ca' && so(x.tuNgay));
+    const kq = [];
+    (ngay || []).forEach(n => {
+      const s = so(n.ngay);
+      if (!s || n.nghi || n.le || !(n.viTri || n.ca)) return;
+      const d = don.find(x => s >= so(x.tuNgay) && s <= (so(x.denNgay) || so(x.tuNgay)));
+      if (d) kq.push({ ngay: n.ngay, thu: n.thu || '', ca: [n.viTri, n.ca ? 'Ca ' + n.ca : ''].filter(Boolean).join(' · '), don: d });
+    });
+    return kq;
+  },
+
   ve_lich: function(d) {
     const e = ShinApp.esc, ng = d.ngay || [], dn = d.donNghi || [];
+    const xd = this.xungDotLich(ng, dn), ngayXD = xd.map(x => x.ngay);
     return `
+      ${xd.length ? `<div class="the" style="border-left:4px solid var(--c-yellow);">
+        <div class="form-label">⚠️ TRÙNG LỊCH · ${xd.length} ngày</div>
+        ${xd.map(x => `<div class="chu-phu">${e(x.thu)} ${e(x.ngay)}: đang xếp ${e(x.ca)} nhưng có đơn ${e(this.LOAI_NGHI[x.don.loai] || x.don.loai || '')} (${e((this.TT_NGHI[x.don.trangThai] || [x.don.trangThai])[0])}).</div>`).join('')}
+        <div class="chu-phu">Báo tổ trưởng xếp người thay / đổi ca trên app PK.</div>
+      </div>` : ''}
       <div class="the">
         <div class="form-label">TUẦN ${e(d.tuan || '')}</div>
         <div class="chu-phu">Phép còn: <b>${e(ShinApp.soVN(d.phepCon || 0))}</b> · Nghỉ bù còn: <b>${e(ShinApp.soVN(d.nghiBuCon || 0))}</b></div>
-        ${ng.map(x => `<div class="hang-tru"><span><b>${e(x.thu || '')}</b> ${e(x.ngay || '')}</span><span>${x.le ? this.badge(['Lễ', 'vang']) : x.nghi ? this.badge(['Nghỉ', 'xam']) : e([x.viTri, x.ca ? 'Ca ' + x.ca : ''].filter(Boolean).join(' · ') || '–')}</span></div>`).join('')}
+        ${ng.map(x => `<div class="hang-tru"><span><b>${e(x.thu || '')}</b> ${e(x.ngay || '')}${ngayXD.indexOf(x.ngay) >= 0 ? ' ⚠️' : ''}</span><span>${x.le ? this.badge(['Lễ', 'vang']) : x.nghi ? this.badge(['Nghỉ', 'xam']) : e([x.viTri, x.ca ? 'Ca ' + x.ca : ''].filter(Boolean).join(' · ') || '–')}</span></div>`).join('')}
         ${ng.length ? '' : '<div class="trong">Tuần này chưa xếp lịch.</div>'}
       </div>
       <div class="hn-tieu"><span>ĐƠN NGHỈ / ĐỔI CA · ${dn.length}</span></div>
