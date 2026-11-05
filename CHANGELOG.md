@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.1] – 06/11/2026 (PHÂN LUỒNG VIỆC THEO QUYỀN M7.3)
+
+### ✨ Tính năng
+- `js/modules/congviec.js`: phân luồng việc theo RBAC phía trình duyệt – việc thuộc mảng người dùng không được vào (cùng luật ẩn menu `ShinApp.mangDuocHien` = chốt chặn quyền mã v1, kể cả mảng đang tắt) bị ẩn kèm dòng 🔒 đếm; chip 🧭 Theo quyền / 👤 Của tôi (khớp họ tên, mã NV hoặc gọi tắt "Sếp Tâm", "chị Thư" theo phần cuối họ tên, không dấu). Số đầu cột Kanban đếm theo luồng đang xem.
+- `js/app.js`: xuất `ShinApp.mangDuocHien`.
+- `css/styles.css`: `.cv-luong`, `.cv-an`.
+
 ## [2.9.0] – 05/11/2026 (RÀ UX TOÀN MÀN 375 / 1280)
 
 ### 🎨 Giao diện

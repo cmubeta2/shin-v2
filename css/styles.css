@@ -1886,6 +1886,9 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .cv-tieu { font-weight: 600; font-size: calc(15px * var(--font-scale)); color: var(--text); line-height: 1.35; margin-bottom: 6px; overflow-wrap: anywhere; }
 .cv-chan { display: flex; justify-content: space-between; gap: 6px; flex-wrap: wrap; font-size: calc(14px * var(--font-scale)); color: var(--text-muted); }
 .cv-sla { flex-wrap: wrap; }
+.cv-luong { flex-wrap: wrap; }
+.cv-luong .chip-chon:disabled { opacity: .5; cursor: default; }
+.cv-an { margin: 4px 0 8px; font-size: calc(14px * var(--font-scale)); }
 
 /* v2.8.5 – Quản trị: ma trận quyền M0.2 (bảng cố định cột, không cuộn ngang ở 320px) */
 .qt-chu-giai { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0; }
