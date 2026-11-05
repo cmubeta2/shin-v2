@@ -368,18 +368,61 @@ const ModulePhongKham = {
     if (d && !kq.demo) { d.baoCao = (d.baoCao || []).filter(b => String(b.id) !== String(id)); const el = document.getElementById('pkXem'); if (el) el.innerHTML = this.ve_duyet(d); }
   },
 
-  /* ---------- 👥 Nhân sự (webNhanSu – quản lý, chỉ xem) ---------- */
+  /* ---------- 👥 Nhân sự (webNhanSu · webHoSoNhanSu · webDuyetSuaHoSo – lãnh đạo / admin) ---------- */
   ve_nhansu: function(d) {
-    const e = ShinApp.esc, ds = d.ds || [];
+    const e = ShinApp.esc, ds = d.ds || [], yc = d.yeuCauSua || [];
     return `
       ${this.o3([['Đang làm', d.dangLam, 'var(--c-blue)'], ['Mới vào', d.moiVao, 'var(--c-green)'], ['Chờ sửa hồ sơ', d.choSua, d.choSua ? 'var(--c-yellow)' : 'var(--c-gray)']])}
+      ${yc.length ? `<div class="hn-tieu"><span>YÊU CẦU SỬA HỒ SƠ · ${yc.length}</span></div>
+        ${yc.map((y, i) => `<div class="the" id="pkYC_${i}">
+          <div class="dong-title">${e(y.hoTen || '')} · ${e(y.truong || '')}</div>
+          <div class="dong-sub">${e(y.giaTriCu || '—')} ➜ ${e(y.giaTriMoi || '')}${y.luc ? ' · ' + e(y.luc) : ''}</div>
+          <input class="form-input" style="font-size:16px;margin-top:8px;" id="pkYCLyDo_${i}" maxlength="300" placeholder="Lý do không duyệt (bắt buộc khi không duyệt)">
+          <div class="hang-nut">
+            <button class="btn-secondary" onclick="ModulePhongKham.duyetHS(${i}, false, this)">✕ Không duyệt</button>
+            <button class="btn-primary" onclick="ModulePhongKham.duyetHS(${i}, true, this)">✓ Đồng ý</button>
+          </div></div>`).join('')}` : ''}
       <input class="form-input" style="font-size:16px;margin:8px 0;" placeholder="🔍 Tìm tên, vị trí, tổ…" oninput="ModulePhongKham.loc(this.value)" aria-label="Tìm nhân sự">
       <div class="hn-list" id="pkNsDs">${ds.map(n => `
-        <div class="hn-dong pk-ns" style="cursor:default;" data-tim="${e(String([n.hoTen, n.viTri, n.to, n.ma].join(' ')).toLowerCase())}">
+        <div class="hn-dong pk-ns" role="button" tabindex="0" data-ma="${e(n.ma || '')}" data-tim="${e(String([n.hoTen, n.viTri, n.to, n.ma].join(' ')).toLowerCase())}" onclick="ModulePhongKham.xemHS(this)">
           <div class="dong-content"><div class="dong-title">${e(n.hoTen || '')}</div><div class="dong-sub">${e([n.viTri, n.to].filter(Boolean).join(' · '))}</div></div>
-          <div class="dong-meta"><span class="badge ${/thử/i.test(n.trangThai || '') ? 'vang' : 'xanh'}">${e(n.trangThai || '')}</span></div>
-        </div>`).join('')}</div>
+          <div class="dong-meta"><span class="badge ${/thử/i.test(n.trangThai || '') ? 'vang' : 'xanh'}">${e(n.trangThai || '')}</span><span class="dong-arrow">›</span></div>
+        </div><div class="pk-hs" hidden></div>`).join('')}</div>
       ${ds.length ? '' : '<div class="trong">Chưa có danh sách nhân sự.</div>'}`;
+  },
+
+  /** Bấm 1 người ➜ mở / đóng hồ sơ (Live: webHoSoNhanSu; Demo: dòng danh sách). */
+  xemHS: async function(dong) {
+    const khung = dong.nextElementSibling, ma = dong.dataset.ma, e = ShinApp.esc;
+    if (!khung || !ma) return;
+    if (!khung.hidden) { khung.hidden = true; return; }
+    khung.hidden = false;
+    khung.innerHTML = '<div class="chu-phu">Đang tải hồ sơ…</div>';
+    try {
+      let h;
+      if (this._live) {
+        const kq = await SHIN_API.goi('PK', 'webHoSoNhanSu', { ma });
+        if (!kq.ok) throw new Error(SHIN_API.moTaLoi(kq));
+        h = kq.data || {};
+      } else h = ((this.demo().nhanSu || {}).ds || []).find(n => n.ma === ma) || {};
+      khung.innerHTML = `<div class="the">${[['Vị trí', h.viTri], ['Tổ', h.to], ['Ngày vào', h.ngayVao], ['Email', h.email], ['Điện thoại', h.dienThoai]]
+        .map(x => `<div class="hang-tru"><span class="chu-phu">${x[0]}</span><span>${e(x[1] || '—')}</span></div>`).join('')}</div>`;
+    } catch (err) { khung.innerHTML = `<div class="chu-phu" style="color:var(--c-red);">⚠️ ${e(err.message)}</div>`; }
+  },
+
+  /** Duyệt / không duyệt 1 yêu cầu sửa hồ sơ (không duyệt bắt buộc lý do), ghi đúng 1 lần (khóa nút). */
+  duyetHS: async function(i, dongY, nut) {
+    const d = this._live ? this._cache.nhansu : this.demo().nhanSu;
+    const y = d && (d.yeuCauSua || [])[i];
+    if (!y) return;
+    const o = document.getElementById('pkYCLyDo_' + i), lyDo = o ? o.value.trim() : '';
+    if (!dongY && !lyDo) { ShinApp.toast('Ghi rõ lý do không duyệt để nhân viên biết.', 'warn'); if (o) o.focus(); return; }
+    const kq = await ShinApp.goiNut(nut, 'Đang gửi…', () => this.gui('webDuyetSuaHoSo', { id: y.id, dongY, lyDo }), 'pk-hs-' + y.id + '-' + y.truong);
+    if (!kq) return;
+    ShinApp.toast(kq.demo ? 'Demo: không gửi máy chủ.' : (dongY ? 'Đã duyệt sửa hồ sơ.' : 'Đã báo không duyệt.'), kq.demo ? 'info' : 'success');
+    d.yeuCauSua = (d.yeuCauSua || []).filter(x => x.id !== y.id);
+    d.choSua = Math.max(0, (Number(d.choSua) || 0) - 1);
+    const el = document.getElementById('pkXem'); if (el && this._tab === 'nhansu') el.innerHTML = this.ve_nhansu(d);
   },
 
   loc: function(q) {

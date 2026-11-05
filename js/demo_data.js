@@ -548,8 +548,8 @@ window.SHIN_DEMO_DATA.phongkhamV1 = {
     { id: 'BC1', nguoi: 'Nhân viên A', ngay: '04/11/2026', tomTat: 'Tiếp đón 40 lượt · 12 cuộc gọi', anh: [] },
     { id: 'BC2', nguoi: 'Nhân viên B', ngay: '04/11/2026', tomTat: 'Tổng đài 85 cuộc', anh: [] }
   ], nghi: [{ id: 'N9', nguoi: 'Nhân viên C', loai: 'nghi_tuan', tuNgay: '07/11/2026', denNgay: '07/11/2026', lyDo: 'Khám sức khỏe' }], lichTuan: [] },
-  nhanSu: { dangLam: 21, moiVao: 2, choSua: 1, yeuCauSua: [], ds: [
-    { ma: 'NV01', hoTen: 'Nhân viên A', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', trangThai: 'Đang làm' },
+  nhanSu: { dangLam: 21, moiVao: 2, choSua: 1, yeuCauSua: [{ id: 'YC1', ma: 'NV02', hoTen: 'Nhân viên B', truong: 'Email', giaTriCu: 'b@example.com', giaTriMoi: 'b.moi@example.com', lyDo: '', luc: '04/11/2026' }], ds: [
+    { ma: 'NV01', hoTen: 'Nhân viên A', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', ngayVao: '01/03/2024', email: 'a@example.com', trangThai: 'Đang làm' },
     { ma: 'NV02', hoTen: 'Nhân viên B', viTri: 'Tổng đài', to: 'Tổ CSKH', trangThai: 'Đang làm' },
     { ma: 'NV03', hoTen: 'Nhân viên C', viTri: 'Tiếp đón', to: 'Tổ Tiếp đón', trangThai: 'Thử việc' }
   ] },
