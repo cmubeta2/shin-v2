@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.7] – 05/11/2026 (KHẢO SÁT – ĐÚNG CỔNG v1)
+
+### 🛠 Sửa
+- `js/modules/khaosat.js`: Live gọi `webTongHopKS` + `webDsKhaoSat` (song song, du object) thay `webTongQuan` không có ở v1; danh sách KS lỗi riêng thì vẫn giữ số tổng hợp thật và báo dải.
+- HOP_DONG_CONG_V2.md + chú thích `js/api.js`: Hub / KS / PK nhận `ham(token, du)`; chỉ KPI / TS bọc `du.a`.
+
 ## [2.6.6] – 05/11/2026 (PTKH GỐC – TỔNG QUAN ĐỌC THẲNG)
 
 ### 🟢 Nối thật

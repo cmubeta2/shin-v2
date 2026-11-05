@@ -1,6 +1,9 @@
 /**
  * SHIN v2 – Mảng 1: Khảo sát hài lòng (máy chủ 70_KhaoSat)
- * Live (v2.4.0 – HOP_DONG_CONG_V2.md mục KS): webTongQuan() ➜
+ * v2.6.7 (theo mã v1 – KS KHÔNG có webTongQuan): gọi 2 cổng thật, du là OBJECT (cuaWebPost_ ➜ ham(token, du)):
+ *   webTongHopKS({thang?}) (L6, v1.4.4) ➜ {thang, tru, canXuLy}  +  webDsKhaoSat({}) (L1) ➜ {ds:[{maKS, tieuDe, trangThai, han, …}], dem}
+ *   Gộp thành khuôn cũ dưới đây (khaoSat lấy từ ds; soPhieu từng KS chưa có cổng ➜ không hiện).
+ * Khuôn (giữ từ v2.4.0):
  *   {thang: {soPhieu, haiLong, canXuLy}, tru: [{ma, ten, diem, tyLe}], khaoSat: [{ma, ten, trangThai, soPhieu, moTu, dongLuc}],
  *    canXuLy: [{ma, khaoSat, cau, diem, ngay, noiDung}]}   – không có thông tin liên hệ người trả lời (QK4).
  * App KS v1 chưa mở cổng ➜ máy chủ trả 'hanh' ➜ màn hiện MẪU (dải vàng).
@@ -14,9 +17,11 @@ const ModuleKhaoSat = {
   mayChu: 'KS',
 
   taiLive: async function() {
-    const kq = await SHIN_API.goiCong('KS', 'webTongQuan');
-    if (!kq.ok) return kq;
-    return { ok: true, data: this.tuV1(kq.data) };
+    const [th, ds] = await Promise.all([SHIN_API.goi('KS', 'webTongHopKS', {}), SHIN_API.goi('KS', 'webDsKhaoSat', {})]);
+    if (!th.ok) return th;
+    const k = Object.assign({}, th.data);
+    k.khaoSat = ds.ok ? ((ds.data || {}).ds || []).map(x => ({ ma: x.maKS, ten: x.tieuDe, trangThai: x.trangThai, dongLuc: x.han })) : [];
+    return { ok: true, data: this.tuV1(k), ghiChu: ds.ok ? '' : 'Chưa đọc được danh sách khảo sát (' + SHIN_API.moTaLoi(ds) + ') – số tổng hợp vẫn là số thật.' };
   },
 
   mau: function(tyLe) {
@@ -102,7 +107,7 @@ const ModuleKhaoSat = {
       ${ks.length ? `
         <details class="tq-gon">
           <summary><span>📋 Các khảo sát</span><span class="tom-tat">${ks.length}</span></summary>
-          ${ks.map(x => `<div class="hang-tru"><span>${e(x.ten)}<br><span class="chu-phu">${e([x.trangThai, x.moTu ? 'từ ' + x.moTu : '', x.dongLuc ? 'đến ' + x.dongLuc : ''].filter(Boolean).join(' · '))}</span></span><b>${ShinApp.soVN(x.soPhieu || 0)} phiếu</b></div>`).join('')}
+          ${ks.map(x => `<div class="hang-tru"><span>${e(x.ten)}<br><span class="chu-phu">${e([x.trangThai, x.moTu ? 'từ ' + x.moTu : '', x.dongLuc ? 'đến ' + x.dongLuc : ''].filter(Boolean).join(' · '))}</span></span>${x.soPhieu !== undefined ? `<b>${ShinApp.soVN(x.soPhieu || 0)} phiếu</b>` : ''}</div>`).join('')}
         </details>` : ''}
 
       <details class="tq-gon">

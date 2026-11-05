@@ -12,7 +12,7 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Gắn hàm:** thêm hàm vào bảng trắng `congWeb_()` của app.
 - **Cách nhận tham số:**
   - Hub nhận `ham(token, du)`.
-  - KPI, TS, KS nhận `ham(token, ...du.a)` qua `bocCong…_`.
+  - KPI, TS nhận `ham(token, ...du.a)` qua `bocCong…_`. **KS nhận `ham(token, du)` – du object** (sửa 05/11 theo mã v1.4.x).
   - **PK (`21_PhongPTKH`) nhận `ham(token, du)` – du là object** (sửa 05/11 theo mã v1.0.7; v2 gọi `SHIN_API.goi('PK', hanh, du)`).
 - **Kiểm quyền:** từ chối thì ném `loiQuyen_()` để v2 hiện "chưa có quyền".
 - **Lỗi khác:** ném `Error` có câu tiếng Việt, v2 hiện nguyên câu đó.
@@ -24,7 +24,9 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 
 ## v2.4.0 – App đã có, cần thêm cổng
 
-### KS – `70_KhaoSat` · `webTongQuan(token)` (chỉ đọc)
+### KS – `70_KhaoSat` · ~~`webTongQuan`~~ ➜ `webTongHopKS` + `webDsKhaoSat` (chỉ đọc)
+
+> **Theo mã v1 (05/11):** KS không làm `webTongQuan`. v2.6.7 gọi `webTongHopKS(token, du{thang?})` (KS L6, v1.4.4 – đã code, chờ lên app; app đang v1.4.3 ➜ trả `hanh` ➜ v2 hiện dải vàng + mẫu) và `webDsKhaoSat(token, {})` (L1). KS nhận `du` là **object** (không phải `du.a`). Dạng `webTongHopKS` = khối dưới bỏ `khaoSat`; danh sách KS lấy từ `webDsKhaoSat.ds` (maKS, tieuDe, trangThai, han) – chưa có số phiếu từng KS.
 
 ```js
 { thang: { soPhieu, haiLong /*0..1|null*/, canXuLy },

@@ -4,7 +4,7 @@
  * Giao thức v1 (00_Loi/Loi_Web.gs – cuaWebPost_):
  *   Gửi : POST text/plain {hanh: 'web…', token, du}
  *   Nhận: {ok: true, du} | {ok: false, loi: 'dang' | 'hanh' | 'token' | 'quyen' | 'loi', chiTiet}
- * Hub gọi hàm trang dạng ham(token, du); KPI / TS / KS / PK nhận tham số rời trong du.a = [..] (bocCong…_).
+ * Hub, KS, PK gọi hàm trang dạng ham(token, du) – du object (dùng goi); KPI / TS nhận tham số rời trong du.a = [..] (bocCong…_ – dùng goiCong).
  */
 
 const SHIN_API = (function() {
