@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.2] – 06/11/2026 (TRÍCH BÀI HỌC KINH NGHIỆM M9.4)
+
+### ✨ Tính năng
+- `js/modules/duan.js`: tab 🧱 Ma trận vướng mắc có thẻ 💡 Bài học kinh nghiệm – rút từ vướng mắc Flash Khối 2 có đề xuất (bỏ trùng, bỏ thẻ HTML), xếp 5 chủ đề (Nhân sự · Thiết bị & Hậu cần · Tài chính · Khách hàng & Hợp đồng · Tiến độ & Quy trình) theo từ khóa; nút sao chép Markdown có `[[Chủ đề]]` để dán vào kho 📚 Tri thức (đồ thị M9.3). Không gửi gì đi.
+
 ## [2.9.1] – 06/11/2026 (PHÂN LUỒNG VIỆC THEO QUYỀN M7.3)
 
 ### ✨ Tính năng
