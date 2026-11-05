@@ -1899,3 +1899,7 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 
 /* v2.8.6 – rà UX 375: chữ tối thiểu 14px cho nhãn / chip còn nhỏ (đo bằng trình duyệt không giao diện) */
 .kanban-header, .o-so-loc, .flash-title, .flash-list li, .flash-badge, .module-chip, #appContent .status-pill { font-size: calc(14px * var(--font-scale)); }
+
+/* v2.8.7 – Khảo sát: chọn tháng tổng hợp 5 trụ ACHSI */
+.ks-thang { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 6px 14px; margin-bottom: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; font-size: calc(14px * var(--font-scale)); font-weight: 700; color: var(--text); }
+.ks-thang input { min-height: 44px; font-size: 16px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); max-width: 60%; }

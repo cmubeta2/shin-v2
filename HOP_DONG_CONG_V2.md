@@ -36,6 +36,7 @@ liên thông ksSoLieu (Hub ký HMAC – trình duyệt không gọi được)   
 
 - **Quyền:** Admin và "Quản lý khảo sát" (QuanLyKS chỉ thấy KS của mình).
 - **v2 dùng (v2.7.2):** webDsKhaoSat + webKetQuaKS (≤ 6 KS, ưu tiên Đang mở) + webXuatKS csv. Màn KHÔNG hiện câu loại `lienhe` / ý kiến (QK4). 5 trụ ACHSI chưa có ở v1 ➜ v2 hiện điểm TB câu 5 mức theo từng khảo sát.
+- **KS L6 (v1.4.4, lên app @5 05/11):** `webTongHopKS({thang?:'mm/yyyy'})` → `{ ok, thang:{soPhieu, haiLong 0..1|null, canXuLy}, tru:[5 {ma, ten, diem|null, tyLe|null}], canXuLy:[≤ 50 {maPhieu, khaoSat, cau, diem, ngay, noiDung}] }` – chỉ đọc; quản lý chỉ thấy KS mình. **v2.8.7 dùng**: Hero tháng + 5 trụ + ≤ 2★; KHÔNG hiện `noiDung` (ý kiến tự do – QK4).
 
 ### HUB – Telegram Mini App `webTelegram` (HUB L8, Hub v1.13.3 ✅)
 

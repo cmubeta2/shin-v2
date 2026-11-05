@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.7] – 05/11/2026 (KHẢO SÁT – 5 TRỤ ACHSI THEO THÁNG)
+
+### 🟢 Khảo sát
+- `js/modules/khaosat.js`: `taiLive` gọi thêm `webTongHopKS` (KS L6, v1.4.4); `ghepTongHop` (thuần), `doiThang`, `giaTriThang`, `thangHienTai`; khối gập điểm theo khảo sát; bỏ `noiDung` (QK4).
+- `css/styles.css`: `.ks-thang` (ô chọn tháng 16px, vùng bấm ≥ 44px, chỉ biến màu).
+- `HOP_DONG_CONG_V2.md`: thêm `webTongHopKS`.
+
 ## [2.8.6] – 05/11/2026 (RÀ UX 375 – CHỮ ≥ 14PX)
 
 ### 🎨 Giao diện

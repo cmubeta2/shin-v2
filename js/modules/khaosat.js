@@ -4,7 +4,10 @@
  *   webDsKhaoSat({}) ➜ {ok, ds:[{maKS, tieuDe, trangThai, han, soCau…}], dem:{dangMo, nhap, daDong}}
  *   webKetQuaKS({maKS}) ➜ {ok, maKS, tieuDe, soPhieu, choXacMinh, theoNgay, cau:[{maCH, loai, noiDung, n, tb?, nps?}]}
  *   webXuatKS({maKS, kieu:'csv'}) ➜ {ok, csv, tenTep}
- * Màn không hiện thông tin liên hệ người trả lời (QK4) – chỉ đọc số tổng hợp theo câu.
+ *   v2.8.7: webTongHopKS({thang?:'mm/yyyy'}) (KS L6, app v1.4.4 @5) ➜ {ok, thang:{soPhieu, haiLong, canXuLy},
+ *           tru:[5 trụ ACHSI {ma, ten, diem, tyLe}], canXuLy:[≤ 50 {maPhieu, khaoSat, cau, diem, ngay, noiDung}]}
+ *           ➜ Hero + 5 trụ + danh sách ≤ 2★ theo THÁNG; lỗi cổng này thì giữ cách cũ (điểm TB theo khảo sát).
+ * Màn không hiện thông tin liên hệ người trả lời, cũng KHÔNG hiện ý kiến tự do (noiDung) – QK4.
  */
 
 const ModuleKhaoSat = {
@@ -14,16 +17,58 @@ const ModuleKhaoSat = {
   paletteMacDinh: 'clinical',
   mayChu: 'KS',
   TOI_DA_KQ: 6,
+  thang: '',   // 'mm/yyyy' – rỗng = tháng hiện tại
 
   taiLive: async function() {
-    const ds = await SHIN_API.goi('KS', 'webDsKhaoSat', {});
+    const [ds, th] = await Promise.all([
+      SHIN_API.goi('KS', 'webDsKhaoSat', {}),
+      SHIN_API.goi('KS', 'webTongHopKS', this.thang ? { thang: this.thang } : {})
+    ]);
     if (!ds.ok) return ds;
     const tatCa = (ds.data && ds.data.ds) || [];
     const mo = tatCa.filter(k => k.trangThai === 'Đang mở').concat(tatCa.filter(k => k.trangThai !== 'Đang mở')).slice(0, this.TOI_DA_KQ);
     const kq = await Promise.all(mo.map(k => SHIN_API.goi('KS', 'webKetQuaKS', { maKS: k.maKS })));
     const loi = kq.filter(x => !x.ok).length;
     const data = this.tuV1(ds.data, mo.map((k, i) => kq[i].ok ? kq[i].data : null));
-    return { ok: true, data, ghiChu: loi ? `${loi} khảo sát không đọc được kết quả (${SHIN_API.moTaLoi(kq.find(x => !x.ok))}) – các số khác là số thật.` : '' };
+    const ghi = [];
+    if (loi) ghi.push(`${loi} khảo sát không đọc được kết quả (${SHIN_API.moTaLoi(kq.find(x => !x.ok))}) – các số khác là số thật.`);
+    if (th.ok) this.ghepTongHop(data, th.data, this.thang);
+    else ghi.push(`Tổng hợp 5 trụ ACHSI theo tháng chưa đọc được (${SHIN_API.moTaLoi(th)}) – đang hiện điểm TB theo từng khảo sát (số thật).`);
+    return { ok: true, data, ghiChu: ghi.join(' ') };
+  },
+
+  /** THUẦN. Ghép webTongHopKS vào khuôn màn: Hero tháng + 5 trụ + ≤ 2★ (bỏ noiDung – QK4). Giữ điểm theo khảo sát ở chiSoKS. */
+  ghepTongHop: function(data, t, thang) {
+    t = t || {};
+    const th = t.thang || {}, nhanTh = thang || this.thangHienTai();
+    data.chiSoKS = data.chiSoNhom;
+    data.tieuDeChiSo = '5 TRỤ ACHSI · THÁNG ' + nhanTh;
+    data.chiSoNhom = (t.tru || []).map(x => ({
+      nhan: x.ten || x.ma,
+      diem: x.diem === null || x.diem === undefined ? '–' : ShinApp.soVN(x.diem, 1),
+      tyLe: x.tyLe === null || x.tyLe === undefined ? '–' : ShinApp.ptVN(x.tyLe),
+      mau: this.mau(x.tyLe)
+    }));
+    data.hero.so = [
+      { nhan: 'Hài lòng tháng ' + nhanTh, giaTri: th.haiLong === null || th.haiLong === undefined ? '–' : ShinApp.ptVN(th.haiLong), mau: this.mau(th.haiLong) },
+      { nhan: 'Phiếu hợp lệ trong tháng', giaTri: ShinApp.soVN(th.soPhieu || 0), mau: 'var(--c-blue)' },
+      { nhan: 'Phiếu cần xử lý', giaTri: ShinApp.soVN(th.canXuLy || 0), mau: th.canXuLy ? 'var(--c-yellow)' : 'var(--c-gray)' }
+    ];
+    data.canXuLy = (t.canXuLy || []).map(x => ({ cau: x.cau, khaoSat: x.khaoSat, diem: ShinApp.soVN(x.diem), ngay: x.ngay || '', noiDung: '' }));
+    data.coThang = true;
+    return data;
+  },
+
+  thangHienTai: function() {
+    const d = new Date();
+    return String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+  },
+
+  /** input type=month 'yyyy-mm' ➜ 'mm/yyyy', tải lại màn. */
+  doiThang: function(v) {
+    const k = /^(\d{4})-(\d{2})$/.exec(String(v || ''));
+    this.thang = k ? k[2] + '/' + k[1] : '';
+    ShinApp.chuyenModule('khaosat');
   },
 
   /** THUẦN. webDsKhaoSat + webKetQuaKS[] ➜ khuôn màn. */
@@ -109,6 +154,7 @@ const ModuleKhaoSat = {
         </div>
         <button class="btn-primary" onclick="ShinApp.moV1('KS', 'Quản lý khảo sát')">📝 Quản lý khảo sát trên app KS</button>
       </div>
+      ${d.coThang ? `<label class="ks-thang"><span>📅 Tháng</span><input type="month" value="${e(this.giaTriThang())}" max="${e(this.giaTriThang(this.thangHienTai()))}" onchange="ModuleKhaoSat.doiThang(this.value)" aria-label="Chọn tháng tổng hợp"></label>` : ''}
 
       ${cx.length ? `
         <div class="hn-tieu"><span>⚠️ Ý KIẾN ≤ 2★ CẦN XỬ LÝ · ${cx.length}</span></div>
@@ -131,6 +177,11 @@ const ModuleKhaoSat = {
           </div>`).join('')}
       </div>
       ${tru.length ? '' : '<div class="trong">Chưa có phiếu nào trong tháng.</div>'}
+      ${(d.chiSoKS || []).length ? `
+        <details class="tq-gon">
+          <summary><span>📊 Điểm TB câu 5 mức theo khảo sát</span><span class="tom-tat">${d.chiSoKS.length}</span></summary>
+          ${d.chiSoKS.map(cs => `<div class="hang-tru"><span>${e(cs.nhan)}<br><span class="chu-phu">Điểm TB ${e(cs.diem)}/5 · toàn kỳ</span></span><b style="color:${cs.mau}">${e(cs.tyLe)}</b></div>`).join('')}
+        </details>` : ''}
 
       ${ks.length ? `
         <details class="tq-gon">
@@ -140,9 +191,15 @@ const ModuleKhaoSat = {
 
       <details class="tq-gon">
         <summary><span>ⓘ Quy ước</span></summary>
-        <p class="chu-phu">Phiếu có câu ≤ 2 sao nổi lên đầu để tổ CSKH liên hệ xử lý. Màn này không hiện thông tin liên hệ người trả lời.</p>
+        <p class="chu-phu">Phiếu có câu ≤ 2 sao nổi lên đầu để tổ CSKH liên hệ xử lý. Màn này không hiện thông tin liên hệ người trả lời và ý kiến tự do (xem trên app KS). Hài lòng = tỷ lệ phiếu có điểm TB câu 5 mức ≥ 4; trụ ACHSI theo cột Nhóm của câu hỏi.</p>
       </details>
     `;
+  },
+
+  /** 'mm/yyyy' ➜ 'yyyy-mm' cho input type=month. */
+  giaTriThang: function(t) {
+    const k = /^(\d{2})\/(\d{4})$/.exec(t || this.thang || this.thangHienTai());
+    return k ? k[2] + '-' + k[1] : '';
   },
 
   guiKhaoSat: function() { ShinApp.moV1('KS', 'Khảo sát'); },
