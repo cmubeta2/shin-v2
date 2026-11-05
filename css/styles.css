@@ -649,7 +649,7 @@ body {
   line-height: 1.2;
 }
 .page-sub {
-  font-size: calc(13px * var(--font-scale));
+  font-size: calc(14px * var(--font-scale));
   color: var(--text-muted);
   margin-top: 2px;
 }
@@ -680,7 +680,7 @@ body {
   margin-bottom: 2px;
 }
 .hero-date {
-  font-size: calc(13px * var(--font-scale));
+  font-size: calc(14px * var(--font-scale));
   color: var(--text-muted);
 }
 
@@ -714,7 +714,7 @@ body {
   line-height: 1.1;
 }
 .tq-nhan {
-  font-size: calc(12px * var(--font-scale));
+  font-size: calc(14px * var(--font-scale));
   color: var(--text-muted);
   margin-top: 4px;
   overflow-wrap: anywhere;
@@ -842,7 +842,7 @@ body {
   text-overflow: ellipsis;
 }
 .dong-sub {
-  font-size: calc(13px * var(--font-scale));
+  font-size: calc(14px * var(--font-scale));
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -1896,3 +1896,6 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .qt-quyen tbody th { font-weight: 600; }
 .qt-q-ten { display: block; overflow-wrap: anywhere; }
 .qt-q-ghi { display: block; font-weight: 400; color: var(--text-muted); font-size: calc(14px * var(--font-scale)); overflow-wrap: anywhere; }
+
+/* v2.8.6 – rà UX 375: chữ tối thiểu 14px cho nhãn / chip còn nhỏ (đo bằng trình duyệt không giao diện) */
+.kanban-header, .o-so-loc, .flash-title, .flash-list li, .flash-badge, .module-chip, #appContent .status-pill { font-size: calc(14px * var(--font-scale)); }

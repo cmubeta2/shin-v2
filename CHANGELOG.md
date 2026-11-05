@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.6] – 05/11/2026 (RÀ UX 375 – CHỮ ≥ 14PX)
+
+### 🎨 Giao diện
+- `css/styles.css`: `.page-sub`, `.hero-date`, `.dong-sub`, `.tq-nhan` lên 14px; khối bù cuối tệp cho `.kanban-header`, `.o-so-loc`, `.flash-*`, `.module-chip`, `#appContent .status-pill`.
+- `js/modules/duan.js`, `js/modules/congviec.js`: cỡ chữ nội tuyến 10–13px ➜ 14px.
+
 ## [2.8.5] – 05/11/2026 (QUẢN TRỊ – MA TRẬN QUYỀN M0.2)
 
 ### ✅ Quản trị

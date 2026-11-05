@@ -96,7 +96,7 @@ const ModuleCongViec = {
         <div class="kanban-col">
           <div class="kanban-header">
             <span>⏳ CẦN LÀM</span>
-            <span class="status-pill warn" style="padding:2px 6px; font-size:10px;">${kanban.canLam.length}</span>
+            <span class="status-pill warn" style="padding:2px 8px; font-size:14px;">${kanban.canLam.length}</span>
           </div>
           <div class="kanban-list">
             ${this.theCot('canLam')}
@@ -107,7 +107,7 @@ const ModuleCongViec = {
         <div class="kanban-col">
           <div class="kanban-header">
             <span>⚡ ĐANG LÀM</span>
-            <span class="status-pill live" style="padding:2px 6px; font-size:10px;">${kanban.dangLam.length}</span>
+            <span class="status-pill live" style="padding:2px 8px; font-size:14px;">${kanban.dangLam.length}</span>
           </div>
           <div class="kanban-list">
             ${this.theCot('dangLam')}
@@ -118,7 +118,7 @@ const ModuleCongViec = {
         <div class="kanban-col">
           <div class="kanban-header">
             <span>✅ HOÀN TẤT</span>
-            <span class="status-pill" style="background:var(--c-green)20; color:var(--c-green); padding:2px 6px; font-size:10px;">${kanban.hoanTat.length}</span>
+            <span class="status-pill" style="background:var(--c-green)20; color:var(--c-green); padding:2px 8px; font-size:14px;">${kanban.hoanTat.length}</span>
           </div>
           <div class="kanban-list">
             ${this.theCot('hoanTat')}
