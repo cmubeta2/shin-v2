@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.8.1] – 05/11/2026 (PK – NHÂN SỰ: HỒ SƠ + DUYỆT SỬA HỒ SƠ)
+
+### 🟢 Phòng PTKH (PK)
+- `js/modules/phongkham.js`: thẻ 👥 Nhân sự – mở hồ sơ từng người (`webHoSoNhanSu`), duyệt / không duyệt yêu cầu sửa hồ sơ (`webDuyetSuaHoSo`, không duyệt bắt buộc lý do). Lỗi cổng hiện ngay dưới dòng, không thay bằng số mẫu.
+- `js/demo_data.js`: 1 yêu cầu sửa hồ sơ mẫu (dữ liệu giả).
+
 ## [2.8.0] – 05/11/2026 (QUẢN TRỊ – NGƯỜI DÙNG & APP GHI THẬT)
 
 ### 🟢 Quản trị (Tầng 0A)
