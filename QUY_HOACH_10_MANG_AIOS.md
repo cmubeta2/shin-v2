@@ -108,7 +108,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M2.1 | Danh bạ hợp nhất: KSK Doanh nghiệp, Nhà cung ứng, Học viên, CTV | ✅ | – |
 | M2.2 | Hộp lead mới đổ về từ Web Phễu (M8.3) | ✅ mẫu / 🟡 tiếp nhận | v2.3.0 |
 | M2.3 | Pipeline B2B: Tiếp cận → Báo giá → Hợp đồng → Triển khai → Tái ký | 🟡 v2.8.2 đếm + lọc phía trình duyệt theo Trạng thái (`webCRM`, chờ Hub lên app) | v2.3.0 |
-| M2.4 | Lịch sử tương tác & nhắc chăm sóc (đẩy việc sang Task Bus) | ⬜ | v2.3.0 |
+| M2.4 | Lịch sử tương tác & nhắc chăm sóc (đẩy việc sang Task Bus) | 🟡 v2.9.3 nhắc chăm sóc lead theo tuổi (🟡 > 24 giờ · 🔴 > 48 giờ, sao chép tin) / ⬜ lịch sử tương tác (cần cổng v1) | v2.3.0 |
 
 > **Ràng buộc bất biến:** CRM **không lưu bệnh nhân** (tuân thủ `KHONG_DUA_VAO.md`). Lead "đặt lịch khám" đi thẳng về máy chủ PK của Mảng 5.
 

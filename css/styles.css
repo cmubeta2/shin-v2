@@ -1924,3 +1924,6 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 
 /* v2.9.0 – rà UX toàn màn: thẻ gập "Chi tiết" đủ vùng bấm 44px */
 .chi-tiet-gon summary { min-height: 44px; }
+.crm-lead { border-left: 4px solid transparent; padding-left: 8px; }
+.crm-lead-vang { border-left-color: var(--c-yellow); }
+.crm-lead-do { border-left-color: var(--c-red); }

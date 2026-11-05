@@ -122,7 +122,8 @@ window.SHIN_DEMO_DATA = {
     ],
     leadMoi: [
       { nguon: "Landing Page KSK Doanh nghiệp (Mảng 8)", ten: "Công ty May Xuất Khẩu An Xuyên", soDt: "0913.xxx.554", slKham: "350 người", thoiGian: "10 phút trước" },
-      { nguon: "Form Tuyển sinh Đại học Từ xa GDU", ten: "Lê Hoàng Yến", soDt: "0982.xxx.901", khoa: "Quản trị Kinh doanh", thoiGian: "45 phút trước" }
+      { nguon: "Form Tuyển sinh Đại học Từ xa GDU", ten: "Lê Hoàng Yến", soDt: "0982.xxx.901", khoa: "Quản trị Kinh doanh", thoiGian: "45 phút trước" },
+      { nguon: "Landing Page KSK Doanh nghiệp (Mảng 8)", ten: "Công ty Mẫu Thủy Sản B", soDt: "0900.xxx.000", slKham: "120 người", thoiGian: "3 ngày trước" }
     ]
   },
 

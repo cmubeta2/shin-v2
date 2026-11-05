@@ -48,6 +48,39 @@ const ModuleCRM = {
     };
   },
 
+  /* v2.9.3 (M2.4) – Nhắc chăm sóc lead PHÍA TRÌNH DUYỆT theo tuổi lead (cột Luc của LeadMoi, webCRM trả "dd/mm/yyyy HH:mm"):
+     🟢 < 24 giờ · 🟡 24–48 giờ · 🔴 > 48 giờ chưa chăm sóc. Lịch sử tương tác đầy đủ cần cột / cổng v1 – chưa có. */
+  /** THUẦN. Chuỗi thời điểm lead ➜ số giờ đã qua (null nếu không đọc được). bayGio: Date. */
+  tuoiLead: function(s, bayGio) {
+    const n = bayGio || new Date(), t = String(s || '').trim().toLowerCase();
+    let m = t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2}))?$/);
+    if (m) return (n - new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0))) / 36e5;
+    m = t.match(/^(\d+)\s*(phút|giờ|ngày)\s*trước$/);
+    if (m) return +m[1] * ({ 'phút': 1 / 60, 'giờ': 1, 'ngày': 24 })[m[2]];
+    m = t.match(/^(\d{1,2}):(\d{2})\s*hôm nay$/);
+    if (m) return (n - new Date(n.getFullYear(), n.getMonth(), n.getDate(), +m[1], +m[2])) / 36e5;
+    return null;
+  },
+  /** THUẦN. Số giờ ➜ 'xanh' | 'vang' | 'do' | '' (không rõ). */
+  mucLead: function(gio) { return gio == null || isNaN(gio) ? '' : gio > 48 ? 'do' : gio >= 24 ? 'vang' : 'xanh'; },
+  NHAN_LEAD: { xanh: '🟢', vang: '🟡 > 24 giờ', do: '🔴 > 48 giờ' },
+
+  /** THUẦN. Tin nhắc chăm sóc (lead 🔴 trước) để dán Telegram / ⚡ Giao việc. */
+  tinNhacLead: function(ds, bayGio) {
+    const dong = (ds || []).map(l => ({ l, m: this.mucLead(this.tuoiLead(l.thoiGian, bayGio)) })).filter(x => x.m === 'do' || x.m === 'vang')
+      .sort((a, b) => (a.m === 'do' ? 0 : 1) - (b.m === 'do' ? 0 : 1))
+      .map(x => `${x.m === 'do' ? '🔴' : '🟡'} ${x.l.ten} – ${x.l.nguon}${x.l.thoiGian ? ' · từ ' + x.l.thoiGian : ''}`);
+    return dong.length ? `⏰ Lead chưa chăm sóc (${dong.length})\n` + dong.join('\n') : '';
+  },
+
+  saoChepNhacLead: function() {
+    const t = this.tinNhacLead((this._d || {}).leadMoi);
+    if (!t) return ShinApp.toast('Không có lead nào quá 24 giờ.', 'info');
+    const xong = () => ShinApp.toast('Đã sao chép nhắc chăm sóc – dán vào Telegram hoặc ⚡ Giao việc.', 'success');
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(xong, () => ShinApp.toast('Trình duyệt chặn sao chép.', 'error'));
+    else ShinApp.toast('Trình duyệt không hỗ trợ sao chép.', 'error');
+  },
+
   render: function(container, data) {
     const d = data || window.SHIN_DEMO_DATA.crm;
     this._d = d;
@@ -58,6 +91,7 @@ const ModuleCRM = {
     const gd = this._gd;
     const b2b = ds.filter(x => x.loai === 'B2B Khám Sức Khỏe');
     const demGD = ten => b2b.filter(x => this.giaiDoan(x.trangThai) === ten).length;
+    const quaHanLead = (d.leadMoi || []).filter(l => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); return m === 'vang' || m === 'do'; }).length;
     const hien = ds.filter(x => (!loc || x.loai === loc) && (!gd || (x.loai === 'B2B Khám Sức Khỏe' && this.giaiDoan(x.trangThai) === gd)));
 
     container.innerHTML = `
@@ -88,10 +122,11 @@ const ModuleCRM = {
 
       ${(d.leadMoi || []).length ? `
         <details class="tq-gon" open>
-          <summary><span>🔔 Lead mới từ web phễu</span><span class="tom-tat">${d.leadMoi.length}</span></summary>
-          ${d.leadMoi.map(l => `
-            <div class="hang-tru"><span><b>${e(l.ten)}</b><br><span class="chu-phu">${e([l.nguon, l.soDt, l.slKham || l.khoa || l.ghiChu].filter(Boolean).join(' · '))}</span></span>
-              <span class="chu-phu">${e(l.thoiGian)}</span></div>`).join('')}
+          <summary><span>🔔 Lead mới từ web phễu</span><span class="tom-tat">${d.leadMoi.length}${quaHanLead ? ' · ⏰ ' + quaHanLead : ''}</span></summary>
+          ${d.leadMoi.map(l => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); return `
+            <div class="hang-tru crm-lead crm-lead-${m || 'xam'}"><span><b>${e(l.ten)}</b><br><span class="chu-phu">${e([l.nguon, l.soDt, l.slKham || l.khoa || l.ghiChu].filter(Boolean).join(' · '))}</span></span>
+              <span class="chu-phu">${e(l.thoiGian)}${m === 'vang' || m === 'do' ? '<br>' + this.NHAN_LEAD[m] : ''}</span></div>`; }).join('')}
+          ${quaHanLead ? `<button class="btn-secondary" style="min-height:44px; font-size:14px; width:100%; margin-top:8px;" onclick="ModuleCRM.saoChepNhacLead()">📋 Sao chép nhắc chăm sóc (${quaHanLead} lead > 24 giờ)</button>` : ''}
         </details>` : ''}
 
       ${b2b.length ? `

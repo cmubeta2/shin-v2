@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.3] – 06/11/2026 (NHẮC CHĂM SÓC LEAD M2.4)
+
+### ✨ Tính năng
+- `js/modules/crm.js`: khối 🔔 Lead mới tính tuổi lead phía trình duyệt từ cột Luc (`webCRM` trả "dd/mm/yyyy HH:mm"; Demo đọc "N phút/giờ/ngày trước", "HH:MM hôm nay") – 🟢 < 24 giờ · 🟡 24–48 giờ · 🔴 > 48 giờ, viền màu từng dòng, đếm ⏰ trên tiêu đề, nút sao chép tin nhắc chăm sóc (🔴 trước) để dán Telegram / ⚡ Giao việc. Không gửi gì đi.
+- `js/demo_data.js`: thêm 1 lead MẪU 3 ngày tuổi (không dữ liệu thật). `css/styles.css`: `.crm-lead-*`.
+
 ## [2.9.2] – 06/11/2026 (TRÍCH BÀI HỌC KINH NGHIỆM M9.4)
 
 ### ✨ Tính năng
