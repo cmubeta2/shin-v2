@@ -23,14 +23,17 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 
 ## v2.4.0 – App đã có, cần thêm cổng
 
-### KS – `70_KhaoSat` · `webTongQuan(token)` (chỉ đọc)
+### KS – `70_KhaoSat` · `webTongHopKS(token, {thang?})` + `webDsKhaoSat(token)` (chỉ đọc – sửa 05/11 theo mã v1, không có `webTongQuan`)
+
+Máy chủ KS nhận `ham(token, du)` với du ĐỐI TƯỢNG ➜ v2 gọi `SHIN_API.goi('KS', …, {})`.
 
 ```js
-{ thang: { soPhieu, haiLong /*0..1|null*/, canXuLy },
-  tru: [{ ma:'A', ten, diem /*1..5|null*/, tyLe /*0..1|null*/ }],          // 5 trụ ACHSI
-  khaoSat: [{ ma, ten, trangThai, soPhieu, moTu, dongLuc }],
-  canXuLy: [{ ma, khaoSat, cau, diem /*≤2*/, ngay, noiDung }] }            // KHÔNG có SĐT / tên người trả lời (QK4)
+webTongHopKS → { thang: { soPhieu, haiLong /*0..1|null*/, canXuLy },
+  tru: [{ ma:'A', ten, diem /*1..5|null*/, tyLe /*0..1|null*/ }],          // 5 trụ ACHSI gộp KS đang mở / tháng
+  canXuLy: [{ maPhieu, khaoSat, cau, diem /*≤2*/, ngay, noiDung }] }       // KHÔNG có SĐT / tên người trả lời (QK4)
+webDsKhaoSat → { ok, ds: [{ maKS, tieuDe, moTa, doiTuong, trangThai, han, nhieuLan, soCau, … }], dem: { dangMo, nhap, daDong } }
 ```
+Cổng khác đã có: `webKetQuaKS`, `webXuatKS` (L3), điền công khai `webCongKhai*` (không token), liên thông `ksSoLieu` (L4).
 
 - **Quyền:** Admin và "Quản lý khảo sát".
 - **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).

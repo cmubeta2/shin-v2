@@ -26,6 +26,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.6.7 ✅ – KHẢO SÁT GỌI ĐÚNG CỔNG THẬT (05/11/2026)
+- Màn 🩺 Khảo sát gọi `webTongHopKS` + `webDsKhaoSat` (theo `congWeb_()` thật của 70_KhaoSat); HOP_DONG_CONG_V2.md mục KS sửa cho khớp mã v1.
+- Còn chờ v1: KS L6 (`webTongHopKS`) «ĐÃ CODE v1.4.4» – chờ kiểm + đưa lên app thì hero / 5 trụ / ý kiến ≤ 2★ có số thật.
+
 ### PHIÊN BẢN v2.6.6 ✅ – PTKH GỐC ĐỌC THẲNG (05/11/2026)
 - Màn PTKH Gốc đọc thẳng app PTKH v1.299 qua `webGoi` (chỉ đọc): `webKhoiDong` (tóm tắt 14 ngày, lịch tuần, việc tuần) + `webDashboard(ky)` (Tuần / Tháng / Quý).
 - Thao tác ghi PTKH (nộp báo cáo, duyệt, xếp lịch) vẫn mở app PTKH. Khuôn `webDashboard` dài và đổi theo phiên bản PTKH ➜ v2 chỉ hiện các trường số của `toi` / `to` / `phong` – cần đối chiếu lại với số thật khi anh mở bằng token.

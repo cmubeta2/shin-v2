@@ -1,9 +1,8 @@
 /**
  * SHIN v2 – Mảng 1: Khảo sát hài lòng (máy chủ 70_KhaoSat)
- * Live (v2.4.0 – HOP_DONG_CONG_V2.md mục KS): webTongQuan() ➜
- *   {thang: {soPhieu, haiLong, canXuLy}, tru: [{ma, ten, diem, tyLe}], khaoSat: [{ma, ten, trangThai, soPhieu, moTu, dongLuc}],
- *    canXuLy: [{ma, khaoSat, cau, diem, ngay, noiDung}]}   – không có thông tin liên hệ người trả lời (QK4).
- * App KS v1 chưa mở cổng ➜ máy chủ trả 'hanh' ➜ màn hiện MẪU (dải vàng).
+ * Live (v2.6.7 – HOP_DONG_CONG_V2.md mục KS): webTongHopKS({thang}) ➜
+ *   {thang: {soPhieu, haiLong, canXuLy}, tru: [{ma, ten, diem, tyLe}], canXuLy: [{maPhieu, khaoSat, cau, diem, ngay, noiDung}]}
+ *   + webDsKhaoSat() ➜ {ds: [{maKS, tieuDe, trangThai, han, soCau…}], dem}   – không có thông tin liên hệ người trả lời (QK4).
  */
 
 const ModuleKhaoSat = {
@@ -13,10 +12,20 @@ const ModuleKhaoSat = {
   paletteMacDinh: 'clinical',
   mayChu: 'KS',
 
+  /**
+   * v2.6.7: cổng THẬT của app KS (70_KhaoSat congWeb_ – không có webTongQuan): webTongHopKS({thang}) (L6, v1.4.4) + webDsKhaoSat() (đã lên app).
+   * Máy chủ KS nhận ham(token, du) với du ĐỐI TƯỢNG ➜ SHIN_API.goi (không dùng goiCong / du.a).
+   * webTongHopKS chưa lên app ➜ hero / 5 trụ để '–' kèm dải vàng, danh sách khảo sát vẫn là số thật.
+   */
   taiLive: async function() {
-    const kq = await SHIN_API.goiCong('KS', 'webTongQuan');
-    if (!kq.ok) return kq;
-    return { ok: true, data: this.tuV1(kq.data) };
+    const [th, ds] = await Promise.all([SHIN_API.goi('KS', 'webTongHopKS', {}), SHIN_API.goi('KS', 'webDsKhaoSat', {})]);
+    if (!th.ok && !ds.ok) return th.loi === 'hanh' ? ds : th;
+    const data = this.tuV1(th.ok ? th.data : {});
+    if (ds.ok) data.khaoSat = ((ds.data || {}).ds || []).map(k => ({ ma: k.maKS, ten: k.tieuDe, trangThai: k.trangThai, dongLuc: k.han, soCau: k.soCau }));
+    const kq = { ok: true, data };
+    if (!th.ok) kq.ghiChu = th.loi === 'hanh' ? 'App Khảo sát chưa lên bản có cổng tổng hợp (webTongHopKS – KS L6) – ô số và 5 trụ để trống; danh sách khảo sát bên dưới là số thật.' : 'Tổng hợp tháng: ' + SHIN_API.moTaLoi(th);
+    else if (!ds.ok) kq.ghiChu = 'Danh sách khảo sát: ' + SHIN_API.moTaLoi(ds);
+    return kq;
   },
 
   mau: function(tyLe) {
@@ -32,8 +41,8 @@ const ModuleKhaoSat = {
       hero: {
         so: [
           { nhan: 'Hài lòng chung', giaTri: ShinApp.ptVN(t.haiLong), mau: this.mau(t.haiLong) },
-          { nhan: 'Phiếu tháng này', giaTri: ShinApp.soVN(t.soPhieu || 0), mau: 'var(--c-blue)' },
-          { nhan: 'Ý kiến cần xử lý', giaTri: ShinApp.soVN(t.canXuLy || 0), mau: t.canXuLy ? 'var(--c-yellow)' : 'var(--c-green)' }
+          { nhan: 'Phiếu tháng này', giaTri: t.soPhieu === undefined ? '–' : ShinApp.soVN(t.soPhieu), mau: 'var(--c-blue)' },
+          { nhan: 'Ý kiến cần xử lý', giaTri: t.canXuLy === undefined ? '–' : ShinApp.soVN(t.canXuLy), mau: t.canXuLy ? 'var(--c-yellow)' : 'var(--c-green)' }
         ]
       },
       chiSoNhom: (k.tru || []).map(x => ({
@@ -43,7 +52,7 @@ const ModuleKhaoSat = {
         mau: this.mau(x.tyLe)
       })),
       khaoSat: k.khaoSat || [],
-      canXuLy: k.canXuLy || []
+      canXuLy: (k.canXuLy || []).map(x => Object.assign({ ma: x.maPhieu }, x))
     };
   },
 
@@ -102,7 +111,7 @@ const ModuleKhaoSat = {
       ${ks.length ? `
         <details class="tq-gon">
           <summary><span>📋 Các khảo sát</span><span class="tom-tat">${ks.length}</span></summary>
-          ${ks.map(x => `<div class="hang-tru"><span>${e(x.ten)}<br><span class="chu-phu">${e([x.trangThai, x.moTu ? 'từ ' + x.moTu : '', x.dongLuc ? 'đến ' + x.dongLuc : ''].filter(Boolean).join(' · '))}</span></span><b>${ShinApp.soVN(x.soPhieu || 0)} phiếu</b></div>`).join('')}
+          ${ks.map(x => `<div class="hang-tru"><span>${e(x.ten)}<br><span class="chu-phu">${e([x.trangThai, x.moTu ? 'từ ' + x.moTu : '', x.dongLuc ? 'đến ' + x.dongLuc : ''].filter(Boolean).join(' · '))}</span></span><b>${x.soPhieu === undefined || x.soPhieu === null ? ShinApp.soVN(x.soCau || 0) + ' câu' : ShinApp.soVN(x.soPhieu) + ' phiếu'}</b></div>`).join('')}
         </details>` : ''}
 
       <details class="tq-gon">

@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.7] – 05/11/2026 (KHẢO SÁT GỌI ĐÚNG CỔNG THẬT)
+
+### Sửa
+- `js/modules/khaosat.js`: bỏ `webTongQuan` (app KS không có cổng này) ➜ gọi `webTongHopKS({})` (KS L6, đã code v1.4.4) + `webDsKhaoSat()` (đã lên app v1.4.3), đúng giao thức `ham(token, du)` với du đối tượng.
+- Cổng tổng hợp chưa lên app ➜ ô số / 5 trụ để "–" kèm dải vàng, danh sách khảo sát vẫn là số thật (số câu từng khảo sát). Không thay số thật bằng số mẫu.
+
 ## [2.6.6] – 05/11/2026 (PTKH GỐC ĐỌC THẲNG QUA CỔNG webGoi)
 
 ### Mới
