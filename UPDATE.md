@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.6.4** · Cập nhật ngày: **01/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.6.5** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.6.5 ✅ – PHÒNG PTKH NỐI THẬT 19 CỔNG APP PK v1.0.7 (05/11/2026)
+- **Mục tiêu:** màn 🏥 Phòng PTKH chạy số thật trên máy chủ `21_PhongPTKH` (PK L1–L5 đã lên app v1.0.7).
+- **Nội dung:** 9 thẻ theo quyền `webKhoiDong.mo` – Hôm nay, Báo cáo ngày + ảnh minh chứng, Công việc (chi tiết, việc con, trao đổi, báo tiến độ chỉ gửi phần đổi, thêm việc cá nhân), Lịch tuần + đơn nghỉ (chỉ đọc), Thông báo (đã đọc / đọc hết), Góp ý (+ảnh), Hồ sơ (+đề nghị sửa), ⚡ Duyệt (Hoàn tác 6s, không gửi gì khi Hoàn tác), 👥 Nhân sự (duyệt sửa hồ sơ). Demo: dữ liệu giả đúng dạng 19 cổng.
+- **Sửa hợp đồng:** cổng PK nhận `ham(token, du)` với `du` là object (không phải `du.a`) – đã ghi lại HOP_DONG_CONG_V2.md.
+- **Còn chờ v1:** xin nghỉ / đổi ca / xếp lịch tuần (ghi) – PK chưa có `webGuiDonNghi`, `webHuyDonNghi`, `webLuuXepLich`, `webGoiYXepLich` trong congWeb_ (đi qua PTKH `webGoi`) → v2 tạm mở app PK v1.
 
 ### PHIÊN BẢN v2.6.4 ✅ – MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T (01/11/2026)
 - **Mục tiêu:** Xây dựng module đánh giá văn hóa hành vi 5T cốt lõi tham chiếu phương pháp luận Bộ 83 Tiêu chí Chất lượng Bộ Y tế, số hóa trên SHIN AIOS và tích hợp Second Brain.

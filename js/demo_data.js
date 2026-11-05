@@ -151,25 +151,50 @@ window.SHIN_DEMO_DATA = {
   // [5] NHÂN SỰ & VẬN HÀNH PHÒNG KHÁM
   // ==========================================
   phongkham: {
-    hero: {
-      chao: "Vận Hành Phòng Khám & PTKH 🏥",
-      ngay: "Ca trực: Sáng 07:00 – 16:30",
-      so: [
-        { nhan: "Báo cáo nộp", giaTri: "18/20", dvt: "nhân sự", mau: "var(--c-blue)" },
-        { nhan: "Minh chứng ảnh", giaTri: "45", dvt: "ảnh", mau: "var(--c-green)" },
-        { nhan: "Đổi ca trực", giaTri: "1", dvt: "yêu cầu", mau: "var(--c-yellow)" }
-      ],
-      nutChinh: { nhan: "📷 Gửi Báo Cáo & Minh Chứng", hanhDong: "baoCao" }
-    },
-    nhanSuTruc: [
-      { ten: "Nguyễn Thị Kim Thư", viTri: "Điều dưỡng Trưởng", ca: "Sáng", tt: "Đã nộp báo cáo", mau: "var(--c-green)" },
-      { ten: "Trần Văn Nghĩa", viTri: "CSKH Ngoại trú", ca: "Sáng", tt: "Đang trực", mau: "var(--c-blue)" },
-      { ten: "Lê Hoàng Phúc", viTri: "Tiếp đón & Hướng dẫn", ca: "Sáng", tt: "Đã nộp báo cáo", mau: "var(--c-green)" },
-      { ten: "Phạm Ngọc Bích", viTri: "Tổng đài viên", ca: "Chiều", tt: "Chưa tới ca", mau: "var(--c-gray)" }
-    ]
+    // v2.6.5: dữ liệu GIẢ đúng dạng 19 cổng PK (KE_HOACH_GIAO_DIEN_PK_AGY.md mục 4) – tên người là tên mẫu
+    cong: {
+      webKhoiDong: { nguoi: { hoTen: "Nguyễn Văn Mẫu", vaiTro: "Tổ trưởng", to: "CSKH", viTri: "Tiếp đón", quyen: ["nv", "totruong", "lanhdao"] },
+        app: { ma: "PK", ten: "Phòng PTKH", phienBan: "v1.0.7", telegramBot: "" },
+        mo: ["homnay", "baocao", "congviec", "lich", "thongbao", "gopy", "toi", "duyet", "nhansu"], dem: { thongBao: 2, choDuyet: 3 } },
+      webHomNay: { ngay: "05/11/2026", viecQuaHan: 1, viecHomNay: 3, baoCaoHomNay: "chua_nop", choDuyet: 3,
+        canXuLy: [
+          { id: "PC|1", ten: "Gọi lại khách hẹn tái khám", nguon: "Được giao", han: "04/11/2026", muc: "do", tab: "congviec" },
+          { id: "PC|2", ten: "Cập nhật bảng trực tuần sau", nguon: "Được giao", han: "06/11/2026", muc: "vang", tab: "congviec" },
+          { id: "NG|3", ten: "Hỗ trợ tổ Tiếp đón giờ cao điểm", nguon: "Nhờ giúp", han: "05/11/2026", muc: "xanh", tab: "congviec" }
+        ],
+        thongBaoMoi: [{ id: "TB1", tieuDe: "Lịch họp giao ban thứ Sáu", luc: "05/11 08:10", daDoc: false }, { id: "TB2", tieuDe: "Báo cáo 04/11 đã được duyệt", luc: "04/11 17:30", daDoc: true }] },
+      webBaoCao: { soDaNop: 3, soChuaNop: 1, soChoDuyet: 1,
+        mau: [{ ma: "viec", nhan: "Việc đã làm", kieu: "chu", batBuoc: true }, { ma: "ketqua", nhan: "Kết quả (số khách)", kieu: "so", batBuoc: false },
+          { ma: "khokhan", nhan: "Khó khăn", kieu: "chu", batBuoc: false }, { ma: "mai", nhan: "Kế hoạch ngày mai", kieu: "chu", batBuoc: false }],
+        lichSu: [{ ngay: "04/11/2026", trangThai: "da_duyet", tomTat: "Tiếp đón 42 khách, gọi lại 15 khách", soAnh: 2 },
+          { ngay: "03/11/2026", trangThai: "tra_lai", tomTat: "Thiếu ảnh minh chứng", soAnh: 0, lyDoTraLai: "Bổ sung ảnh bảng trực" },
+          { ngay: "02/11/2026", trangThai: "cho", tomTat: "Hỗ trợ tổng đài giờ cao điểm", soAnh: 1 }] },
+      webCongViec: { dangLam: 4, quaHan: 1, xongTuan: 6,
+        viec: [{ id: "PC|1", ten: "Gọi lại khách hẹn tái khám", loai: "giao", han: "04/11/2026", tienDo: 60, nguoiGiao: "Lãnh đạo phòng", muc: "do" },
+          { id: "PC|2", ten: "Cập nhật bảng trực tuần sau", loai: "giao", han: "06/11/2026", tienDo: 30, nguoiGiao: "Lãnh đạo phòng", muc: "vang" },
+          { id: "CN|5", ten: "Ôn quy trình tiếp đón mới", loai: "canhan", han: "08/11/2026", tienDo: 0, nguoiGiao: "", muc: "xam" }] },
+      webChiTietViec: { ten: "Gọi lại khách hẹn tái khám", moTa: "Danh sách khách hẹn tái khám trong tuần.", han: "04/11/2026", tienDo: 60,
+        viecCon: [{ id: "VC1", ten: "Lọc danh sách khách", xong: true }, { id: "VC2", ten: "Gọi nhóm 1", xong: true }, { id: "VC3", ten: "Gọi nhóm 2", xong: false }],
+        traoDoi: [{ nguoi: "Lãnh đạo phòng", luc: "03/11 09:00", chu: "Ưu tiên khách hẹn trước 10h." }] },
+      webLichTuan: { tuan: "T2 02/11 – CN 08/11", phepCon: 8, nghiBuCon: 1,
+        ngay: [{ ngay: "02/11", thu: "T2", viTri: "Tiếp đón", ca: "Sáng" }, { ngay: "03/11", thu: "T3", viTri: "Tổng đài", ca: "Chiều" }, { ngay: "04/11", thu: "T4", viTri: "Tiếp đón", ca: "Sáng" },
+          { ngay: "05/11", thu: "T5", viTri: "CSKH", ca: "Sáng" }, { ngay: "06/11", thu: "T6", viTri: "Tiếp đón", ca: "Chiều" }, { ngay: "07/11", thu: "T7", viTri: "Tiếp đón", ca: "Sáng" }, { ngay: "08/11", thu: "CN", nghi: true }],
+        donNghi: [{ id: "DN1", loai: "nghi_tuan", tuNgay: "08/11/2026", denNgay: "08/11/2026", trangThai: "cho", lyDo: "Nghỉ tuần" }] },
+      webThongBao: { ds: [{ id: "TB1", tieuDe: "Lịch họp giao ban thứ Sáu", noiDung: "8h00 tại phòng họp tầng 2", luc: "05/11 08:10", daDoc: false },
+        { id: "TB3", tieuDe: "Có việc mới được giao", noiDung: "Cập nhật bảng trực tuần sau", luc: "05/11 07:45", daDoc: false },
+        { id: "TB2", tieuDe: "Báo cáo 04/11 đã được duyệt", noiDung: "", luc: "04/11 17:30", daDoc: true }] },
+      webGopYCuaToi: { ds: [{ id: "GY1", loai: "gop_y", noiDung: "Thêm nút gọi nhanh trên danh sách khách", luc: "01/11/2026", trangThai: "dang_xu_ly", traLoi: "", soAnh: 0 }] },
+      webHoSo: { hoTen: "Nguyễn Văn Mẫu", viTri: "Tiếp đón", to: "CSKH", ngayVao: "01/03/2024", email: "mau@vidu.vn", dienThoai: "(mẫu)" },
+      webChoDuyet: { baoCao: [{ id: "BC9", nguoi: "Trần Thị Mẫu", ngay: "04/11/2026", tomTat: "Tiếp đón 38 khách", anh: [] }],
+        nghi: [{ id: "DN7", nguoi: "Lê Văn Mẫu", loai: "nghi_om", tuNgay: "05/11/2026", denNgay: "06/11/2026", lyDo: "Sốt" }],
+        lichTuan: [{ id: "LT2", to: "CSKH", tuan: "T2 09/11 – CN 15/11" }] },
+      webNhanSu: { dangLam: 18, moiVao: 2, choSua: 1,
+        ds: [{ ma: "NV01", hoTen: "Nguyễn Văn Mẫu", viTri: "Tiếp đón", to: "CSKH", trangThai: "Đang làm" }, { ma: "NV02", hoTen: "Trần Thị Mẫu", viTri: "Tổng đài", to: "CSKH", trangThai: "Đang làm" }],
+        yeuCauSua: [{ id: "YC1", ma: "NV02", hoTen: "Trần Thị Mẫu", truong: "Email", giaTriCu: "cu@vidu.vn", giaTriMoi: "moi@vidu.vn", lyDo: "Đổi email", luc: "04/11" }] },
+      webHoSoNhanSu: { hoTen: "Trần Thị Mẫu", viTri: "Tổng đài", to: "CSKH", ngayVao: "15/06/2025", email: "moi@vidu.vn", dienThoai: "(mẫu)" }
+    }
   },
 
-  // ==========================================
   // [6] QUẢN LÝ DỰ ÁN & BÁO CÁO NHANH 4 KHỐI (DAILY FLASH)
   // ==========================================
   duan: {

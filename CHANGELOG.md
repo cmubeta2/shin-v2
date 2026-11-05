@@ -4,6 +4,19 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.6.5] – 05/11/2026 (PHÒNG PTKH NỐI THẬT APP PK v1.0.7)
+
+### 🟢 Nối thật
+- `js/modules/phongkham.js` viết lại theo hợp đồng mục 4 KE_HOACH_GIAO_DIEN_PK_AGY.md: 9 thẻ (Hôm nay · Báo cáo · Công việc · Lịch tuần · Thông báo · Góp ý · Hồ sơ · Duyệt · Nhân sự), thẻ hiện theo `webKhoiDong.mo`, badge đếm thật `dem.choDuyet` / `dem.thongBao`.
+- Gọi 19 cổng `congWeb_()` PK bằng `SHIN_API.goi('PK', hanh, du)` (du object). Lỗi cổng → báo rõ + nút Tải lại, không thay bằng số mẫu.
+- Nộp báo cáo + ảnh minh chứng (nén ≤ 1600px JPEG, ≤ 6 ảnh, base64 không tiền tố); báo `loiAnh` nếu ảnh nào lỗi.
+- Duyệt báo cáo / đơn nghỉ / lịch tuần: Hoàn tác 6 giây, ghi đúng 1 lần; trả lại bắt buộc lý do.
+- Công việc: báo tiến độ chỉ gửi phần thay đổi (tiến độ, việc con, trao đổi mới).
+
+### 🛠 Sửa
+- Số phiên bản trên Header (`app.js` còn ghi v2.6.3) → v2.6.5; `PHIEN_BAN_SW` → shin-v2.6.5.
+- Thanh thẻ PK trên điện thoại cuộn ngang trong hàng (không đẩy trang), ô nhập 16px, vùng bấm ≥ 44px.
+
 ## [2.6.4] – 01/11/2026 (MODULE ĐÁNH GIÁ VĂN HÓA HÀNH VI 5T CHUẨN 83 TIÊU CHÍ BỘ Y TẾ)
 
 ### ⭐ Mới: Module Đánh Giá Văn Hóa Hành Vi 5T Bậc Thang

@@ -12,7 +12,8 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Gắn hàm:** thêm hàm vào bảng trắng `congWeb_()` của app.
 - **Cách nhận tham số:**
   - Hub nhận `ham(token, du)`.
-  - KPI, TS, KS, PK nhận `ham(token, ...du.a)` qua `bocCong…_`.
+  - KPI, TS, KS nhận `ham(token, ...du.a)` qua `bocCong…_`.
+  - **PK (`21_PhongPTKH`) nhận `ham(token, du)` – du là object** (sửa 05/11 theo mã v1.0.7; v2 gọi `SHIN_API.goi('PK', hanh, du)`).
 - **Kiểm quyền:** từ chối thì ném `loiQuyen_()` để v2 hiện "chưa có quyền".
 - **Lỗi khác:** ném `Error` có câu tiếng Việt, v2 hiện nguyên câu đó.
 - **Tiền:** là số đồng (number). Không gửi chuỗi đã định dạng; v2 tự định dạng kiểu Việt Nam.
@@ -35,13 +36,16 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 - **Quyền:** Admin và "Quản lý khảo sát".
 - **Thuộc dòng:** KS L1 (khung), L3 (kết quả), L4 (liên thông).
 
-### PK – `21_PhongPTKH` · `webHomNay(token)` (chỉ đọc, dùng chung file PTKH qua DB_ID)
+### PK – `21_PhongPTKH` · 19 cổng (đã lên app v1.0.7 – L1–L5 [x]) – v2.6.5 nối thật
+
+Dạng dữ liệu = mục 4 `He sinh thai Shin/21_PhongPTKH/KE_HOACH_GIAO_DIEN_PK_AGY.md` (trọng tài là `congWeb_()` trong `10_WebApp.gs`):
+`webKhoiDong` · `webHomNay` · `webBaoCao` · `webNopBaoCao` · `webChoDuyet` · `webDuyet` · `webCongViec` · `webChiTietViec` · `webCapNhatViec` · `webThemViecCaNhan` · `webThongBao` · `webDaDocThongBao` · `webGopYCuaToi` · `webGuiGopY` · `webHoSo` · `webDeNghiSuaHoSo` · `webNhanSu` · `webHoSoNhanSu` · `webDuyetSuaHoSo` · `webLichTuan` · `webBangXepLich`.
 
 ```js
-{ ngay: 'dd/mm/yyyy', baoCao: { daNop, tong }, minhChung /*số ảnh hôm nay*/, doiCa /*đơn chờ*/,
-  nhanSu: [{ ten, viTri, ca, trangThai: 'da_nop'|'dang_truc'|'chua_toi_ca'|'chua_nop' }],
-  viecCa: [{ tieuDe, han, xong }] }
+webHomNay() → { ngay, viecQuaHan, viecHomNay, baoCaoHomNay:'da_nop'|'chua_nop'|'nghi',
+                canXuLy:[{id, ten, nguon, han, muc, tab}], thongBaoMoi:[{id, tieuDe, luc, daDoc}], choDuyet }
 ```
+(Dạng cũ `{baoCao:{daNop,tong}, minhChung, doiCa, nhanSu, viecCa}` bỏ – v1 không làm.) Chưa có trong congWeb_: `webGuiDonNghi`, `webHuyDonNghi`, `webLuuXepLich`, `webGoiYXepLich` (ghi qua PTKH `webGoi`).
 
 - **Quyền:** lãnh đạo phòng và tổ trưởng xem cả phòng; nhân viên chỉ thấy dòng của mình.
 - **Thuộc dòng:** PK L1–L3.
