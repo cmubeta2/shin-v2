@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.4] – 06/11/2026 (ĐỒNG BỘ CẤU HÌNH M0.1)
+
+### ✨ Tính năng
+- `js/modules/caidat_module.js`: khối "Đồng bộ cấu hình sang máy khác" – sao chép / dán mã `SHINCFG1.…` (8 khóa giao diện theo danh sách trắng, kiểm từng giá trị; `shin_token` không bao giờ vào mã). Áp dụng có Hoàn tác 6s, hết giờ mới ghi rồi tải lại. Trình duyệt chặn clipboard ➜ hiện mã trong ô để tự chép.
+- `sw.js`: PHIEN_BAN_SW shin-v2.9.4.
+
 ## [2.9.3] – 06/11/2026 (NHẮC CHĂM SÓC LEAD M2.4)
 
 ### ✨ Tính năng

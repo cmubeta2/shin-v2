@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.9.3** · Cập nhật ngày: **06/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.9.4** · Cập nhật ngày: **06/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.9.4 ✅ – ĐỒNG BỘ CẤU HÌNH GIỮA CÁC MÁY M0.1 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** màn ⚙️ Quản trị Module thêm "Đồng bộ cấu hình sang máy khác": sao chép mã `SHINCFG1.<base64>` (bảng màu, sáng/tối, cỡ chữ, kiểu thanh mép, mảng đang tắt) và dán ở máy kia; danh sách trắng 8 khóa + kiểm giá trị, **token không bao giờ vào mã** (khóa lạ bị bỏ khi đọc). Áp dụng có Hoàn tác 6s – hết 6s mới ghi localStorage rồi tải lại.
+- **Kiểm:** node --check; taoMaCauHinh / docMaCauHinh thử 3 ca (bỏ shin_token, bỏ giá trị sai dạng, mã hỏng) đạt; headless 375 + 1280.
+- Còn chờ v1: đồng bộ tự động theo người (lưu cấu hình vào sheet NguoiDung qua cổng Hub) chưa có cổng ➜ hiện đồng bộ thủ công bằng mã.
 
 ### PHIÊN BẢN v2.9.3 ✅ – NHẮC CHĂM SÓC LEAD M2.4 (06/11/2026, lượt tự động ⑤)
 - **Nội dung:** màn 👥 CRM đánh dấu lead quá 24 / 48 giờ và sao chép tin nhắc chăm sóc – chạy phía trình duyệt trên `leadMoi` của `webCRM` (HUB L22).
