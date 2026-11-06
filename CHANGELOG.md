@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.6] – 06/11/2026 (RÀ UX 375 + 1280)
+
+### 🐛 Sửa lỗi
+- `css/styles.css`: `.form-input` từ 14px lên `max(16px, 14px × cỡ chữ)` – trước đây ô nhập ở 🧭 Điều hành, 📋 Đánh giá 5T (160 ô), 🛡️ Quản trị, 👥 Đối tác chỉ 14px ➜ iPhone tự phóng to khi gõ (nguyên tắc: ô nhập 16px).
+- Rà tự động 16 màn × 2 bề rộng (Edge không giao diện qua CDP, chế độ Demo): 0 cuộn ngang, 0 vùng bấm < 44px, 0 chữ < 12px, 0 lỗi console. `sw.js`: shin-v2.9.6.
+
 ## [2.9.5] – 06/11/2026 (KIỂM TRA TRÙNG LỊCH M5.3)
 
 ### ✨ Tính năng

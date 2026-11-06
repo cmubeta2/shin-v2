@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.9.5** · Cập nhật ngày: **06/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.9.6** · Cập nhật ngày: **06/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.9.6 ✅ – RÀ UX 375 + 1280 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** rà đo từng màn ở 375 px và 1280 px (mục h). Lỗi đo được duy nhất: ô nhập `.form-input` 14px < 16px ➜ nâng lên tối thiểu 16px (giữ hệ số cỡ chữ khi phóng to). Không đổi bố cục.
+- **Kiểm:** node --check; Edge không giao diện qua CDP mở index.html, bấm lần lượt 16 màn ở 375 + 1280: scrollWidth ≤ bề rộng, không phần tử tràn, không nút / ô < 44px, không chữ < 12px, 0 lỗi console; đo lại sau sửa: 0 ô nhập < 16px (chỉ còn ô tick).
+- Còn chờ: không.
 
 ### PHIÊN BẢN v2.9.5 ✅ – KIỂM TRA TRÙNG LỊCH M5.3 (06/11/2026, lượt tự động ⑤)
 - **Nội dung:** tab 📅 Lịch tuần (🩺 Phòng PTKH) tự dò ngày đang xếp ca mà trùng đơn nghỉ chờ duyệt / đã duyệt của chính mình (bỏ đổi ca, đơn trả lại, ngày nghỉ / lễ) ➜ thẻ ⚠️ TRÙNG LỊCH + dấu ⚠️ trên dòng ngày. Chạy phía trình duyệt trên `webLichTuan` (PK L5), không gửi gì.

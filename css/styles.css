@@ -986,7 +986,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: inherit;
-  font-size: calc(14px * var(--font-scale));
+  font-size: max(16px, calc(14px * var(--font-scale))); /* ô nhập ≥ 16px – iPhone không tự phóng to khi gõ (v2.9.6) */
 }
 .form-input:focus {
   outline: none;
