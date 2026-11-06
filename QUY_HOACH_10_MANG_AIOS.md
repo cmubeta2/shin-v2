@@ -137,8 +137,8 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M5.2 | Minh chứng ảnh nén → Drive (Base64 qua `21_PhongPTKH`) | 🟢 v2.7.0 (nén JPEG ≤ 1600px, ≤ 6 ảnh → `webNopBaoCao`) | v2.4.0 (v1 mở cổng trước) |
 | M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | 🟢 xem lịch tuần + đơn nghỉ (`webLichTuan`) · 🟢 v2.9.5 cảnh báo trùng lịch cá nhân (ca ↔ đơn nghỉ) / 🟢 v2.9.7 trùng nghỉ cả tổ (`webLichTo`, 🏥 PTKH) · đổi ca (làm trên PTKH) | v2.3.0 |
 | M5.4 | Bóc tách tăng ca & bù giờ TC-NS | ⬜ (logic có ở M-PTKH-03) | v2.4.0 |
-| M5.5 | Kiểm soát vi phạm NTC (> 3 lần trễ → trừ 0,5 công) | ⬜ (M-PTKH-04) | v2.4.0 |
-| M5.6 | Team Morale Index – cảm nhận sau ca 1–5★ | ⬜ (M-PTKH-01) | v2.4.0 |
+| M5.5 | Kiểm soát vi phạm NTC (> 3 lần trễ → trừ 0,5 công) | 🟢 v2.9.8 của tôi: Ca NTC tuần x/3 + ngày công bị trừ (`webLichSuThang`, luật L111c) / ⬜ cả tổ (cần cổng v1) | v2.4.0 |
+| M5.6 | Team Morale Index – cảm nhận sau ca 1–5★ | 🟢 v2.9.8 của tôi: trung bình + phân bố tháng (`webLichSuThang`) / ⬜ chỉ số cả tổ ẩn danh (cần cổng v1) | v2.4.0 |
 | M5.7 | Danh bạ nhân sự khoa/phòng | 🟢 v2.7.0 (`webNhanSu`, quản lý) | v2.5.0 (đi cùng RBAC) |
 
 ### 📌 MẢNG 6 – QUẢN LÝ DỰ ÁN · `duan` · Executive Hub

@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.8] – 06/11/2026 (NHỊP THÁNG: NTC M5.5 + CẢM NHẬN M5.6)
+
+### ✨ Tính năng
+- `js/modules/ptkh.js`: khối 🧭 **Nhịp tháng của tôi** đọc cổng có sẵn `webLichSuThang(token, 'yyyy-MM')` của PTKH (đã trong `HAM_WEBGOI_`) cho tháng này + tháng trước (tuần ISO vắt tháng). Hàm thuần `nhipThang` làm đúng luật `phatNTCTuan_` / `demTruNTCThang_` của PTKH (L111c): ngày Ca NTC đếm theo tuần ISO T2–CN, lần ≥ 4 ➜ trừ ½ công, tính vào tháng của ngày vượt; bỏ báo cáo đã hủy / thử. Hiện: Ca NTC tuần này x/3, ngày công bị trừ, dải ⚠️ các ngày vượt; cảm nhận sau ca 1–5★ trung bình + phân bố; BC đúng hạn tháng. Chỉ đọc, lỗi cổng báo riêng khối, không thay bằng số mẫu.
+- `js/demo_data.js`: `lsThang` MẪU (4 ca NTC tuần 02–08/11 ➜ trừ 0,5 công). `sw.js`: shin-v2.9.8.
+
 ## [2.9.7] – 06/11/2026 (DÒ TRÙNG NGHỈ CẢ TỔ)
 
 ### ✨ Tính năng

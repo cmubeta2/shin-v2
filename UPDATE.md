@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.9.7** · Cập nhật ngày: **06/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.9.8** · Cập nhật ngày: **06/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.9.8 ✅ – NHỊP THÁNG: NTC M5.5 + CẢM NHẬN M5.6 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** gỡ một phần "Còn chờ v1" của M5.5 / M5.6 – cổng `webLichSuThang` của PTKH (đã trong `webGoi`) trả ca + cảm nhận (`camNhan` 1–5) từng báo cáo của chính NV, nên 🏥 PTKH có khối 🧭 Nhịp tháng: Ca NTC tuần này x/3, ngày công bị trừ (luật L111c: lần ≥ 4/tuần ISO trừ ½ công), cảm nhận sau ca trung bình + phân bố, BC đúng hạn tháng.
+- **Kiểm:** node --check; nhipThang thử Demo + tuần vắt tháng 27/10–01/11 đạt; headless Edge 375 + 1280: 16 màn không cuộn ngang, 0 lỗi console.
+- Còn chờ v1: Team Morale cả tổ (trung bình ẩn danh) và M5.4 tăng ca / bù giờ – PTKH chưa có hàm chỉ đọc tổng hợp theo tổ trong `HAM_WEBGOI_` (chỉ `webXuatTCNS` ghi, Admin) ➜ v2 mới hiện số của riêng người dùng.
 
 ### PHIÊN BẢN v2.9.7 ✅ – DÒ TRÙNG NGHỈ CẢ TỔ (06/11/2026, lượt tự động ⑤)
 - **Nội dung:** gỡ mục "Còn chờ v1" của v2.9.5 – cổng `webLichTo` của PTKH (L26d, đã trong danh sách `webGoi`) trả sẵn nghỉ đã duyệt của mọi người cùng tổ, nên dò trùng cả tổ chạy được phía trình duyệt: 🏥 PTKH › 📅 Lịch tổ hiện ⚠️ ngày ≥ 2 người nghỉ hoặc còn ca < nửa tổ.
