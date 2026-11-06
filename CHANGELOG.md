@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.7] – 06/11/2026 (DÒ TRÙNG NGHỈ CẢ TỔ)
+
+### ✨ Tính năng
+- `js/modules/ptkh.js`: hàm thuần `doTrungTo(lichTo)` trên cổng `webLichTo` (PTKH, đã có trong `HAM_WEBGOI_` – trả lịch tuần + nghỉ đã duyệt của cả tổ): ngày có ≥ 2 người nghỉ, hoặc số người còn ca < nửa tổ ➜ dải ⚠️ "Trùng nghỉ cả tổ" trên khối 📅 Lịch tổ + dấu ⚠️ và "còn x/y người có ca" trên dòng ngày. Bỏ ngày lễ, tổ < 2 người. Chỉ đọc, không gửi gì.
+- `js/demo_data.js`: thêm 1 người MẪU cùng nghỉ T6. `sw.js`: shin-v2.9.7.
+
 ## [2.9.6] – 06/11/2026 (RÀ UX 375 + 1280)
 
 ### 🐛 Sửa lỗi

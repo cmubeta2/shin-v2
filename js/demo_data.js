@@ -594,5 +594,7 @@ window.SHIN_DEMO_DATA.ptkh.lichSu = [
 ];
 window.SHIN_DEMO_DATA.ptkh.lichTo = { to: 'Tổ Mẫu', thuHai: '2026-11-02', nv: [
   { ma: 'NV01', ten: 'Nhân viên Mẫu', toi: true, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: i < 6 ? (i % 2 ? 'Chiều' : 'Sáng') : '', vt: i < 6 ? 'Tư vấn' : '', nghi: i === 6 ? 'Nghỉ' : '', le: false })) },
-  { ma: 'NV02', ten: 'Nhân viên A', toi: false, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: 'Sáng', vt: 'Tổng đài', nghi: i === 4 ? 'Nghỉ' : '', le: false })) }
+  { ma: 'NV02', ten: 'Nhân viên A', toi: false, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: 'Sáng', vt: 'Tổng đài', nghi: i === 4 ? 'Nghỉ' : '', le: false })) },
+  // v2.9.7 – thêm 1 người MẪU cùng nghỉ T6 để Demo thấy ⚠️ trùng nghỉ cả tổ
+  { ma: 'NV03', ten: 'Nhân viên B', toi: false, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: i < 6 ? 'Chiều' : '', vt: i < 6 ? 'Tư vấn' : '', nghi: i === 4 ? 'Nghỉ' : '', le: false })) }
 ] };

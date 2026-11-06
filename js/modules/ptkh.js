@@ -92,17 +92,35 @@ const ModulePTKH = {
     const toi = lt.nv.find(n => n.toi) || { ngay: [] };
     const soNgay = Math.max(0, ...lt.nv.map(n => (n.ngay || []).length));
     const THU = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
-    const dong = [];
+    const dong = [], trung = this.doTrungTo(lt);
     for (let i = 0; i < soNgay; i++) {
       const o = (toi.ngay || [])[i] || {};
       const nghi = lt.nv.filter(n => ((n.ngay || [])[i] || {}).nghi).map(n => n.ten);
       const cua = o.nghi ? 'Nghỉ' : [o.ca, o.vt].filter(Boolean).join(' · ') || '–';
-      dong.push(`<div class="hang-tru"><span>${THU[i] || ''} ${e(String(o.ngay || ''))}${o.le ? ' 🎌' : ''}</span><b>${e(cua)}</b></div>
-        ${nghi.length ? `<div class="chu-phu">Nghỉ: ${e(nghi.join(', '))}</div>` : ''}`);
+      const t = trung.find(x => x.i === i);
+      dong.push(`<div class="hang-tru"><span>${t ? '⚠️ ' : ''}${THU[i] || ''} ${e(String(o.ngay || ''))}${o.le ? ' 🎌' : ''}</span><b>${e(cua)}</b></div>
+        ${nghi.length ? `<div class="chu-phu">Nghỉ: ${e(nghi.join(', '))}${t ? ` – còn ${t.lam}/${t.tong} người có ca` : ''}</div>` : ''}`);
     }
+    const canh = trung.length ? `<div class="canh-bao-nguon">⚠️ Trùng nghỉ cả tổ: ${trung.map(t => `${THU[t.i] || ''} ${e(String(t.ngay))} (${t.nghi} nghỉ, còn ${t.lam}/${t.tong})`).join(' · ')} – tổ trưởng xem lại lịch trong app PTKH.</div>` : '';
     return `
       <div class="hn-tieu"><span>📅 LỊCH TỔ ${e(lt.to || '')} · TUẦN ${e(String(lt.thuHai || ''))}${mau}</span></div>
+      ${canh}
       ${dong.length ? `<div class="the">${dong.join('')}</div>` : '<div class="trong">Chưa có lịch tổ tuần này.</div>'}`;
+  },
+
+  /** THUẦN – v2.9.7: dò trùng nghỉ cả tổ trên webLichTo (chỉ nghỉ đã duyệt). Ngày bị đánh dấu khi ≥ 2 người nghỉ
+   *  hoặc số người còn ca < nửa tổ (làm tròn lên). Bỏ ngày lễ và tổ < 2 người. ➜ [{i, ngay, nghi, lam, tong}] */
+  doTrungTo: function(lt) {
+    const ds = (lt && Array.isArray(lt.nv)) ? lt.nv : [], tong = ds.length, kq = [];
+    if (tong < 2) return kq;
+    const soNgay = Math.max(0, ...ds.map(n => (n.ngay || []).length));
+    for (let i = 0; i < soNgay; i++) {
+      const o = ds.map(n => (n.ngay || [])[i] || {});
+      if (o.some(x => x.le)) continue;
+      const nghi = o.filter(x => x.nghi).length, lam = o.filter(x => !x.nghi && x.ca).length;
+      if (nghi && (nghi >= 2 || lam < Math.ceil(tong / 2))) kq.push({ i, ngay: (o.find(x => x.ngay) || {}).ngay || '', nghi, lam, tong });
+    }
+    return kq;
   },
 
   /** THUẦN. webHomNay ➜ phần của PTKH (thẻ tieuDe 'PTKH' + việc cùng tên app). */
