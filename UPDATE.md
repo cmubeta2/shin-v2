@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.9.8** · Cập nhật ngày: **06/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.9.9** · Cập nhật ngày: **06/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.9.9 ✅ – ĐỒNG BỘ TRẠNG THÁI: HUB v1.15.6 ĐÃ LÊN APP (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** HUB L21–L25 đã «lên app v1.15.6 @15» (06/11 10h, `_TacVu/ban_tren_app.json`) ➜ các màn 0B Phê duyệt (`webPheDuyet` / `webDuyet`), CRM (`webCRM` / `webLuuDoiTac`), Dự án (`webDuAn`), Tài chính (`webTaiChinh`), Quản trị (`webLuuNguoiDung` / `webLuuUngDung`) đã nối từ v2.8.x nay chạy số thật ở Live – hết dải vàng "chưa mở cổng". QUY_HOACH mục 2: M0.1 (bật/tắt app), M0B.2–M0B.4, M2.3, M6.2 chuyển 🟢. KPI v1.8.2 @9 đã lên app ➜ nháp AOP năm sau (`webNhap2027`) chạy thật. Không đổi mã màn.
+- Còn chờ v1: ghi chú kiểm L21 (Hub) – `chuanPhieuDuyet` dùng `Number(du.soTien)` nên chuỗi kiểu "1.500.000" từ app nguồn thành trống (v2 không gửi số tiền, chỉ hiển thị) ➜ dòng v1 tự lo. **Chờ anh:** trộn PR #19 (máy tự động không được phép trộn).
 
 ### PHIÊN BẢN v2.9.8 ✅ – NHỊP THÁNG: NTC M5.5 + CẢM NHẬN M5.6 (06/11/2026, lượt tự động ⑤)
 - **Nội dung:** gỡ một phần "Còn chờ v1" của M5.5 / M5.6 – cổng `webLichSuThang` của PTKH (đã trong `webGoi`) trả ca + cảm nhận (`camNhan` 1–5) từng báo cáo của chính NV, nên 🏥 PTKH có khối 🧭 Nhịp tháng: Ca NTC tuần này x/3, ngày công bị trừ (luật L111c: lần ≥ 4/tuần ISO trừ ½ công), cảm nhận sau ca trung bình + phân bố, BC đúng hạn tháng.

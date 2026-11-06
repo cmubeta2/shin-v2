@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.9] – 06/11/2026 (ĐỒNG BỘ TRẠNG THÁI HUB v1.15.6)
+
+### 📝 Tài liệu
+- HUB L21–L25 đã lên app v1.15.6 @15 (06/11): `QUY_HOACH_10_MANG_AIOS.md` mục 2 chuyển 🟢 M0.1 (`webLuuUngDung`), M0B.2–M0B.4 (`webDuyet` / `webPheDuyet`), M2.3 (`webCRM`), M6.2 (`webDuAn`). Màn đã nối từ v2.8.x – không đổi mã. Header + `sw.js`: shin-v2.9.9.
+
 ## [2.9.8] – 06/11/2026 (NHỊP THÁNG: NTC M5.5 + CẢM NHẬN M5.6)
 
 ### ✨ Tính năng

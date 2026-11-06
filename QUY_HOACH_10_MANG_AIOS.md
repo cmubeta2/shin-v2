@@ -79,7 +79,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 ### ⚙️ TẦNG 0A – QUẢN TRỊ NỀN TẢNG & PHÂN QUYỀN · `caidat` · bộ màu Cyber Terminal
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
-| M0.1 | Bật/Tắt Module (Feature Flags) – ẩn mảng khỏi menu khi tắt | ✅ lưu trên máy + v2.9.4 mã cấu hình SHINCFG1 chuyển máy (thủ công, không kèm token) / ⬜ tự đồng bộ theo người (cần cổng Hub) · 🟡 bật/tắt app v1 qua `webLuuUngDung` (v2.8.0, chờ Hub lên app) | v2.6.0 đồng bộ |
+| M0.1 | Bật/Tắt Module (Feature Flags) – ẩn mảng khỏi menu khi tắt | ✅ lưu trên máy + v2.9.4 mã cấu hình SHINCFG1 chuyển máy (thủ công, không kèm token) / ⬜ tự đồng bộ theo người (cần cổng Hub) · 🟢 bật/tắt app v1 qua `webLuuUngDung` (v2.8.0; Hub v1.15.6 lên app @15 06/11) | v2.6.0 đồng bộ |
 | M0.2 | Ma trận RBAC: Vai trò × Khoa/Phòng × Module | 🟡 v2.8.5 xem ma trận Vai trò × Mảng (suy từ chốt chặn quyền mã v1, chỉ xem) / ⬜ chiều Khoa/Phòng + sửa quyền theo ô (cần cổng v1) | v2.5.0 |
 | M0.3 | Cổng cấp Token SSO `h1.<ma>.0.<chuKy>` (dùng lại M-HUB-05 của v1) | 🟢 dùng token Hub, ẩn mảng không có quyền / 🟡 cấp token (`webCapLink`) | v2.3.0 |
 | M0.4 | Giám sát tải & sức khỏe 5 máy chủ /exec (latency, lỗi, fallback) | 🟢 độ trễ + lỗi từng máy chủ | – |
@@ -88,9 +88,9 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M0B.1 | Hộp thư duyệt gom đa nguồn (PK, DA, NS, MKT, TC) | ✅ | – |
-| M0B.2 | Duyệt / Yêu cầu sửa / Từ chối + Hoàn tác 6s | 🟡 màn xong, chờ Hub mở `webDuyet` | v2.5.0 (ghi `Log_Duyet`) |
-| M0B.3 | Duyệt tất cả theo bộ lọc | 🟡 | v2.5.0 |
-| M0B.4 | Badge ⚡ đếm phiếu chờ theo dữ liệu thật | 🟡 tự hiện khi Hub mở `webPheDuyet` | v2.5.0 |
+| M0B.2 | Duyệt / Yêu cầu sửa / Từ chối + Hoàn tác 6s | 🟢 `webDuyet` (Hub v1.15.6 @15 06/11 – ghi `Log_Duyet` 1 lần, bấm 2 lần an toàn) | v2.5.0 (ghi `Log_Duyet`) |
+| M0B.3 | Duyệt tất cả theo bộ lọc | 🟢 lần lượt từng phiếu qua `webDuyet` (Hub v1.15.6) | v2.5.0 |
+| M0B.4 | Badge ⚡ đếm phiếu chờ theo dữ liệu thật | 🟢 `webPheDuyet` (Hub v1.15.6 @15 06/11) | v2.5.0 |
 
 ### 🏢 MẢNG 1 – ĐIỀU HÀNH, KPI & KHẢO SÁT · `hub` `kpi` `khaosat`
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
@@ -107,7 +107,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 |---|---|---|---|
 | M2.1 | Danh bạ hợp nhất: KSK Doanh nghiệp, Nhà cung ứng, Học viên, CTV | ✅ | – |
 | M2.2 | Hộp lead mới đổ về từ Web Phễu (M8.3) | ✅ mẫu / 🟡 tiếp nhận | v2.3.0 |
-| M2.3 | Pipeline B2B: Tiếp cận → Báo giá → Hợp đồng → Triển khai → Tái ký | 🟡 v2.8.2 đếm + lọc phía trình duyệt theo Trạng thái (`webCRM`, chờ Hub lên app) | v2.3.0 |
+| M2.3 | Pipeline B2B: Tiếp cận → Báo giá → Hợp đồng → Triển khai → Tái ký | 🟢 v2.8.2 đếm + lọc phía trình duyệt theo Trạng thái (`webCRM` + `webLuuDoiTac`, Hub v1.15.6 @15 06/11) | v2.3.0 |
 | M2.4 | Lịch sử tương tác & nhắc chăm sóc (đẩy việc sang Task Bus) | 🟡 v2.9.3 nhắc chăm sóc lead theo tuổi (🟡 > 24 giờ · 🔴 > 48 giờ, sao chép tin) / ⬜ lịch sử tương tác (cần cổng v1) | v2.3.0 |
 
 > **Ràng buộc bất biến:** CRM **không lưu bệnh nhân** (tuân thủ `KHONG_DUA_VAO.md`). Lead "đặt lịch khám" đi thẳng về máy chủ PK của Mảng 5.
@@ -145,7 +145,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M6.1 | Master Dashboard đa dự án (`40_DuAnPK`, `50_HoaSua`, cơ sở mới) | ✅ | – |
-| M6.2 | **Daily Flash Report 4 khối** (Tiến độ · Vướng mắc & Đề xuất · Tài chính phát sinh · Chờ Sếp duyệt) | 🟡 màn xong, chờ Hub mở `webDuAn` | v2.5.0 |
+| M6.2 | **Daily Flash Report 4 khối** (Tiến độ · Vướng mắc & Đề xuất · Tài chính phát sinh · Chờ Sếp duyệt) | 🟢 `webDuAn` (Hub v1.15.6 @15 06/11) | v2.5.0 |
 | M6.3 | Blocker Matrix: rủi ro, người xử lý, hạn gỡ → Task Bus | ✅ v2.7.8 phía trình duyệt (Flash + dự án đỏ / vàng / quá hạn; ➜ Task Bus tạm sao chép) | v2.3.0 |
 | M6.4 | Cổng trình duyệt hạng mục / đề xuất chi → 0B + Mảng 3 | 🟡 | v2.3.0 |
 
