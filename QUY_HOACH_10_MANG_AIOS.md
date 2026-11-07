@@ -116,7 +116,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | Mã | Micro-Module | Trạng thái · nguồn tái sử dụng | Phiên bản đích |
 |---|---|---|---|
 | M3.1 | Cổng VietQR SePay: sinh QR động, xác nhận thanh toán qua webhook | ⬜ · M-WEB-03 (v1) | v2.3.0 |
-| M3.2 | Sổ chi phí phát sinh & cảnh báo lệch dự toán (cấp cho Mảng 6) | ⬜ · M5.3 (bản 1.0) | v2.3.0 |
+| M3.2 | Sổ chi phí phát sinh & cảnh báo lệch dự toán (cấp cho Mảng 6) | 🟢 v2.10.2 ngân sách vs đã chi + cảnh báo vượt / sắp chạm cấp dự án (`webDuAn`) · ⬜ theo khoản mục (v1 chưa có dự toán khoản mục) · M5.3 (bản 1.0) | v2.3.0 |
 | M3.3 | Chi trả hoa hồng CTV/đại lý (lấy kết quả tính từ M4.3) | ⬜ · M-TS-03 | v2.3.0 |
 | M3.4 | Đề nghị tạm ứng / thanh toán → gửi 0B duyệt | 🟡 v2.10.1 form gộp Chi / Tạm ứng / Thanh toán, kiểm luật L26 + sao chép phiếu (💰 Tài chính) / ⬜ gửi thẳng 0B (chờ HUB L26 lên app) | v2.3.0 |
 | M3.5 | Xuất bảng tăng ca TC-NS cho Kế toán (nhận từ M5.4) | ⬜ Còn chờ v1 (giờ vào/ra PTKH) · M-PTKH-03 | v2.4.0 |

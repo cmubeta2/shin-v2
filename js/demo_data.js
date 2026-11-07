@@ -474,6 +474,17 @@ window.SHIN_DEMO_DATA.taichinh = {
   giaoDich: [
     { ngay: '30/10/2026', noiDung: 'Công ty mẫu chuyển khoản đợt 2 KSK', soTien: 120000000, nguon: 'SePay' },
     { ngay: '29/10/2026', noiDung: 'Chi vé xe đoàn KSK lưu động', soTien: -3200000, nguon: 'Tay' }
+  ],
+  // v2.10.2 – M3.2: khuôn webDuAn (duAn + flash.taiChinh.phatSinh) – dữ liệu GIẢ
+  duAnNS: [
+    { ma: 'DA-KSK01', ten: 'KSK định kỳ doanh nghiệp mẫu', nganSach: 350000000, daChi: 145000000, trangThai: 'Đang triển khai' },
+    { ma: 'DA-PK02', ten: 'Nâng cấp phòng khám mẫu', nganSach: 120000000, daChi: 112500000, trangThai: 'Đang triển khai' },
+    { ma: 'DA-MKT03', ten: 'Chiến dịch truyền thông mẫu', nganSach: 45000000, daChi: 49200000, trangThai: 'Đang triển khai' },
+    { ma: 'DA-NB04', ten: 'Dự án nội bộ mẫu', nganSach: 0, daChi: 2500000, trangThai: 'Đang triển khai' }
+  ],
+  phatSinh: [
+    { khoanMuc: 'Thuê xe X-quang lưu động', soTien: 15000000, nguoiChi: 'Nhân viên mẫu A', tinhTrang: 'Chờ duyệt' },
+    { khoanMuc: 'In tờ rơi chiến dịch', soTien: 4200000, nguoiChi: 'Nhân viên mẫu B', tinhTrang: 'Đã chi' }
   ]
 };
 

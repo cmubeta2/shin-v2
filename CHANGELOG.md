@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.10.2] – 08/11/2026 (M3.2 NGÂN SÁCH THEO DỰ ÁN)
+
+### ✨ Tính năng
+- 💰 Tài chính: khối Ngân sách & giải ngân theo dự án (Live `webDuAn` song song `webTaiChinh`; lỗi riêng khối, không dùng số mẫu). Hàm thuần `ModuleTaiChinh.lechDuToan` (vượt > 100% / sắp chạm > 90% / chưa có dự toán). Chi phát sinh từ Flash dự án. Demo `duAnNS`, `phatSinh`. Header + `sw.js`: shin-v2.10.2.
+
 ## [2.10.1] – 08/11/2026 (M3.4 TẠM ỨNG / THANH TOÁN)
 
 ### ✨ Tính năng

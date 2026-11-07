@@ -8,6 +8,8 @@
  *   kế toán / 0B (Hub chưa có cổng tạo phiếu chi – xin HUB L26 `webGuiDeXuatChi`). Không gửi gì lên máy chủ.
  * v2.10.1 – M3.4 gộp 1 form: loại Chi / Tạm ứng (hạn hoàn ứng) / Thanh toán (số chứng từ), kiểm theo luật L26 Hub v1.15.7,
  *   kiemDeXuat trả thêm `goi` = tham số webGuiDeXuatChi (nối thật khi L26 lên app – thêm maGui chống trùng).
+ * v2.10.2 – M3.2 ngân sách & giải ngân theo dự án: Live đọc thêm webDuAn (duAn.nganSach / daChi, flash.taiChinh.phatSinh),
+ *   cảnh báo vượt / sắp chạm dự toán cấp dự án. Dự toán theo khoản mục: v1 chưa có dữ liệu ➜ không làm.
  */
 
 const ModuleTaiChinh = {
@@ -18,9 +20,50 @@ const ModuleTaiChinh = {
   mayChu: 'HUB',
 
   taiLive: async function() {
-    const kq = await SHIN_API.goi('HUB', 'webTaiChinh', {});
+    const [kq, da] = await Promise.all([SHIN_API.goi('HUB', 'webTaiChinh', {}), SHIN_API.goi('HUB', 'webDuAn', {})]);
     if (!kq.ok) return kq;
-    return { ok: true, data: Object.assign({ live: true }, kq.data || {}) };
+    // v2.10.2 M3.2: webDuAn lỗi ➜ chỉ khối ngân sách báo lỗi, KHÔNG thay bằng số mẫu
+    const d = da.ok && da.data ? da.data : null;
+    const them = d ? { duAnNS: d.duAn || [], phatSinh: ((d.flash || {}).taiChinh || {}).phatSinh || [] }
+      : { duAnNS: null, loiDuAn: da.chiTiet || da.loi || 'không đọc được' };
+    return { ok: true, data: Object.assign({ live: true }, kq.data || {}, them) };
+  },
+
+  /** THUẦN – v2.10.2 M3.2: ngân sách vs đã chi theo dự án (cấp DỰ ÁN – v1 chưa có dự toán theo khoản mục).
+   *  Bỏ dự án Đóng / Hoàn thành / Hủy. tyLe = null khi chưa có ngân sách. Ngưỡng như Hub mucDoDuAn: > 100% đỏ, > 90% vàng.
+   *  daChi âm (điều chỉnh) tính 0. Sắp xếp tỷ lệ giảm dần, chưa có dự toán cuối. */
+  lechDuToan: function(ds, docSo) {
+    const so = v => { const n = typeof v === 'number' ? v : (docSo ? docSo(v) : Number(v)); return isFinite(n) ? n : 0; };
+    const kq = (ds || []).filter(x => x && !/đóng|hoàn thành|hủy|huỷ/i.test(String(x.trangThai || ''))).map(x => {
+      const ns = Math.max(0, so(x.nganSach)), chi = Math.max(0, so(x.daChi));
+      const tyLe = ns > 0 ? chi / ns * 100 : null;
+      const muc = tyLe === null ? 'chua' : tyLe > 100 ? 'do' : tyLe > 90 ? 'vang' : 'xanh';
+      return { ma: String(x.ma || ''), ten: String(x.ten || x.ma || ''), nganSach: ns, daChi: chi, conLai: ns - chi, tyLe, muc };
+    });
+    kq.sort((a, b) => (b.tyLe === null ? -1 : b.tyLe) - (a.tyLe === null ? -1 : a.tyLe));
+    return { ds: kq, vuot: kq.filter(x => x.muc === 'do').length, sapVuot: kq.filter(x => x.muc === 'vang').length };
+  },
+
+  /** Khối M3.2 – HTML. */
+  veNganSach: function(d) {
+    const e = ShinApp.esc, trieu = v => ShinApp.soVN(v / 1e6, 1) + ' tr';
+    if (!d.duAnNS) return `<div class="hn-tieu"><span>NGÂN SÁCH & GIẢI NGÂN THEO DỰ ÁN</span></div>
+      <div class="trong" style="color:var(--c-red)">⚠️ Không đọc được cổng webDuAn: ${e(d.loiDuAn || '')} – khối này để trống, không dùng số mẫu.</div>`;
+    const r = this.lechDuToan(d.duAnNS, ShinApp.docSoVN);
+    const MAU = { do: 'var(--c-red)', vang: 'var(--c-yellow)', xanh: 'var(--c-green)', chua: 'var(--text-muted)' };
+    const NHAN = { do: 'Vượt dự toán', vang: 'Sắp chạm trần', xanh: 'Trong dự toán', chua: 'Chưa có dự toán' };
+    const ps = d.phatSinh || [];
+    return `
+      <div class="hn-tieu"><span>NGÂN SÁCH & GIẢI NGÂN THEO DỰ ÁN · ${r.ds.length}${r.vuot ? ' · ' + r.vuot + ' vượt' : ''}${r.sapVuot ? ' · ' + r.sapVuot + ' sắp chạm' : ''}</span></div>
+      ${r.ds.length ? r.ds.map(x => `
+        <div class="hang-tru" style="flex-wrap:wrap"><span style="flex:1 1 60%;min-width:0"><b>${e(x.ma)}</b> ${e(x.ten === x.ma ? '' : x.ten)}<br>
+          <span class="chu-phu">Đã chi ${e(trieu(x.daChi))} / ${x.nganSach ? e(trieu(x.nganSach)) : '–'}${x.tyLe === null ? '' : ' · ' + ShinApp.soVN(x.tyLe, 0) + '%'}</span></span>
+          <b style="color:${MAU[x.muc]}">${e(NHAN[x.muc])}${x.muc === 'do' ? '<br>+' + e(trieu(-x.conLai)) : ''}</b>
+          ${x.tyLe === null ? '' : `<div class="thanh-tien" style="flex-basis:100%"><div style="width:${Math.min(100, x.tyLe).toFixed(1)}%;background:${MAU[x.muc]}"></div></div>`}
+        </div>`).join('') : '<div class="trong">Không có dự án đang chạy.</div>'}
+      ${ps.length ? `<div class="hn-tieu"><span>CHI PHÁT SINH (FLASH DỰ ÁN) · ${ps.length}</span></div>
+        ${ps.map(x => `<div class="hang-tru"><span>${e(x.khoanMuc)}<br><span class="chu-phu">${e([x.nguoiChi, x.tinhTrang].filter(Boolean).join(' · '))}</span></span>
+          <b>${e(ShinApp.soVN(Math.abs(ShinApp.docSoVN(x.soTien) || 0)))} đ</b></div>`).join('')}` : ''}`;
   },
 
   render: function(container, data) {
@@ -66,6 +109,8 @@ const ModuleTaiChinh = {
         <div class="hang-tru"><span>${e(x.noiDung)}<br><span class="chu-phu">${e([x.ngay, x.nguon].filter(Boolean).join(' · '))}</span></span>
           <b style="color:${Number(x.soTien) < 0 ? 'var(--c-red)' : 'var(--c-green)'}">${Number(x.soTien) < 0 ? '−' : '+'}${e(tien(Math.abs(Number(x.soTien) || 0)))}</b></div>`).join('')
         : '<div class="trong">Chưa có giao dịch.</div>'}
+
+      ${this.veNganSach(d)}
 
       <details class="tq-gon" id="tcDeXuat">
         <summary><span>✍️ Đề xuất chi / Tạm ứng / Thanh toán (M6.4 · M3.4)</span></summary>

@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.10.1** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.10.2** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.10.2 ✅ – M3.2 NGÂN SÁCH & GIẢI NGÂN THEO DỰ ÁN (08/11/2026, lượt tự động ⑤ 04h)
+- **Nội dung:** 💰 Tài chính thêm khối Ngân sách & giải ngân theo dự án: Live đọc thêm cổng có sẵn `webDuAn` (Hub v1.15.6, `duAn[].nganSach / daChi`, `flash.taiChinh.phatSinh`) song song `webTaiChinh`; hàm thuần `ModuleTaiChinh.lechDuToan` – bỏ dự án Đóng / Hoàn thành / Hủy, tỷ lệ giải ngân, > 100% "Vượt dự toán" (đỏ, +số vượt), > 90% "Sắp chạm trần" (vàng), ngân sách 0 ➜ "Chưa có dự toán" (không chia cho 0), đã chi âm tính 0; thanh tiến độ màu theo mức; danh sách chi phát sinh từ Flash dự án. `webDuAn` lỗi ➜ khối báo lỗi đỏ, không thay bằng số mẫu. Demo: `SHIN_DEMO_DATA.taichinh.duAnNS / phatSinh` (giả).
+- **Kiểm:** node --check; 20/20 ca thuần (kiemDeXuat 12 + lechDuToan 8: vượt, chưa dự toán, chuỗi "1.000", dự án Đóng, chi âm, thứ tự); Edge không giao diện 375 + 1280: 16/16 màn không cuộn ngang, 0 lỗi console.
+- Còn chờ v1: dự toán theo **khoản mục** trong dự án – Hub chưa có bảng phân bổ ➜ chỉ cảnh báo cấp dự án (phản biện agy 11080154_V2_M3).
 
 ### PHIÊN BẢN v2.10.1 ✅ – M3.4 ĐỀ NGHỊ TẠM ỨNG / THANH TOÁN (08/11/2026, lượt tự động ⑤ 04h)
 - **Nội dung:** 💰 Tài chính gộp 1 form ✍️ Đề xuất chi / Tạm ứng / Thanh toán (theo phản biện agy 11080154_V2_M3): chọn loại ➜ Tạm ứng hiện ô hạn hoàn ứng dd/mm/yyyy (bắt buộc, ngày có thật, không ở quá khứ), Thanh toán hiện ô số hóa đơn / chứng từ (≤ 60). Kiểm đúng luật `kiemDeXuatChi` của HUB L26 (Hub v1.15.7): khoản mục ≤ 120, lý do 5–500, số tiền > 0 + tường lửa M9.5 ➜ sao chép phiếu. `kiemDeXuat` trả thêm `goi` = tham số `webGuiDeXuatChi` để nối thật 1 dòng khi cổng lên app. HOP_DONG_CONG_V2.md mục Tài chính ghi lại theo mã thật v1.15.7.
