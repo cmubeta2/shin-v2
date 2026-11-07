@@ -319,11 +319,66 @@ const ModuleDuAn = {
     return kq.sort((a, b) => thuTu[a.muc] - thuTu[b.muc] || (b.quaHan - a.quaHan));
   },
 
+  /* v2.9.2 (M9.4) – Trích bài học kinh nghiệm PHÍA TRÌNH DUYỆT từ Blocker Matrix (Flash Khối 2 + dự án chậm / quá hạn):
+     mỗi vướng mắc có đề xuất ➜ 1 bài học {chuDe, vanDe, cachLam, nguon, muc}; xuất Markdown có [[Chủ đề]] để dán vào kho 📚 Tri thức
+     (kho chưa có máy chủ ➜ chỉ sao chép, không gửi gì đi). */
+  CHU_DE_BH: [
+    ['Nhân sự', /nhân sự|nhân viên|thiếu người|ca trực|tuyển|đào tạo|bác sĩ|điều dưỡng/],
+    ['Thiết bị & Hậu cần', /thiết bị|máy|xe|x-quang|vật tư|kho|hậu cần|sửa chữa/],
+    ['Tài chính', /tiền|chi phí|ngân sách|thanh toán|công nợ|tạm ứng|chuyển khoản|đơn giá|học phí|doanh thu/],
+    ['Khách hàng & Hợp đồng', /khách|hợp đồng|đối tác|doanh nghiệp|báo giá|ký |bệnh nhân|khảo sát/],
+    ['Tiến độ & Quy trình', /tiến độ|chậm|quá hạn|quy trình|thủ tục|duyệt|hồ sơ|giấy phép/]
+  ],
+
+  /** THUẦN. ds: kết quả maTranVuongMac ➜ [{chuDe, vanDe, cachLam, nguon, muc, nguoiXuLy}]. Chỉ lấy vướng mắc Flash Khối 2 có đề xuất
+   *  (dòng dự án chậm / quá hạn chỉ mang trạng thái, không phải cách làm), bỏ trùng vấn đề. giaiMa: hàm bỏ thẻ HTML (tùy chọn). */
+  trichBaiHoc: function(ds, giaiMa) {
+    const g = giaiMa || (s => String(s || '').replace(/<[^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&'));
+    const daCo = {}, ra = [];
+    (ds || []).filter(x => /^Flash/.test(String(x.nguon || ''))).forEach(x => {
+      const vanDe = g(x.vanDe).trim(), cachLam = g(x.deXuat).trim();
+      if (!vanDe || !cachLam) return;
+      const khoa = vanDe.toLowerCase();
+      if (daCo[khoa]) return; daCo[khoa] = 1;
+      const t = (vanDe + ' ' + cachLam).toLowerCase();
+      const cd = (this.CHU_DE_BH.find(([, re]) => re.test(t)) || ['Khác'])[0];
+      ra.push({ chuDe: cd, vanDe, cachLam, nguon: g(x.nguon), muc: x.muc, nguoiXuLy: g(x.nguoiXuLy) });
+    });
+    return ra;
+  },
+
+  /** THUẦN. Bài học ➜ Markdown gom theo chủ đề, có [[wiki-link]] (M9.3) và dòng nguồn. */
+  baiHocMarkdown: function(bh, ngay) {
+    if (!bh || !bh.length) return '';
+    const nhom = {};
+    bh.forEach(b => (nhom[b.chuDe] = nhom[b.chuDe] || []).push(b));
+    const MUC = { cao: '🔴', vua: '🟡', thap: '🟢' };
+    return `# Bài học kinh nghiệm – Flash ${ngay || ''}`.trim() + '\n\n' + Object.keys(nhom).map(cd =>
+      `## [[${cd}]]\n` + nhom[cd].map(b => `- ${MUC[b.muc] || '•'} **Vấn đề:** ${b.vanDe}\n  - **Cách làm / đề xuất:** ${b.cachLam}\n  - Nguồn: ${b.nguon}${b.nguoiXuLy ? ' · ' + b.nguoiXuLy : ''}`).join('\n')
+    ).join('\n\n') + '\n';
+  },
+
+  saoChepBaiHoc: function() {
+    const bh = this.trichBaiHoc(this._maTran || []);
+    if (!bh.length) return ShinApp.toast('Chưa có vướng mắc nào kèm đề xuất để rút bài học.', 'info');
+    const txt = this.baiHocMarkdown(bh, ((this._d || {}).flashReport || {}).ngay || new Date().toLocaleDateString('vi-VN'));
+    const xong = () => ShinApp.toast(`Đã sao chép ${bh.length} bài học (Markdown) – dán vào kho 📚 Tri thức.`, 'success');
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(xong, () => ShinApp.toast('Trình duyệt chặn sao chép.', 'error'));
+    else ShinApp.toast('Trình duyệt không hỗ trợ sao chép.', 'error');
+  },
+
   renderMaTran: function(ds) {
     if (!ds.length) return `<div class="card" style="text-align:center; padding:24px; font-size:14px; color:var(--text-muted);">✅ Không có vướng mắc nào cần gỡ.</div>`;
     const NHOM = [['cao', '🔴 Cao – gỡ trong ngày', 'var(--c-red)'], ['vua', '🟡 Vừa – gỡ trong tuần', 'var(--c-yellow)'], ['thap', '🟢 Thấp – theo dõi', 'var(--c-green)']];
     this._maTran = ds;
-    return NHOM.map(([k, nhan, mau]) => {
+    const bh = this.trichBaiHoc(ds);
+    const dauBh = bh.length ? `
+      <div class="card" style="padding:12px; margin-bottom:14px;">
+        <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:6px;">💡 Bài học kinh nghiệm · ${bh.length}</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">${[...new Set(bh.map(b => b.chuDe))].map(cd => `<span class="badge xam" style="font-size:14px;">${ShinApp.esc(cd)} · ${bh.filter(b => b.chuDe === cd).length}</span>`).join('')}</div>
+        <button class="btn-secondary" style="min-height:44px; font-size:14px; width:100%;" onclick="ModuleDuAn.saoChepBaiHoc()">📋 Sao chép bài học (Markdown cho 📚 Tri thức)</button>
+      </div>` : '';
+    return dauBh + NHOM.map(([k, nhan, mau]) => {
       const nhom = ds.map((x, i) => ({ x, i })).filter(o => o.x.muc === k);
       if (!nhom.length) return '';
       return `

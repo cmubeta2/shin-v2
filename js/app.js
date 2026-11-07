@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.9.0';
+  const PHIEN_BAN = 'v2.9.9';
 
   const MODULES = [
     ModuleHub,
@@ -984,6 +984,7 @@ const ShinApp = (function() {
     live,
     datMangBat,
     mangDangBat,
+    mangDuocHien,
     get mangDangMo() { return currentModule; }
   };
 })();

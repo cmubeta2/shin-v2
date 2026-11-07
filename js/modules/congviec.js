@@ -39,6 +39,51 @@ const ModuleCongViec = {
     return conGio < 0 ? 'do' : conGio <= this.GIO_VANG ? 'vang' : 'xanh';
   },
 
+  /* v2.9.1 (M7.3) – Phân luồng việc theo RBAC PHÍA TRÌNH DUYỆT: việc thuộc mảng người dùng không được vào (cùng luật ẩn menu
+     ShinApp.mangDuocHien = chốt chặn quyền của mã v1) bị ẩn; chip "👤 Của tôi" lọc việc giao đúng tên / mã người đang đăng nhập. */
+  MANG_SO: { 1: 'hub', 2: 'crm', 3: 'taichinh', 4: 'tuyensinh', 5: 'phongkham', 6: 'duan', 7: 'congviec', 8: 'web', 9: 'trithuc' },
+  _luong: '',
+
+  /** THUẦN. Nguồn việc ("Mảng 6 (Dự án)", "Tầng 0 (Core)", "0B …") ➜ mã module, '' nếu không rõ. */
+  maTuNguon: function(nguon) {
+    const s = String(nguon || '');
+    const m = s.match(/Mảng\s*(\d)/i);
+    if (m) return this.MANG_SO[m[1]] || '';
+    if (/^\s*0B|phê duyệt/i.test(s)) return 'pheduyet';
+    if (/Tầng\s*0|Core/i.test(s)) return 'quantri';
+    return '';
+  },
+
+  boDau: function(s) {
+    return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase().replace(/\s+/g, ' ').trim();
+  },
+
+  /** THUẦN. Việc có giao cho người này không: chứa đủ họ tên, mã NV, hoặc gọi tắt ("Sếp Tâm", "chị Thư") khớp phần cuối họ tên. */
+  laCuaToi: function(nguoiViec, nguoi) {
+    if (!nguoi) return false;
+    const v = this.boDau(nguoiViec), ten = this.boDau(nguoi.hoTen), ma = this.boDau(nguoi.maNV || nguoi.ma);
+    if (!v) return false;
+    if ((ten && v.indexOf(ten) >= 0) || (ma && (' ' + v + ' ').indexOf(' ' + ma + ' ') >= 0)) return true;
+    return v.split(/\s*(?:&|,|\/|\bva\b)\s*/).some(p => {
+      const goi = p.replace(/^(sep|anh|chi|em|bs|ths|ts|co|thay)\s+/, '').trim();
+      return goi && goi !== p.trim() && ten && (' ' + ten).endsWith(' ' + goi);
+    });
+  },
+
+  /** THUẦN. ds: [{it, cot, sla}] ➜ { duocXem, cuaToi, an } theo hàm coQuyen(ma) và người đang đăng nhập. */
+  phanLuong: function(ds, nguoi, coQuyen) {
+    const duocXem = [], cuaToi = []; let an = 0;
+    (ds || []).forEach(x => {
+      const ma = this.maTuNguon(x.it.nguon);
+      if (ma && coQuyen && !coQuyen(ma)) { an++; return; }
+      duocXem.push(x);
+      if (this.laCuaToi(x.it.nguoi, nguoi)) cuaToi.push(x);
+    });
+    return { duocXem, cuaToi, an };
+  },
+
+  luongLoc: function(k) { this._luong = k || ''; ShinApp.rung('nhe'); if (this._container) this.render(this._container, this._data); },
+
   NHAN_SLA: { do: '🔴 Quá hạn', vang: '🟡 Sắp tới hạn', xanh: '🟢 Trong hạn', xam: '⚪ Chưa rõ hạn', xong: '✅ Xong' },
 
   render: function(container, data) {
@@ -48,6 +93,13 @@ const ModuleCongViec = {
     const bay = new Date();
     this._ds = [];
     ['canLam', 'dangLam', 'hoanTat'].forEach(c => (kanban[c] || []).forEach(it => this._ds.push({ it, cot: c, sla: this.mucSla(it, c, bay) })));
+    // M7.3 – phân luồng theo quyền (Live: người đăng nhập Hub; Demo: người mẫu)
+    const laLive = typeof SHIN_API !== 'undefined' && SHIN_API.laCheDoLive();
+    const nguoi = laLive ? (ShinApp.live && ShinApp.live.nguoi) : (d.nguoiDemo || { hoTen: 'Sếp Tâm', vaiTro: 'Admin' });
+    const lu = this.phanLuong(this._ds, nguoi, ShinApp.mangDuocHien || null);
+    if (this._luong === 'toi' && !lu.cuaToi.length) this._luong = '';
+    this._ds = this._luong === 'toi' ? lu.cuaToi : lu.duocXem;
+    const demCot = c => this._ds.filter(x => x.cot === c).length;
     const dem = k => this._ds.filter(x => x.sla === k).length;
 
     let html = `
@@ -83,6 +135,13 @@ const ModuleCongViec = {
         </button>
       </div>
 
+      <!-- M7.3 – luồng việc theo quyền -->
+      <div class="hang-tab cv-luong" role="tablist" aria-label="Luồng việc">
+        <button class="chip-chon ${this._luong ? '' : 'dang-chon'}" data-l="" onclick="ModuleCongViec.luongLoc(this.dataset.l)">🧭 Theo quyền · ${lu.duocXem.length}</button>
+        <button class="chip-chon ${this._luong === 'toi' ? 'dang-chon' : ''}" data-l="toi" onclick="ModuleCongViec.luongLoc(this.dataset.l)" ${lu.cuaToi.length ? '' : 'disabled'}>👤 Của tôi · ${lu.cuaToi.length}</button>
+      </div>
+      ${lu.an ? `<div class="chu-phu cv-an">🔒 ${lu.an} việc thuộc mảng anh/chị không có quyền (hoặc đang tắt) – đã ẩn.</div>` : ''}
+
       <!-- M7.4 – dải SLA -->
       <div class="hang-tab cv-sla" role="tablist" aria-label="Lọc theo SLA">
         <button class="chip-chon ${this._loc ? '' : 'dang-chon'}" data-sla="" onclick="ModuleCongViec.locSla(this.dataset.sla)">Tất cả · ${this._ds.length}</button>
@@ -96,7 +155,7 @@ const ModuleCongViec = {
         <div class="kanban-col">
           <div class="kanban-header">
             <span>⏳ CẦN LÀM</span>
-            <span class="status-pill warn" style="padding:2px 8px; font-size:14px;">${kanban.canLam.length}</span>
+            <span class="status-pill warn" style="padding:2px 8px; font-size:14px;">${demCot('canLam')}</span>
           </div>
           <div class="kanban-list">
             ${this.theCot('canLam')}
@@ -107,7 +166,7 @@ const ModuleCongViec = {
         <div class="kanban-col">
           <div class="kanban-header">
             <span>⚡ ĐANG LÀM</span>
-            <span class="status-pill live" style="padding:2px 8px; font-size:14px;">${kanban.dangLam.length}</span>
+            <span class="status-pill live" style="padding:2px 8px; font-size:14px;">${demCot('dangLam')}</span>
           </div>
           <div class="kanban-list">
             ${this.theCot('dangLam')}
@@ -118,7 +177,7 @@ const ModuleCongViec = {
         <div class="kanban-col">
           <div class="kanban-header">
             <span>✅ HOÀN TẤT</span>
-            <span class="status-pill" style="background:var(--c-green)20; color:var(--c-green); padding:2px 8px; font-size:14px;">${kanban.hoanTat.length}</span>
+            <span class="status-pill" style="background:var(--c-green)20; color:var(--c-green); padding:2px 8px; font-size:14px;">${demCot('hoanTat')}</span>
           </div>
           <div class="kanban-list">
             ${this.theCot('hoanTat')}

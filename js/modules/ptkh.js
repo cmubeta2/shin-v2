@@ -22,11 +22,18 @@ const ModulePTKH = {
     // v2.7.5: Tổng quan tháng đọc THẲNG PTKH qua webGoi (L148) – lỗi thì báo riêng ở khối này, không thay bằng số mẫu
     const link = ShinApp.linkV1('PTKH') || d.linkThe || '';
     // v2.7.7: thêm 📝 Báo cáo 14 ngày (webLichSu) + 📅 Lịch tổ tuần này (webLichTo) – gọi song song, lỗi khối nào báo khối đó
-    const [db, ls, lt] = await Promise.all([
+    // v2.9.8: + webLichSuThang tháng này & tháng trước (tuần ISO vắt tháng) cho 🧭 Nhịp tháng (NTC M5.5 · cảm nhận M5.6)
+    const bay = new Date(), th = this.thangKhoa(bay), thTruoc = this.thangKhoa(new Date(bay.getFullYear(), bay.getMonth() - 1, 1));
+    const [db, ls, lt, lsN, lsT] = await Promise.all([
       SHIN_API.goiPTKH(link, 'webDashboard', ['thang']),
       SHIN_API.goiPTKH(link, 'webLichSu', []),
-      SHIN_API.goiPTKH(link, 'webLichTo', [''])
+      SHIN_API.goiPTKH(link, 'webLichTo', ['']),
+      SHIN_API.goiPTKH(link, 'webLichSuThang', [th]),
+      SHIN_API.goiPTKH(link, 'webLichSuThang', [thTruoc])
     ]);
+    d.thang = th;
+    if (lsN.ok) d.lsThang = (Array.isArray(lsN.data) ? lsN.data : []).concat(lsT.ok && Array.isArray(lsT.data) ? lsT.data : []);
+    else d.lsThangLoi = SHIN_API.moTaLoi(lsN);
     if (db.ok) d.dash = db.data || {}; else d.dashLoi = SHIN_API.moTaLoi(db);
     if (ls.ok) d.lichSu = Array.isArray(ls.data) ? ls.data : []; else d.lichSuLoi = SHIN_API.moTaLoi(ls);
     if (lt.ok) d.lichTo = lt.data || {}; else d.lichToLoi = SHIN_API.moTaLoi(lt);
@@ -92,17 +99,86 @@ const ModulePTKH = {
     const toi = lt.nv.find(n => n.toi) || { ngay: [] };
     const soNgay = Math.max(0, ...lt.nv.map(n => (n.ngay || []).length));
     const THU = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
-    const dong = [];
+    const dong = [], trung = this.doTrungTo(lt);
     for (let i = 0; i < soNgay; i++) {
       const o = (toi.ngay || [])[i] || {};
       const nghi = lt.nv.filter(n => ((n.ngay || [])[i] || {}).nghi).map(n => n.ten);
       const cua = o.nghi ? 'Nghỉ' : [o.ca, o.vt].filter(Boolean).join(' · ') || '–';
-      dong.push(`<div class="hang-tru"><span>${THU[i] || ''} ${e(String(o.ngay || ''))}${o.le ? ' 🎌' : ''}</span><b>${e(cua)}</b></div>
-        ${nghi.length ? `<div class="chu-phu">Nghỉ: ${e(nghi.join(', '))}</div>` : ''}`);
+      const t = trung.find(x => x.i === i);
+      dong.push(`<div class="hang-tru"><span>${t ? '⚠️ ' : ''}${THU[i] || ''} ${e(String(o.ngay || ''))}${o.le ? ' 🎌' : ''}</span><b>${e(cua)}</b></div>
+        ${nghi.length ? `<div class="chu-phu">Nghỉ: ${e(nghi.join(', '))}${t ? ` – còn ${t.lam}/${t.tong} người có ca` : ''}</div>` : ''}`);
     }
+    const canh = trung.length ? `<div class="canh-bao-nguon">⚠️ Trùng nghỉ cả tổ: ${trung.map(t => `${THU[t.i] || ''} ${e(String(t.ngay))} (${t.nghi} nghỉ, còn ${t.lam}/${t.tong})`).join(' · ')} – tổ trưởng xem lại lịch trong app PTKH.</div>` : '';
     return `
       <div class="hn-tieu"><span>📅 LỊCH TỔ ${e(lt.to || '')} · TUẦN ${e(String(lt.thuHai || ''))}${mau}</span></div>
+      ${canh}
       ${dong.length ? `<div class="the">${dong.join('')}</div>` : '<div class="trong">Chưa có lịch tổ tuần này.</div>'}`;
+  },
+
+  /** THUẦN – v2.9.7: dò trùng nghỉ cả tổ trên webLichTo (chỉ nghỉ đã duyệt). Ngày bị đánh dấu khi ≥ 2 người nghỉ
+   *  hoặc số người còn ca < nửa tổ (làm tròn lên). Bỏ ngày lễ và tổ < 2 người. ➜ [{i, ngay, nghi, lam, tong}] */
+  doTrungTo: function(lt) {
+    const ds = (lt && Array.isArray(lt.nv)) ? lt.nv : [], tong = ds.length, kq = [];
+    if (tong < 2) return kq;
+    const soNgay = Math.max(0, ...ds.map(n => (n.ngay || []).length));
+    for (let i = 0; i < soNgay; i++) {
+      const o = ds.map(n => (n.ngay || [])[i] || {});
+      if (o.some(x => x.le)) continue;
+      const nghi = o.filter(x => x.nghi).length, lam = o.filter(x => !x.nghi && x.ca).length;
+      if (nghi && (nghi >= 2 || lam < Math.ceil(tong / 2))) kq.push({ i, ngay: (o.find(x => x.ngay) || {}).ngay || '', nghi, lam, tong });
+    }
+    return kq;
+  },
+
+  /** THUẦN. Date ➜ 'yyyy-MM' (giờ máy). */
+  thangKhoa: function(dt) { return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0'); },
+
+  /** THUẦN – v2.9.8: báo cáo của tôi (khuôn webLichSuThang, có thể gồm tháng trước) ➜ nhịp tháng `thang`.
+   *  M5.5 NTC giống phatNTCTuan_ / demTruNTCThang_ của PTKH: ngày Ca NTC đếm theo tuần ISO (T2–CN), ngày trùng tính 1,
+   *  lần ≥ 4 trong tuần ➜ trừ ½ công, tính vào tháng của ngày vượt. Bỏ báo cáo đã hủy / thử.
+   *  M5.6: cảm nhận 1–5★ (camNhan) trung bình + phân bố trong tháng.
+   *  ➜ {ntc:[{ngay, lan, tru}], tuanNay, truCong, cam:{tb, n, pb[5]}, bc:{tong, dung, tre}} */
+  nhipThang: function(ds, thang, homNay) {
+    const hop = (Array.isArray(ds) ? ds : []).filter(r => r && /^\d{4}-\d{2}-\d{2}$/.test(String(r.khoa || '')) && !/hủy|thử/i.test(String(r.trangThaiDuyet || '')));
+    const khoa = d => this.thangKhoa(d) + '-' + String(d.getDate()).padStart(2, '0');
+    const thu2 = k => { const t = new Date(k + 'T00:00:00'); t.setDate(t.getDate() + 1 - (t.getDay() || 7)); return khoa(t); };
+    const ngayNTC = [...new Set(hop.filter(r => /NTC/i.test(String(r.ca || ''))).map(r => r.khoa))].sort();
+    const dem = {}, ntc = [];
+    ngayNTC.forEach(k => { const w = thu2(k); dem[w] = (dem[w] || 0) + 1; if (k.slice(0, 7) === thang) ntc.push({ ngay: k, lan: dem[w], tru: dem[w] > 3 ? 0.5 : 0 }); });
+    const trongThang = hop.filter(r => r.khoa.slice(0, 7) === thang);
+    const cam = trongThang.map(r => Number(r.camNhan)).filter(v => v >= 1 && v <= 5), pb = [0, 0, 0, 0, 0];
+    cam.forEach(v => pb[v - 1]++);
+    return {
+      ntc, tuanNay: dem[thu2(khoa(homNay || new Date()))] || 0, truCong: ntc.reduce((a, x) => a + x.tru, 0),
+      cam: { n: cam.length, tb: cam.length ? cam.reduce((a, v) => a + v, 0) / cam.length : null, pb },
+      bc: { tong: trongThang.length, dung: trongThang.filter(r => r.dungHan === true || r.dungHan === 'Đúng hạn').length,
+        tre: trongThang.filter(r => r.dungHan === false || /trễ|không/i.test(String(r.dungHan || ''))).length }
+    };
+  },
+
+  /** v2.9.8 – 🧭 Nhịp tháng của tôi (M5.5 NTC · M5.6 cảm nhận sau ca) từ webLichSuThang, chỉ đọc. */
+  veNhip: function(d) {
+    const e = ShinApp.esc, so = ShinApp.soVN, mau = d.live ? '' : ' (mẫu)';
+    if (d.lsThangLoi) return `<div class="canh-bao-nguon loi">⚠️ Nhịp tháng PTKH: ${e(d.lsThangLoi)}</div>`;
+    if (!Array.isArray(d.lsThang)) return '';
+    const th = d.thang || this.thangKhoa(new Date());
+    const n = this.nhipThang(d.lsThang, th, d.live ? new Date() : new Date(th + '-06T00:00:00')), c = n.cam;
+    const vuot = n.ntc.filter(x => x.tru);
+    const sao = c.tb === null ? '–' : c.tb.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + '★';
+    const mauCam = c.tb === null ? 'var(--c-gray)' : c.tb >= 4 ? 'var(--c-green)' : c.tb >= 3 ? 'var(--c-yellow)' : 'var(--c-red)';
+    const dm = k => k.slice(8) + '/' + k.slice(5, 7);
+    return `
+      <div class="hn-tieu"><span>🧭 NHỊP THÁNG ${e(th.slice(5) + '/' + th.slice(0, 4))} CỦA TÔI${mau}</span></div>
+      ${vuot.length ? `<div class="canh-bao-nguon">⚠️ Ca NTC vượt 3 lần/tuần: ${vuot.map(x => e(dm(x.ngay)) + ' (lần ' + x.lan + ')').join(' · ')} – trừ ${e(String(n.truCong).replace('.', ','))} ngày công khi xuất TC-NS.</div>` : ''}
+      <div class="luoi-o-so">
+        <div class="o-so-loc"><b style="color:${n.tuanNay > 3 ? 'var(--c-red)' : n.tuanNay === 3 ? 'var(--c-yellow)' : 'var(--c-blue)'}">${so(n.tuanNay)}/3</b>Ca NTC tuần này</div>
+        <div class="o-so-loc"><b style="color:${n.truCong ? 'var(--c-red)' : 'var(--c-green)'}">${e(String(n.truCong).replace('.', ','))}</b>Ngày công bị trừ (NTC)</div>
+        <div class="o-so-loc"><b style="color:${mauCam}">${sao}</b>Cảm nhận sau ca · ${so(c.n)} lần</div>
+        <div class="o-so-loc"><b style="color:${n.bc.tre ? 'var(--c-red)' : 'var(--c-green)'}">${so(n.bc.dung)}/${so(n.bc.tong)}</b>BC đúng hạn tháng</div>
+      </div>
+      ${c.n ? `<div class="the">${[5, 4, 3, 2, 1].map(v => `<div class="hang-tru"><span>${'★'.repeat(v)}</span><b>${so(c.pb[v - 1])}</b></div>
+        <div class="thanh-tien"><div style="width:${Math.round(c.pb[v - 1] * 100 / c.n)}%"></div></div>`).join('')}
+        <div class="chu-phu">Chỉ của riêng anh/chị – chỉ số tinh thần cả tổ cần cổng tổng hợp ẩn danh của PTKH.</div></div>` : ''}`;
   },
 
   /** THUẦN. webHomNay ➜ phần của PTKH (thẻ tieuDe 'PTKH' + việc cùng tên app). */
@@ -158,6 +234,7 @@ const ModulePTKH = {
       ${this.veDash(d.live ? d : Object.assign({}, d, { dash: d.dash ? Object.assign({ live: false }, d.dash) : null }))}
       ${this.veLichSu(d)}
       ${this.veLichTo(d)}
+      ${this.veNhip(d)}
 
       <div class="hn-tieu"><span>VIỆC TỪ PTKH · ${viec.length}</span></div>
       ${viec.length ? `<div class="hn-list">${viec.map((v, i) => `
@@ -176,7 +253,7 @@ const ModulePTKH = {
 
       <details class="tq-gon">
         <summary><span>ⓘ Kết nối với app PTKH gốc</span></summary>
-        <p class="chu-phu">Số và việc ở đây do Hub kéo từ app PTKH (khoảng 90 phút / lần; bấm ↻ trên 🏠 Hôm nay để kéo ngay). Các nút mở thẳng app PTKH bằng token Hub của anh/chị – không cần link PTKH riêng. Khối 📊 Tổng quan tháng (v2.7.5), 📝 Báo cáo 14 ngày và 📅 Lịch tổ (v2.7.7) đọc thẳng app PTKH qua cổng webGoi – chỉ đọc; nộp / sửa vẫn mở app PTKH.</p>
+        <p class="chu-phu">Số và việc ở đây do Hub kéo từ app PTKH (khoảng 90 phút / lần; bấm ↻ trên 🏠 Hôm nay để kéo ngay). Các nút mở thẳng app PTKH bằng token Hub của anh/chị – không cần link PTKH riêng. Khối 📊 Tổng quan tháng (v2.7.5), 📝 Báo cáo 14 ngày và 📅 Lịch tổ (v2.7.7), 🧭 Nhịp tháng (v2.9.8 – webLichSuThang) đọc thẳng app PTKH qua cổng webGoi – chỉ đọc; nộp / sửa vẫn mở app PTKH.</p>
       </details>
     `;
   },

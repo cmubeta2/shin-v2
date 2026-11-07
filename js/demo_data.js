@@ -122,7 +122,8 @@ window.SHIN_DEMO_DATA = {
     ],
     leadMoi: [
       { nguon: "Landing Page KSK Doanh nghiệp (Mảng 8)", ten: "Công ty May Xuất Khẩu An Xuyên", soDt: "0913.xxx.554", slKham: "350 người", thoiGian: "10 phút trước" },
-      { nguon: "Form Tuyển sinh Đại học Từ xa GDU", ten: "Lê Hoàng Yến", soDt: "0982.xxx.901", khoa: "Quản trị Kinh doanh", thoiGian: "45 phút trước" }
+      { nguon: "Form Tuyển sinh Đại học Từ xa GDU", ten: "Lê Hoàng Yến", soDt: "0982.xxx.901", khoa: "Quản trị Kinh doanh", thoiGian: "45 phút trước" },
+      { nguon: "Landing Page KSK Doanh nghiệp (Mảng 8)", ten: "Công ty Mẫu Thủy Sản B", soDt: "0900.xxx.000", slKham: "120 người", thoiGian: "3 ngày trước" }
     ]
   },
 
@@ -537,7 +538,8 @@ window.SHIN_DEMO_DATA.phongkhamV1 = {
       { ngay: '03/11/2026', trangThai: 'da_duyet', tomTat: 'Tiếp đón 42 lượt · 15 cuộc gọi', soAnh: 2, lyDoTraLai: '' },
       { ngay: '02/11/2026', trangThai: 'tra_lai', tomTat: 'Tiếp đón 38 lượt', soAnh: 0, lyDoTraLai: 'Bổ sung ảnh bảng trực' }
     ] },
-  lichTuan: { tuan: 'T2 02/11 – CN 08/11', phepCon: 8, nghiBuCon: 1, donNghi: [{ id: 'N1', loai: 'nghi_tuan', tuNgay: '08/11/2026', denNgay: '08/11/2026', trangThai: 'cho', lyDo: 'Việc gia đình', lyDoTraLai: '' }],
+  lichTuan: { tuan: 'T2 02/11 – CN 08/11', phepCon: 8, nghiBuCon: 1, donNghi: [{ id: 'N1', loai: 'nghi_tuan', tuNgay: '08/11/2026', denNgay: '08/11/2026', trangThai: 'cho', lyDo: 'Việc gia đình', lyDoTraLai: '' },
+      { id: 'N2', loai: 'nghi_om', tuNgay: '07/11/2026', denNgay: '07/11/2026', trangThai: 'da_duyet', lyDo: 'Khám sức khỏe định kỳ (MẪU)', lyDoTraLai: '' }],
     ngay: [
       { ngay: '02/11/2026', thu: 'T2', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false }, { ngay: '03/11/2026', thu: 'T3', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false },
       { ngay: '04/11/2026', thu: 'T4', viTri: 'Tổng đài', ca: 'Chiều', nghi: false, le: false }, { ngay: '05/11/2026', thu: 'T5', viTri: 'Tiếp đón', ca: 'Sáng', nghi: false, le: false },
@@ -592,5 +594,18 @@ window.SHIN_DEMO_DATA.ptkh.lichSu = [
 ];
 window.SHIN_DEMO_DATA.ptkh.lichTo = { to: 'Tổ Mẫu', thuHai: '2026-11-02', nv: [
   { ma: 'NV01', ten: 'Nhân viên Mẫu', toi: true, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: i < 6 ? (i % 2 ? 'Chiều' : 'Sáng') : '', vt: i < 6 ? 'Tư vấn' : '', nghi: i === 6 ? 'Nghỉ' : '', le: false })) },
-  { ma: 'NV02', ten: 'Nhân viên A', toi: false, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: 'Sáng', vt: 'Tổng đài', nghi: i === 4 ? 'Nghỉ' : '', le: false })) }
+  { ma: 'NV02', ten: 'Nhân viên A', toi: false, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: 'Sáng', vt: 'Tổng đài', nghi: i === 4 ? 'Nghỉ' : '', le: false })) },
+  // v2.9.7 – thêm 1 người MẪU cùng nghỉ T6 để Demo thấy ⚠️ trùng nghỉ cả tổ
+  { ma: 'NV03', ten: 'Nhân viên B', toi: false, ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'].map((n, i) => ({ ngay: n, ca: i < 6 ? 'Chiều' : '', vt: i < 6 ? 'Tư vấn' : '', nghi: i === 4 ? 'Nghỉ' : '', le: false })) }
 ] };
+
+// v2.9.8 – 🧭 Nhịp tháng (khuôn webLichSuThang) – dữ liệu GIẢ: 4 ca NTC tuần 02–08/11 (lần 4 bị trừ ½ công) + cảm nhận 1–5★
+window.SHIN_DEMO_DATA.ptkh.thang = '2026-11';
+window.SHIN_DEMO_DATA.ptkh.lsThang = [
+  { khoa: '2026-11-06', ca: 'Ca NTC (6h45-12h)', dungHan: 'Đúng hạn', trangThaiDuyet: 'Chờ duyệt', camNhan: 3 },
+  { khoa: '2026-11-05', ca: 'Ca NTC (6h45-12h)', dungHan: 'Đúng hạn', trangThaiDuyet: 'Đã duyệt', camNhan: 4 },
+  { khoa: '2026-11-04', ca: 'Ca NTC (6h45-12h)', dungHan: 'Trễ', trangThaiDuyet: 'Đã duyệt', camNhan: 4 },
+  { khoa: '2026-11-03', ca: 'Ca NTC (6h45-12h)', dungHan: 'Đúng hạn', trangThaiDuyet: 'Đã duyệt', camNhan: 5 },
+  { khoa: '2026-11-02', ca: 'Ca 7h-15h', dungHan: 'Đúng hạn', trangThaiDuyet: 'Đã duyệt', camNhan: 5 },
+  { khoa: '2026-11-01', ca: 'Hành chính', dungHan: 'Đúng hạn', trangThaiDuyet: 'Đã hủy', camNhan: 1 }
+];

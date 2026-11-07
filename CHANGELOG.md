@@ -4,6 +4,59 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.9.9] – 06/11/2026 (ĐỒNG BỘ TRẠNG THÁI HUB v1.15.6)
+
+### 📝 Tài liệu
+- HUB L21–L25 đã lên app v1.15.6 @15 (06/11): `QUY_HOACH_10_MANG_AIOS.md` mục 2 chuyển 🟢 M0.1 (`webLuuUngDung`), M0B.2–M0B.4 (`webDuyet` / `webPheDuyet`), M2.3 (`webCRM`), M6.2 (`webDuAn`). Màn đã nối từ v2.8.x – không đổi mã. Header + `sw.js`: shin-v2.9.9.
+
+## [2.9.8] – 06/11/2026 (NHỊP THÁNG: NTC M5.5 + CẢM NHẬN M5.6)
+
+### ✨ Tính năng
+- `js/modules/ptkh.js`: khối 🧭 **Nhịp tháng của tôi** đọc cổng có sẵn `webLichSuThang(token, 'yyyy-MM')` của PTKH (đã trong `HAM_WEBGOI_`) cho tháng này + tháng trước (tuần ISO vắt tháng). Hàm thuần `nhipThang` làm đúng luật `phatNTCTuan_` / `demTruNTCThang_` của PTKH (L111c): ngày Ca NTC đếm theo tuần ISO T2–CN, lần ≥ 4 ➜ trừ ½ công, tính vào tháng của ngày vượt; bỏ báo cáo đã hủy / thử. Hiện: Ca NTC tuần này x/3, ngày công bị trừ, dải ⚠️ các ngày vượt; cảm nhận sau ca 1–5★ trung bình + phân bố; BC đúng hạn tháng. Chỉ đọc, lỗi cổng báo riêng khối, không thay bằng số mẫu.
+- `js/demo_data.js`: `lsThang` MẪU (4 ca NTC tuần 02–08/11 ➜ trừ 0,5 công). `sw.js`: shin-v2.9.8.
+
+## [2.9.7] – 06/11/2026 (DÒ TRÙNG NGHỈ CẢ TỔ)
+
+### ✨ Tính năng
+- `js/modules/ptkh.js`: hàm thuần `doTrungTo(lichTo)` trên cổng `webLichTo` (PTKH, đã có trong `HAM_WEBGOI_` – trả lịch tuần + nghỉ đã duyệt của cả tổ): ngày có ≥ 2 người nghỉ, hoặc số người còn ca < nửa tổ ➜ dải ⚠️ "Trùng nghỉ cả tổ" trên khối 📅 Lịch tổ + dấu ⚠️ và "còn x/y người có ca" trên dòng ngày. Bỏ ngày lễ, tổ < 2 người. Chỉ đọc, không gửi gì.
+- `js/demo_data.js`: thêm 1 người MẪU cùng nghỉ T6. `sw.js`: shin-v2.9.7.
+
+## [2.9.6] – 06/11/2026 (RÀ UX 375 + 1280)
+
+### 🐛 Sửa lỗi
+- `css/styles.css`: `.form-input` từ 14px lên `max(16px, 14px × cỡ chữ)` – trước đây ô nhập ở 🧭 Điều hành, 📋 Đánh giá 5T (160 ô), 🛡️ Quản trị, 👥 Đối tác chỉ 14px ➜ iPhone tự phóng to khi gõ (nguyên tắc: ô nhập 16px).
+- Rà tự động 16 màn × 2 bề rộng (Edge không giao diện qua CDP, chế độ Demo): 0 cuộn ngang, 0 vùng bấm < 44px, 0 chữ < 12px, 0 lỗi console. `sw.js`: shin-v2.9.6.
+
+## [2.9.5] – 06/11/2026 (KIỂM TRA TRÙNG LỊCH M5.3)
+
+### ✨ Tính năng
+- `js/modules/phongkham.js`: hàm thuần `xungDotLich(ngay, donNghi)` – ngày đang xếp ca nằm trong đơn nghỉ (chờ duyệt / đã duyệt, không tính đổi ca) ➜ thẻ ⚠️ TRÙNG LỊCH đầu tab 📅 Lịch tuần và dấu ⚠️ trên dòng ngày.
+- `js/demo_data.js`: thêm 1 đơn nghỉ MẪU (07/11, đã duyệt) để Demo thấy cảnh báo. `sw.js`: shin-v2.9.5.
+
+## [2.9.4] – 06/11/2026 (ĐỒNG BỘ CẤU HÌNH M0.1)
+
+### ✨ Tính năng
+- `js/modules/caidat_module.js`: khối "Đồng bộ cấu hình sang máy khác" – sao chép / dán mã `SHINCFG1.…` (8 khóa giao diện theo danh sách trắng, kiểm từng giá trị; `shin_token` không bao giờ vào mã). Áp dụng có Hoàn tác 6s, hết giờ mới ghi rồi tải lại. Trình duyệt chặn clipboard ➜ hiện mã trong ô để tự chép.
+- `sw.js`: PHIEN_BAN_SW shin-v2.9.4.
+
+## [2.9.3] – 06/11/2026 (NHẮC CHĂM SÓC LEAD M2.4)
+
+### ✨ Tính năng
+- `js/modules/crm.js`: khối 🔔 Lead mới tính tuổi lead phía trình duyệt từ cột Luc (`webCRM` trả "dd/mm/yyyy HH:mm"; Demo đọc "N phút/giờ/ngày trước", "HH:MM hôm nay") – 🟢 < 24 giờ · 🟡 24–48 giờ · 🔴 > 48 giờ, viền màu từng dòng, đếm ⏰ trên tiêu đề, nút sao chép tin nhắc chăm sóc (🔴 trước) để dán Telegram / ⚡ Giao việc. Không gửi gì đi.
+- `js/demo_data.js`: thêm 1 lead MẪU 3 ngày tuổi (không dữ liệu thật). `css/styles.css`: `.crm-lead-*`.
+
+## [2.9.2] – 06/11/2026 (TRÍCH BÀI HỌC KINH NGHIỆM M9.4)
+
+### ✨ Tính năng
+- `js/modules/duan.js`: tab 🧱 Ma trận vướng mắc có thẻ 💡 Bài học kinh nghiệm – rút từ vướng mắc Flash Khối 2 có đề xuất (bỏ trùng, bỏ thẻ HTML), xếp 5 chủ đề (Nhân sự · Thiết bị & Hậu cần · Tài chính · Khách hàng & Hợp đồng · Tiến độ & Quy trình) theo từ khóa; nút sao chép Markdown có `[[Chủ đề]]` để dán vào kho 📚 Tri thức (đồ thị M9.3). Không gửi gì đi.
+
+## [2.9.1] – 06/11/2026 (PHÂN LUỒNG VIỆC THEO QUYỀN M7.3)
+
+### ✨ Tính năng
+- `js/modules/congviec.js`: phân luồng việc theo RBAC phía trình duyệt – việc thuộc mảng người dùng không được vào (cùng luật ẩn menu `ShinApp.mangDuocHien` = chốt chặn quyền mã v1, kể cả mảng đang tắt) bị ẩn kèm dòng 🔒 đếm; chip 🧭 Theo quyền / 👤 Của tôi (khớp họ tên, mã NV hoặc gọi tắt "Sếp Tâm", "chị Thư" theo phần cuối họ tên, không dấu). Số đầu cột Kanban đếm theo luồng đang xem.
+- `js/app.js`: xuất `ShinApp.mangDuocHien`.
+- `css/styles.css`: `.cv-luong`, `.cv-an`.
+
 ## [2.9.0] – 05/11/2026 (RÀ UX TOÀN MÀN 375 / 1280)
 
 ### 🎨 Giao diện

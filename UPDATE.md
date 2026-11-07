@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.9.0** · Cập nhật ngày: **05/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.9.9** · Cập nhật ngày: **06/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,50 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.9.9 ✅ – ĐỒNG BỘ TRẠNG THÁI: HUB v1.15.6 ĐÃ LÊN APP (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** HUB L21–L25 đã «lên app v1.15.6 @15» (06/11 10h, `_TacVu/ban_tren_app.json`) ➜ các màn 0B Phê duyệt (`webPheDuyet` / `webDuyet`), CRM (`webCRM` / `webLuuDoiTac`), Dự án (`webDuAn`), Tài chính (`webTaiChinh`), Quản trị (`webLuuNguoiDung` / `webLuuUngDung`) đã nối từ v2.8.x nay chạy số thật ở Live – hết dải vàng "chưa mở cổng". QUY_HOACH mục 2: M0.1 (bật/tắt app), M0B.2–M0B.4, M2.3, M6.2 chuyển 🟢. KPI v1.8.2 @9 đã lên app ➜ nháp AOP năm sau (`webNhap2027`) chạy thật. Không đổi mã màn.
+- Còn chờ v1: ghi chú kiểm L21 (Hub) – `chuanPhieuDuyet` dùng `Number(du.soTien)` nên chuỗi kiểu "1.500.000" từ app nguồn thành trống (v2 không gửi số tiền, chỉ hiển thị) ➜ dòng v1 tự lo. **Chờ anh:** trộn PR #19 (máy tự động không được phép trộn).
+
+### PHIÊN BẢN v2.9.8 ✅ – NHỊP THÁNG: NTC M5.5 + CẢM NHẬN M5.6 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** gỡ một phần "Còn chờ v1" của M5.5 / M5.6 – cổng `webLichSuThang` của PTKH (đã trong `webGoi`) trả ca + cảm nhận (`camNhan` 1–5) từng báo cáo của chính NV, nên 🏥 PTKH có khối 🧭 Nhịp tháng: Ca NTC tuần này x/3, ngày công bị trừ (luật L111c: lần ≥ 4/tuần ISO trừ ½ công), cảm nhận sau ca trung bình + phân bố, BC đúng hạn tháng.
+- **Kiểm:** node --check; nhipThang thử Demo + tuần vắt tháng 27/10–01/11 đạt; headless Edge 375 + 1280: 16 màn không cuộn ngang, 0 lỗi console.
+- Còn chờ v1: Team Morale cả tổ (trung bình ẩn danh) và M5.4 tăng ca / bù giờ – PTKH chưa có hàm chỉ đọc tổng hợp theo tổ trong `HAM_WEBGOI_` (chỉ `webXuatTCNS` ghi, Admin) ➜ v2 mới hiện số của riêng người dùng.
+
+### PHIÊN BẢN v2.9.7 ✅ – DÒ TRÙNG NGHỈ CẢ TỔ (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** gỡ mục "Còn chờ v1" của v2.9.5 – cổng `webLichTo` của PTKH (L26d, đã trong danh sách `webGoi`) trả sẵn nghỉ đã duyệt của mọi người cùng tổ, nên dò trùng cả tổ chạy được phía trình duyệt: 🏥 PTKH › 📅 Lịch tổ hiện ⚠️ ngày ≥ 2 người nghỉ hoặc còn ca < nửa tổ.
+- **Kiểm:** node --check; doTrungTo thử 5 ca đạt; Demo (tổ mẫu 3 người, 2 nghỉ T6) ➜ 1 ngày cảnh báo; headless 375 + 1280.
+- Còn chờ v1: đơn nghỉ CHỜ duyệt của cả tổ không trả qua `webLichTo` (chỉ đã duyệt) ➜ chưa cảnh báo sớm trước khi duyệt.
+
+### PHIÊN BẢN v2.9.6 ✅ – RÀ UX 375 + 1280 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** rà đo từng màn ở 375 px và 1280 px (mục h). Lỗi đo được duy nhất: ô nhập `.form-input` 14px < 16px ➜ nâng lên tối thiểu 16px (giữ hệ số cỡ chữ khi phóng to). Không đổi bố cục.
+- **Kiểm:** node --check; Edge không giao diện qua CDP mở index.html, bấm lần lượt 16 màn ở 375 + 1280: scrollWidth ≤ bề rộng, không phần tử tràn, không nút / ô < 44px, không chữ < 12px, 0 lỗi console; đo lại sau sửa: 0 ô nhập < 16px (chỉ còn ô tick).
+- Còn chờ: không.
+
+### PHIÊN BẢN v2.9.5 ✅ – KIỂM TRA TRÙNG LỊCH M5.3 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** tab 📅 Lịch tuần (🩺 Phòng PTKH) tự dò ngày đang xếp ca mà trùng đơn nghỉ chờ duyệt / đã duyệt của chính mình (bỏ đổi ca, đơn trả lại, ngày nghỉ / lễ) ➜ thẻ ⚠️ TRÙNG LỊCH + dấu ⚠️ trên dòng ngày. Chạy phía trình duyệt trên `webLichTuan` (PK L5), không gửi gì.
+- **Kiểm:** node --check; xungDotLich thử 5 ca đạt; Demo thêm 1 đơn nghỉ MẪU 07/11 ➜ hiện 1 ngày trùng; headless 375 + 1280.
+- Còn chờ v1: dò trùng cả tổ (nhiều người cùng nghỉ một ca, thiếu người trực) cần cổng lịch tổ + đơn nghỉ cả tổ cho v2 (hiện `webBangXepLich` chỉ tổ trưởng, chưa trả đơn nghỉ).
+
+### PHIÊN BẢN v2.9.4 ✅ – ĐỒNG BỘ CẤU HÌNH GIỮA CÁC MÁY M0.1 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** màn ⚙️ Quản trị Module thêm "Đồng bộ cấu hình sang máy khác": sao chép mã `SHINCFG1.<base64>` (bảng màu, sáng/tối, cỡ chữ, kiểu thanh mép, mảng đang tắt) và dán ở máy kia; danh sách trắng 8 khóa + kiểm giá trị, **token không bao giờ vào mã** (khóa lạ bị bỏ khi đọc). Áp dụng có Hoàn tác 6s – hết 6s mới ghi localStorage rồi tải lại.
+- **Kiểm:** node --check; taoMaCauHinh / docMaCauHinh thử 3 ca (bỏ shin_token, bỏ giá trị sai dạng, mã hỏng) đạt; headless 375 + 1280.
+- Còn chờ v1: đồng bộ tự động theo người (lưu cấu hình vào sheet NguoiDung qua cổng Hub) chưa có cổng ➜ hiện đồng bộ thủ công bằng mã.
+
+### PHIÊN BẢN v2.9.3 ✅ – NHẮC CHĂM SÓC LEAD M2.4 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** màn 👥 CRM đánh dấu lead quá 24 / 48 giờ và sao chép tin nhắc chăm sóc – chạy phía trình duyệt trên `leadMoi` của `webCRM` (HUB L22).
+- **Kiểm:** node --check; tuoiLead / mucLead / tinNhacLead thử 8 ca đạt; headless 375 + 1280: 16 màn + tab con không cuộn ngang, 0 lỗi console.
+- Còn chờ v1: lịch sử tương tác từng đối tác (sheet / cổng ghi lần liên hệ) và đánh dấu lead "đã chăm sóc" chưa có ➜ lead đã xử lý vẫn bị nhắc tới khi xóa khỏi LeadMoi; Hub trên app vẫn v1.13.3 (L22 chưa lên app) ➜ Live còn dải vàng.
+
+### PHIÊN BẢN v2.9.2 ✅ – TRÍCH BÀI HỌC KINH NGHIỆM TỪ FLASH REPORT M9.4 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** hàm thuần `trichBaiHoc` / `baiHocMarkdown` chạy phía trình duyệt trên Blocker Matrix (Live: `webDuAn`; Demo: demo_data) – chỉ lấy vướng mắc Flash có đề xuất (dòng dự án chậm chỉ là trạng thái, không phải cách làm).
+- **Kiểm:** node --check; Demo ra 2 bài học (Thiết bị & Hậu cần, Nhân sự); headless 375 + 1280 tab Ma trận không cuộn ngang, 0 lỗi console.
+- Còn chờ v1: kho tri thức (`05_TriThuc`) chưa có cổng ghi ➜ bài học chỉ sao chép; báo cáo ca PK chưa đưa vào nguồn trích (cổng PK chỉ trả báo cáo của chính người dùng).
+
+### PHIÊN BẢN v2.9.1 ✅ – PHÂN LUỒNG VIỆC THEO QUYỀN M7.3 (06/11/2026, lượt tự động ⑤)
+- **Nội dung:** màn 📋 Công việc ẩn việc thuộc mảng người đang đăng nhập không có quyền (Live: theo kết quả hỏi quyền các máy chủ v1 lúc mở; mảng đang tắt cũng ẩn), thêm chip 🧭 Theo quyền / 👤 Của tôi. Chạy hoàn toàn phía trình duyệt trên dữ liệu màn đang có – không cổng mới.
+- **Kiểm:** node --check; hàm thuần maTuNguon / laCuaToi / phanLuong thử 11 ca đạt; headless 375 + 1280: 16 màn + 17 tab con không cuộn ngang, 0 lỗi console (Demo).
+- Còn chờ v1: Task Bus M7.1 (máy chủ gom việc) – khi có, phân luồng dùng lại nguyên hàm phanLuong.
 
 ### PHIÊN BẢN v2.9.0 ✅ – RÀ UX TOÀN BỘ 16 MÀN + 18 TAB CON Ở 375 / 1280 (05/11/2026, lượt tự động ⑤)
 - **Nội dung:** đo tự động (mở hết khối gập) mọi màn trong menu và các tab con (5T Thư viện; Dự án Danh sách / Flash / Ma trận; Quản trị Người dùng / App / Mảng / Ma trận quyền; KPI Soát lỗi / AOP / Báo cáo quý; PK Công việc / Báo cáo / Lịch / Góp ý / Hồ sơ / Thông báo / Nhân sự): còn đúng 1 lỗi – thẻ gập "Chi tiết" ở Điều hành cao 32px → 44px. Kết quả sau sửa: **0 chữ < 14px, 0 vùng bấm < 44px, 0 cuộn ngang, 0 lỗi console** (Demo).
