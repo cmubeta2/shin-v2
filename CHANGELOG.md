@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.10.0] – 07/11/2026 (M6.4 SOẠN ĐỀ XUẤT CHI)
+
+### ✨ Tính năng
+- 💰 Tài chính: khối gập ✍️ Soạn đề xuất chi (M6.4) – khoản mục, số tiền (đọc kiểu VN), dự án / hạng mục (gợi ý từ khoản chờ duyệt), lý do; kiểm đủ trường + tường lửa M9.5 (`SHIN_API.soatKhongDuaVao`) rồi sao chép phiếu để gửi kế toán nhập Phê duyệt 0B. Hàm thuần `ModuleTaiChinh.kiemDeXuat`. Không gửi gì lên máy chủ (Hub chưa có cổng tạo phiếu chi – xin HUB L26). Header + `sw.js`: shin-v2.10.0.
+
 ## [2.9.9] – 06/11/2026 (ĐỒNG BỘ TRẠNG THÁI HUB v1.15.6)
 
 ### 📝 Tài liệu

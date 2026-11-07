@@ -147,7 +147,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M6.1 | Master Dashboard đa dự án (`40_DuAnPK`, `50_HoaSua`, cơ sở mới) | ✅ | – |
 | M6.2 | **Daily Flash Report 4 khối** (Tiến độ · Vướng mắc & Đề xuất · Tài chính phát sinh · Chờ Sếp duyệt) | 🟢 `webDuAn` (Hub v1.15.6 @15 06/11) | v2.5.0 |
 | M6.3 | Blocker Matrix: rủi ro, người xử lý, hạn gỡ → Task Bus | ✅ v2.7.8 phía trình duyệt (Flash + dự án đỏ / vàng / quá hạn; ➜ Task Bus tạm sao chép) | v2.3.0 |
-| M6.4 | Cổng trình duyệt hạng mục / đề xuất chi → 0B + Mảng 3 | 🟡 | v2.3.0 |
+| M6.4 | Cổng trình duyệt hạng mục / đề xuất chi → 0B + Mảng 3 | 🟡 v2.10.0 soạn + kiểm + sao chép phiếu phía trình duyệt (💰 Tài chính) / ⬜ gửi thẳng vào 0B (cần HUB L26 `webGuiDeXuatChi`) | v2.3.0 |
 
 ### 📋 MẢNG 7 – CÔNG VIỆC LIÊN THÔNG (TASK BUS) · `congviec` · Executive Hub
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
