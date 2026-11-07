@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.11.1] – 08/11/2026 (M8.3 SMART LEAD DISPATCHER)
+
+### ✨ Tính năng
+- `ModuleMarketing.phanLuongLead` + 👥 CRM: lead mới gắn luồng (KSK / Tuyển sinh / Đặt khám / Đối tác / Chưa rõ) và nút chuyển tới màn đích. Header + `sw.js`: shin-v2.11.1.
+
 ## [2.11.0] – 08/11/2026 (MẢNG 8 MARKETING PHẦN 1)
 
 ### ✨ Tính năng

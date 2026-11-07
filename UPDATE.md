@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.11.0** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.11.1** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.11.1 ✅ – M8.3 SMART LEAD DISPATCHER (08/11/2026, lượt tự động ⑤ 04h – kéo mục T5 lên)
+- **Nội dung:** hàm thuần `ModuleMarketing.phanLuongLead` chia lead mới (cổng có sẵn `webCRM.leadMoi` – nguồn, ghi chú; Demo thêm khoa / số lượng khám) theo thứ tự: 🏢 KSK doanh nghiệp ➜ Pipeline B2B · 🎓 Tuyển sinh ➜ chiến dịch · 🏥 Đặt khám ➜ Phòng khám (CRM không lưu bệnh nhân) · 🤝 Đối tác / CTV ➜ CRM · ❔ Chưa rõ ➜ phân loại tay (so khớp không dấu, có lý do khớp). 👥 CRM – khối 🔔 Lead mới: dòng tổng "Phân luồng" + mỗi lead 1 nút chuyển tới màn đích (≥ 44px). Chỉ đọc, không ghi gì.
+- **Kiểm:** 10/10 ca thuần (KSK theo nguồn / tên "Cty", tuyển sinh theo học phí / tiếng Anh, đặt khám, CTV, "khám phá" không nhầm khám, lead rỗng); Demo Edge 375 + 1280: 🏢 2 · 🎓 1, nút chuyển đúng màn, 17/17 màn không cuộn ngang, 0 lỗi console.
+- Còn chờ v1: ghi luồng / người nhận vào sheet LeadMoi + giao tự động cho tư vấn viên (cần cổng ghi – chưa duyệt). Bài học: sửa JS qua heredoc Python làm `` thành ký tự backspace – từ nay sửa JS chỉ bằng Edit / Write.
 
 ### PHIÊN BẢN v2.11.0 ✅ – MẢNG 8 MARKETING PHẦN 1: M8.1 · M8.2 · M8.4 (08/11/2026, lượt tự động ⑤ 04h – kéo mục T4 lên)
 - **Nội dung:** module mới 📣 Marketing & Nội dung (`js/modules/marketing.js`, nhóm TĂNG TRƯỞNG & ĐỐI TÁC) + bộ khuôn `js/modules/mau_marketing.js` (agy soạn – phiếu 11080154_V2_M8_lam; em bỏ 5 cụm "nhất / tuyệt đối" trái chính khuôn y tế). M8.1 lịch 4 tuần 12 bài (4 kênh, TOFU / MOFU / BOFU, nút lọc); M8.2 xưởng mẫu 12 khuôn PAS / AIDA / 4P / kịch bản video: chọn khuôn ➜ điền ô {{…}} ➜ xem trước trực tiếp, cảnh báo từ cấm quảng cáo dịch vụ y tế (nhất, hàng đầu, 100%, cam kết khỏi, dứt điểm…) + tường lửa M9.5; M8.4 chốt chặn: Nháp ➜ 📤 Gửi duyệt (bắt đủ ô, không từ cấm) ➜ ✅ Duyệt (Toast Hoàn tác 6s, hết giờ mới ghi) / ↩️ Trả lại / Rút ➜ Sẵn sàng đăng – chỉ bài đã duyệt mới 📋 sao chép. Lưu localStorage `shin_mkt_bai`. Hàm thuần `dienKhuon`, `thieuBien`, `kiemTuCam`, `chuyen`. `index.html`, `sw.js` VO_APP thêm 2 tệp; shin-v2.11.0.

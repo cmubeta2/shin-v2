@@ -44,6 +44,32 @@ const ModuleMarketing = {
     return ((B[cu || 'nhap'] || {})[hanhDong]) || null;
   },
 
+  /** THUẦN – v2.11.1 M8.3 Smart Lead Dispatcher: 1 lead mới (webCRM.leadMoi / Demo) ➜ {luong, module, nhan, lyDo}.
+   *  Thứ tự: KSK doanh nghiệp ➜ Tuyển sinh ➜ Đặt khám (chuyển PK – CRM không lưu bệnh nhân) ➜ Đối tác / CTV ➜ Khác (phân loại tay). */
+  LUONG_LEAD: {
+    ksk: { module: 'crm', nhan: '🏢 KSK doanh nghiệp → Pipeline B2B' },
+    tuyensinh: { module: 'tuyensinh', nhan: '🎓 Tuyển sinh → chiến dịch' },
+    phongkham: { module: 'phongkham', nhan: '🏥 Đặt khám → Phòng khám' },
+    doitac: { module: 'crm', nhan: '🤝 Đối tác / CTV → CRM' },
+    khac: { module: 'crm', nhan: '❔ Chưa rõ → phân loại tay' }
+  },
+  phanLuongLead: function(l) {
+    l = l || {};
+    const bo = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd');
+    const t = bo([l.nguon, l.ghiChu, l.khoa ? 'khoa hoc ' + l.khoa : '', l.slKham ? 'so luong kham ' + l.slKham : ''].join(' ')), ten = bo(l.ten);
+    const R = [
+      ['ksk', /\bksk\b|kham suc khoe (doanh nghiep|dinh ky|cong ty)|so luong kham|doanh nghiep/, /^(cong ty|cty|doanh nghiep)\b/],
+      ['tuyensinh', /tuyen sinh|dai hoc|khoa hoc|hoc phi|chung chi|lop hoc|nganh|tu xa|tieng anh|ielts|nhap hoc/],
+      ['phongkham', /dat lich|dat kham|kham benh|bac si|phong kham|trieu chung|xet nghiem|\bkham\b/],
+      ['doitac', /hop tac|dai ly|\bctv\b|cong tac vien|doi tac/]
+    ];
+    for (const [k, re, reTen] of R) {
+      const m = t.match(re) || (reTen && ten.match(reTen));
+      if (m) return Object.assign({ luong: k, lyDo: 'khớp "' + m[0].trim() + '"' }, this.LUONG_LEAD[k]);
+    }
+    return Object.assign({ luong: 'khac', lyDo: 'không khớp từ khóa' }, this.LUONG_LEAD.khac);
+  },
+
   // ===== Lưu trên máy =====
   docKho: function() { try { return JSON.parse(localStorage.getItem(this.KHOA) || '{}') || {}; } catch (e) { return {}; } },
   ghiKho: function(k) { try { localStorage.setItem(this.KHOA, JSON.stringify(k)); return true; } catch (e) { ShinApp.toast('Trình duyệt không cho lưu trên máy.', 'error'); return false; } },
