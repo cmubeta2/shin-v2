@@ -157,13 +157,13 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M7.3 | Phân luồng việc theo RBAC (M0.2) | ✅ v2.9.1 phía trình duyệt (ẩn việc mảng không có quyền theo chốt chặn v1 + chip 👤 Của tôi) / ⬜ phân luồng phía máy chủ (cần Task Bus M7.1) | v2.5.0 |
 | M7.4 | Giám sát SLA Xanh → Vàng → Đỏ + báo Telegram | ✅ v2.8.4 đèn SLA + lọc + sao chép tin cảnh báo phía trình duyệt / ⬜ tự gửi Telegram (cần Task Bus M7.1 phía v1) | v2.4.0 |
 
-### 🚀 MẢNG 8 – TĂNG TRƯỞNG (MARKETING AI & WEB PHỄU) · `tangtruong` · *(mảng mới – chưa có module)*
-| Mã | Micro-Module | Nguồn tái sử dụng | Phiên bản đích |
+### 🚀 MẢNG 8 – TĂNG TRƯỞNG (MARKETING AI & WEB PHỄU) · `marketing` · *(module 📣 Marketing có từ v2.11.0 – M8.1 · M8.2 · M8.4 lưu trên máy)*
+| Mã | Micro-Module | Trạng thái · nguồn tái sử dụng | Phiên bản đích |
 |---|---|---|---|
-| M8.1 | Lịch nội dung đa kênh TOFU/MOFU/BOFU (Facebook, TikTok, Zalo, YouTube) | M7.1 (bản 1.0) | v2.4.0 |
-| M8.2 | Xưởng AI Copywriter (PAS/AIDA, kịch bản video ngắn) | M7.2 (bản 1.0) | v2.4.0 |
+| M8.1 | Lịch nội dung đa kênh TOFU/MOFU/BOFU (Facebook, TikTok, Zalo, YouTube) | ✅ v2.11.0 lịch 4 tuần 12 bài mẫu, lọc tầng phễu (📣 Marketing, lưu máy) · M7.1 (bản 1.0) | v2.4.0 |
+| M8.2 | Xưởng AI Copywriter (PAS/AIDA, kịch bản video ngắn) | ✅ v2.11.0 xưởng 12 khuôn PAS / AIDA / 4P / video – điền chỗ trống, xem trước, kiểm từ cấm QC y tế (không gọi AI) · M7.2 (bản 1.0) | v2.4.0 |
 | M8.3 | **Smart Lead Dispatcher** – phân luồng lead (xem luồng A) | M8.3 (bản 1.0) | v2.3.0 |
-| M8.4 | Chốt chặn Human-in-the-Loop: bài chỉ xuất bản sau khi 0B duyệt | M7.3 (bản 1.0) | v2.4.0 |
+| M8.4 | Chốt chặn Human-in-the-Loop: bài chỉ xuất bản sau khi 0B duyệt | ✅ v2.11.0 Nháp ➜ Chờ duyệt ➜ Duyệt (Hoàn tác 6s) ➜ Sẵn sàng đăng, chỉ bài đã duyệt sao chép được (lưu máy) · ⬜ qua 0B (Còn chờ v1) · M7.3 (bản 1.0) | v2.4.0 |
 | M8.5 | Phễu Lặn Biển 0m → -105m & xuất bản đa nền tảng | M-WEB-01/02 | v2.6.0 |
 | M8.6 | Báo cáo hiệu suất truyền thông (reach, tương tác) | M7.5 (bản 1.0) | v2.6.0 |
 
