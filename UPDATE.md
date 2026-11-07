@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.10.0** · Cập nhật ngày: **07/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.10.1** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.10.1 ✅ – M3.4 ĐỀ NGHỊ TẠM ỨNG / THANH TOÁN (08/11/2026, lượt tự động ⑤ 04h)
+- **Nội dung:** 💰 Tài chính gộp 1 form ✍️ Đề xuất chi / Tạm ứng / Thanh toán (theo phản biện agy 11080154_V2_M3): chọn loại ➜ Tạm ứng hiện ô hạn hoàn ứng dd/mm/yyyy (bắt buộc, ngày có thật, không ở quá khứ), Thanh toán hiện ô số hóa đơn / chứng từ (≤ 60). Kiểm đúng luật `kiemDeXuatChi` của HUB L26 (Hub v1.15.7): khoản mục ≤ 120, lý do 5–500, số tiền > 0 + tường lửa M9.5 ➜ sao chép phiếu. `kiemDeXuat` trả thêm `goi` = tham số `webGuiDeXuatChi` để nối thật 1 dòng khi cổng lên app. HOP_DONG_CONG_V2.md mục Tài chính ghi lại theo mã thật v1.15.7.
+- Còn chờ v1: HUB L26 «ĐÃ CODE v1.15.7», chưa [x] / chưa lên app ➜ chưa gửi thẳng 0B (M6.4 / M3.4 vẫn 🟡).
 
 ### PHIÊN BẢN v2.10.0 ✅ – M6.4 SOẠN ĐỀ XUẤT CHI (07/11/2026, lượt tự động ⑤)
 - **Nội dung:** 💰 Tài chính thêm khối ✍️ Soạn đề xuất chi: nhập khoản mục / số tiền / dự án / lý do ➜ kiểm đủ trường, chặn CCCD · BHYT · khóa (tường lửa M9.5) ➜ 📋 sao chép phiếu dán gửi kế toán / Telegram để nhập Phê duyệt 0B. Chạy hoàn toàn trên trình duyệt, không ghi gì lên Hub.

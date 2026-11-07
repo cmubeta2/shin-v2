@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.10.1] – 08/11/2026 (M3.4 TẠM ỨNG / THANH TOÁN)
+
+### ✨ Tính năng
+- 💰 Tài chính: form ✍️ gộp 3 loại phiếu Chi / Tạm ứng (hạn hoàn ứng) / Thanh toán (số chứng từ), hiện ô theo loại. `ModuleTaiChinh.kiemDeXuat(p, soat, homNay)` kiểm theo luật HUB L26 (Hub v1.15.7) và trả `goi` cho `webGuiDeXuatChi`. Vẫn sao chép phiếu (L26 chưa lên app). Header + `sw.js`: shin-v2.10.1.
+
 ## [2.10.0] – 07/11/2026 (M6.4 SOẠN ĐỀ XUẤT CHI)
 
 ### ✨ Tính năng

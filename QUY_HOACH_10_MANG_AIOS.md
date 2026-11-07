@@ -112,14 +112,14 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 
 > **Ràng buộc bất biến:** CRM **không lưu bệnh nhân** (tuân thủ `KHONG_DUA_VAO.md`). Lead "đặt lịch khám" đi thẳng về máy chủ PK của Mảng 5.
 
-### 💰 MẢNG 3 – TÀI CHÍNH & THANH TOÁN · `taichinh` · *(mảng mới – chưa có module)*
-| Mã | Micro-Module | Nguồn tái sử dụng | Phiên bản đích |
+### 💰 MẢNG 3 – TÀI CHÍNH & THANH TOÁN · `taichinh` · *(module có từ v2.5.0 – màn 💰 Tài chính, cổng `webTaiChinh`)*
+| Mã | Micro-Module | Trạng thái · nguồn tái sử dụng | Phiên bản đích |
 |---|---|---|---|
-| M3.1 | Cổng VietQR SePay: sinh QR động, xác nhận thanh toán qua webhook | M-WEB-03 (v1) | v2.3.0 |
-| M3.2 | Sổ chi phí phát sinh & cảnh báo lệch dự toán (cấp cho Mảng 6) | M5.3 (bản 1.0) | v2.3.0 |
-| M3.3 | Chi trả hoa hồng CTV/đại lý (lấy kết quả tính từ M4.3) | M-TS-03 | v2.3.0 |
-| M3.4 | Đề nghị tạm ứng / thanh toán → gửi 0B duyệt | – | v2.3.0 |
-| M3.5 | Xuất bảng tăng ca TC-NS cho Kế toán (nhận từ M5.4) | M-PTKH-03 | v2.4.0 |
+| M3.1 | Cổng VietQR SePay: sinh QR động, xác nhận thanh toán qua webhook | ⬜ · M-WEB-03 (v1) | v2.3.0 |
+| M3.2 | Sổ chi phí phát sinh & cảnh báo lệch dự toán (cấp cho Mảng 6) | ⬜ · M5.3 (bản 1.0) | v2.3.0 |
+| M3.3 | Chi trả hoa hồng CTV/đại lý (lấy kết quả tính từ M4.3) | ⬜ · M-TS-03 | v2.3.0 |
+| M3.4 | Đề nghị tạm ứng / thanh toán → gửi 0B duyệt | 🟡 v2.10.1 form gộp Chi / Tạm ứng / Thanh toán, kiểm luật L26 + sao chép phiếu (💰 Tài chính) / ⬜ gửi thẳng 0B (chờ HUB L26 lên app) | v2.3.0 |
+| M3.5 | Xuất bảng tăng ca TC-NS cho Kế toán (nhận từ M5.4) | ⬜ Còn chờ v1 (giờ vào/ra PTKH) · M-PTKH-03 | v2.4.0 |
 
 ### 🎓 MẢNG 4 – GIÁO DỤC & TUYỂN SINH · `tuyensinh` · Fintech Growth
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
