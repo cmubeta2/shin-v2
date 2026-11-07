@@ -135,6 +135,7 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 
 - **Quyền:** Admin và Kế toán.
 - **Nguồn thu tự động:** webhook SePay, làm sau. Trước mắt nhập tay.
+- **Đề xuất (HUB L26, v2.10.0 – chưa có trong mã v1):** `webGuiDeXuatChi(token, { khoanMuc, soTien /* số đ > 0 */, duAn, lyDo, maGui })` ➜ tạo 1 phiếu 0B nguồn 'TC' (hiện ngay trong `khoanChoDuyet`), trả `{ ok, ma }`; `maGui` chống ghi trùng (gửi lại cùng mã ➜ trả phiếu cũ). Quyền: mọi người dùng Hub đã đăng nhập. Trong lúc chờ, v2 chỉ soạn + kiểm + sao chép phiếu.
 
 ---
 
