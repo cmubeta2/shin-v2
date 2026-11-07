@@ -91,6 +91,8 @@ const ModuleCRM = {
     const gd = this._gd;
     const b2b = ds.filter(x => x.loai === 'B2B Khám Sức Khỏe');
     const demGD = ten => b2b.filter(x => this.giaiDoan(x.trangThai) === ten).length;
+    const luongLead = typeof ModuleMarketing !== 'undefined' ? (d.leadMoi || []).map(l => ModuleMarketing.phanLuongLead(l)) : null;
+    const demLuong = {}; (luongLead || []).forEach(x => { demLuong[x.luong] = (demLuong[x.luong] || 0) + 1; });
     const quaHanLead = (d.leadMoi || []).filter(l => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); return m === 'vang' || m === 'do'; }).length;
     const hien = ds.filter(x => (!loc || x.loai === loc) && (!gd || (x.loai === 'B2B Khám Sức Khỏe' && this.giaiDoan(x.trangThai) === gd)));
 
@@ -123,9 +125,11 @@ const ModuleCRM = {
       ${(d.leadMoi || []).length ? `
         <details class="tq-gon" open>
           <summary><span>🔔 Lead mới từ web phễu</span><span class="tom-tat">${d.leadMoi.length}${quaHanLead ? ' · ⏰ ' + quaHanLead : ''}</span></summary>
-          ${d.leadMoi.map(l => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); return `
-            <div class="hang-tru crm-lead crm-lead-${m || 'xam'}"><span><b>${e(l.ten)}</b><br><span class="chu-phu">${e([l.nguon, l.soDt, l.slKham || l.khoa || l.ghiChu].filter(Boolean).join(' · '))}</span></span>
-              <span class="chu-phu">${e(l.thoiGian)}${m === 'vang' || m === 'do' ? '<br>' + this.NHAN_LEAD[m] : ''}</span></div>`; }).join('')}
+          ${luongLead ? `<p class="chu-phu">🧭 Phân luồng (M8.3): ${Object.keys(demLuong).map(k => e(ModuleMarketing.LUONG_LEAD[k].nhan.split(' ')[0]) + ' ' + demLuong[k]).join(' · ')}</p>` : ''}
+          ${d.leadMoi.map((l, i) => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); const lu = luongLead ? luongLead[i] : null; return `
+            <div class="hang-tru crm-lead crm-lead-${m || 'xam'}" style="flex-wrap:wrap"><span style="flex:1 1 60%;min-width:0"><b>${e(l.ten)}</b><br><span class="chu-phu">${e([l.nguon, l.soDt, l.slKham || l.khoa || l.ghiChu].filter(Boolean).join(' · '))}</span></span>
+              <span class="chu-phu">${e(l.thoiGian)}${m === 'vang' || m === 'do' ? '<br>' + this.NHAN_LEAD[m] : ''}</span>
+              ${lu ? `<button class="btn-secondary" style="flex-basis:100%;min-height:44px;font-size:14px;margin-top:6px" title="${e(lu.lyDo)}" onclick="ShinApp.chuyenModule('${lu.module}')">${e(lu.nhan)}</button>` : ''}</div>`; }).join('')}
           ${quaHanLead ? `<button class="btn-secondary" style="min-height:44px; font-size:14px; width:100%; margin-top:8px;" onclick="ModuleCRM.saoChepNhacLead()">📋 Sao chép nhắc chăm sóc (${quaHanLead} lead > 24 giờ)</button>` : ''}
         </details>` : ''}
 
