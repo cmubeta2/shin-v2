@@ -142,8 +142,8 @@ window.SHIN_DEMO_DATA = {
       nutChinh: { nhan: "＋ Tiếp Nhận Lead Mới", hanhDong: "nhapLead" }
     },
     chienDich: [
-      { ma: "CD03", ten: "Đại học Trực tuyến GDU – Đợt 3/2026", han: "15/11/2026", lead: 84, nhapHoc: 21, hoaHong: "Bậc 3 (2.5tr/hv)" },
-      { ma: "CD02", ten: "Đại học Sư phạm Huế – Đợt 2/2026", han: "05/12/2026", lead: 42, nhapHoc: 8, hoaHong: "Bậc 2 (2.0tr/hv)" },
+      { ma: "CD03", ten: "Đại học Trực tuyến GDU – Đợt 3/2026", han: "15/11/2026", lead: 84, nhapHoc: 21, hoaHong: "Bậc 3 (2.5tr/hv)", hhSo: { bac: 3, tien: 52500000 } },
+      { ma: "CD02", ten: "Đại học Sư phạm Huế – Đợt 2/2026", han: "05/12/2026", lead: 42, nhapHoc: 8, hoaHong: "Bậc 2 (2.0tr/hv)", hhSo: { bac: 2, tien: 16000000 } },
       { ma: "CD01", ten: "Chứng chỉ Y tế Ngắn hạn CS3", han: "Thường xuyên", lead: 22, nhapHoc: 3, hoaHong: "Bậc 1 (1.5tr/hv)" }
     ]
   },

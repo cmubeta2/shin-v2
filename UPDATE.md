@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.10.2** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.10.3** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.10.3 ✅ – M3.3 ĐỀ NGHỊ CHI HOA HỒNG CTV / ĐẠI LÝ (08/11/2026, lượt tự động ⑤ 04h)
+- **Nội dung:** 🎓 Tuyển sinh – chi tiết chiến dịch có hoa hồng > 0 hiện nút 💸 Lập đề nghị chi hoa hồng: lấy kết quả `hoaHongDat` (bảng bậc thang M4.3) mà cổng có sẵn `webLeadCD` trả (`hoaHong.{bac, tien}`, `pheu.nhapHoc`) ➜ hàm thuần `ModuleTaiChinh.deXuatHoaHong` ➜ mở 💰 Tài chính với form ✍️ điền sẵn loại Thanh toán (khoản mục "Hoa hồng CTV/đại lý – <chiến dịch>", số tiền, mã chiến dịch, lý do số HV × bậc) ➜ người dùng kiểm lại rồi 📋 sao chép (cùng luật M3.4). Demo: `hhSo` trong chiến dịch mẫu.
+- **Kiểm:** node --check; luồng Demo Edge không giao diện 375 + 1280 (Tuyển sinh ➜ nút ➜ Tài chính điền đúng 52.500.000 đ, form mở, ô chứng từ hiện; ô Tạm ứng hiện hạn hoàn ứng), không cuộn ngang, 0 lỗi console.
+- Còn chờ v1: TS chưa có sổ "đã chi hoa hồng" theo chiến dịch ➜ số đề nghị là hoa hồng lũy kế, người lập tự trừ phần đã chi kỳ trước; gửi thẳng 0B chờ HUB L26.
 
 ### PHIÊN BẢN v2.10.2 ✅ – M3.2 NGÂN SÁCH & GIẢI NGÂN THEO DỰ ÁN (08/11/2026, lượt tự động ⑤ 04h)
 - **Nội dung:** 💰 Tài chính thêm khối Ngân sách & giải ngân theo dự án: Live đọc thêm cổng có sẵn `webDuAn` (Hub v1.15.6, `duAn[].nganSach / daChi`, `flash.taiChinh.phatSinh`) song song `webTaiChinh`; hàm thuần `ModuleTaiChinh.lechDuToan` – bỏ dự án Đóng / Hoàn thành / Hủy, tỷ lệ giải ngân, > 100% "Vượt dự toán" (đỏ, +số vượt), > 90% "Sắp chạm trần" (vàng), ngân sách 0 ➜ "Chưa có dự toán" (không chia cho 0), đã chi âm tính 0; thanh tiến độ màu theo mức; danh sách chi phát sinh từ Flash dự án. `webDuAn` lỗi ➜ khối báo lỗi đỏ, không thay bằng số mẫu. Demo: `SHIN_DEMO_DATA.taichinh.duAnNS / phatSinh` (giả).

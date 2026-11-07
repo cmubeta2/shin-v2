@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.10.3] – 08/11/2026 (M3.3 HOA HỒNG CTV)
+
+### ✨ Tính năng
+- 🎓 Tuyển sinh: nút 💸 Lập đề nghị chi hoa hồng ở chiến dịch có hoa hồng (webLeadCD.hoaHong) ➜ 💰 Tài chính điền sẵn phiếu Thanh toán (`ModuleTaiChinh.deXuatHoaHong`, `moDeXuat`, `apDienSan`). Header + `sw.js`: shin-v2.10.3.
+
 ## [2.10.2] – 08/11/2026 (M3.2 NGÂN SÁCH THEO DỰ ÁN)
 
 ### ✨ Tính năng

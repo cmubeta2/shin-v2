@@ -10,6 +10,7 @@
  *   kiemDeXuat trả thêm `goi` = tham số webGuiDeXuatChi (nối thật khi L26 lên app – thêm maGui chống trùng).
  * v2.10.2 – M3.2 ngân sách & giải ngân theo dự án: Live đọc thêm webDuAn (duAn.nganSach / daChi, flash.taiChinh.phatSinh),
  *   cảnh báo vượt / sắp chạm dự toán cấp dự án. Dự toán theo khoản mục: v1 chưa có dữ liệu ➜ không làm.
+ * v2.10.3 – M3.3 hoa hồng CTV/đại lý: 🎓 Tuyển sinh (webLeadCD.hoaHong) ➜ deXuatHoaHong ➜ moDeXuat điền sẵn form Thanh toán.
  */
 
 const ModuleTaiChinh = {
@@ -18,6 +19,37 @@ const ModuleTaiChinh = {
   bieuTuong: '💰',
   paletteMacDinh: 'executive',
   mayChu: 'HUB',
+
+  _dienSan: null,   // v2.10.3: phiếu điền sẵn (VD hoa hồng M3.3) – áp 1 lần ở lần vẽ kế
+
+  /** THUẦN – v2.10.3 M3.3: hoa hồng 1 chiến dịch (kết quả hoaHongDat của TS: {bac, tien}) ➜ phiếu Thanh toán điền sẵn hoặc {loi}. */
+  deXuatHoaHong: function(cd, hh, nhapHoc) {
+    cd = cd || {}; hh = hh || {};
+    const tien = Math.round(Number(hh.tien) || 0), n = Math.max(0, Math.floor(Number(nhapHoc) || 0));
+    if (!(tien > 0)) return { loi: 'Chiến dịch chưa có học viên nhập học đạt bậc – chưa có hoa hồng để chi.' };
+    const ten = String(cd.ten || cd.ma || '').trim();
+    return { loai: 'Thanh toán', khoanMuc: ('Hoa hồng CTV/đại lý – ' + ten).slice(0, 120), soTien: tien, duAn: String(cd.ma || '').slice(0, 60),
+      lyDo: (n + ' học viên nhập học · bậc ' + (Number(hh.bac) || '?') + ' theo bảng hoa hồng bậc thang của chiến dịch (Tuyển sinh M4.3). Trừ phần đã chi kỳ trước nếu có.').slice(0, 500) };
+  },
+
+  /** Mở 💰 Tài chính với form ✍️ điền sẵn. */
+  moDeXuat: function(p) {
+    this._dienSan = p || null;
+    ShinApp.chuyenModule('taichinh');
+  },
+
+  apDienSan: function(container) {
+    const p = this._dienSan;
+    if (!p || !container) return;
+    this._dienSan = null;
+    const o = id => container.querySelector('#' + id);
+    const dat = (id, v) => { if (o(id) && v !== undefined) o(id).value = v; };
+    dat('dxLoai', p.loai); dat('dxKhoan', p.khoanMuc); dat('dxTien', p.soTien ? ShinApp.soVN(p.soTien) : ''); dat('dxDuAn', p.duAn); dat('dxLyDo', p.lyDo);
+    this.doiLoai();
+    const k = o('tcDeXuat');
+    if (k) { k.open = true; if (k.scrollIntoView) k.scrollIntoView({ block: 'start' }); }
+    ShinApp.toast('Đã điền sẵn phiếu – kiểm lại số tiền rồi bấm 📋.', 'info');
+  },
 
   taiLive: async function() {
     const [kq, da] = await Promise.all([SHIN_API.goi('HUB', 'webTaiChinh', {}), SHIN_API.goi('HUB', 'webDuAn', {})]);
@@ -131,9 +163,11 @@ const ModuleTaiChinh = {
       <details class="tq-gon">
         <summary><span>ⓘ Nguồn số</span></summary>
         <p class="chu-phu">✍️ Đề xuất chi / tạm ứng / thanh toán chỉ chạy trên máy anh/chị: kiểm đủ trường theo luật Hub, chặn CCCD / BHYT / khóa rồi sao chép phiếu – chưa gửi lên Hub (Còn chờ v1: cổng HUB L26 <code>webGuiDeXuatChi</code> đã code ở Hub v1.15.7, chưa lên app).</p>
+        <p class="chu-phu">💸 Hoa hồng CTV/đại lý: mở chiến dịch ở 🎓 Tuyển sinh ➜ "Lập đề nghị chi hoa hồng" – số tiền lấy từ bảng bậc thang của chiến dịch; chưa trừ phần đã chi kỳ trước (Còn chờ v1: TS chưa có sổ chi hoa hồng).</p>
         <p class="chu-phu">Thu qua chuyển khoản tự ghi từ SePay (VietQR); thu chi tay do kế toán nhập trên Hub. Mọi khoản chi mới phải qua Phê duyệt 1-chạm.</p>
       </details>
     `;
+    this.apDienSan(container);
   },
 
   /** Hiện ô theo loại phiếu: Tạm ứng ➜ hạn hoàn ứng; Thanh toán ➜ số chứng từ (progressive disclosure). */
