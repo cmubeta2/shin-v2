@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.11.0] – 08/11/2026 (MẢNG 8 MARKETING PHẦN 1)
+
+### ✨ Tính năng
+- Module mới 📣 Marketing & Nội dung: M8.1 lịch 4 tuần đa kênh lọc tầng phễu, M8.2 xưởng mẫu 12 khuôn (điền chỗ trống, xem trước, kiểm từ cấm QC y tế), M8.4 chốt chặn duyệt (Hoàn tác 6s; chỉ bài đã duyệt sao chép được). Khuôn `js/modules/mau_marketing.js` (agy). `index.html`, `sw.js`: shin-v2.11.0.
+
 ## [2.10.4] – 08/11/2026 (M3.1 VIETQR)
 
 ### ✨ Tính năng

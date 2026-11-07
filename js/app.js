@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.10.4';
+  const PHIEN_BAN = 'v2.11.0';
 
   const MODULES = [
     ModuleHub,
@@ -22,6 +22,7 @@ const ShinApp = (function() {
     ModulePheDuyet,
     ModuleTriThuc,
     ModuleTaiChinh,
+    ModuleMarketing,
     ModuleQuanTri,
     ModuleCaiDat
   ];
@@ -70,7 +71,8 @@ const ShinApp = (function() {
       danhSach: [
         { ma: "crm", ten: "Khách Hàng & Đối Tác", icon: "👥" },
         { ma: "taichinh", ten: "Tài Chính & Thu Chi", icon: "💰" },
-        { ma: "tuyensinh", ten: "Giáo Dục & Tuyển Sinh", icon: "🎓" }
+        { ma: "tuyensinh", ten: "Giáo Dục & Tuyển Sinh", icon: "🎓" },
+        { ma: "marketing", ten: "Marketing & Nội Dung", icon: "📣" }
       ]
     }
   ];
