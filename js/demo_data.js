@@ -620,3 +620,14 @@ window.SHIN_DEMO_DATA.ptkh.lsThang = [
   { khoa: '2026-11-02', ca: 'Ca 7h-15h', dungHan: 'Đúng hạn', trangThaiDuyet: 'Đã duyệt', camNhan: 5 },
   { khoa: '2026-11-01', ca: 'Hành chính', dungHan: 'Đúng hạn', trangThaiDuyet: 'Đã hủy', camNhan: 1 }
 ];
+
+// v2.12.0 M8.6 – số hiệu suất truyền thông MẪU (không phải số thật)
+window.SHIN_DEMO_DATA.marketing = {
+  hieuSuat: [
+    { id: 'L01', bai: 'Bài mẫu 1 – Khám sức khỏe định kỳ', kenh: 'facebook', ngay: '03/11/2026', reach: 4200, tuongTac: 310, click: 96, lead: 7 },
+    { id: 'L02', bai: 'Bài mẫu 2 – Video 30 giây quy trình khám', kenh: 'tiktok', ngay: '04/11/2026', reach: 9800, tuongTac: 820, click: 60, lead: 4 },
+    { id: 'L03', bai: 'Bài mẫu 3 – Ưu đãi gói KSK doanh nghiệp', kenh: 'zalo_oa', ngay: '05/11/2026', reach: 1500, tuongTac: 140, click: 85, lead: 9 },
+    { id: 'L04', bai: 'Bài mẫu 4 – Hỏi đáp tuyển sinh', kenh: 'youtube', ngay: '06/11/2026', reach: 2300, tuongTac: 120, click: 40, lead: 3 },
+    { id: 'L05', bai: 'Bài mẫu 5 – Câu chuyện khách hàng', kenh: 'facebook', ngay: '07/11/2026', reach: 3100, tuongTac: 260, click: 51, lead: 5 }
+  ]
+};

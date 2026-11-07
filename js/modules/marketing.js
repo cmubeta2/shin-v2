@@ -128,6 +128,9 @@ const ModuleMarketing = {
           <div style="min-width:0"><b>${e(kenh(p.kenh).bieuTuong)} ${e(p.thu)} · ${e(p.tangPheu)}</b><div class="chu-phu">${e(p.chude)}</div></div>
           <div class="dong-lead-phai"><span class="chu-phu" style="color:${MAU_TT[tt(p.id)]}">${e(this.TRANG_THAI[tt(p.id)])}</span></div></div>`).join('')}`).join('') || '<div class="trong">Không có bài ở tầng này.</div>'}
 
+      <div class="hn-tieu"><span>HIỆU SUẤT TRUYỀN THÔNG (M8.6)</span></div>
+      <div id="mkHieuSuat"></div>
+
       <details class="tq-gon" id="mkXuong">
         <summary><span>✍️ Xưởng mẫu viết bài (M8.2)</span></summary>
         <div id="mkXuongNoi"></div>
@@ -142,9 +145,109 @@ const ModuleMarketing = {
         <summary><span>ⓘ Nguồn & giới hạn</span></summary>
         <p class="chu-phu">Lịch + khuôn là MẪU (không chứa dữ liệu thật). Bài viết, trạng thái duyệt lưu trên máy này. Bài dịch vụ y tế tự kiểm từ khẳng định tuyệt đối / cam kết khỏi bệnh và chặn CCCD · BHYT · SĐT người bệnh.</p>
         <p class="chu-phu">Còn chờ v1: gửi bài vào Phê duyệt 0B + đăng tự động đa kênh – chưa có cổng máy chủ.</p>
+        <p class="chu-phu">Hiệu suất (M8.6): số nhập tay từ trang quản lý của từng kênh, lưu trên máy này. Chế độ trình diễn hiện số MẪU (ghi rõ). Còn chờ v1: lấy số tự động từ API kênh (Facebook / TikTok / Zalo / YouTube) – chưa có cổng.</p>
       </details>
     `;
+    this.veHieuSuat();
     if (this._bai) this.veXuong(true);
+  },
+
+  // ===== v2.12.0 M8.6 – Báo cáo hiệu suất truyền thông =====
+  KHOA_HS: 'shin_mkt_hs',
+  /** THUẦN: '1.200' / '1,2k' / '3.000.000' ➜ số nguyên ≥ 0; rỗng / sai ➜ null. */
+  soNhap: function(s) {
+    let t = String(s == null ? '' : s).trim().toLowerCase().replace(/\s/g, '');
+    if (!t) return null;
+    let nhan = 1;
+    if (/k$/.test(t)) { nhan = 1000; t = t.slice(0, -1).replace(',', '.'); }
+    else t = t.replace(/[.,](?=\d{3}(\D|$))/g, '');
+    if (!/^\d+(\.\d+)?$/.test(t)) return null;
+    return Math.round(parseFloat(t) * nhan);
+  },
+  /** THUẦN: dòng [{kenh, reach, tuongTac, click, lead}] ➜ {theoKenh:[…sắp theo reach giảm], tong}. Tỷ lệ % 1 chữ số; reach 0 ➜ tỷ lệ null. */
+  tongHieuSuat: function(dong) {
+    const cong = (a, r) => { a.reach += +r.reach || 0; a.tuongTac += +r.tuongTac || 0; a.click += +r.click || 0; a.lead += +r.lead || 0; a.soBai++; return a; };
+    const moi = k => ({ kenh: k, reach: 0, tuongTac: 0, click: 0, lead: 0, soBai: 0 });
+    const tyLe = a => Object.assign(a, {
+      tyLeTT: a.reach ? Math.round(a.tuongTac / a.reach * 1000) / 10 : null,
+      ctr: a.reach ? Math.round(a.click / a.reach * 1000) / 10 : null,
+      leadNghin: a.reach ? Math.round(a.lead / a.reach * 10000) / 10 : null
+    });
+    const nhom = {}, tong = moi('tong');
+    (dong || []).forEach(r => { const k = r.kenh || 'khac'; cong(nhom[k] = nhom[k] || moi(k), r); cong(tong, r); });
+    return { theoKenh: Object.values(nhom).map(tyLe).sort((a, b) => b.reach - a.reach), tong: tyLe(tong) };
+  },
+  docHS: function() { try { const a = JSON.parse(localStorage.getItem(this.KHOA_HS) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } },
+  ghiHS: function(a) { try { localStorage.setItem(this.KHOA_HS, JSON.stringify(a)); return true; } catch (e) { ShinApp.toast('Trình duyệt không cho lưu trên máy.', 'error'); return false; } },
+
+  veHieuSuat: function() {
+    const o = document.getElementById('mkHieuSuat'), M = window.MAU_MARKETING;
+    if (!o || !M) return;
+    const e = ShinApp.esc, so = n => Number(n || 0).toLocaleString('vi-VN'), pt = x => x == null ? '–' : String(x).replace('.', ',') + '%';
+    const that = this.hsHien();
+    const laLive = window.SHIN_API && SHIN_API.laCheDoLive && SHIN_API.laCheDoLive();
+    const mau = !that.length && !laLive ? (((window.SHIN_DEMO_DATA || {}).marketing || {}).hieuSuat || []) : [];
+    const dong = that.length ? that : mau;
+    const kenh = ma => M.kenh.find(k => k.ma === ma) || { bieuTuong: '•', ten: ma };
+    const t = this.tongHieuSuat(dong);
+    const tot = dong.filter(r => +r.reach > 0).map(r => ({ r, tl: r.tuongTac / r.reach })).sort((a, b) => b.tl - a.tl)[0];
+    const baiChon = [...new Map(M.phieu_lich.map(p => [p.id, p])).values()];
+    o.innerHTML = `
+      ${mau.length ? '<div class="chu-phu" style="color:var(--c-yellow)">⚠️ Số MẪU (chế độ trình diễn) – nhập số thật bên dưới sẽ thay.</div>' : ''}
+      ${dong.length ? `
+        <div class="tq-3so">
+          <div class="tq-o"><div class="tq-so" style="color:var(--c-blue)">${e(so(t.tong.reach))}</div><div class="tq-nhan">Lượt tiếp cận</div></div>
+          <div class="tq-o"><div class="tq-so" style="color:var(--c-green)">${e(pt(t.tong.tyLeTT))}</div><div class="tq-nhan">Tỷ lệ tương tác</div></div>
+          <div class="tq-o"><div class="tq-so" style="color:var(--c-yellow)">${e(so(t.tong.lead))}</div><div class="tq-nhan">Lead</div></div>
+        </div>
+        ${t.theoKenh.map(k => `<div class="hang-tru"><span style="min-width:0"><b>${e(kenh(k.kenh).bieuTuong)} ${e(kenh(k.kenh).ten)}</b> · ${k.soBai} bài<br>
+          <span class="chu-phu">Tiếp cận ${e(so(k.reach))} · tương tác ${e(pt(k.tyLeTT))} · bấm ${e(pt(k.ctr))} · ${e(k.leadNghin == null ? '–' : String(k.leadNghin).replace('.', ','))} lead / 1.000 tiếp cận</span></span></div>`).join('')}
+        ${tot ? `<div class="chu-phu">🏆 Tương tác tốt nhất: <b>${e(tot.r.bai || '')}</b> (${e(kenh(tot.r.kenh).ten)}, ${e(pt(Math.round(tot.tl * 1000) / 10))})</div>` : ''}
+        ${that.length ? `<details class="tq-gon"><summary><span>Số đã nhập · ${that.length}</span></summary>
+          ${that.map((r, i) => `<div class="hang-tru" style="flex-wrap:wrap"><span style="flex:1 1 60%;min-width:0">${e(r.bai || '')}<br><span class="chu-phu">${e(kenh(r.kenh).ten)} · ${e(r.ngay || '')} · ${e(so(r.reach))} tiếp cận · ${e(so(r.tuongTac))} tương tác · ${e(so(r.lead))} lead</span></span>
+            <span class="hang-nut"><button class="btn-secondary" onclick="ModuleMarketing.xoaHS(${i})">🗑 Xóa</button></span></div>`).join('')}</details>` : ''}
+      ` : '<div class="trong">Chưa có số hiệu suất. Nhập số từ trang quản lý kênh bên dưới.</div>'}
+      <details class="tq-gon" id="mkNhapHS">
+        <summary><span>＋ Nhập số 1 bài đã đăng</span></summary>
+        <label class="nhan-o" for="mkHsBai">Bài</label>
+        <select id="mkHsBai" class="form-input">${baiChon.map(p => `<option value="${e(p.id)}">${e(p.thu)} · ${e(p.chude)}</option>`).join('')}</select>
+        <label class="nhan-o" for="mkHsKenh">Kênh</label>
+        <select id="mkHsKenh" class="form-input">${M.kenh.map(k => `<option value="${e(k.ma)}">${e(k.bieuTuong)} ${e(k.ten)}</option>`).join('')}</select>
+        ${[['reach', 'Lượt tiếp cận (reach)'], ['tuongTac', 'Tương tác (thích + bình luận + chia sẻ)'], ['click', 'Lượt bấm liên kết'], ['lead', 'Lead / tin nhắn hỏi']].map(([k, n]) => `
+          <label class="nhan-o" for="mkHs_${k}">${n}</label><input id="mkHs_${k}" class="form-input" inputmode="numeric" maxlength="15" placeholder="vd 1.200">`).join('')}
+        <div id="mkHsLoi" class="chu-phu" style="color:var(--c-red)"></div>
+        <div class="hang-nut"><button class="btn-primary" onclick="ModuleMarketing.themHS()">💾 Ghi số</button></div>
+      </details>`;
+  },
+
+  themHS: function() {
+    const g = id => (document.getElementById(id) || {}).value || '';
+    const loi = document.getElementById('mkHsLoi');
+    const r = { reach: this.soNhap(g('mkHs_reach')), tuongTac: this.soNhap(g('mkHs_tuongTac')) || 0, click: this.soNhap(g('mkHs_click')) || 0, lead: this.soNhap(g('mkHs_lead')) || 0 };
+    const sai = ['tuongTac', 'click', 'lead'].find(k => g('mkHs_' + k).trim() && this.soNhap(g('mkHs_' + k)) == null);
+    let bao = '';
+    if (r.reach == null) bao = 'Nhập lượt tiếp cận (số, vd 1.200 hoặc 1,2k).';
+    else if (sai) bao = 'Ô ' + sai + ' không phải số.';
+    else if (r.tuongTac > r.reach * 5 || r.click > r.reach) bao = 'Tương tác / lượt bấm lớn bất thường so với tiếp cận – kiểm lại.';
+    if (bao) { if (loi) loi.textContent = bao; return; }
+    const p = window.MAU_MARKETING.phieu_lich.find(x => x.id === g('mkHsBai')) || {};
+    const a = this.docHS();
+    a.unshift(Object.assign({ id: p.id || '', bai: p.chude || '', kenh: g('mkHsKenh'), ngay: ShinApp.ngayVN() }, r));
+    if (this.ghiHS(a.slice(0, 300))) this.veHieuSuat();
+  },
+
+  /** Xóa 1 dòng: ẩn ngay, Hoàn tác 6s; hết giờ mới ghi. */
+  _anHS: [],          // dòng đang chờ xóa (JSON) – ẩn khỏi màn trong 6s Hoàn tác
+  hsHien: function() { return this.docHS().filter(x => this._anHS.indexOf(JSON.stringify(x)) < 0); },
+  xoaHS: function(i) {
+    const r = this.hsHien()[i];
+    if (!r) return;
+    const k = JSON.stringify(r);
+    this._anHS.push(k);
+    this.veHieuSuat();
+    const bo = () => { this._anHS = this._anHS.filter(x => x !== k); };
+    ShinApp.toast('Đã xóa số của "' + (r.bai || '') + '".', 'success', { nhan: 'Hoàn tác', bam: () => { bo(); this.veHieuSuat(); },
+      khiHet: () => { bo(); const b = this.docHS(); const j = b.findIndex(x => JSON.stringify(x) === k); if (j >= 0) { b.splice(j, 1); this.ghiHS(b); } this.veHieuSuat(); } });
   },
 
   loc: function(t) { this._loc = t; ShinApp.chuyenModule('marketing'); },

@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.12.1] – 08/11/2026 (M4.5 LMS MINI)
+
+### ✨ Tính năng
+- 🎓 Tuyển sinh › 🏫 Lớp học & điểm danh: chọn lớp, điểm danh theo ngày, chuyên cần từng học viên (cảnh báo < 80%), bài M01–M20 theo tuần. Tệp mới `js/modules/mau_lms.js` (dữ liệu mẫu); lưu trên máy `shin_lms`. Header + `sw.js`: shin-v2.12.1.
+
+## [2.12.0] – 08/11/2026 (M8.6 HIỆU SUẤT TRUYỀN THÔNG)
+
+### ✨ Tính năng
+- 📣 Marketing › 📊 Hiệu suất truyền thông: tổng + từng kênh (tiếp cận, % tương tác, % bấm, lead / 1.000), nhập tay số từng bài, xóa có Hoàn tác 6s. `soNhap`, `tongHieuSuat` thuần; số mẫu chỉ ở Demo.
+
 ## [2.11.1] – 08/11/2026 (M8.3 SMART LEAD DISPATCHER)
 
 ### ✨ Tính năng

@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.11.1** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.12.1** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,16 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.12.1 ✅ – M4.5 LMS MINI: LỚP HỌC · ĐIỂM DANH · BÀI M01–M20 (08/11/2026, lượt tự động ⑤ 06h – kéo mục T5 lên)
+- **Nội dung:** 🎓 Tuyển sinh có khối gập 🏫 Lớp học & điểm danh: chọn lớp (2 lớp mẫu, học viên đặt tên "Học viên 01…"), 3 số đầu khối (bài đã học x/20 · chuyên cần TB · số học viên dưới 80%), điểm danh theo ngày (ô ngày 16px, mỗi học viên 1 dòng ≥ 44px, hiện có mặt / tổng buổi + % – đỏ khi < 80%) ➜ 💾 Lưu điểm danh; 20 bài M01–M20 chia 5 tuần, đánh dấu đã học ➜ % tiến độ + bài kế. Tệp mới `js/modules/mau_lms.js` (dữ liệu MẪU: lớp, học viên, bài, điểm danh mẫu 2 buổi / lớp). Hàm thuần `ModuleTuyenSinh.chuyenCan`, `tienDoBai`. Lưu localStorage `shin_lms` (lần đầu chép từ mẫu). `index.html`, `sw.js` VO_APP thêm tệp; shin-v2.12.1.
+- **Kiểm:** node --check; ca thuần chuyenCan (100 / 50 / 0%, cảnh báo < 80) + tienDoBai (2/3 = 67%, bài kế M02); Demo Edge 375 + 1280: bỏ 1 học viên ➜ lưu 7/8, đánh dấu M05 ➜ 5 bài, đổi lớp B đúng; nút / dòng / ô ≥ 44px; 17/17 màn không cuộn ngang; 0 lỗi console.
+- Còn chờ v1: lớp + học viên thật, điểm danh lưu máy chủ (app Tuyển sinh chưa có sheet lớp / cổng – chưa duyệt, không xin dòng v1).
+
+### PHIÊN BẢN v2.12.0 ✅ – M8.6 BÁO CÁO HIỆU SUẤT TRUYỀN THÔNG (08/11/2026, lượt tự động ⑤ 06h – kéo mục T5 lên)
+- **Nội dung:** 📣 Marketing thêm khối 📊 HIỆU SUẤT TRUYỀN THÔNG: 3 số (tiếp cận · tỷ lệ tương tác · lead), từng kênh (số bài, tiếp cận, % tương tác, % bấm, lead / 1.000 tiếp cận – sắp theo tiếp cận), bài tương tác tốt nhất; ＋ Nhập số 1 bài đã đăng (chọn bài trong lịch, kênh, 4 ô số kiểu VN "1.200" / "1,2k", chặn số bất thường – lỗi hiện ngay dưới ô); danh sách số đã nhập, 🗑 Xóa có Hoàn tác 6s (ẩn ngay, hết giờ mới ghi). Hàm thuần `soNhap`, `tongHieuSuat`. Lưu localStorage `shin_mkt_hs` (≤ 300 dòng). Demo: 5 dòng số MẪU (`SHIN_DEMO_DATA.marketing.hieuSuat`) ghi rõ "Số MẪU"; Live không có số nhập ➜ ô trống mời nhập (không hiện số mẫu).
+- **Kiểm:** node --check; soNhap ('1.200' ➜ 1200, '1,2k' ➜ 1200, '3.000.000', 'abc' ➜ null), tongHieuSuat (5% · 2 lead / 1.000, reach 0 ➜ –); Demo Edge 375 + 1280: thêm 1 dòng thay số mẫu, ô sai báo lỗi, xóa ➜ ẩn 0/1 ➜ Hoàn tác về 1; 17/17 màn không cuộn ngang; 0 lỗi console.
+- Còn chờ v1: lấy số tự động từ API Facebook / TikTok / Zalo OA / YouTube (chưa có cổng – chưa duyệt).
 
 ### PHIÊN BẢN v2.11.1 ✅ – M8.3 SMART LEAD DISPATCHER (08/11/2026, lượt tự động ⑤ 04h – kéo mục T5 lên)
 - **Nội dung:** hàm thuần `ModuleMarketing.phanLuongLead` chia lead mới (cổng có sẵn `webCRM.leadMoi` – nguồn, ghi chú; Demo thêm khoa / số lượng khám) theo thứ tự: 🏢 KSK doanh nghiệp ➜ Pipeline B2B · 🎓 Tuyển sinh ➜ chiến dịch · 🏥 Đặt khám ➜ Phòng khám (CRM không lưu bệnh nhân) · 🤝 Đối tác / CTV ➜ CRM · ❔ Chưa rõ ➜ phân loại tay (so khớp không dấu, có lý do khớp). 👥 CRM – khối 🔔 Lead mới: dòng tổng "Phân luồng" + mỗi lead 1 nút chuyển tới màn đích (≥ 44px). Chỉ đọc, không ghi gì.
