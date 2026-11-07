@@ -128,7 +128,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M4.2 | Lead theo chiến dịch (`webLeadCD`) · thêm/sửa (`webLuuLead`) · nhật ký · chuyển · xóa | 🟢 | – |
 | M4.3 | Bảng tính hoa hồng bậc thang 6 bậc | 🟢 theo từng chiến dịch | – |
 | M4.4 | Phễu ứng viên: Mới → Tư vấn → Hồ sơ → Nhập học → Hủy | ✅ | – |
-| M4.5 | LMS mini: lớp học, điểm danh, bài tập M01–M20 | ⬜ | v2.6.0 |
+| M4.5 | LMS mini: lớp học, điểm danh, bài tập M01–M20 | ✅ v2.12.1 lớp mẫu + điểm danh theo ngày + chuyên cần (< 80% cảnh báo) + tiến độ M01–M20 (🎓 Tuyển sinh, lưu máy) · ⬜ lớp / học viên thật (Còn chờ v1) | v2.6.0 |
 
 ### 🏥 MẢNG 5 – NHÂN SỰ & VẬN HÀNH PHÒNG KHÁM · `phongkham` · Hoàng Kim
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
@@ -157,7 +157,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M7.3 | Phân luồng việc theo RBAC (M0.2) | ✅ v2.9.1 phía trình duyệt (ẩn việc mảng không có quyền theo chốt chặn v1 + chip 👤 Của tôi) / ⬜ phân luồng phía máy chủ (cần Task Bus M7.1) | v2.5.0 |
 | M7.4 | Giám sát SLA Xanh → Vàng → Đỏ + báo Telegram | ✅ v2.8.4 đèn SLA + lọc + sao chép tin cảnh báo phía trình duyệt / ⬜ tự gửi Telegram (cần Task Bus M7.1 phía v1) | v2.4.0 |
 
-### 🚀 MẢNG 8 – TĂNG TRƯỞNG (MARKETING AI & WEB PHỄU) · `marketing` · *(module 📣 Marketing có từ v2.11.0 – M8.1 · M8.2 · M8.4 lưu trên máy)*
+### 🚀 MẢNG 8 – TĂNG TRƯỞNG (MARKETING AI & WEB PHỄU) · `marketing` · *(module 📣 Marketing có từ v2.11.0 – M8.1 · M8.2 · M8.4 · M8.6 lưu trên máy)*
 | Mã | Micro-Module | Trạng thái · nguồn tái sử dụng | Phiên bản đích |
 |---|---|---|---|
 | M8.1 | Lịch nội dung đa kênh TOFU/MOFU/BOFU (Facebook, TikTok, Zalo, YouTube) | ✅ v2.11.0 lịch 4 tuần 12 bài mẫu, lọc tầng phễu (📣 Marketing, lưu máy) · M7.1 (bản 1.0) | v2.4.0 |
@@ -165,7 +165,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M8.3 | **Smart Lead Dispatcher** – phân luồng lead (xem luồng A) | 🟢 v2.11.1 phân luồng lead mới `webCRM.leadMoi` + nút chuyển màn (👥 CRM) · ⬜ ghi luồng / giao tư vấn viên (chờ cổng ghi) · M8.3 (bản 1.0) | v2.3.0 |
 | M8.4 | Chốt chặn Human-in-the-Loop: bài chỉ xuất bản sau khi 0B duyệt | ✅ v2.11.0 Nháp ➜ Chờ duyệt ➜ Duyệt (Hoàn tác 6s) ➜ Sẵn sàng đăng, chỉ bài đã duyệt sao chép được (lưu máy) · ⬜ qua 0B (Còn chờ v1) · M7.3 (bản 1.0) | v2.4.0 |
 | M8.5 | Phễu Lặn Biển 0m → -105m & xuất bản đa nền tảng | M-WEB-01/02 | v2.6.0 |
-| M8.6 | Báo cáo hiệu suất truyền thông (reach, tương tác) | M7.5 (bản 1.0) | v2.6.0 |
+| M8.6 | Báo cáo hiệu suất truyền thông (reach, tương tác) | ✅ v2.12.0 tổng + từng kênh, nhập tay số từng bài, số mẫu chỉ ở Demo (📣 Marketing, lưu máy) · ⬜ lấy số tự động từ API kênh (Còn chờ v1) · M7.5 (bản 1.0) | v2.6.0 |
 
 ### 🧠 MẢNG 9 – TRI THỨC (SECOND BRAIN) · `trithuc` · Nordic Minimalist
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |

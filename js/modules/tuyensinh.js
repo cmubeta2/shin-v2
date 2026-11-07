@@ -126,11 +126,103 @@ const ModuleTuyenSinh = {
       </div>
       ${chienDich.length ? '' : `<div class="trong">Chưa có chiến dịch nào.${d.laAdmin ? ' Bấm "＋ Chiến dịch mới" để tạo.' : ''}</div>`}
 
+      <details class="tq-gon" id="tsLms">
+        <summary><span>🏫 Lớp học & điểm danh (LMS mini · M4.5)</span></summary>
+        <div id="tsLmsNoi"></div>
+      </details>
+
       <details class="tq-gon">
         <summary><span>ⓘ Cổng lead web & hoa hồng</span></summary>
         <p class="chu-phu">Trang đích gửi lead về app Tuyển sinh: chống trùng 1 SĐT / 10 phút, bẫy honeypot chặn bot. Hoa hồng tính theo bậc số học viên nhập học của từng chiến dịch.</p>
       </details>
     `;
+    this.veLms();
+  },
+
+  /* ---------------- v2.12.1 M4.5 LMS mini (dữ liệu mẫu + lưu trên máy) ---------------- */
+  KHOA_LMS: 'shin_lms',
+  _lop: null,
+  /** THUẦN: điểm danh {'lop|ngày': [tên]} ➜ [{ten, co, tong, phanTram, canhBao}] cho 1 lớp; canhBao khi < nguong % (mặc định 80). */
+  chuyenCan: function(diemDanh, maLop, hocVien, nguong) {
+    nguong = nguong == null ? 80 : nguong;
+    const buoi = Object.keys(diemDanh || {}).filter(k => k.split('|')[0] === maLop);
+    return (hocVien || []).map(ten => {
+      const co = buoi.filter(k => (diemDanh[k] || []).indexOf(ten) >= 0).length;
+      const phanTram = buoi.length ? Math.round(co / buoi.length * 100) : null;
+      return { ten, co, tong: buoi.length, phanTram, canhBao: phanTram != null && phanTram < nguong };
+    });
+  },
+  /** THUẦN: tiến độ bài ➜ {xong, tong, phanTram, ke} (ke = mã bài kế tiếp chưa học, theo thứ tự). */
+  tienDoBai: function(baiXong, dsBai) {
+    const xong = (dsBai || []).filter(b => (baiXong || []).indexOf(b.ma) >= 0).length, tong = (dsBai || []).length;
+    const ke = (dsBai || []).find(b => (baiXong || []).indexOf(b.ma) < 0);
+    return { xong, tong, phanTram: tong ? Math.round(xong / tong * 100) : 0, ke: ke ? ke.ma : null };
+  },
+  docLms: function() {
+    const L = window.MAU_LMS || {};
+    let k = null;
+    try { k = JSON.parse(localStorage.getItem(this.KHOA_LMS) || 'null'); } catch (e) { k = null; }
+    return k && k.diemDanh ? k : { diemDanh: Object.assign({}, L.diemDanhMau), baiXong: JSON.parse(JSON.stringify(L.baiXongMau || {})) };
+  },
+  ghiLms: function(k) { try { localStorage.setItem(this.KHOA_LMS, JSON.stringify(k)); return true; } catch (e) { ShinApp.toast('Trình duyệt không cho lưu trên máy.', 'error'); return false; } },
+  ngayNay: function() { const d = new Date(), p = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); },
+
+  veLms: function() {
+    const o = document.getElementById('tsLmsNoi'), L = window.MAU_LMS;
+    if (!o) return;
+    if (!L) { o.innerHTML = '<div class="trong">Chưa tải được dữ liệu lớp mẫu (mau_lms.js).</div>'; return; }
+    const e = ShinApp.esc, k = this.docLms();
+    const lop = L.lop.find(x => x.ma === this._lop) || L.lop[0];
+    this._lop = lop.ma;
+    const ngay = (document.getElementById('tsLmsNgay') || {}).value || this.ngayNay();
+    const coMat = k.diemDanh[lop.ma + '|' + ngay];
+    const cc = this.chuyenCan(k.diemDanh, lop.ma, lop.hocVien);
+    const td = this.tienDoBai(k.baiXong[lop.ma], L.bai);
+    const ccTB = cc.filter(x => x.phanTram != null);
+    const tb = ccTB.length ? Math.round(ccTB.reduce((s, x) => s + x.phanTram, 0) / ccTB.length) : null;
+    o.innerHTML = `
+      <div class="chu-phu" style="color:var(--c-yellow)">⚠️ Dữ liệu MẪU – điểm danh, tiến độ lưu trên máy này. Còn chờ v1: lớp + học viên thật từ app Tuyển sinh.</div>
+      <div class="hang-nut" role="group" aria-label="Chọn lớp">
+        ${L.lop.map(x => `<button class="${x.ma === lop.ma ? 'btn-primary' : 'btn-secondary'}" onclick="ModuleTuyenSinh.chonLop('${e(x.ma)}')">${e(x.ma)}</button>`).join('')}
+      </div>
+      <div class="chu-phu"><b>${e(lop.ten)}</b> · ${e(lop.lich)} · ${lop.hocVien.length} học viên</div>
+      <div class="tq-3so">
+        <div class="tq-o"><div class="tq-so" style="color:var(--c-blue)">${td.xong}/${td.tong}</div><div class="tq-nhan">Bài đã học</div></div>
+        <div class="tq-o"><div class="tq-so" style="color:var(--c-green)">${tb == null ? '–' : tb + '%'}</div><div class="tq-nhan">Chuyên cần TB</div></div>
+        <div class="tq-o"><div class="tq-so" style="color:var(--c-red)">${cc.filter(x => x.canhBao).length}</div><div class="tq-nhan">Dưới 80%</div></div>
+      </div>
+
+      <div class="nhan-o">📋 Điểm danh buổi</div>
+      <label class="nhan-o" for="tsLmsNgay">Ngày học</label>
+      <input id="tsLmsNgay" type="date" class="form-input" value="${e(ngay)}" onchange="ModuleTuyenSinh.veLms()">
+      <div class="chu-phu">${coMat ? 'Đã điểm danh ' + coMat.length + '/' + lop.hocVien.length + ' – sửa rồi lưu lại nếu cần.' : 'Chưa điểm danh buổi này.'}</div>
+      ${lop.hocVien.map((t, i) => { const c = cc[i]; return `<label class="hang-tru" style="min-height:44px;cursor:pointer;gap:12px">
+        <input type="checkbox" class="tsLmsHV" value="${e(t)}" ${!coMat || coMat.indexOf(t) >= 0 ? 'checked' : ''} style="width:22px;height:22px;flex:0 0 auto">
+        <span style="flex:1;min-width:0">${e(t)}</span>
+        <span class="chu-phu" style="color:${c.canhBao ? 'var(--c-red)' : 'var(--text-muted)'}">${c.phanTram == null ? '–' : c.co + '/' + c.tong + ' · ' + c.phanTram + '%'}</span></label>`; }).join('')}
+      <div class="hang-nut"><button class="btn-primary" onclick="ModuleTuyenSinh.luuDiemDanh()">💾 Lưu điểm danh</button></div>
+
+      <div class="nhan-o">📚 Bài M01–M20 · ${td.phanTram}%${td.ke ? ' · bài kế: ' + e(td.ke) : ' · đã xong khóa'}</div>
+      ${[...new Set(L.bai.map(b => b.tuan))].map(t => `<div class="chu-phu" style="margin-top:8px"><b>Tuần ${t}</b></div>
+        ${L.bai.filter(b => b.tuan === t).map(b => { const x = (k.baiXong[lop.ma] || []).indexOf(b.ma) >= 0; return `<label class="hang-tru" style="min-height:44px;cursor:pointer;gap:12px">
+          <input type="checkbox" ${x ? 'checked' : ''} onchange="ModuleTuyenSinh.danhDauBai('${e(b.ma)}', this.checked)" style="width:22px;height:22px;flex:0 0 auto">
+          <span style="flex:1;min-width:0"><b>${e(b.ma)}</b> · ${e(b.ten)}</span></label>`; }).join('')}`).join('')}`;
+  },
+  chonLop: function(ma) { this._lop = ma; const n = document.getElementById('tsLmsNgay'); const giu = n ? n.value : ''; this.veLms(); const m = document.getElementById('tsLmsNgay'); if (m && giu) m.value = giu; },
+  luuDiemDanh: function() {
+    const ngay = (document.getElementById('tsLmsNgay') || {}).value;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(ngay || '')) return ShinApp.toast('Chọn ngày học trước khi lưu.', 'error');
+    const co = [...document.querySelectorAll('.tsLmsHV')].filter(x => x.checked).map(x => x.value);
+    const k = this.docLms();
+    k.diemDanh[this._lop + '|' + ngay] = co;
+    if (this.ghiLms(k)) this.veLms();
+  },
+  danhDauBai: function(ma, xong) {
+    const k = this.docLms(), a = k.baiXong[this._lop] = k.baiXong[this._lop] || [];
+    const i = a.indexOf(ma);
+    if (xong && i < 0) a.push(ma);
+    if (!xong && i >= 0) a.splice(i, 1);
+    if (this.ghiLms(k)) this.veLms();
   },
 
   /* ---------------- Chi tiết chiến dịch + lead ---------------- */
