@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.10.3** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.10.4** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.10.4 ✅ – M3.1 MÃ VIETQR NHẬN TIỀN (08/11/2026, lượt tự động ⑤ 04h)
+- **Nội dung:** tệp mới `js/vietqr.js` (`ShinVietQR`): chuỗi VietQR chuẩn EMVCo + NAPAS 247 (tag 38 A000000727 · BIN · số TK · QRIBFTTA, 53=704, 54 số tiền – bỏ trống ➜ QR tĩnh, 58=VN, 62/08 nội dung tự bỏ dấu ≤ 25 ký tự, CRC-16/CCITT-FALSE) + bộ mã hóa QR thuần (byte mode, mức M, phiên bản 1–20, tự chọn mặt nạ) vẽ SVG ngay trên máy – không gọi dịch vụ ảnh QR ngoài. 💰 Tài chính có khối gập 🔳 Mã VietQR: chọn ngân hàng (18 BIN phổ biến), số TK, tên chủ TK ➜ lưu localStorage máy này (khóa `shin_vietqr_tk`, không có trong repo, không vào SHINCFG1), hiện •••• 4 số cuối, nút Đổi có Hoàn tác 6s; nhập số tiền (kiểu VN) + nội dung ➜ 🔳 Tạo mã.
+- **Kiểm:** 17/17 ca thuần (CRC "123456789" = 29B1, RS mẫu Thonky 1-M, vị trí căn chỉnh v7/v14, bộ giải độc lập đọc lại 6 chuỗi tới 300 ký tự – hội chứng RS = 0, chuỗi VietQR động / tĩnh, BIN / TK / tiền lẻ / tiền âm bị chặn); luồng Demo Edge 375 + 1280 (lưu TK ➜ tạo mã 280px ➜ gỡ TK), mọi nút / ô ≥ 44px, 16/16 màn không cuộn ngang, 0 lỗi console.
+- **Chờ anh:** quét thử 1 mã bằng app ngân hàng thật (máy không có bộ quét). Còn chờ v1: tự xác nhận đã nhận tiền (webhook SePay).
 
 ### PHIÊN BẢN v2.10.3 ✅ – M3.3 ĐỀ NGHỊ CHI HOA HỒNG CTV / ĐẠI LÝ (08/11/2026, lượt tự động ⑤ 04h)
 - **Nội dung:** 🎓 Tuyển sinh – chi tiết chiến dịch có hoa hồng > 0 hiện nút 💸 Lập đề nghị chi hoa hồng: lấy kết quả `hoaHongDat` (bảng bậc thang M4.3) mà cổng có sẵn `webLeadCD` trả (`hoaHong.{bac, tien}`, `pheu.nhapHoc`) ➜ hàm thuần `ModuleTaiChinh.deXuatHoaHong` ➜ mở 💰 Tài chính với form ✍️ điền sẵn loại Thanh toán (khoản mục "Hoa hồng CTV/đại lý – <chiến dịch>", số tiền, mã chiến dịch, lý do số HV × bậc) ➜ người dùng kiểm lại rồi 📋 sao chép (cùng luật M3.4). Demo: `hhSo` trong chiến dịch mẫu.

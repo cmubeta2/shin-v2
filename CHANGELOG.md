@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.10.4] – 08/11/2026 (M3.1 VIETQR)
+
+### ✨ Tính năng
+- `js/vietqr.js` mới: chuỗi VietQR (EMVCo/NAPAS, CRC16) + bộ mã hóa QR thuần vẽ SVG offline. 💰 Tài chính: khối 🔳 Mã VietQR nhận tiền (số TK chỉ lưu localStorage máy này). `index.html` + `sw.js` VO_APP thêm `js/vietqr.js`; shin-v2.10.4.
+
 ## [2.10.3] – 08/11/2026 (M3.3 HOA HỒNG CTV)
 
 ### ✨ Tính năng

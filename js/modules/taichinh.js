@@ -10,6 +10,7 @@
  *   kiemDeXuat trả thêm `goi` = tham số webGuiDeXuatChi (nối thật khi L26 lên app – thêm maGui chống trùng).
  * v2.10.2 – M3.2 ngân sách & giải ngân theo dự án: Live đọc thêm webDuAn (duAn.nganSach / daChi, flash.taiChinh.phatSinh),
  *   cảnh báo vượt / sắp chạm dự toán cấp dự án. Dự toán theo khoản mục: v1 chưa có dữ liệu ➜ không làm.
+ * v2.10.4 – M3.1 khối 🔳 Mã VietQR (js/vietqr.js – sinh QR offline, số TK chỉ lưu máy này).
  * v2.10.3 – M3.3 hoa hồng CTV/đại lý: 🎓 Tuyển sinh (webLeadCD.hoaHong) ➜ deXuatHoaHong ➜ moDeXuat điền sẵn form Thanh toán.
  */
 
@@ -159,6 +160,8 @@ const ModuleTaiChinh = {
         <label class="nhan-o" for="dxLyDo">Lý do *</label><textarea id="dxLyDo" class="form-input" rows="3" maxlength="500" placeholder="Vì sao cần chi, hạn cần tiền"></textarea>
         <button class="btn-primary" onclick="ModuleTaiChinh.saoChepDeXuat()">📋 Kiểm & sao chép phiếu</button>
       </details>
+
+      ${typeof ShinVietQR !== 'undefined' ? ShinVietQR.veKhoi() : ''}
 
       <details class="tq-gon">
         <summary><span>ⓘ Nguồn số</span></summary>
