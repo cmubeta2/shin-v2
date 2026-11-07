@@ -150,7 +150,8 @@ const ModuleTuyenSinh = {
 
     if (!SHIN_API.laCheDoLive()) {
       khung.innerHTML = `<div class="chu-phu">Mẫu: ${ShinApp.esc(cd.lead)} lead · ${ShinApp.esc(cd.nhapHoc)} nhập học · ${ShinApp.esc(cd.hoaHong)}. Có token sẽ hiện phễu và danh sách lead thật.</div>
-        <button class="nut-rong" onclick="ModuleTuyenSinh.moFormLead('${ShinApp.esc(cd.ma)}')">＋ Thêm lead vào chiến dịch này</button>`;
+        <button class="nut-rong" onclick="ModuleTuyenSinh.moFormLead('${ShinApp.esc(cd.ma)}')">＋ Thêm lead vào chiến dịch này</button>
+        ${cd.hhSo && cd.hhSo.tien > 0 ? `<button class="nut-rong" onclick="ModuleTuyenSinh.chiHoaHong(${i})">💸 Lập đề nghị chi hoa hồng (M3.3)</button>` : ''}`;
       return;
     }
     if (!this._d.xemLead) {
@@ -194,6 +195,7 @@ const ModuleTuyenSinh = {
       <div class="hang-tru"><span>Tỷ lệ nhập học / lead · Loss</span><b>${e(ShinApp.ptVN(p.tyLe))} · ${so(p.loss)}</b></div>
       <div class="hang-tru"><span>Hoa hồng hiện tại${hh.bac ? ' (bậc ' + so(hh.bac) + ')' : ''}</span><b>${so(hh.tien)} đ</b></div>
       ${hh.conLenBac ? `<div class="chu-phu">Còn ${so(hh.conLenBac)} học viên nữa lên bậc kế.</div>` : ''}
+      ${Number(hh.tien) > 0 ? `<button class="nut-rong" onclick="ModuleTuyenSinh.chiHoaHong(${i})">💸 Lập đề nghị chi hoa hồng (M3.3)</button>` : ''}
       <button class="nut-rong" onclick="ModuleTuyenSinh.moFormLead('${e(c.maCD)}')">＋ Thêm lead vào chiến dịch này</button>
       <div class="hn-tieu"><span>LEAD · ${so(s.dangTV)} đang theo${s.quaHan ? ' · ' + so(s.quaHan) + ' quá hạn' : ''}</span></div>
       ${ds.length ? ds.map((l, j) => `
@@ -211,6 +213,17 @@ const ModuleTuyenSinh = {
       `).join('') : '<div class="trong">Chiến dịch chưa có lead.</div>'}
       ${(c.lead || []).length > 50 ? `<div class="chu-phu">Đang hiện 50 / ${so(c.lead.length)} lead – lead quá hạn và đang theo luôn nằm trên cùng.</div>` : ''}
     `;
+  },
+
+  /** v2.10.3 M3.3: hoa hồng bậc thang của chiến dịch (webLeadCD.hoaHong – Demo: cd.hhSo) ➜ form Thanh toán ở 💰 Tài chính. */
+  chiHoaHong: function(i) {
+    const cd = (this._d.chienDich || [])[i];
+    if (!cd) return;
+    const du = this._lead[cd.ma];
+    const hh = du ? du.hoaHong : cd.hhSo, n = du ? (du.pheu || {}).nhapHoc : cd.nhapHoc;
+    const p = ModuleTaiChinh.deXuatHoaHong(cd, hh, n);
+    if (p.loi) return ShinApp.toast(p.loi, 'error');
+    ModuleTaiChinh.moDeXuat(p);
   },
 
   layLead: function(i, j) {

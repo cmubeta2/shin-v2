@@ -4,6 +4,26 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.10.4] – 08/11/2026 (M3.1 VIETQR)
+
+### ✨ Tính năng
+- `js/vietqr.js` mới: chuỗi VietQR (EMVCo/NAPAS, CRC16) + bộ mã hóa QR thuần vẽ SVG offline. 💰 Tài chính: khối 🔳 Mã VietQR nhận tiền (số TK chỉ lưu localStorage máy này). `index.html` + `sw.js` VO_APP thêm `js/vietqr.js`; shin-v2.10.4.
+
+## [2.10.3] – 08/11/2026 (M3.3 HOA HỒNG CTV)
+
+### ✨ Tính năng
+- 🎓 Tuyển sinh: nút 💸 Lập đề nghị chi hoa hồng ở chiến dịch có hoa hồng (webLeadCD.hoaHong) ➜ 💰 Tài chính điền sẵn phiếu Thanh toán (`ModuleTaiChinh.deXuatHoaHong`, `moDeXuat`, `apDienSan`). Header + `sw.js`: shin-v2.10.3.
+
+## [2.10.2] – 08/11/2026 (M3.2 NGÂN SÁCH THEO DỰ ÁN)
+
+### ✨ Tính năng
+- 💰 Tài chính: khối Ngân sách & giải ngân theo dự án (Live `webDuAn` song song `webTaiChinh`; lỗi riêng khối, không dùng số mẫu). Hàm thuần `ModuleTaiChinh.lechDuToan` (vượt > 100% / sắp chạm > 90% / chưa có dự toán). Chi phát sinh từ Flash dự án. Demo `duAnNS`, `phatSinh`. Header + `sw.js`: shin-v2.10.2.
+
+## [2.10.1] – 08/11/2026 (M3.4 TẠM ỨNG / THANH TOÁN)
+
+### ✨ Tính năng
+- 💰 Tài chính: form ✍️ gộp 3 loại phiếu Chi / Tạm ứng (hạn hoàn ứng) / Thanh toán (số chứng từ), hiện ô theo loại. `ModuleTaiChinh.kiemDeXuat(p, soat, homNay)` kiểm theo luật HUB L26 (Hub v1.15.7) và trả `goi` cho `webGuiDeXuatChi`. Vẫn sao chép phiếu (L26 chưa lên app). Header + `sw.js`: shin-v2.10.1.
+
 ## [2.10.0] – 07/11/2026 (M6.4 SOẠN ĐỀ XUẤT CHI)
 
 ### ✨ Tính năng

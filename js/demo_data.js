@@ -142,8 +142,8 @@ window.SHIN_DEMO_DATA = {
       nutChinh: { nhan: "＋ Tiếp Nhận Lead Mới", hanhDong: "nhapLead" }
     },
     chienDich: [
-      { ma: "CD03", ten: "Đại học Trực tuyến GDU – Đợt 3/2026", han: "15/11/2026", lead: 84, nhapHoc: 21, hoaHong: "Bậc 3 (2.5tr/hv)" },
-      { ma: "CD02", ten: "Đại học Sư phạm Huế – Đợt 2/2026", han: "05/12/2026", lead: 42, nhapHoc: 8, hoaHong: "Bậc 2 (2.0tr/hv)" },
+      { ma: "CD03", ten: "Đại học Trực tuyến GDU – Đợt 3/2026", han: "15/11/2026", lead: 84, nhapHoc: 21, hoaHong: "Bậc 3 (2.5tr/hv)", hhSo: { bac: 3, tien: 52500000 } },
+      { ma: "CD02", ten: "Đại học Sư phạm Huế – Đợt 2/2026", han: "05/12/2026", lead: 42, nhapHoc: 8, hoaHong: "Bậc 2 (2.0tr/hv)", hhSo: { bac: 2, tien: 16000000 } },
       { ma: "CD01", ten: "Chứng chỉ Y tế Ngắn hạn CS3", han: "Thường xuyên", lead: 22, nhapHoc: 3, hoaHong: "Bậc 1 (1.5tr/hv)" }
     ]
   },
@@ -474,6 +474,17 @@ window.SHIN_DEMO_DATA.taichinh = {
   giaoDich: [
     { ngay: '30/10/2026', noiDung: 'Công ty mẫu chuyển khoản đợt 2 KSK', soTien: 120000000, nguon: 'SePay' },
     { ngay: '29/10/2026', noiDung: 'Chi vé xe đoàn KSK lưu động', soTien: -3200000, nguon: 'Tay' }
+  ],
+  // v2.10.2 – M3.2: khuôn webDuAn (duAn + flash.taiChinh.phatSinh) – dữ liệu GIẢ
+  duAnNS: [
+    { ma: 'DA-KSK01', ten: 'KSK định kỳ doanh nghiệp mẫu', nganSach: 350000000, daChi: 145000000, trangThai: 'Đang triển khai' },
+    { ma: 'DA-PK02', ten: 'Nâng cấp phòng khám mẫu', nganSach: 120000000, daChi: 112500000, trangThai: 'Đang triển khai' },
+    { ma: 'DA-MKT03', ten: 'Chiến dịch truyền thông mẫu', nganSach: 45000000, daChi: 49200000, trangThai: 'Đang triển khai' },
+    { ma: 'DA-NB04', ten: 'Dự án nội bộ mẫu', nganSach: 0, daChi: 2500000, trangThai: 'Đang triển khai' }
+  ],
+  phatSinh: [
+    { khoanMuc: 'Thuê xe X-quang lưu động', soTien: 15000000, nguoiChi: 'Nhân viên mẫu A', tinhTrang: 'Chờ duyệt' },
+    { khoanMuc: 'In tờ rơi chiến dịch', soTien: 4200000, nguoiChi: 'Nhân viên mẫu B', tinhTrang: 'Đã chi' }
   ]
 };
 
