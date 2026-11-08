@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.5** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.6** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.6 ✅ – PWA HOÀN THIỆN (09/11/2026, lượt tự động ⑤ 04h – kéo trước mục T6 13/11)
+- **Nội dung:** (1) `sw.js` vỏ app thiếu `js/modules/danhgia5t.js` (index.html có nạp) và `danhgia5t.html` ➜ thêm vào VO_APP, PHIEN_BAN_SW `shin-v2.13.6` – mở offline ngay từ lần đầu không thiếu tệp. (2) Báo bản mới: khi service worker mới thay bản đang chạy ➜ Toast "Đã có bản SHIN mới" + nút Tải lại (lần cài đầu không báo). (3) App cài mở lâu ngày: quay lại màn hình là kiểm bản mới (`reg.update()`, tối đa 1 lần / 30 phút, bỏ qua khi mất mạng). (4) Manifest thêm lối tắt 💰 Tài chính, 📣 Marketing (`?m=taichinh`, `?m=marketing`).
+- **Kiểm:** node --check; Edge headless qua máy chủ http cục bộ: 17 màn × 375 / 1280 – 0 cuộn ngang, 0 lỗi console (Demo); SW kích hoạt, bộ đệm `shin-v2.13.6` cài đủ vỏ app (addAll không lỗi); lối tắt `?m=taichinh&nguon=app` mở đúng màn và xóa tham số; chặn mạng tải lại ➜ vỏ app vẫn mở.
+- **T6 còn lại:** M0.2 phía trình duyệt đã xong (v2.13.1); nối cổng v1 mới: HUB L29 «ĐÃ CODE v1.18.6», chưa lên app ➜ CRM đã đón sẵn (v2.13.3).
+- **Còn chờ v1:** HUB L29 lên app (CRM giai đoạn + sổ tương tác + đánh dấu lead).
 
 ### PHIÊN BẢN v2.13.5 ✅ – RÀ UX TỰ ĐỘNG 17 MÀN (08/11/2026, lượt tự động ⑤ 18h – kéo trước một phần T7)
 - **Nội dung:** quét Edge headless 375 + 1280 mọi màn, đo thêm vùng bấm < 44px, chữ < 14px, ô nhập < 16px. Sửa: `.btn-icon` (↻ / ＋ / 🏠 trên đầu màn) bị flex bóp còn 36–42px ở 375 ➜ `min-width: 44px; flex-shrink: 0`; 💰 Tài chính huy hiệu trạng thái dự án, số tiền vượt, nhãn Chờ duyệt / Đã chi 11–12px ➜ 14px.
