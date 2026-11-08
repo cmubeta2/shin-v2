@@ -139,6 +139,10 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 
 ---
 
+### Tri thức – `webTriThuc` (HUB L28a, lên app Hub v1.18.5 – `84_TriThuc.gs`) – v2.13.2 nối
+- **Đọc:** `webTriThuc(token, {})` – mọi người dùng Hub đã đăng nhập ➜ `{ ok, capNhat, taiLieu: [{ ma ≤120, ten ≤200, linhVuc, capNhat 'dd/mm/yyyy'|'', dinhDang, tomTat ≤400, lienKet: [≤50], duongDan }], baiHoc: [], loi? }`. Nguồn: `_TacVu/tri_thuc_chi_muc.json` trên Drive (máy anh quét `05_TriThuc`, đã lọc SĐT / CCCD / BHYT). Chưa có / hỏng chỉ mục ➜ `taiLieu: []` + `loi` (v2 báo đỏ, không thay số mẫu).
+- **Ghi (còn chờ v1 – HUB L28 phần ghi):** `webLuuBaiHoc` ghi bài học trích từ Flash Report, tường lửa KHONG_DUA_VAO phía máy chủ.
+
 ## v2.6.0 – Quản trị người dùng & app · Nối PTKH gốc
 
 ### Đã chạy được ngay (cổng có sẵn, v2 không cần chờ)

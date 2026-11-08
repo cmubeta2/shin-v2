@@ -4,6 +4,8 @@
  * lọc theo lĩnh vực, tô đậm chỗ khớp. Chưa có máy chủ v1 cho kho tri thức ➜ dữ liệu là MẪU (FTS5 phía máy chủ để sau).
  * v2.8.3 (M9.3): đồ thị liên kết [[wiki-links]] PHÍA TRÌNH DUYỆT – đọc [[Mã]] / [[Tên|nhãn]] trong tóm tắt + mảng lienKet,
  * tính liên kết ra / liên kết ngược (backlinks) / liên kết treo (chưa có bài), vẽ SVG vòng tròn, bấm tài liệu mở khung chi tiết.
+ * v2.13.2 (M9.1 🟢): Live đọc thật HUB L28a `webTriThuc(token, {})` (Hub v1.18.5) ➜ {capNhat, taiLieu:[{ma, ten, linhVuc, capNhat,
+ *   dinhDang, tomTat, lienKet, duongDan}], baiHoc:[], loi?} – chỉ mục 05_TriThuc do máy anh đồng bộ. Lỗi / chưa có chỉ mục ➜ báo đỏ, không thay số mẫu.
  */
 
 const ModuleTriThuc = {
@@ -11,6 +13,14 @@ const ModuleTriThuc = {
   ten: 'Thư Viện Tri Thức',
   bieuTuong: '🧠',
   paletteMacDinh: 'nordic',
+  mayChu: 'HUB',
+
+  taiLive: async function() {
+    const kq = await SHIN_API.goi('HUB', 'webTriThuc', {});
+    if (!kq.ok) return kq;
+    const d = kq.data || {};
+    return { ok: true, data: { live: true, capNhat: String(d.capNhat || ''), taiLieu: Array.isArray(d.taiLieu) ? d.taiLieu : [], loi: d.loi || '' } };
+  },
 
   _ds: [],
   _tim: '',
@@ -98,6 +108,13 @@ const ModuleTriThuc = {
     this._dt = this.phanTichLienKet(this._ds);
     if (this._xem && !this._ds.some(t => t.ma === this._xem)) this._xem = '';
     const lv = [...new Set(this._ds.map(t => t.linhVuc).filter(Boolean))];
+    if (d.live) {
+      hero.chao = 'Thư Viện Tri Thức 🧠';
+      hero.ngay = d.capNhat ? 'Chỉ mục cập nhật ' + d.capNhat : 'Kho 05_TriThuc (Hub)';
+      hero.so = [{ nhan: 'Tài liệu', giaTri: String(this._ds.length), mau: 'var(--c-blue)' },
+        { nhan: 'Lĩnh vực', giaTri: String(lv.length), mau: 'var(--c-green)' },
+        { nhan: 'Liên kết', giaTri: String(this._dt.canh.length), mau: 'var(--c-purple)' }];
+    }
 
     container.innerHTML = `
       <div class="page-header">
@@ -125,6 +142,7 @@ const ModuleTriThuc = {
         ${lv.map(x => `<button class="chip-chon ${this._linhVuc === x ? 'dang-chon' : ''}" data-lv="${e(x)}" onclick="ModuleTriThuc.chonLinhVuc(this.dataset.lv)">${e(x)}</button>`).join('')}
       </div>` : ''}
 
+      ${d.loi ? `<div class="trong" style="color:var(--c-red)">⚠️ Kho tri thức: ${e(d.loi)} – danh sách để trống, không dùng số mẫu.</div>` : ''}
       <div id="ttXem"></div>
 
       <details class="tq-gon" id="ttDoThiKhoi">
@@ -138,7 +156,7 @@ const ModuleTriThuc = {
 
       <details class="tq-gon">
         <summary><span>ⓘ Nguồn dữ liệu</span></summary>
-        <p class="chu-phu">Kho tài liệu đồng bộ tại <code>He sinh thai Shin/05_TriThuc</code>. Hệ v1 chưa có máy chủ cho kho tri thức – danh sách trên là MẪU; tìm kiếm chạy ngay trên máy, không gửi câu tìm đi đâu.</p>
+        <p class="chu-phu">${d.live ? 'Số thật: chỉ mục kho <code>05_TriThuc</code> (máy anh quét → Drive) đọc qua cổng Hub <code>webTriThuc</code> (L28a).' : 'Demo: danh sách là MẪU. Live đọc chỉ mục kho <code>05_TriThuc</code> qua cổng Hub <code>webTriThuc</code>.'} Tìm kiếm chạy ngay trên máy, không gửi câu tìm đi đâu. Còn chờ v1: ghi bài học từ Flash Report (<code>webLuuBaiHoc</code>, HUB L28 phần ghi).</p>
       </details>`;
     this.veDs();
     this.veXem();

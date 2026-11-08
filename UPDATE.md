@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.1** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.2** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.2 ✅ – M9.1 🟢 THƯ VIỆN TRI THỨC ĐỌC THẬT QUA HUB L28a (08/11/2026, lượt tự động ⑤ 10h – T6 "nối cổng v1 mới đã lên app")
+- **Nội dung:** `ModuleTriThuc` thêm `mayChu: 'HUB'` + `taiLive` ➜ `webTriThuc(token, {})`; Live vẽ hero từ số thật (số tài liệu, lĩnh vực, liên kết [[…]]) + "Chỉ mục cập nhật dd/mm/yyyy"; Hub trả `loi` (chưa đồng bộ chỉ mục) ➜ dải đỏ, danh sách trống; lỗi mạng ➜ khung lỗi chung của app. Hợp đồng ghi vào HOP_DONG_CONG_V2.md mục Tri thức.
+- **Kiểm:** node --check; Edge 375 Live giả lập: gọi đúng HUB:webTriThuc, 2 tài liệu ➜ hero 2 · 2 · 1 liên kết; ca `loi` ➜ dải đỏ; không cuộn ngang; 0 lỗi console.
+- Còn chờ v1: ghi bài học `webLuuBaiHoc` (HUB L28 phần ghi – Sếp đã duyệt 08/11, dòng đã có trong KE_HOACH Hub).
 
 ### PHIÊN BẢN v2.13.1 ✅ – M0.2 RBAC PHÍA TRÌNH DUYỆT: CHẶN MỞ THẲNG MẢNG KHÔNG CÓ QUYỀN (08/11/2026, lượt tự động ⑤ 10h – kéo mục T6 lên)
 - **Nội dung:** trước đây mảng không có quyền chỉ bị ẩn khỏi menu, vẫn mở được qua lối tắt `?m=` hoặc nút chuyển màn giữa các mảng. Nay `chuyenModule` (Live, sau khi Hub nhận diện) kiểm `mangCoQuyen` ➜ vẽ màn 🔒 `veKhongCoQuyen`, không gọi cổng. Mảng anh/chị tự tắt trong ⚙️ vẫn mở được bằng nút (chỉ ẩn menu). Máy chủ v1 vẫn là chốt chặn thật.

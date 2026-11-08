@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.2] – 08/11/2026 (M9.1 🟢 TRI THỨC ĐỌC THẬT)
+
+### ✨ Tính năng
+- 🧠 Tri thức: Live đọc thật HUB L28a `webTriThuc` (Hub v1.18.5) – 3 số đầu (tài liệu · lĩnh vực · liên kết) tính từ số thật, ngày cập nhật chỉ mục; chưa có chỉ mục ➜ dải đỏ, không thay số mẫu. Tìm kiếm + đồ thị liên kết chạy trên danh sách thật.
+
 ## [2.13.1] – 08/11/2026 (M0.2 RBAC PHÍA TRÌNH DUYỆT)
 
 ### 🔒 Quyền
