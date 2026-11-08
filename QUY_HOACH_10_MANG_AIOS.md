@@ -80,7 +80,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M0.1 | Bật/Tắt Module (Feature Flags) – ẩn mảng khỏi menu khi tắt | ✅ lưu trên máy + v2.9.4 mã cấu hình SHINCFG1 chuyển máy (thủ công, không kèm token) / ⬜ tự đồng bộ theo người (cần cổng Hub) · 🟢 bật/tắt app v1 qua `webLuuUngDung` (v2.8.0; Hub v1.15.6 lên app @15 06/11) | v2.6.0 đồng bộ |
-| M0.2 | Ma trận RBAC: Vai trò × Khoa/Phòng × Module | 🟡 v2.8.5 xem ma trận Vai trò × Mảng (suy từ chốt chặn quyền mã v1, chỉ xem) / ⬜ chiều Khoa/Phòng + sửa quyền theo ô (cần cổng v1) | v2.5.0 |
+| M0.2 | Ma trận RBAC: Vai trò × Khoa/Phòng × Module | 🟡 v2.8.5 xem ma trận Vai trò × Mảng (suy từ chốt chặn quyền mã v1, chỉ xem) · ✅ v2.13.1 chặn mở thẳng mảng không có quyền (lối tắt / nút chuyển màn) / ⬜ chiều Khoa/Phòng + sửa quyền theo ô (cần cổng v1) | v2.5.0 |
 | M0.3 | Cổng cấp Token SSO `h1.<ma>.0.<chuKy>` (dùng lại M-HUB-05 của v1) | 🟢 dùng token Hub, ẩn mảng không có quyền / 🟡 cấp token (`webCapLink`) | v2.3.0 |
 | M0.4 | Giám sát tải & sức khỏe 5 máy chủ /exec (latency, lỗi, fallback) | 🟢 độ trễ + lỗi từng máy chủ | – |
 
