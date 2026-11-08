@@ -26,6 +26,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.13.4 ✅ – GIAO DIỆN 🧠 TRI THỨC + TRANG offline.html (08/11/2026, lượt tự động ⑤ 16h – nhận phiếu agy 11081024_V2_M9.1_giao-dien)
+- **Nội dung:** áp phiếu giao diện agy (đã rà diff: chỉ giao diện, không đổi tên hàm / logic, 100% var(--…)): thẻ tài liệu + chi tiết dễ đọc ở 320–375px, dải đỏ lỗi Hub có hướng dẫn, 3 trạng thái trống; offline.html tự tải lại khi `online` (theo phản biện agy). Sửa ghi chú cũ "v1 chưa có máy chủ cho kho tri thức" ➜ "Hub chỉ trả chỉ mục + tóm tắt (L28a)".
+- **Kiểm:** node --check; Edge headless 375 + 1280: 17 màn mở đúng, 0 cuộn ngang, 0 lỗi console (Demo); offline.html 320px: 0 chữ nhỏ, 0 vùng bấm nhỏ.
+- **Còn chờ v1:** HUB L29 (CRM giai đoạn + sổ tương tác) «ĐÃ CODE v1.18.6», chưa lên app – màn 👥 CRM đã đón sẵn từ v2.13.3.
+
 ### PHIÊN BẢN v2.13.3 ✅ – M3.3 / M3.4 🟢 + CRM ĐÓN SẴN HUB L29 (08/11/2026, lượt tự động ⑤ 12h – T6 "nối cổng v1 mới" + mục 5b)
 - **Nội dung:** (1) Xác minh mã Hub `83_TaiChinh.gs`: `webGuiDeXuatChi` nhận `loai` (Chi / Tạm ứng / Thanh toán), `hanHoanUng`, `soChungTu` ➜ form gộp M3.4 và phiếu hoa hồng M3.3 (🎓 Tuyển sinh ➜ 💰 Tài chính) đã gửi thật vào 0B từ v2.12.2 ➜ QUY_HOACH M3.3 / M3.4 🟢. (2) 👥 CRM đón sẵn HUB L29: `tuV1` mang `giaiDoan` + `tuongTac`; hàm thuần `gdCua` (cột GiaiDoan đúng 5 giá trị ➜ dùng, không thì suy từ Trạng thái), `tuongTacCua` (5 lần liên hệ mới nhất); ô chọn giai đoạn trong form và lịch sử tương tác trong chi tiết đối tác CHỈ hiện khi cổng thật trả trường mới – chưa có thì ghi "còn chờ máy chủ Hub (dòng L29)", không gửi trường máy chủ bỏ qua. Hợp đồng L29 ghi vào HOP_DONG_CONG_V2.md mục CRM.
 - **Mục 5b:** thêm dòng **HUB L29** (CRM GiaiDoan + sổ tương tác `webGhiTuongTac` + `webDanhDauLead`, Sếp đã duyệt 08/11) vào 10_Hub/KE_HOACH.md + đầu thu_tu (commit v1, không push). Dòng tri thức (L28) đã có từ trước.

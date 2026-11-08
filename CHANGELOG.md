@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.4] – 08/11/2026 (GIAO DIỆN 🧠 TRI THỨC + offline.html – phiếu agy)
+
+### 🎨 Giao diện
+- 🧠 Tri thức: thẻ tài liệu xuống dòng gọn ở 320–375px, lĩnh vực thành badge, ngày cập nhật chữ phụ; dải đỏ khi Hub lỗi kèm câu hướng dẫn đồng bộ kho; 3 trạng thái trống riêng (lỗi / Live chưa có tài liệu / Demo); nút ✕ đủ 44px. Ghi chú cuối thẻ sửa lại: Hub chỉ trả chỉ mục (L28a).
+- offline.html: bố cục rõ hơn, tự tải lại khi có mạng trở lại (sự kiện `online`).
+
 ## [2.13.3] – 08/11/2026 (M3.3 / M3.4 🟢 · CRM ĐÓN SẴN HUB L29)
 
 ### ✨ Tính năng
