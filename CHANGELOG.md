@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.12.2] – 08/11/2026 (M6.4 🟢 GỬI ĐỀ XUẤT CHI THẬT + GIAO DIỆN TÀI CHÍNH / LMS)
+
+### ✨ Tính năng
+- 💰 Tài chính › ✍️ Đề xuất chi: nút 📤 Gửi vào Phê duyệt 0B gọi thật HUB L26 `webGuiDeXuatChi` (lên app Hub v1.18.5) – kiểm đủ trường + tường lửa M9.5, Toast Hoàn tác 6s (Hoàn tác = không gửi), `maGui` chống trùng (gửi lại sau lỗi mạng không tạo phiếu thứ 2). Demo: không gửi. Giữ nút 📋 sao chép.
+- `kiemDeXuat`: nhận số tiền dạng chuỗi '1.500.000', chặn tên dự án > 120 ký tự (khớp Hub).
+
+### 🎨 Giao diện (agy)
+- 💰 Tài chính + 🔳 VietQR: lớp CSS `.tc-` (badge mức dự toán, thanh giải ngân, form nhóm) – phiếu 11080424_V2_M3.1_giao-dien.
+- 🎓 Tuyển sinh › LMS: thẻ học viên, badge chuyên cần, tên bài M01–M20 chuẩn hóa – phiếu 11080619_V2_M4.5_giao-dien.
+
 ## [2.12.1] – 08/11/2026 (M4.5 LMS MINI)
 
 ### ✨ Tính năng

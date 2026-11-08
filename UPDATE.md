@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.12.1** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.12.2** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.12.2 ✅ – M6.4 🟢 GỬI ĐỀ XUẤT CHI THẬT VÀO 0B + GIAO DIỆN TÀI CHÍNH / LMS (08/11/2026, lượt tự động ⑤ 10h – ưu tiên số 1: HUB L26 đã lên app v1.18.5)
+- **Nội dung:** 💰 Tài chính › ✍️ Đề xuất chi / Tạm ứng / Thanh toán có nút chính 📤 Gửi vào Phê duyệt 0B ➜ `ModuleTaiChinh.guiDeXuat`: kiểm như cũ (`kiemDeXuat` + `SHIN_API.soatKhongDuaVao`) ➜ Toast "Sẽ gửi …" có Hoàn tác 6s ➜ hết giờ mới gọi `webGuiDeXuatChi(token, {loai, khoanMuc, soTien, duAn, lyDo, hanHoanUng?, soChungTu?, maGui})`; Hub trả `{ma, moi}` ➜ toast mã phiếu TC-… + tải lại màn (phiếu hiện trong khoản chờ duyệt). `maGui` (hàm thuần `taoMaGui`) giữ nguyên tới khi Hub nhận ➜ lỗi mạng bấm lại không tạo phiếu trùng; khóa `_dangGui` chặn bấm đúp. Demo / chưa có máy chủ: báo rõ, không gửi. Theo ca biên agy 11080424_V2_M3.4: `kiemDeXuat` bóc số chuỗi '1.500.000', chặn dự án > 120 ký tự. Áp 2 phiếu giao diện agy (M3.1 `.tc-` cho Tài chính + VietQR; M4.5 thẻ LMS + tên bài).
+- **Kiểm:** node --check 4 tệp; ca thuần (chuỗi 1.500.000 ➜ 1500000, dự án 125 ký tự ➜ lỗi, maGui đúng mẫu Hub); Edge 375 + 1280: 17 màn không cuộn ngang, 0 lỗi console, 2 nút 46px, Demo bấm 📤 ➜ báo không gửi; Live giả lập: Hoàn tác ➜ 0 lần gọi, bấm đúp ➜ 1 lần, lỗi mạng rồi gửi lại ➜ cùng maGui.
+- Chờ anh: thử 1 phiếu thật trên app (Hub v1.18.5) – kiểm phiếu TC-… hiện ở ⚡ Phê duyệt 0B. Hub chặn chuỗi 12 chữ số trong số chứng từ (đề xuất sửa ở Hub đã ghi 08/11 08:4x).
 
 ### PHIÊN BẢN v2.12.1 ✅ – M4.5 LMS MINI: LỚP HỌC · ĐIỂM DANH · BÀI M01–M20 (08/11/2026, lượt tự động ⑤ 06h – kéo mục T5 lên)
 - **Nội dung:** 🎓 Tuyển sinh có khối gập 🏫 Lớp học & điểm danh: chọn lớp (2 lớp mẫu, học viên đặt tên "Học viên 01…"), 3 số đầu khối (bài đã học x/20 · chuyên cần TB · số học viên dưới 80%), điểm danh theo ngày (ô ngày 16px, mỗi học viên 1 dòng ≥ 44px, hiện có mặt / tổng buổi + % – đỏ khi < 80%) ➜ 💾 Lưu điểm danh; 20 bài M01–M20 chia 5 tuần, đánh dấu đã học ➜ % tiến độ + bài kế. Tệp mới `js/modules/mau_lms.js` (dữ liệu MẪU: lớp, học viên, bài, điểm danh mẫu 2 buổi / lớp). Hàm thuần `ModuleTuyenSinh.chuyenCan`, `tienDoBai`. Lưu localStorage `shin_lms` (lần đầu chép từ mẫu). `index.html`, `sw.js` VO_APP thêm tệp; shin-v2.12.1.

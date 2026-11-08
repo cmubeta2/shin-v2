@@ -212,19 +212,48 @@ const ShinVietQR = (function() {
     return `
       <details class="tq-gon" id="qrKhoi">
         <summary><span>🔳 Mã VietQR nhận tiền (M3.1)</span></summary>
-        ${tk ? `<div class="hang-tru"><span>${e(ten)} ${e(an(tk.soTK))}<br><span class="chu-phu">${e(tk.chuTK || '')} · chỉ lưu trên máy này</span></span>
-          <button class="btn-secondary" onclick="ShinVietQR.doiTK()">Đổi</button></div>` : `
-        <p class="chu-phu">Nhập tài khoản nhận tiền 1 lần – chỉ lưu trên máy này, không gửi đi đâu.</p>
-        <label class="nhan-o" for="qrBin">Ngân hàng *</label>
-        <select id="qrBin" class="form-input"><option value="">– Chọn ngân hàng –</option>${NGAN_HANG.map(x => `<option value="${x[0]}">${e(x[1])}</option>`).join('')}</select>
-        <label class="nhan-o" for="qrTK">Số tài khoản *</label><input id="qrTK" class="form-input" inputmode="numeric" maxlength="19" autocomplete="off">
-        <label class="nhan-o" for="qrChu">Tên chủ tài khoản (để người chuyển đối chiếu)</label><input id="qrChu" class="form-input" maxlength="60" autocomplete="off">
-        <button class="btn-secondary" onclick="ShinVietQR.luuTK()">💾 Lưu trên máy này</button>`}
-        <label class="nhan-o" for="qrTien">Số tiền (đ) – bỏ trống để người chuyển tự nhập</label><input id="qrTien" class="form-input" inputmode="numeric" maxlength="18" placeholder="VD: 1.500.000">
-        <label class="nhan-o" for="qrND">Nội dung (≤ 25 ký tự, tự bỏ dấu)</label><input id="qrND" class="form-input" maxlength="60" placeholder="VD: Hoc phi dot 1">
-        <button class="btn-primary" onclick="ShinVietQR.taoMa()">🔳 Tạo mã</button>
-        <div id="qrKetQua"></div>
-        <p class="chu-phu">Mã sinh ngay trên máy (không qua dịch vụ ngoài). Người chuyển kiểm đúng tên chủ tài khoản trước khi chuyển. Còn chờ v1: tự xác nhận đã nhận tiền (SePay).</p>
+        <div class="tc-form-hop">
+          ${tk ? `<div class="tc-tk-the">
+            <div class="tc-tk-trai">
+              <span class="tc-tk-icon">🏦</span>
+              <div class="tc-tk-thongtin">
+                <div class="tc-tk-nganhang">${e(ten)}</div>
+                <div class="tc-tk-so">${e(an(tk.soTK))}</div>
+                <div class="chu-phu">${e(tk.chuTK || '')} · chỉ lưu trên máy này</div>
+              </div>
+            </div>
+            <button class="btn-secondary tc-btn-doi-tk" onclick="ShinVietQR.doiTK()">Đổi</button>
+          </div>` : `
+          <p class="chu-phu">Nhập tài khoản nhận tiền 1 lần – chỉ lưu trên máy này, không gửi đi đâu.</p>
+          <div class="tc-form-nhom">
+            <label class="nhan-o" for="qrBin">Ngân hàng *</label>
+            <select id="qrBin" class="form-input"><option value="">– Chọn ngân hàng –</option>${NGAN_HANG.map(x => `<option value="${x[0]}">${e(x[1])}</option>`).join('')}</select>
+          </div>
+          <div class="tc-form-hang-doi">
+            <div class="tc-form-nhom">
+              <label class="nhan-o" for="qrTK">Số tài khoản *</label>
+              <input id="qrTK" class="form-input" inputmode="numeric" maxlength="19" autocomplete="off">
+            </div>
+            <div class="tc-form-nhom">
+              <label class="nhan-o" for="qrChu">Tên chủ tài khoản</label>
+              <input id="qrChu" class="form-input" maxlength="60" autocomplete="off" placeholder="VD: NGUYEN VAN A">
+            </div>
+          </div>
+          <button class="btn-secondary tc-btn-chinh" onclick="ShinVietQR.luuTK()">💾 Lưu trên máy này</button>`}
+          <div class="tc-form-hang-doi">
+            <div class="tc-form-nhom">
+              <label class="nhan-o" for="qrTien">Số tiền (đ) – bỏ trống để người chuyển tự nhập</label>
+              <input id="qrTien" class="form-input" inputmode="numeric" maxlength="18" placeholder="VD: 1.500.000">
+            </div>
+            <div class="tc-form-nhom">
+              <label class="nhan-o" for="qrND">Nội dung (≤ 25 ký tự, tự bỏ dấu)</label>
+              <input id="qrND" class="form-input" maxlength="60" placeholder="VD: Hoc phi dot 1">
+            </div>
+          </div>
+          <button class="btn-primary tc-btn-chinh" onclick="ShinVietQR.taoMa()">🔳 Tạo mã</button>
+          <div id="qrKetQua"></div>
+          <p class="chu-phu">Mã sinh ngay trên máy (không qua dịch vụ ngoài). Người chuyển kiểm đúng tên chủ tài khoản trước khi chuyển. Còn chờ v1: tự xác nhận đã nhận tiền (SePay).</p>
+        </div>
       </details>`;
   }
 
@@ -265,8 +294,19 @@ const ShinVietQR = (function() {
     const o = document.getElementById('qrKetQua');
     if (!o) return;
     const e = ShinApp.esc;
-    o.innerHTML = svg(maHoa(kq.chuoi), 'Mã VietQR') +
-      `<div class="chu-phu" style="text-align:center">${e(tk.chuTK || '')} · ${e(an(tk.soTK))}${tien > 0 ? ' · ' + e(ShinApp.soVN(Math.round(tien))) + ' đ' : ' · người chuyển tự nhập tiền'}${kq.noiDung ? ' · "' + e(kq.noiDung) + '"' : ''}</div>`;
+    const tenNH = (NGAN_HANG.find(x => x[0] === tk.bin) || [])[1] || 'Ngân hàng';
+    o.innerHTML = `
+      <div class="tc-qr-card">
+        <div class="tc-qr-khung">
+          ${svg(maHoa(kq.chuoi), 'Mã VietQR')}
+        </div>
+        <div class="tc-qr-thongtin">
+          <div class="tc-qr-chutk">${e(tk.chuTK || 'CHỦ TÀI KHOẢN')}</div>
+          <div class="tc-qr-nganhang">${e(tenNH)} · <b>${e(tk.soTK)}</b></div>
+          ${tien > 0 ? `<div class="tc-qr-sotien">${e(ShinApp.soVN(Math.round(tien)))} đ</div>` : '<div class="tc-qr-tien-tuy-y">Người chuyển tự nhập số tiền</div>'}
+          ${kq.noiDung ? `<div class="tc-qr-noidung"><span class="chu-phu">Nội dung:</span> <b>${e(kq.noiDung)}</b></div>` : ''}
+        </div>
+      </div>`;
   }
 
   return { maHoa, chuoiVietQR, crc16, noiDungSach, svg, veKhoi, luuTK, doiTK, taoMa, _nb: { nhanGF, duRS, boChiaRS, viTriCanChinh } };

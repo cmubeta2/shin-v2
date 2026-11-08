@@ -1927,3 +1927,247 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .crm-lead { border-left: 4px solid transparent; padding-left: 8px; }
 .crm-lead-vang { border-left-color: var(--c-yellow); }
 .crm-lead-do { border-left-color: var(--c-red); }
+
+/* ==========================================================================
+   v2.10.4 M3.1 – Giao diện 💰 Tài chính & 🔳 VietQR (tiền tố .tc-)
+   Quy chuẩn UX: 320px không cuộn ngang, vùng bấm ≥ 44px, chữ ≥ 14px, ô nhập 16px
+   ========================================================================== */
+:root {
+  --qr-nen: #ffffff;
+  --qr-dam: #000000;
+}
+[data-theme="dark"] {
+  --qr-nen: #ffffff;
+  --qr-dam: #000000;
+}
+
+/* 1. Ngân sách & Giải ngân theo dự án (M3.2) */
+.tc-hang-da {
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding: 10px 0;
+  align-items: flex-start;
+}
+.tc-da-thongtin {
+  flex: 1 1 58%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tc-da-trangthai {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 2px;
+  flex-shrink: 0;
+  text-align: right;
+}
+.tc-da-trangthai .badge {
+  font-size: calc(12px * var(--font-scale));
+  padding: 3px 10px;
+  line-height: 1.3;
+}
+.tc-tien-vuot {
+  font-size: calc(12px * var(--font-scale));
+  font-weight: 700;
+  color: var(--c-red);
+}
+.tc-thanh-tien {
+  flex: 1 0 100%;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bg-sub);
+  overflow: hidden;
+  margin: 6px 0 2px;
+}
+.tc-thanh-tien > div {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+.tc-bar-do { background: var(--c-red) !important; }
+.tc-bar-vang { background: var(--c-yellow) !important; }
+.tc-bar-xanh { background: var(--c-green) !important; }
+.tc-bar-chua { background: var(--c-gray) !important; }
+
+/* 2. Chi phát sinh (Flash dự án) */
+.tc-hang-ps {
+  padding: 10px 0;
+  gap: 12px;
+  align-items: center;
+}
+.tc-ps-noidung {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tc-ps-phu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 3px;
+}
+.tc-ps-tien {
+  flex-shrink: 0;
+  text-align: right;
+  font-weight: 700;
+  font-size: calc(14px * var(--font-scale));
+  color: var(--c-red);
+  white-space: nowrap;
+}
+.tc-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: calc(11px * var(--font-scale));
+  font-weight: 600;
+  line-height: 1.2;
+}
+.tc-tag.cho { background: var(--c-yellow-soft); color: var(--c-yellow); }
+.tc-tag.chi { background: var(--c-green-soft); color: var(--c-green); }
+.tc-tag.khac { background: var(--c-gray-soft); color: var(--c-gray); }
+
+/* 3. Form Đề xuất chi & VietQR (#tcDeXuat, #qrKhoi) */
+.tc-form-hop {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0 10px;
+}
+.tc-form-nhom {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tc-form-nhom[hidden] {
+  display: none !important;
+}
+.tc-form-nhom .nhan-o {
+  margin: 0;
+  font-size: calc(13px * var(--font-scale));
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.tc-form-hang-doi {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 480px) {
+  .tc-form-hang-doi {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+.tc-btn-chinh {
+  min-height: 46px;
+  font-size: calc(15px * var(--font-scale));
+  font-weight: 700;
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* 4. Thẻ tài khoản VietQR & Khung kết quả QR */
+.tc-tk-the {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-sub);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 12px 14px;
+  margin-bottom: 4px;
+}
+.tc-tk-trai {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.tc-tk-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.tc-tk-thongtin {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tc-tk-nganhang {
+  font-weight: 700;
+  font-size: calc(14px * var(--font-scale));
+  color: var(--text);
+}
+.tc-tk-so {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: calc(13px * var(--font-scale));
+  color: var(--text-muted);
+}
+.tc-btn-doi-tk {
+  min-height: 44px;
+  min-width: 54px;
+  padding: 6px 14px;
+  flex-shrink: 0;
+}
+.tc-qr-card {
+  margin-top: 14px;
+  padding: 16px;
+  background: var(--bg-sub);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.tc-qr-khung {
+  background: var(--qr-nen, #fff);
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: inline-block;
+  max-width: 280px;
+  width: 100%;
+}
+.tc-qr-thongtin {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tc-qr-chutk {
+  font-weight: 800;
+  font-size: calc(15px * var(--font-scale));
+  letter-spacing: 0.5px;
+  color: var(--text);
+}
+.tc-qr-nganhang {
+  font-size: calc(13px * var(--font-scale));
+  color: var(--text-muted);
+}
+.tc-qr-sotien {
+  font-size: calc(18px * var(--font-scale));
+  font-weight: 800;
+  color: var(--primary);
+  margin-top: 2px;
+}
+.tc-qr-tien-tuy-y {
+  font-size: calc(13px * var(--font-scale));
+  color: var(--text-muted);
+  font-style: italic;
+}
+.tc-qr-noidung {
+  font-size: calc(13px * var(--font-scale));
+  background: var(--card);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-top: 4px;
+  display: inline-block;
+  align-self: center;
+}

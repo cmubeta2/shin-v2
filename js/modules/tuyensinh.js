@@ -180,33 +180,123 @@ const ModuleTuyenSinh = {
     const td = this.tienDoBai(k.baiXong[lop.ma], L.bai);
     const ccTB = cc.filter(x => x.phanTram != null);
     const tb = ccTB.length ? Math.round(ccTB.reduce((s, x) => s + x.phanTram, 0) / ccTB.length) : null;
+    const baiKe = L.bai.find(b => b.ma === td.ke);
+    const tuanMoMacDinh = baiKe ? baiKe.tuan : 1;
+    const dsTuan = [...new Set(L.bai.map(b => b.tuan))];
+
     o.innerHTML = `
-      <div class="chu-phu" style="color:var(--c-yellow)">⚠️ Dữ liệu MẪU – điểm danh, tiến độ lưu trên máy này. Còn chờ v1: lớp + học viên thật từ app Tuyển sinh.</div>
-      <div class="hang-nut" role="group" aria-label="Chọn lớp">
-        ${L.lop.map(x => `<button class="${x.ma === lop.ma ? 'btn-primary' : 'btn-secondary'}" onclick="ModuleTuyenSinh.chonLop('${e(x.ma)}')">${e(x.ma)}</button>`).join('')}
-      </div>
-      <div class="chu-phu"><b>${e(lop.ten)}</b> · ${e(lop.lich)} · ${lop.hocVien.length} học viên</div>
-      <div class="tq-3so">
-        <div class="tq-o"><div class="tq-so" style="color:var(--c-blue)">${td.xong}/${td.tong}</div><div class="tq-nhan">Bài đã học</div></div>
-        <div class="tq-o"><div class="tq-so" style="color:var(--c-green)">${tb == null ? '–' : tb + '%'}</div><div class="tq-nhan">Chuyên cần TB</div></div>
-        <div class="tq-o"><div class="tq-so" style="color:var(--c-red)">${cc.filter(x => x.canhBao).length}</div><div class="tq-nhan">Dưới 80%</div></div>
+      <div class="chu-phu" style="color:var(--c-yellow);margin-bottom:8px">⚠️ Dữ liệu MẪU – điểm danh, tiến độ lưu trên máy này. Còn chờ v1: lớp + học viên thật từ app Tuyển sinh.</div>
+      
+      <div class="hang-nut" role="group" aria-label="Chọn lớp" style="margin-bottom:8px">
+        ${L.lop.map(x => `<button class="${x.ma === lop.ma ? 'btn-primary' : 'btn-secondary'}" style="min-height:44px;padding:8px 16px" onclick="ModuleTuyenSinh.chonLop('${e(x.ma)}')">${e(x.ma)}</button>`).join('')}
       </div>
 
-      <div class="nhan-o">📋 Điểm danh buổi</div>
-      <label class="nhan-o" for="tsLmsNgay">Ngày học</label>
-      <input id="tsLmsNgay" type="date" class="form-input" value="${e(ngay)}" onchange="ModuleTuyenSinh.veLms()">
-      <div class="chu-phu">${coMat ? 'Đã điểm danh ' + coMat.length + '/' + lop.hocVien.length + ' – sửa rồi lưu lại nếu cần.' : 'Chưa điểm danh buổi này.'}</div>
-      ${lop.hocVien.map((t, i) => { const c = cc[i]; return `<label class="hang-tru" style="min-height:44px;cursor:pointer;gap:12px">
-        <input type="checkbox" class="tsLmsHV" value="${e(t)}" ${!coMat || coMat.indexOf(t) >= 0 ? 'checked' : ''} style="width:22px;height:22px;flex:0 0 auto">
-        <span style="flex:1;min-width:0">${e(t)}</span>
-        <span class="chu-phu" style="color:${c.canhBao ? 'var(--c-red)' : 'var(--text-muted)'}">${c.phanTram == null ? '–' : c.co + '/' + c.tong + ' · ' + c.phanTram + '%'}</span></label>`; }).join('')}
-      <div class="hang-nut"><button class="btn-primary" onclick="ModuleTuyenSinh.luuDiemDanh()">💾 Lưu điểm danh</button></div>
+      <div class="chu-phu" style="margin-bottom:12px;line-height:1.5">
+        <b style="color:var(--text-main);font-size:15px">${e(lop.ten)}</b><br>
+        <span>📅 ${e(lop.lich)}</span> · <span>👥 ${lop.hocVien.length} học viên</span>
+      </div>
 
-      <div class="nhan-o">📚 Bài M01–M20 · ${td.phanTram}%${td.ke ? ' · bài kế: ' + e(td.ke) : ' · đã xong khóa'}</div>
-      ${[...new Set(L.bai.map(b => b.tuan))].map(t => `<div class="chu-phu" style="margin-top:8px"><b>Tuần ${t}</b></div>
-        ${L.bai.filter(b => b.tuan === t).map(b => { const x = (k.baiXong[lop.ma] || []).indexOf(b.ma) >= 0; return `<label class="hang-tru" style="min-height:44px;cursor:pointer;gap:12px">
-          <input type="checkbox" ${x ? 'checked' : ''} onchange="ModuleTuyenSinh.danhDauBai('${e(b.ma)}', this.checked)" style="width:22px;height:22px;flex:0 0 auto">
-          <span style="flex:1;min-width:0"><b>${e(b.ma)}</b> · ${e(b.ten)}</span></label>`; }).join('')}`).join('')}`;
+      <div class="tq-3so" style="margin-bottom:16px">
+        <div class="tq-o">
+          <div class="tq-so" style="color:var(--c-blue)">${td.xong}/${td.tong}</div>
+          <div class="tq-nhan">Bài đã học</div>
+        </div>
+        <div class="tq-o">
+          <div class="tq-so" style="color:var(--c-green)">${tb == null ? '–' : tb + '%'}</div>
+          <div class="tq-nhan">Chuyên cần TB</div>
+        </div>
+        <div class="tq-o">
+          <div class="tq-so" style="color:${cc.filter(x => x.canhBao).length > 0 ? 'var(--c-red)' : 'var(--text-muted)'}">${cc.filter(x => x.canhBao).length}</div>
+          <div class="tq-nhan">Dưới 80%</div>
+        </div>
+      </div>
+
+      <!-- Khối Điểm danh -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md,8px);padding:14px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+          <div class="nhan-o" style="margin:0;font-size:15px;font-weight:600">📋 Điểm danh buổi học</div>
+          <span class="chu-phu">${coMat ? '<span class="badge xanh">Đã điểm danh ' + coMat.length + '/' + lop.hocVien.length + '</span>' : '<span class="badge xam">Chưa điểm danh</span>'}</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+          <label class="nhan-o" for="tsLmsNgay" style="margin:0;font-size:14px">Ngày học:</label>
+          <input id="tsLmsNgay" type="date" class="form-input" value="${e(ngay)}" onchange="ModuleTuyenSinh.veLms()" style="font-size:16px;min-height:44px;width:100%;box-sizing:border-box">
+        </div>
+
+        <div class="chu-phu" style="margin-bottom:10px">
+          ${coMat ? 'Chạm vào học viên để đổi trạng thái có mặt, sau đó bấm Lưu:' : 'Tích chọn học viên có mặt trong buổi này:'}
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+          ${lop.hocVien.map((t, i) => {
+            const c = cc[i];
+            const isChecked = !coMat || coMat.indexOf(t) >= 0;
+            return `
+              <label class="hang-tru" style="min-height:44px;padding:8px 12px;border-radius:var(--radius-sm,6px);background:var(--bg-card-hover, var(--bg-card));border:1px solid ${c.canhBao ? 'var(--c-red)' : 'var(--border)'};cursor:pointer;display:flex;align-items:center;gap:12px;transition:background 0.15s ease">
+                <input type="checkbox" class="tsLmsHV" value="${e(t)}" ${isChecked ? 'checked' : ''} style="width:22px;height:22px;flex:0 0 auto;accent-color:var(--primary);cursor:pointer">
+                <span style="flex:1;min-width:0;font-size:14px;color:var(--text-main);font-weight:500">${e(t)}</span>
+                ${c.canhBao 
+                  ? `<span class="badge do" title="Dưới ngưỡng 80% chuyên cần" style="flex:0 0 auto;font-size:12px">⚠️ ${c.co}/${c.tong} · ${c.phanTram}%</span>` 
+                  : `<span class="badge ${c.phanTram == null ? 'xam' : 'xanh'}" style="flex:0 0 auto;font-size:12px">${c.phanTram == null ? '–' : c.co + '/' + c.tong + ' · ' + c.phanTram + '%'}</span>`}
+              </label>
+            `;
+          }).join('')}
+        </div>
+
+        <div class="hang-nut" style="margin:0">
+          <button class="btn-primary" style="min-height:44px;width:100%;padding:10px 16px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px" onclick="ModuleTuyenSinh.luuDiemDanh()">
+            💾 Lưu điểm danh
+          </button>
+        </div>
+      </div>
+
+      <!-- Khối Bài học M01–M20 -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md,8px);padding:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+          <div class="nhan-o" style="margin:0;font-size:15px;font-weight:600">📚 Giáo trình bài M01–M20</div>
+          <span class="badge ${td.phanTram === 100 ? 'xanh' : 'vang'}">${td.phanTram}%</span>
+        </div>
+        
+        <div class="chu-phu" style="margin-bottom:12px">
+          ${td.ke ? `Bài học tiếp theo: <b style="color:var(--primary)">${e(td.ke)}</b>` : '<span style="color:var(--c-green)">🎉 Đã hoàn thành toàn bộ khóa học!</span>'}
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${dsTuan.map(t => {
+            const baiTuan = L.bai.filter(b => b.tuan === t);
+            const baiXongTuan = baiTuan.filter(b => (k.baiXong[lop.ma] || []).indexOf(b.ma) >= 0).length;
+            const laTuanMo = t === tuanMoMacDinh;
+            return `
+              <details class="tq-gon" style="border:1px solid var(--border);border-radius:var(--radius-sm,6px);overflow:hidden;background:var(--bg-card)" ${laTuanMo ? 'open' : ''}>
+                <summary style="padding:10px 12px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;min-height:44px;background:var(--bg-card-hover, var(--bg-card))">
+                  <span style="font-weight:600;font-size:14px;color:var(--text-main)">Tuần ${t}</span>
+                  <span class="badge ${baiXongTuan === baiTuan.length ? 'xanh' : baiXongTuan > 0 ? 'vang' : 'xam'}" style="font-size:12px">
+                    ${baiXongTuan}/${baiTuan.length} bài
+                  </span>
+                </summary>
+                <div style="display:flex;flex-direction:column;border-top:1px solid var(--border)">
+                  ${baiTuan.map(b => {
+                    const x = (k.baiXong[lop.ma] || []).indexOf(b.ma) >= 0;
+                    return `
+                      <label class="hang-tru" style="min-height:44px;padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:flex-start;gap:12px;transition:background 0.15s ease">
+                        <input type="checkbox" ${x ? 'checked' : ''} onchange="ModuleTuyenSinh.danhDauBai('${e(b.ma)}', this.checked)" style="width:22px;height:22px;margin-top:2px;flex:0 0 auto;accent-color:var(--primary);cursor:pointer">
+                        <div style="flex:1;min-width:0">
+                          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                            <b style="color:var(--primary);font-size:14px">${e(b.ma)}</b>
+                            <span style="font-size:14px;color:var(--text-main);${x ? 'text-decoration:line-through;color:var(--text-muted)' : ''}">${e(b.ten)}</span>
+                          </div>
+                          ${b.mucTieu ? `<div class="chu-phu" style="font-size:12px;margin-top:3px;color:var(--text-muted);line-height:1.4">${e(b.mucTieu)}</div>` : ''}
+                        </div>
+                      </label>
+                    `;
+                  }).join('')}
+                </div>
+              </details>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
   },
   chonLop: function(ma) { this._lop = ma; const n = document.getElementById('tsLmsNgay'); const giu = n ? n.value : ''; this.veLms(); const m = document.getElementById('tsLmsNgay'); if (m && giu) m.value = giu; },
   luuDiemDanh: function() {
