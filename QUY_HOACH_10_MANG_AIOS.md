@@ -107,8 +107,8 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 |---|---|---|---|
 | M2.1 | Danh bạ hợp nhất: KSK Doanh nghiệp, Nhà cung ứng, Học viên, CTV | ✅ | – |
 | M2.2 | Hộp lead mới đổ về từ Web Phễu (M8.3) | ✅ mẫu / 🟡 tiếp nhận | v2.3.0 |
-| M2.3 | Pipeline B2B: Tiếp cận → Báo giá → Hợp đồng → Triển khai → Tái ký | 🟢 v2.8.2 đếm + lọc phía trình duyệt theo Trạng thái (`webCRM` + `webLuuDoiTac`, Hub v1.15.6 @15 06/11) | v2.3.0 |
-| M2.4 | Lịch sử tương tác & nhắc chăm sóc (đẩy việc sang Task Bus) | 🟡 v2.9.3 nhắc chăm sóc lead theo tuổi (🟡 > 24 giờ · 🔴 > 48 giờ, sao chép tin) / ⬜ lịch sử tương tác (cần cổng v1) | v2.3.0 |
+| M2.3 | Pipeline B2B: Tiếp cận → Báo giá → Hợp đồng → Triển khai → Tái ký | 🟢 v2.8.2 đếm + lọc phía trình duyệt theo Trạng thái (`webCRM` + `webLuuDoiTac`, Hub v1.15.6 @15 06/11) · v2.13.3 ô chọn giai đoạn (cột GiaiDoan – tự bật khi HUB L29 lên app) | v2.3.0 |
+| M2.4 | Lịch sử tương tác & nhắc chăm sóc (đẩy việc sang Task Bus) | 🟡 v2.9.3 nhắc chăm sóc lead theo tuổi (🟡 > 24 giờ · 🔴 > 48 giờ, sao chép tin) · v2.13.3 khung lịch sử tương tác trong chi tiết đối tác (tự bật khi `webCRM` trả `tuongTac`) / ⬜ ghi lần liên hệ + đánh dấu lead (Còn chờ v1: HUB L29) | v2.3.0 |
 
 > **Ràng buộc bất biến:** CRM **không lưu bệnh nhân** (tuân thủ `KHONG_DUA_VAO.md`). Lead "đặt lịch khám" đi thẳng về máy chủ PK của Mảng 5.
 
@@ -117,8 +117,8 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 |---|---|---|---|
 | M3.1 | Cổng VietQR SePay: sinh QR động, xác nhận thanh toán qua webhook | ✅ v2.10.4 sinh QR động / tĩnh offline trên máy (`js/vietqr.js`, số TK lưu máy người dùng) · ⬜ xác nhận thanh toán (Còn chờ v1: SePay) · M-WEB-03 (v1) | v2.3.0 |
 | M3.2 | Sổ chi phí phát sinh & cảnh báo lệch dự toán (cấp cho Mảng 6) | 🟢 v2.10.2 ngân sách vs đã chi + cảnh báo vượt / sắp chạm cấp dự án (`webDuAn`) · ⬜ theo khoản mục (v1 chưa có dự toán khoản mục) · M5.3 (bản 1.0) | v2.3.0 |
-| M3.3 | Chi trả hoa hồng CTV/đại lý (lấy kết quả tính từ M4.3) | 🟡 v2.10.3 nút ở 🎓 Tuyển sinh ➜ phiếu Thanh toán điền sẵn từ `webLeadCD.hoaHong` (sao chép, chờ HUB L26) · ⬜ trừ phần đã chi (TS chưa có sổ) · M-TS-03 | v2.3.0 |
-| M3.4 | Đề nghị tạm ứng / thanh toán → gửi 0B duyệt | 🟡 v2.10.1 form gộp Chi / Tạm ứng / Thanh toán, kiểm luật L26 + sao chép phiếu (💰 Tài chính) / ⬜ gửi thẳng 0B (chờ HUB L26 lên app) | v2.3.0 |
+| M3.3 | Chi trả hoa hồng CTV/đại lý (lấy kết quả tính từ M4.3) | 🟢 v2.13.3 nút ở 🎓 Tuyển sinh ➜ phiếu Thanh toán điền sẵn từ `webLeadCD.hoaHong` ➜ 📤 gửi thật vào 0B qua HUB L26 `webGuiDeXuatChi` (Hub v1.18.5, từ v2.12.2) · ⬜ sổ "đã chi" theo chiến dịch (Còn chờ v1) | v2.3.0 |
+| M3.4 | Đề nghị tạm ứng / thanh toán → gửi 0B duyệt | 🟢 v2.13.3 form gộp Chi / Tạm ứng / Thanh toán, kiểm luật L26 ➜ 📤 gửi thật vào 0B (`webGuiDeXuatChi` nhận loai, hanHoanUng, soChungTu – Hub v1.18.5, Toast Hoàn tác 6s, maGui chống trùng) – 💰 Tài chính | v2.3.0 |
 | M3.5 | Xuất bảng tăng ca TC-NS cho Kế toán (nhận từ M5.4) | ⬜ Còn chờ v1 (giờ vào/ra PTKH) · M-PTKH-03 | v2.4.0 |
 
 ### 🎓 MẢNG 4 – GIÁO DỤC & TUYỂN SINH · `tuyensinh` · Fintech Growth

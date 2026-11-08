@@ -26,6 +26,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.13.3 ✅ – M3.3 / M3.4 🟢 + CRM ĐÓN SẴN HUB L29 (08/11/2026, lượt tự động ⑤ 12h – T6 "nối cổng v1 mới" + mục 5b)
+- **Nội dung:** (1) Xác minh mã Hub `83_TaiChinh.gs`: `webGuiDeXuatChi` nhận `loai` (Chi / Tạm ứng / Thanh toán), `hanHoanUng`, `soChungTu` ➜ form gộp M3.4 và phiếu hoa hồng M3.3 (🎓 Tuyển sinh ➜ 💰 Tài chính) đã gửi thật vào 0B từ v2.12.2 ➜ QUY_HOACH M3.3 / M3.4 🟢. (2) 👥 CRM đón sẵn HUB L29: `tuV1` mang `giaiDoan` + `tuongTac`; hàm thuần `gdCua` (cột GiaiDoan đúng 5 giá trị ➜ dùng, không thì suy từ Trạng thái), `tuongTacCua` (5 lần liên hệ mới nhất); ô chọn giai đoạn trong form và lịch sử tương tác trong chi tiết đối tác CHỈ hiện khi cổng thật trả trường mới – chưa có thì ghi "còn chờ máy chủ Hub (dòng L29)", không gửi trường máy chủ bỏ qua. Hợp đồng L29 ghi vào HOP_DONG_CONG_V2.md mục CRM.
+- **Mục 5b:** thêm dòng **HUB L29** (CRM GiaiDoan + sổ tương tác `webGhiTuongTac` + `webDanhDauLead`, Sếp đã duyệt 08/11) vào 10_Hub/KE_HOACH.md + đầu thu_tu (commit v1, không push). Dòng tri thức (L28) đã có từ trước.
+- Còn chờ v1: HUB L29 (code + lên app) ➜ ghi lần liên hệ, đánh dấu lead đã chăm sóc, lưu giai đoạn; TS chưa có sổ "đã chi hoa hồng" theo chiến dịch.
+
 ### PHIÊN BẢN v2.13.2 ✅ – M9.1 🟢 THƯ VIỆN TRI THỨC ĐỌC THẬT QUA HUB L28a (08/11/2026, lượt tự động ⑤ 10h – T6 "nối cổng v1 mới đã lên app")
 - **Nội dung:** `ModuleTriThuc` thêm `mayChu: 'HUB'` + `taiLive` ➜ `webTriThuc(token, {})`; Live vẽ hero từ số thật (số tài liệu, lĩnh vực, liên kết [[…]]) + "Chỉ mục cập nhật dd/mm/yyyy"; Hub trả `loi` (chưa đồng bộ chỉ mục) ➜ dải đỏ, danh sách trống; lỗi mạng ➜ khung lỗi chung của app. Hợp đồng ghi vào HOP_DONG_CONG_V2.md mục Tri thức.
 - **Kiểm:** node --check; Edge 375 Live giả lập: gọi đúng HUB:webTriThuc, 2 tài liệu ➜ hero 2 · 2 · 1 liên kết; ca `loi` ➜ dải đỏ; không cuộn ngang; 0 lỗi console.

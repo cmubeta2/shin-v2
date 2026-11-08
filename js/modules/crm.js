@@ -28,6 +28,11 @@ const ModuleCRM = {
     if (/tiếp cận|tiep can|liên hệ|lien he|tìm hiểu|mới/.test(t)) return 'Tiếp cận';
     return 'Chưa rõ';
   },
+  /** THUẦN – v2.13.3: giai đoạn của 1 đối tác: cột GiaiDoan (HUB L29) nếu đúng 1 trong 5 giá trị, không thì suy từ TrangThai. */
+  gdCua: function(x) {
+    const g = String((x || {}).giaiDoan || '').trim();
+    return this.GIAI_DOAN.some(([ten]) => ten === g) ? g : this.giaiDoan((x || {}).trangThai);
+  },
   LOAI: ['B2B Khám Sức Khỏe', 'Đối tác Đào tạo', 'CTV Tuyển sinh', 'Nhà Cung Ứng'],
   MAU_LOAI: { 'B2B Khám Sức Khỏe': 'xanh', 'Đối tác Đào tạo': 'vang', 'CTV Tuyển sinh': 'vang', 'Nhà Cung Ứng': 'xam' },
 
@@ -40,9 +45,13 @@ const ModuleCRM = {
   /** THUẦN. Cổng webCRM ➜ khuôn màn (cùng khuôn với dữ liệu mẫu). */
   tuV1: function(c) {
     c = c || {};
-    const ds = (c.doiTac || []).map(x => ({ ma: x.ma || '', ten: x.ten || '', loai: x.loai || '', quyMo: x.quyMo || '', nguoiLienHe: x.nguoiLienHe || '', dienThoai: x.dienThoai || '', trangThai: x.trangThai || '' }));
+    const coKhoa = (x, k) => !!x && Object.prototype.hasOwnProperty.call(x, k);
+    const ds = (c.doiTac || []).map(x => ({ ma: x.ma || '', ten: x.ten || '', loai: x.loai || '', quyMo: x.quyMo || '', nguoiLienHe: x.nguoiLienHe || '', dienThoai: x.dienThoai || '', trangThai: x.trangThai || '', giaiDoan: x.giaiDoan || '' }));
     return {
       live: true,
+      // v2.13.3: HUB L29 (chưa lên app) – chỉ bật ô giai đoạn / lịch sử tương tác khi cổng thật trả các trường này
+      coGiaiDoan: (c.doiTac || []).some(x => coKhoa(x, 'giaiDoan')),
+      tuongTac: Array.isArray(c.tuongTac) ? c.tuongTac.map(t => ({ maDoiTac: t.maDoiTac || '', maLead: t.maLead || '', ngay: t.ngay || '', kenh: t.kenh || '', noiDung: t.noiDung || '', nguoiGhi: t.nguoiGhi || '' })) : null,
       danhBa: ds,
       leadMoi: (c.leadMoi || []).map(l => ({ ten: l.ten || '', nguon: l.nguon || '', soDt: l.soDt || '', ghiChu: l.ghiChu || '', thoiGian: l.luc || '' }))
     };
@@ -90,11 +99,11 @@ const ModuleCRM = {
     const loc = this._loc;
     const gd = this._gd;
     const b2b = ds.filter(x => x.loai === 'B2B Khám Sức Khỏe');
-    const demGD = ten => b2b.filter(x => this.giaiDoan(x.trangThai) === ten).length;
+    const demGD = ten => b2b.filter(x => this.gdCua(x) === ten).length;
     const luongLead = typeof ModuleMarketing !== 'undefined' ? (d.leadMoi || []).map(l => ModuleMarketing.phanLuongLead(l)) : null;
     const demLuong = {}; (luongLead || []).forEach(x => { demLuong[x.luong] = (demLuong[x.luong] || 0) + 1; });
     const quaHanLead = (d.leadMoi || []).filter(l => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); return m === 'vang' || m === 'do'; }).length;
-    const hien = ds.filter(x => (!loc || x.loai === loc) && (!gd || (x.loai === 'B2B Khám Sức Khỏe' && this.giaiDoan(x.trangThai) === gd)));
+    const hien = ds.filter(x => (!loc || x.loai === loc) && (!gd || (x.loai === 'B2B Khám Sức Khỏe' && this.gdCua(x) === gd)));
 
     container.innerHTML = `
       <div class="page-header">
@@ -139,7 +148,7 @@ const ModuleCRM = {
           <div class="crm-pipe">${this.GIAI_DOAN.map(([ten, bt]) => `
             <button class="crm-pipe-o ${gd === ten ? 'dang-chon' : ''}" onclick="ModuleCRM.datGD('${ten}')" aria-pressed="${gd === ten}">
               <span class="crm-pipe-so">${ShinApp.soVN(demGD(ten))}</span><span class="crm-pipe-nhan">${bt} ${ten}</span></button>`).join('')}</div>
-          ${demGD('Chưa rõ') ? `<p class="chu-phu">${demGD('Chưa rõ')} doanh nghiệp chưa ghi giai đoạn trong ô Trạng thái (vd "Đang báo giá", "Đã ký HĐ", "Đang triển khai", "Tái ký").</p>` : ''}
+          ${demGD('Chưa rõ') ? `<p class="chu-phu">${demGD('Chưa rõ')} doanh nghiệp chưa rõ giai đoạn – ${d.coGiaiDoan ? 'bấm ✏️ Sửa để chọn giai đoạn' : 'ghi vào ô Trạng thái (vd "Đang báo giá", "Đã ký HĐ", "Đang triển khai", "Tái ký")'}.</p>` : ''}
         </details>` : ''}
 
       <div class="hn-tieu">
@@ -201,13 +210,25 @@ const ModuleCRM = {
     khung.hidden = false;
     const e = ShinApp.esc;
     const sdt = String(x.dienThoai || '').replace(/[^\d+]/g, '');
+    const tt = this.tuongTacCua(this._d.tuongTac, x.ma);
     khung.innerHTML = `
       <div class="hang-tru"><span>Người liên hệ</span><b>${e(x.nguoiLienHe || '–')}</b></div>
       <div class="hang-tru"><span>Quy mô</span><b>${e(x.quyMo || '–')}</b></div>
+      ${x.loai === 'B2B Khám Sức Khỏe' ? `<div class="hang-tru"><span>Giai đoạn</span><b>${e(this.gdCua(x))}</b></div>` : ''}
+      ${tt ? (tt.length ? tt.map(t => `<div class="hang-tru"><span>${e([t.ngay, t.kenh].filter(Boolean).join(' · '))}</span><b style="font-weight:400">${e(t.noiDung)}</b></div>`).join('')
+        : '<p class="chu-phu">🗂️ Chưa có lần liên hệ nào được ghi.</p>')
+        : '<p class="chu-phu">🗂️ Lịch sử tương tác: còn chờ máy chủ Hub (dòng L29).</p>'}
       <div class="hang-nut">
         ${sdt.length >= 9 ? `<a class="btn-secondary" href="tel:${e(sdt)}">📞 Gọi</a>` : ''}
         <button class="btn-secondary" onclick="ModuleCRM.moForm(${i})">✏️ Sửa</button>
       </div>`;
+  },
+
+  /** THUẦN – v2.13.3: 5 lần liên hệ mới nhất của 1 đối tác (ngày dd/mm/yyyy mới trước) | null khi cổng chưa trả tuongTac. */
+  tuongTacCua: function(ds, ma) {
+    if (!Array.isArray(ds)) return null;
+    const so = s => { const m = String(s || '').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? +m[3] * 1e4 + +m[2] * 100 + +m[1] : 0; };
+    return ds.filter(t => ma && t.maDoiTac === ma).sort((a, b) => so(b.ngay) - so(a.ngay)).slice(0, 5);
   },
 
   moForm: function(i) {
@@ -227,6 +248,8 @@ const ModuleCRM = {
           <summary><span>＋ Thêm chi tiết</span></summary>
           <label class="nhan-o">Quy mô</label><input id="cfQuyMo" class="form-input" maxlength="80" value="${e(x.quyMo || '')}" placeholder="vd 420 nhân sự">
           <label class="nhan-o">Trạng thái</label><input id="cfTT" class="form-input" maxlength="120" value="${e(x.trangThai || '')}" placeholder="Đang đàm phán, đã ký HĐ…">
+          ${this._d.coGiaiDoan ? `<label class="nhan-o">Giai đoạn pipeline</label>
+          <select id="cfGD" class="form-input"><option value="">– Tự suy từ trạng thái –</option>${this.GIAI_DOAN.map(([ten, bt]) => `<option value="${ten}" ${ten === x.giaiDoan ? 'selected' : ''}>${bt} ${ten}</option>`).join('')}</select>` : ''}
         </details>
         <div class="hang-nut"><button class="btn-primary" onclick="ModuleCRM.luu(this, '${e(x.ma || '')}')">💾 Lưu</button></div>
       </div>`;
@@ -236,6 +259,7 @@ const ModuleCRM = {
   luu: async function(nut, ma) {
     const v = id => String((document.getElementById(id) || {}).value || '').trim();
     const doiTac = { ma, ten: v('cfTen'), loai: v('cfLoai'), nguoiLienHe: v('cfNguoi'), dienThoai: v('cfSdt'), quyMo: v('cfQuyMo'), trangThai: v('cfTT') };
+    if (this._d.coGiaiDoan) doiTac.giaiDoan = v('cfGD');
     if (!doiTac.ten || !doiTac.nguoiLienHe) { ShinApp.toast('Cần tên và người liên hệ.', 'warn'); return; }
     if (!SHIN_API.laCheDoLive() || !this._d.live) {
       document.getElementById('crmForm').innerHTML = '';
