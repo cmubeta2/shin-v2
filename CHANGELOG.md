@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.1] – 08/11/2026 (M0.2 RBAC PHÍA TRÌNH DUYỆT)
+
+### 🔒 Quyền
+- `chuyenModule` chặn mở thẳng (lối tắt ?m=, nút chuyển màn) mảng mà chốt chặn quyền v1 đã từ chối ➜ màn 🔒, không gọi máy chủ. Tách `mangCoQuyen` (quyền) khỏi `mangDangBat` (anh/chị tự tắt). 🧭 Điều hành / Quản trị: câu "chỉ dành cho Admin Hub". sw.js shin-v2.13.1.
+
 ## [2.13.0] – 08/11/2026 (PWA: BÁO MẤT MẠNG)
 
 ### ✨ Tính năng

@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.0** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.1** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.1 ✅ – M0.2 RBAC PHÍA TRÌNH DUYỆT: CHẶN MỞ THẲNG MẢNG KHÔNG CÓ QUYỀN (08/11/2026, lượt tự động ⑤ 10h – kéo mục T6 lên)
+- **Nội dung:** trước đây mảng không có quyền chỉ bị ẩn khỏi menu, vẫn mở được qua lối tắt `?m=` hoặc nút chuyển màn giữa các mảng. Nay `chuyenModule` (Live, sau khi Hub nhận diện) kiểm `mangCoQuyen` ➜ vẽ màn 🔒 `veKhongCoQuyen`, không gọi cổng. Mảng anh/chị tự tắt trong ⚙️ vẫn mở được bằng nút (chỉ ẩn menu). Máy chủ v1 vẫn là chốt chặn thật.
+- **Kiểm:** node --check; Edge 375: Demo mở KPI bình thường; Live giả lập quyen.KPI = khong ➜ 🔒 KPI; HUB co + không Admin ➜ 🔒 Điều hành "chỉ dành cho Admin Hub"; Admin ➜ mở được; 17 màn 375 + 1280 không cuộn ngang, 0 lỗi console.
+- Còn chờ v1: chiều Khoa/Phòng + sửa quyền theo ô (Sếp 08/11: KHÔNG làm RBAC Khoa/Phòng tuần này).
 
 ### PHIÊN BẢN v2.13.0 ✅ – PWA: DẢI BÁO MẤT MẠNG + TRANG offline.html (08/11/2026, lượt tự động ⑤ 10h – kéo mục T6 lên)
 - **Nội dung:** `app.js` `baoMatMang`: nghe offline / online ➜ dải vàng 📴 dính đầu trang (≥ 44px, chỉ var(--…)), có mạng lại ẩn + toast nhắc ↻. `offline.html` (trang tự chứa, sáng / tối theo máy, nút ↻ Thử lại 44px) là đích cuối của sw.js khi điều hướng mất mạng mà không có index.html trong bộ đệm. Đã có từ trước: manifest + lối tắt, nút 📲 cài (beforeinstallprompt / hướng dẫn iOS), sw.js mạng-trước cho vỏ app, không lưu đệm máy chủ v1.

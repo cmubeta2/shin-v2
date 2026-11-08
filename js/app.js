@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.13.0';
+  const PHIEN_BAN = 'v2.13.1';
 
   const MODULES = [
     ModuleHub,
@@ -653,7 +653,11 @@ const ShinApp = (function() {
 
   /** Mảng hiện trong menu: đang bật + (Live) không bị máy chủ v1 từ chối quyền. 🧭 Điều hành chỉ Admin Hub. */
   function mangDuocHien(ma) {
-    if (!mangDangBat(ma)) return false;
+    return mangDangBat(ma) && mangCoQuyen(ma);
+  }
+
+  /** v2.13.1 M0.2 RBAC phía trình duyệt: (Live) mảng không bị chốt chặn quyền v1 từ chối. Máy chủ v1 vẫn là chốt thật. */
+  function mangCoQuyen(ma) {
     if ((ma === 'dieuhanh' || ma === 'quantri') && SHIN_API.laCheDoLive() && live.quyen.HUB === 'co' && !live.laAdminHub) return false;
     const mod = MODULES.find(m => m.ma === ma);
     const khoa = mod && mod.mayChu;
@@ -754,7 +758,9 @@ const ShinApp = (function() {
     container.innerHTML = `
       <div class="man-khong-vao">
         <div class="man-khong-vao-tieu">Chưa vào được ${esc(mod.ten)}</div>
-        <p>Tài khoản của anh/chị chưa được cấp quyền vào app ${esc(SHIN_API.TEN_MAY_CHU[mod.mayChu] || mod.ten)} trên hệ v1.</p>
+        ${(mod.ma === 'dieuhanh' || mod.ma === 'quantri') && live.quyen.HUB === 'co' && !live.laAdminHub
+          ? '<p>Mảng này chỉ dành cho Admin Hub (theo chốt chặn quyền của Hub v1).</p>'
+          : `<p>Tài khoản của anh/chị chưa được cấp quyền vào app ${esc(SHIN_API.TEN_MAY_CHU[mod.mayChu] || mod.ten)} trên hệ v1.</p>`}
         <p>Liên hệ người quản trị app (Admin của ${esc(SHIN_API.TEN_MAY_CHU[mod.mayChu] || 'app')}) để được thêm vào danh sách người dùng.</p>
         <p class="nho">Không chia sẻ link đăng nhập của mình cho người khác.</p>
         <button class="btn-primary" onclick="ShinApp.chuyenModule('hub')">🏠 Về trang Hôm nay</button>
@@ -788,6 +794,8 @@ const ShinApp = (function() {
       // Chờ Hub nhận diện người dùng (tên cho lời chào, link app v1) – lỗi thì vẫn vẽ tiếp
       if (live.hubSanSang) { try { await live.hubSanSang; } catch (e) {} }
       if (luot !== luotTai) return;
+      // v2.13.1 M0.2: mở thẳng (lối tắt ?m=, nút chuyển màn) mảng không có quyền ➜ màn 🔒, không gọi máy chủ
+      if (!mangCoQuyen(targetMod.ma)) { veKhongCoQuyen(container, targetMod); return; }
       if (targetMod.taiLive) {
         let kq;
         try { kq = await targetMod.taiLive(); } catch (e) { kq = { ok: false, loi: 'loi', chiTiet: e.message }; }
