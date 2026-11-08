@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.2** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.5** · Cập nhật ngày: **08/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.5 ✅ – RÀ UX TỰ ĐỘNG 17 MÀN (08/11/2026, lượt tự động ⑤ 18h – kéo trước một phần T7)
+- **Nội dung:** quét Edge headless 375 + 1280 mọi màn, đo thêm vùng bấm < 44px, chữ < 14px, ô nhập < 16px. Sửa: `.btn-icon` (↻ / ＋ / 🏠 trên đầu màn) bị flex bóp còn 36–42px ở 375 ➜ `min-width: 44px; flex-shrink: 0`; 💰 Tài chính huy hiệu trạng thái dự án, số tiền vượt, nhãn Chờ duyệt / Đã chi 11–12px ➜ 14px.
+- **Kiểm:** node --check; 17 màn × 2 bề rộng: 0 cuộn ngang, 0 lỗi console (Demo), 0 vùng bấm < 44px, 0 chữ < 14px, 0 ô nhập < 16px. Không đổi logic / cổng.
+- **Phiếu agy:** 11081816_V2_P3_danh-gia – nháp bảng đối chiếu v1 ↔ v2 từng màn cho nghiệm thu P3 (T7).
+- **Còn chờ v1:** HUB L29 (CRM giai đoạn + sổ tương tác) «ĐÃ CODE v1.18.6», chưa lên app.
 
 ### PHIÊN BẢN v2.13.4 ✅ – GIAO DIỆN 🧠 TRI THỨC + TRANG offline.html (08/11/2026, lượt tự động ⑤ 16h – nhận phiếu agy 11081024_V2_M9.1_giao-dien)
 - **Nội dung:** áp phiếu giao diện agy (đã rà diff: chỉ giao diện, không đổi tên hàm / logic, 100% var(--…)): thẻ tài liệu + chi tiết dễ đọc ở 320–375px, dải đỏ lỗi Hub có hướng dẫn, 3 trạng thái trống; offline.html tự tải lại khi `online` (theo phản biện agy). Sửa ghi chú cũ "v1 chưa có máy chủ cho kho tri thức" ➜ "Hub chỉ trả chỉ mục + tóm tắt (L28a)".

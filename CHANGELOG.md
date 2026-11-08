@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.5] – 08/11/2026 (RÀ UX 17 MÀN – vùng bấm + cỡ chữ)
+
+### 🎨 Giao diện
+- Nút icon đầu màn (↻ / ＋ / 🏠) luôn đủ 44×44px ở 375px (không bị flex bóp).
+- 💰 Tài chính: huy hiệu trạng thái dự án, số tiền vượt, nhãn Chờ duyệt / Đã chi lên 14px.
+
 ## [2.13.4] – 08/11/2026 (GIAO DIỆN 🧠 TRI THỨC + offline.html – phiếu agy)
 
 ### 🎨 Giao diện
