@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.6] – 09/11/2026 (PWA HOÀN THIỆN)
+
+### 📲 PWA
+- Vỏ app offline thêm `js/modules/danhgia5t.js` + `danhgia5t.html` (trước thiếu), PHIEN_BAN_SW `shin-v2.13.6`.
+- Toast "Đã có bản SHIN mới" + nút Tải lại khi service worker mới thay bản cũ; app cài tự kiểm bản mới khi quay lại (≤ 1 lần / 30 phút).
+- Manifest thêm lối tắt Tài chính, Marketing.
+
+---
+
 ## [2.13.5] – 08/11/2026 (RÀ UX 17 MÀN – vùng bấm + cỡ chữ)
 
 ### 🎨 Giao diện

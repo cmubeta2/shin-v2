@@ -23,6 +23,8 @@
     { "name": "Hôm nay", "url": "./?m=hub", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
     { "name": "Điều hành", "url": "./?m=dieuhanh", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
     { "name": "Phê duyệt", "url": "./?m=pheduyet", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Tuyển sinh", "url": "./?m=tuyensinh", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Tuyển sinh", "url": "./?m=tuyensinh", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Tài chính", "url": "./?m=taichinh", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Marketing", "url": "./?m=marketing", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] }
   ]
 }

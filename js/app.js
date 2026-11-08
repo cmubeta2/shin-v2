@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.13.5';
+  const PHIEN_BAN = 'v2.13.6';
 
   const MODULES = [
     ModuleHub,
@@ -440,7 +440,23 @@ const ShinApp = (function() {
 
   function khoiDongPWA() {
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-      navigator.serviceWorker.register('sw.js').catch(e => console.warn('[Shin PWA] Không đăng ký được service worker:', e.message));
+      // v2.13.6: lần đầu cài SW (chưa có controller) thì KHÔNG báo; chỉ báo khi bản mới thay bản cũ đang chạy
+      const daCoBanCu = !!navigator.serviceWorker.controller;
+      let daBaoBanMoi = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!daCoBanCu || daBaoBanMoi) return;
+        daBaoBanMoi = true;
+        toast('Đã có bản SHIN mới – tải lại để dùng bản mới.', 'info', { nhan: 'Tải lại', bam: () => location.reload(), thoiGian: 10000 });
+      });
+      navigator.serviceWorker.register('sw.js').then(reg => {
+        // App cài để mở lâu ngày: quay lại màn hình là kiểm bản mới (tối đa 1 lần / 30 phút)
+        let lanKiem = Date.now();
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState !== 'visible' || navigator.onLine === false || Date.now() - lanKiem < 30 * 60000) return;
+          lanKiem = Date.now();
+          reg.update().catch(() => {});
+        });
+      }).catch(e => console.warn('[Shin PWA] Không đăng ký được service worker:', e.message));
     }
     window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); loiMoiCai = e; capNhatNutCai(); });
     window.addEventListener('appinstalled', () => { loiMoiCai = null; capNhatNutCai(); });
