@@ -4,9 +4,9 @@
  * KHÔNG đụng tới máy chủ Apps Script (script.google.com) – số liệu luôn lấy thật, không lưu đệm.
  * Đổi PHIEN_BAN_SW mỗi khi đổi danh sách tệp vỏ app.
  */
-const PHIEN_BAN_SW = 'shin-v2.12.2';
+const PHIEN_BAN_SW = 'shin-v2.13.0';
 const VO_APP = [
-  './', 'index.html', 'manifest.webmanifest', 'css/styles.css',
+  './', 'index.html', 'offline.html', 'manifest.webmanifest', 'css/styles.css',
   'js/demo_data.js', 'js/api.js', 'js/app.js', 'js/vietqr.js',
   'js/modules/hub.js', 'js/modules/dieuhanh.js', 'js/modules/kpi.js', 'js/modules/khaosat.js', 'js/modules/crm.js',
   'js/modules/tuyensinh.js', 'js/modules/phongkham.js', 'js/modules/ptkh.js', 'js/modules/quantri.js', 'js/modules/duan.js', 'js/modules/congviec.js',
@@ -41,6 +41,6 @@ self.addEventListener('fetch', (e) => {
       }
       return res;
     }).catch(() => caches.match(khoa, { ignoreSearch: req.mode === 'navigate' })
-      .then(r => r || (req.mode === 'navigate' ? caches.match('index.html') : undefined)))
+      .then(r => r || (req.mode === 'navigate' ? caches.match('index.html').then(i => i || caches.match('offline.html')) : undefined)))
   );
 });

@@ -2171,3 +2171,13 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
   display: inline-block;
   align-self: center;
 }
+
+/* v2.13.0 PWA – dải báo mất mạng (app.js baoMatMang) */
+.dai-mat-mang {
+  position: sticky; top: 0; z-index: 900;
+  padding: 10px 16px; min-height: 44px;
+  background: linear-gradient(var(--c-yellow-soft), var(--c-yellow-soft)), var(--bg-card, var(--bg));
+  border-bottom: 2px solid var(--c-yellow); color: var(--text);
+  font-size: calc(14px * var(--font-scale, 1)); font-weight: 600; line-height: 1.4;
+  overflow-wrap: anywhere;
+}

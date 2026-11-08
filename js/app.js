@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.12.2';
+  const PHIEN_BAN = 'v2.13.0';
 
   const MODULES = [
     ModuleHub,
@@ -445,6 +445,20 @@ const ShinApp = (function() {
     window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); loiMoiCai = e; capNhatNutCai(); });
     window.addEventListener('appinstalled', () => { loiMoiCai = null; capNhatNutCai(); });
     capNhatNutCai();
+    // v2.13.0 PWA: dải báo mất mạng – vỏ app vẫn mở được, số liệu máy chủ chưa cập nhật
+    window.addEventListener('offline', () => baoMatMang(true));
+    window.addEventListener('online', () => { baoMatMang(false); toast('Đã có mạng lại – bấm ↻ để lấy số mới.', 'info'); });
+    if (navigator.onLine === false) baoMatMang(true);
+  }
+
+  function baoMatMang(mat) {
+    let d = document.getElementById('daiMatMang');
+    if (!mat) { if (d) d.remove(); return; }
+    if (d) return;
+    d = document.createElement('div');
+    d.id = 'daiMatMang'; d.className = 'dai-mat-mang'; d.setAttribute('role', 'status');
+    d.textContent = '📴 Mất mạng – đang xem bản lưu trên máy; số liệu chưa cập nhật, thao tác gửi sẽ báo lỗi.';
+    document.body.prepend(d);
   }
 
   /* ---------------- Khởi động ---------------- */

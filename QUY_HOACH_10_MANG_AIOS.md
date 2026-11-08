@@ -261,7 +261,7 @@ Vá lỗi       P1 nối thật  Dùng nốt  Mở cổng   0B → CRM  PWA +   
 | **v2.3.0** | Dùng nốt cổng v1 đã có: 🧭 Điều hành, KPI soát lỗi / AOP / báo cáo quý, TS form lead + chiến dịch | Mỗi màn cùng số với app v1 tương ứng; mỗi lệnh ghi tạo đúng 1 dòng |
 | **v2.4.0** | Mở cổng ở v1 rồi dựng màn: PK (báo cáo + minh chứng, lịch trực), KS (phiếu, radar), PTKH `webGoi` | Bộ kiểm thử từng app v1 vẫn đạt 100%; v2 cùng số với v1 |
 | **v2.5.0** | 0B Dịch vụ chung (phê duyệt, máy báo cáo, việc) → CRM → Dự án (Daily Flash) → Tài chính, trên máy chủ Hub (Q1) | Phê duyệt ghi `Log_Duyet` và trả về mảng gốc; Hoàn tác 6s không gửi gì |
-| **v2.6.0** | PWA · RBAC M0.2 · cấp token M0.3 · tên miền riêng · mã hóa token | Mở offline < 0,5s; nhân viên chỉ thấy mảng được cấp |
+| **v2.6.0** | PWA (✅ v2.13.0: manifest, cài, sw offline vỏ app, báo mất mạng) · RBAC M0.2 · cấp token M0.3 · tên miền riêng · mã hóa token | Mở offline < 0,5s; nhân viên chỉ thấy mảng được cấp |
 | **v2.7.0** | Tăng trưởng (Marketing + Web phễu) · LMS · Đồ thị tri thức · Tầng 3 Gói tư vấn | Theo phiếu chi tiết lập khi bắt đầu đợt |
 
 **Quy tắc mỗi đợt:** cập nhật `CHANGELOG.md`, `UPDATE.md`, số phiên bản (`js/app.js` – `PHIEN_BAN`); kiểm tra 375px + 1280px, sáng + tối; cập nhật cột trạng thái mục 2; mọi màn theo `PHONG_CACH_APP_SHIN.md`.
