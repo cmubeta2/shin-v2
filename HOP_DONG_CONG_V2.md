@@ -135,7 +135,7 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 
 - **Quyền:** Admin và Kế toán.
 - **Nguồn thu tự động:** webhook SePay, làm sau. Trước mắt nhập tay.
-- **Đề xuất (HUB L26 – «ĐÃ CODE» Hub v1.15.7 `83_TaiChinh.gs`, chưa lên app; v2.10.1 khớp theo mã thật):** `webGuiDeXuatChi(token, { loai /* 'Chi'|'Tạm ứng'|'Thanh toán' */, khoanMuc /* ≤120, bắt buộc */, soTien /* > 0, làm tròn */, duAn, lyDo /* ≤500, bắt buộc */, hanHoanUng /* dd/mm/yyyy, chỉ khi Tạm ứng */, soChungTu /* ≤60 */, maGui /* [A-Za-z0-9_-]{6,40} */ })` ➜ `kiemDeXuatChi` (thuần) + tường lửa SĐT / CCCD / BHYT / chữ người bệnh ➜ `nhanPhieuDuyet_` nguồn 'TC', mã phiếu `TC-<maGui>` (hiện ngay trong `khoanChoDuyet`), trả `{ ok, ma, moi }`; gửi lại cùng `maGui` ➜ trả phiếu cũ (`moi: false`). Người đề xuất ghi theo phiên (`nd = {ma, hoTen}`). Quyền: mọi người dùng Hub đã đăng nhập. Trong lúc chờ lên app, v2 soạn + kiểm (cùng luật, `ModuleTaiChinh.kiemDeXuat` trả sẵn gói tham số) + sao chép phiếu.
+- **Đề xuất (HUB L26 – lên app Hub v1.18.5 `83_TaiChinh.gs`; v2.12.2 gửi thật):** `webGuiDeXuatChi(token, { loai /* 'Chi'|'Tạm ứng'|'Thanh toán' */, khoanMuc /* ≤120, bắt buộc */, soTien /* > 0, làm tròn */, duAn, lyDo /* ≤500, bắt buộc */, hanHoanUng /* dd/mm/yyyy, chỉ khi Tạm ứng */, soChungTu /* ≤60 */, maGui /* [A-Za-z0-9_-]{6,40} */ })` ➜ `kiemDeXuatChi` (thuần) + tường lửa SĐT / CCCD / BHYT / chữ người bệnh ➜ `nhanPhieuDuyet_` nguồn 'TC', mã phiếu `TC-<maGui>` (hiện ngay trong `khoanChoDuyet`), trả `{ ok, ma, moi }`; gửi lại cùng `maGui` ➜ trả phiếu cũ (`moi: false`). Người đề xuất ghi theo phiên (`nd = {ma, hoTen}`). Quyền: mọi người dùng Hub đã đăng nhập. v2.12.2: `ModuleTaiChinh.guiDeXuat` gửi sau Toast Hoàn tác 6s; nút 📋 sao chép vẫn giữ cho Demo.
 
 ---
 

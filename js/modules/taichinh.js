@@ -11,6 +11,7 @@
  * v2.10.2 – M3.2 ngân sách & giải ngân theo dự án: Live đọc thêm webDuAn (duAn.nganSach / daChi, flash.taiChinh.phatSinh),
  *   cảnh báo vượt / sắp chạm dự toán cấp dự án. Dự toán theo khoản mục: v1 chưa có dữ liệu ➜ không làm.
  * v2.10.4 – M3.1 khối 🔳 Mã VietQR (js/vietqr.js – sinh QR offline, số TK chỉ lưu máy này).
+ * v2.12.2 – M6.4 🟢: HUB L26 lên app (v1.18.5) ➜ guiDeXuat gửi thật webGuiDeXuatChi (+maGui chống trùng, Toast Hoàn tác 6s).
  * v2.10.3 – M3.3 hoa hồng CTV/đại lý: 🎓 Tuyển sinh (webLeadCD.hoaHong) ➜ deXuatHoaHong ➜ moDeXuat điền sẵn form Thanh toán.
  */
 
@@ -83,20 +84,39 @@ const ModuleTaiChinh = {
     if (!d.duAnNS) return `<div class="hn-tieu"><span>NGÂN SÁCH & GIẢI NGÂN THEO DỰ ÁN</span></div>
       <div class="trong" style="color:var(--c-red)">⚠️ Không đọc được cổng webDuAn: ${e(d.loiDuAn || '')} – khối này để trống, không dùng số mẫu.</div>`;
     const r = this.lechDuToan(d.duAnNS, ShinApp.docSoVN);
-    const MAU = { do: 'var(--c-red)', vang: 'var(--c-yellow)', xanh: 'var(--c-green)', chua: 'var(--text-muted)' };
+    const BADGE_MUC = { do: 'badge do', vang: 'badge vang', xanh: 'badge xanh', chua: 'badge xam' };
     const NHAN = { do: 'Vượt dự toán', vang: 'Sắp chạm trần', xanh: 'Trong dự toán', chua: 'Chưa có dự toán' };
+    const BAR_MUC = { do: 'tc-bar-do', vang: 'tc-bar-vang', xanh: 'tc-bar-xanh', chua: 'tc-bar-chua' };
     const ps = d.phatSinh || [];
     return `
       <div class="hn-tieu"><span>NGÂN SÁCH & GIẢI NGÂN THEO DỰ ÁN · ${r.ds.length}${r.vuot ? ' · ' + r.vuot + ' vượt' : ''}${r.sapVuot ? ' · ' + r.sapVuot + ' sắp chạm' : ''}</span></div>
       ${r.ds.length ? r.ds.map(x => `
-        <div class="hang-tru" style="flex-wrap:wrap"><span style="flex:1 1 60%;min-width:0"><b>${e(x.ma)}</b> ${e(x.ten === x.ma ? '' : x.ten)}<br>
-          <span class="chu-phu">Đã chi ${e(trieu(x.daChi))} / ${x.nganSach ? e(trieu(x.nganSach)) : '–'}${x.tyLe === null ? '' : ' · ' + ShinApp.soVN(x.tyLe, 0) + '%'}</span></span>
-          <b style="color:${MAU[x.muc]}">${e(NHAN[x.muc])}${x.muc === 'do' ? '<br>+' + e(trieu(-x.conLai)) : ''}</b>
-          ${x.tyLe === null ? '' : `<div class="thanh-tien" style="flex-basis:100%"><div style="width:${Math.min(100, x.tyLe).toFixed(1)}%;background:${MAU[x.muc]}"></div></div>`}
+        <div class="hang-tru tc-hang-da">
+          <div class="tc-da-thongtin">
+            <b>${e(x.ma)}</b> ${e(x.ten === x.ma ? '' : x.ten)}<br>
+            <span class="chu-phu">Đã chi ${e(trieu(x.daChi))} / ${x.nganSach ? e(trieu(x.nganSach)) : '–'}${x.tyLe === null ? '' : ' · ' + ShinApp.soVN(x.tyLe, 0) + '%'}</span>
+          </div>
+          <div class="tc-da-trangthai">
+            <span class="${BADGE_MUC[x.muc]}">${e(NHAN[x.muc])}</span>
+            ${x.muc === 'do' ? `<span class="tc-tien-vuot">+${e(trieu(-x.conLai))}</span>` : ''}
+          </div>
+          ${x.tyLe === null ? '' : `<div class="thanh-tien tc-thanh-tien"><div class="${BAR_MUC[x.muc]}" style="width:${Math.min(100, x.tyLe).toFixed(1)}%"></div></div>`}
         </div>`).join('') : '<div class="trong">Không có dự án đang chạy.</div>'}
       ${ps.length ? `<div class="hn-tieu"><span>CHI PHÁT SINH (FLASH DỰ ÁN) · ${ps.length}</span></div>
-        ${ps.map(x => `<div class="hang-tru"><span>${e(x.khoanMuc)}<br><span class="chu-phu">${e([x.nguoiChi, x.tinhTrang].filter(Boolean).join(' · '))}</span></span>
-          <b>${e(ShinApp.soVN(Math.abs(ShinApp.docSoVN(x.soTien) || 0)))} đ</b></div>`).join('')}` : ''}`;
+        ${ps.map(x => {
+          const tt = String(x.tinhTrang || '').trim();
+          const tagLoai = /chờ/i.test(tt) ? 'cho' : /đã chi/i.test(tt) ? 'chi' : 'khac';
+          return `<div class="hang-tru tc-hang-ps">
+            <div class="tc-ps-noidung">
+              <b>${e(x.khoanMuc)}</b>
+              <div class="tc-ps-phu">
+                ${x.nguoiChi ? `<span class="chu-phu">${e(x.nguoiChi)}</span>` : ''}
+                ${tt ? `<span class="tc-tag ${tagLoai}">${e(tt)}</span>` : ''}
+              </div>
+            </div>
+            <div class="tc-ps-tien">−${e(ShinApp.soVN(Math.abs(ShinApp.docSoVN(x.soTien) || 0)))} đ</div>
+          </div>`;
+        }).join('')}` : ''}`;
   },
 
   render: function(container, data) {
@@ -147,25 +167,50 @@ const ModuleTaiChinh = {
 
       <details class="tq-gon" id="tcDeXuat">
         <summary><span>✍️ Đề xuất chi / Tạm ứng / Thanh toán (M6.4 · M3.4)</span></summary>
-        <label class="nhan-o" for="dxLoai">Loại phiếu *</label>
-        <select id="dxLoai" class="form-input" onchange="ModuleTaiChinh.doiLoai()">
-          <option value="Chi">Đề xuất chi</option><option value="Tạm ứng">Đề nghị tạm ứng</option><option value="Thanh toán">Thanh toán / hoàn ứng</option>
-        </select>
-        <div id="dxOHan" hidden><label class="nhan-o" for="dxHan">Hạn hoàn ứng (dd/mm/yyyy) *</label><input id="dxHan" class="form-input" inputmode="numeric" maxlength="10" placeholder="VD: 30/11/2026"></div>
-        <div id="dxOCT" hidden><label class="nhan-o" for="dxCT">Số hóa đơn / chứng từ</label><input id="dxCT" class="form-input" maxlength="60" placeholder="VD: HĐ 0001234 hoặc mã tạm ứng"></div>
-        <label class="nhan-o" for="dxKhoan">Khoản mục *</label><input id="dxKhoan" class="form-input" maxlength="120" placeholder="VD: Thuê cẩu lắp máy">
-        <label class="nhan-o" for="dxTien">Số tiền (đ) *</label><input id="dxTien" class="form-input" inputmode="numeric" maxlength="18" placeholder="VD: 3.000.000">
-        <label class="nhan-o" for="dxDuAn">Dự án / hạng mục</label><input id="dxDuAn" class="form-input" maxlength="60" list="dxDsDuAn" placeholder="VD: DA-KSK01">
-        <datalist id="dxDsDuAn">${[...new Set(cho.map(x => x.duAn).filter(Boolean))].map(m => `<option value="${e(m)}">`).join('')}</datalist>
-        <label class="nhan-o" for="dxLyDo">Lý do *</label><textarea id="dxLyDo" class="form-input" rows="3" maxlength="500" placeholder="Vì sao cần chi, hạn cần tiền"></textarea>
-        <button class="btn-primary" onclick="ModuleTaiChinh.saoChepDeXuat()">📋 Kiểm & sao chép phiếu</button>
+        <div class="tc-form-hop">
+          <div class="tc-form-hang-doi">
+            <div class="tc-form-nhom">
+              <label class="nhan-o" for="dxLoai">Loại phiếu *</label>
+              <select id="dxLoai" class="form-input" onchange="ModuleTaiChinh.doiLoai()">
+                <option value="Chi">Đề xuất chi</option><option value="Tạm ứng">Đề nghị tạm ứng</option><option value="Thanh toán">Thanh toán / hoàn ứng</option>
+              </select>
+            </div>
+            <div class="tc-form-nhom">
+              <label class="nhan-o" for="dxTien">Số tiền (đ) *</label>
+              <input id="dxTien" class="form-input" inputmode="numeric" maxlength="18" placeholder="VD: 3.000.000">
+            </div>
+          </div>
+          <div id="dxOHan" class="tc-form-nhom" hidden>
+            <label class="nhan-o" for="dxHan">Hạn hoàn ứng (dd/mm/yyyy) *</label>
+            <input id="dxHan" class="form-input" inputmode="numeric" maxlength="10" placeholder="VD: 30/11/2026">
+          </div>
+          <div id="dxOCT" class="tc-form-nhom" hidden>
+            <label class="nhan-o" for="dxCT">Số hóa đơn / chứng từ</label>
+            <input id="dxCT" class="form-input" maxlength="60" placeholder="VD: HĐ 0001234 hoặc mã tạm ứng">
+          </div>
+          <div class="tc-form-nhom">
+            <label class="nhan-o" for="dxKhoan">Khoản mục *</label>
+            <input id="dxKhoan" class="form-input" maxlength="120" placeholder="VD: Thuê cẩu lắp máy">
+          </div>
+          <div class="tc-form-nhom">
+            <label class="nhan-o" for="dxDuAn">Dự án / hạng mục</label>
+            <input id="dxDuAn" class="form-input" maxlength="60" list="dxDsDuAn" placeholder="VD: DA-KSK01">
+            <datalist id="dxDsDuAn">${[...new Set(cho.map(x => x.duAn).filter(Boolean))].map(m => `<option value="${e(m)}">`).join('')}</datalist>
+          </div>
+          <div class="tc-form-nhom">
+            <label class="nhan-o" for="dxLyDo">Lý do *</label>
+            <textarea id="dxLyDo" class="form-input" rows="3" maxlength="500" placeholder="Vì sao cần chi, hạn cần tiền"></textarea>
+          </div>
+          <button class="btn-primary tc-btn-chinh" onclick="ModuleTaiChinh.guiDeXuat(this)">📤 Gửi vào Phê duyệt 0B</button>
+          <button class="btn-secondary tc-btn-chinh" onclick="ModuleTaiChinh.saoChepDeXuat()">📋 Kiểm & sao chép phiếu</button>
+        </div>
       </details>
 
       ${typeof ShinVietQR !== 'undefined' ? ShinVietQR.veKhoi() : ''}
 
       <details class="tq-gon">
         <summary><span>ⓘ Nguồn số</span></summary>
-        <p class="chu-phu">✍️ Đề xuất chi / tạm ứng / thanh toán chỉ chạy trên máy anh/chị: kiểm đủ trường theo luật Hub, chặn CCCD / BHYT / khóa rồi sao chép phiếu – chưa gửi lên Hub (Còn chờ v1: cổng HUB L26 <code>webGuiDeXuatChi</code> đã code ở Hub v1.15.7, chưa lên app).</p>
+        <p class="chu-phu">✍️ Đề xuất chi / tạm ứng / thanh toán chỉ chạy trên máy anh/chị: kiểm đủ trường theo luật Hub, chặn SĐT / CCCD / BHYT / khóa, rồi 📤 gửi thẳng vào Phê duyệt 0B (cổng HUB L26 <code>webGuiDeXuatChi</code>, Hub v1.18.5) sau 6 giây cho Hoàn tác – gửi lại không tạo phiếu trùng. Demo: không gửi, chỉ sao chép.</p>
         <p class="chu-phu">💸 Hoa hồng CTV/đại lý: mở chiến dịch ở 🎓 Tuyển sinh ➜ "Lập đề nghị chi hoa hồng" – số tiền lấy từ bảng bậc thang của chiến dịch; chưa trừ phần đã chi kỳ trước (Còn chờ v1: TS chưa có sổ chi hoa hồng).</p>
         <p class="chu-phu">Thu qua chuyển khoản tự ghi từ SePay (VietQR); thu chi tay do kế toán nhập trên Hub. Mọi khoản chi mới phải qua Phê duyệt 1-chạm.</p>
       </details>
@@ -190,10 +235,12 @@ const ModuleTaiChinh = {
     const loai = LOAI[p.loai] ? p.loai : (p.loai ? '' : 'Chi');
     const khoan = String(p.khoanMuc || '').trim(), lyDo = String(p.lyDo || '').trim(), duAn = String(p.duAn || '').trim();
     const han = String(p.hanHoanUng || '').trim(), ct = String(p.soChungTu || '').trim();
-    const tien = Number(p.soTien);
+    // v2.12.2 (ca biên agy 11080424): chuỗi '1.500.000' ➜ bóc số như Hub soTien_ (không ra NaN)
+    const tien = typeof p.soTien === 'string' ? Number(p.soTien.replace(/[^\d,-]/g, '').replace(',', '.')) : Number(p.soTien);
     if (!loai) return { loi: 'Loại phiếu không hợp lệ.' };
     if (!khoan) return { loi: 'Chưa nhập khoản mục.' };
     if (khoan.length > 120) return { loi: 'Khoản mục tối đa 120 ký tự.' };
+    if (duAn.length > 120) return { loi: 'Tên dự án tối đa 120 ký tự.' };
     if (!isFinite(tien) || tien <= 0) return { loi: 'Số tiền phải lớn hơn 0.' };
     if (tien > 1e12) return { loi: 'Số tiền quá lớn – kiểm lại.' };
     if (lyDo.length < 5) return { loi: 'Lý do cần ít nhất 5 ký tự.' };
@@ -217,13 +264,50 @@ const ModuleTaiChinh = {
     if (ct && loai !== 'Tạm ứng') goi.soChungTu = ct;
     return { goi, tin: ['💰 ' + LOAI[loai], '• Khoản mục: ' + khoan, '• Số tiền: ' + ShinApp.soVN(so) + ' đ',
       duAn ? '• Dự án / hạng mục: ' + duAn : '', hanOk ? '• Hạn hoàn ứng: ' + hanOk : '', goi.soChungTu ? '• Chứng từ: ' + goi.soChungTu : '',
-      '• Lý do: ' + lyDo, '• Ngày: ' + ShinApp.ngayVN(), '→ Kế toán nhập Phê duyệt 0B'].filter(Boolean).join('\n') };
+      '• Lý do: ' + lyDo, '• Ngày: ' + ShinApp.ngayVN(), '→ Phê duyệt 0B'].filter(Boolean).join('\n') };
+  },
+
+  _docForm: function() {
+    const v = id => (document.getElementById(id) || {}).value || '';
+    return this.kiemDeXuat({ loai: v('dxLoai') || 'Chi', khoanMuc: v('dxKhoan'), soTien: ShinApp.docSoVN(v('dxTien')), duAn: v('dxDuAn'),
+      lyDo: v('dxLyDo'), hanHoanUng: v('dxHan'), soChungTu: v('dxCT') }, SHIN_API.soatKhongDuaVao, ShinApp.ngayVN());
+  },
+
+  /** THUẦN – mã chống gửi trùng cho HUB L26 (Hub đòi ^[A-Za-z0-9_-]{6,40}$). */
+  taoMaGui: function(bay, ngauNhien) {
+    return 'v2' + Number(bay || 0).toString(36) + String(ngauNhien || '').replace(/[^a-z0-9]/gi, '').slice(0, 6).padEnd(4, '0');
+  },
+
+  /** v2.12.2 M6.4 🟢 – gửi thật vào Phê duyệt 0B qua HUB L26 `webGuiDeXuatChi` (lên app Hub v1.18.5).
+   *  Kiểm đủ trường + tường lửa M9.5 ➜ Toast Hoàn tác 6s (bấm Hoàn tác = không gửi gì) ➜ gửi đúng 1 lần.
+   *  maGui giữ nguyên tới khi Hub nhận ➜ gửi lại sau lỗi mạng không tạo phiếu thứ 2. Demo: không gửi. */
+  guiDeXuat: function(nut) {
+    const kq = this._docForm();
+    if (kq.loi) return ShinApp.toast(kq.loi, 'error');
+    if (!SHIN_API.layToken()) return ShinApp.toast('Đang ở Demo – chưa đăng nhập Hub nên không gửi. Dùng 📋 để sao chép phiếu.', 'info');
+    if (this._dangGui) return;
+    const khoa = JSON.stringify(kq.goi);
+    if (this._maGuiCho !== khoa) { this._maGuiCho = khoa; this._maGui = this.taoMaGui(Date.now(), Math.random().toString(36).slice(2)); }
+    const du = Object.assign({}, kq.goi, { maGui: this._maGui });
+    this._dangGui = true;
+    const khoaNut = on => { if (nut && nut.isConnected) { nut.disabled = on; nut.innerHTML = on ? '⏳ Chờ 6 giây…' : '📤 Gửi vào Phê duyệt 0B'; } };
+    ShinApp.hanhDongHoanTac('Sẽ gửi ' + kq.goi.loai.toLowerCase() + ' ' + ShinApp.soVN(kq.goi.soTien) + ' đ vào Phê duyệt 0B.', {
+      lamTruoc: () => khoaNut(true),
+      traLai: () => { this._dangGui = false; khoaNut(false); },
+      thucHien: async () => {
+        const r = await SHIN_API.goi('HUB', 'webGuiDeXuatChi', du);
+        if (!r.ok) throw new Error('Chưa gửi được: ' + SHIN_API.moTaLoi(r) + ' – bấm gửi lại (không tạo phiếu trùng).');
+        if (r.isDemo) throw new Error('Chưa có máy chủ Hub – không gửi. Dùng 📋 để sao chép phiếu.');
+        const d = r.data || {};
+        this._dangGui = false; this._maGui = ''; this._maGuiCho = '';
+        ShinApp.toast((d.moi === false ? 'Phiếu đã có sẵn ' : 'Đã gửi phiếu ') + (d.ma || du.maGui) + ' – chờ duyệt ở ⚡ Phê duyệt 0B.', 'success');
+        ShinApp.chuyenModule('taichinh');
+      }
+    });
   },
 
   saoChepDeXuat: function() {
-    const v = id => (document.getElementById(id) || {}).value || '';
-    const kq = this.kiemDeXuat({ loai: v('dxLoai') || 'Chi', khoanMuc: v('dxKhoan'), soTien: ShinApp.docSoVN(v('dxTien')), duAn: v('dxDuAn'),
-      lyDo: v('dxLyDo'), hanHoanUng: v('dxHan'), soChungTu: v('dxCT') }, SHIN_API.soatKhongDuaVao, ShinApp.ngayVN());
+    const kq = this._docForm();
     if (kq.loi) return ShinApp.toast(kq.loi, 'error');
     const xong = () => ShinApp.toast('Đã sao chép phiếu – dán gửi kế toán / Telegram để nhập Phê duyệt 0B.', 'success');
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(kq.tin).then(xong, () => ShinApp.toast('Trình duyệt chặn sao chép.', 'error'));
