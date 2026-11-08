@@ -112,6 +112,12 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 - Chống chèn công thức bằng `chongCongThuc`.
 - **Cấm lưu dữ liệu người bệnh.**
 
+**HUB L29 (shin-v2 08/11 – Sếp đã duyệt 08/11, CHƯA code) – giai đoạn + sổ tương tác.** v2.13.3 đã dựng sẵn phía màn, tự bật khi cổng trả trường mới:
+- `webCRM` trả thêm `doiTac[].giaiDoan` ∈ {'', 'Tiếp cận', 'Báo giá', 'Hợp đồng', 'Triển khai', 'Tái ký'} (trống ➜ v2 suy từ `trangThai`) và `tuongTac: [{ ma, maDoiTac, maLead, ngay:'dd/mm/yyyy', kenh, noiDung, nguoiGhi }]` (50 dòng mới nhất).
+- `webLuuDoiTac` nhận `doiTac.giaiDoan` (giá trị lạ ➜ lỗi câu Việt).
+- `webGhiTuongTac(token, { maDoiTac | maLead, kenh, noiDung ≤ 500, maGui })` ➜ `{ ok, ma, moi }`; maGui chống ghi trùng; tường lửa không nhận SĐT / CCCD / BHYT / tên người bệnh.
+- `webDanhDauLead(token, { maLead, trangThai: 'Đã chăm sóc' | 'Đã chuyển' })` – không xóa dòng LeadMoi.
+
 ### Dự án – Daily Flash 4 khối
 
 **`webDuAn(token, {})`** trả về:

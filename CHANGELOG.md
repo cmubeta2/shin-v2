@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.3] – 08/11/2026 (M3.3 / M3.4 🟢 · CRM ĐÓN SẴN HUB L29)
+
+### ✨ Tính năng
+- 👥 CRM: ô chọn giai đoạn pipeline + lịch sử tương tác trong chi tiết đối tác – tự bật khi Hub trả `giaiDoan` / `tuongTac` (HUB L29); pipeline B2B ưu tiên cột GiaiDoan, không có thì suy từ Trạng thái.
+- 💰 Tài chính: xác nhận M3.3 hoa hồng + M3.4 tạm ứng / thanh toán gửi thật vào 0B qua `webGuiDeXuatChi` ➜ 🟢.
+
 ## [2.13.2] – 08/11/2026 (M9.1 🟢 TRI THỨC ĐỌC THẬT)
 
 ### ✨ Tính năng
