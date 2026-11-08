@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.7] – 09/11/2026 (🗓️ XIN NGHỈ NGAY TRÊN v2 – đối chiếu P3 #1)
+
+### 📋 PTKH gốc
+- Khối 🗓️ Xin nghỉ: Lịch nghỉ tuần (chọn ngày 4 tuần tới, khóa ngày lễ / đã xin / tuần sau quá hạn) và Nghỉ ốm (từ – đến, buổi, lý do) ➜ gửi thẳng PTKH qua `webGoi` ➜ `webGuiNghiPhep` sau Toast Hoàn tác 6s, đúng 1 lần; đọc `webLichNghiNV` để vẽ lịch. Kiểm như `loiNghiPhep` + chặn SĐT / CCCD / BHYT trong lý do. Đổi ca vẫn mở app PTKH.
+
 ## [2.13.6] – 09/11/2026 (PWA HOÀN THIỆN)
 
 ### 📲 PWA
