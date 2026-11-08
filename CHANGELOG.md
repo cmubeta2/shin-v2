@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.0] – 08/11/2026 (PWA: BÁO MẤT MẠNG)
+
+### ✨ Tính năng
+- Dải 📴 báo mất mạng (sự kiện offline/online) đầu trang: vỏ app vẫn mở từ bản lưu, nói rõ số liệu chưa cập nhật; có mạng lại ➜ ẩn dải + nhắc bấm ↻.
+- Trang `offline.html` (tệp mới, có trong VO_APP): hiện khi mất mạng mà máy chưa từng lưu vỏ app. `sw.js` shin-v2.13.0; `.gitignore` thêm `!/offline.html`.
+
 ## [2.12.2] – 08/11/2026 (M6.4 🟢 GỬI ĐỀ XUẤT CHI THẬT + GIAO DIỆN TÀI CHÍNH / LMS)
 
 ### ✨ Tính năng

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f766e">
+<title>SHIN – Mất mạng</title>
+<style>
+  :root { --bg: #f4f5f7; --bg-card: #ffffff; --text: #1f2937; --text-muted: #6b7280; --border: #e5e7eb; --c-chinh: #0f766e; --c-chu-nut: #ffffff; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0c0d12; --bg-card: #161a26; --text: #f8fafc; --text-muted: #94a3b8; --border: #25293a; --c-chinh: #14b8a6; --c-chu-nut: #0c0d12; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px;
+    background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .the { max-width: 420px; width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; text-align: center; }
+  .bieu { font-size: 48px; line-height: 1; }
+  h1 { font-size: 20px; margin: 12px 0 8px; }
+  p { margin: 0 0 12px; color: var(--text-muted); font-size: 15px; }
+  button { min-height: 44px; min-width: 44px; padding: 10px 20px; border: 0; border-radius: 12px; font: inherit; font-weight: 600;
+    background: var(--c-chinh); color: var(--c-chu-nut); cursor: pointer; width: 100%; }
+</style>
+</head>
+<body>
+  <main class="the">
+    <div class="bieu" aria-hidden="true">📴</div>
+    <h1>Chưa có mạng</h1>
+    <p>Máy đang mất kết nối và chưa lưu sẵn SHIN v2 lần nào. Bật 4G / Wi-Fi rồi thử lại.</p>
+    <p>Lần sau mở được 1 lần có mạng, SHIN sẽ lưu vỏ app để mở được cả khi rớt mạng.</p>
+    <button type="button" onclick="location.reload()">↻ Thử lại</button>
+  </main>
+</body>
+</html>
