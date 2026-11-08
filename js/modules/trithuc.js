@@ -27,6 +27,8 @@ const ModuleTriThuc = {
   _linhVuc: '',
   _xem: '',
   _dt: null,
+  _live: false,
+  _loi: '',
 
   /** THUẦN. Phân tích [[wiki-links]] ➜ { ra:{ma:[ma]}, vao:{ma:[ma]}, treo:{ma:[chữ]}, canh:[[a,b]] }.
    *  Đích khớp theo mã hoặc tên (không phân biệt hoa thường / dấu); bỏ phần #mục và |nhãn; bỏ tự liên kết; không trùng. */
@@ -104,6 +106,8 @@ const ModuleTriThuc = {
     const d = data || window.SHIN_DEMO_DATA.trithuc;
     const e = ShinApp.esc;
     const hero = d.hero || {};
+    this._live = !!d.live;
+    this._loi = d.loi || '';
     this._ds = d.taiLieu || [];
     this._dt = this.phanTichLienKet(this._ds);
     if (this._xem && !this._ds.some(t => t.ma === this._xem)) this._xem = '';
@@ -142,7 +146,7 @@ const ModuleTriThuc = {
         ${lv.map(x => `<button class="chip-chon ${this._linhVuc === x ? 'dang-chon' : ''}" data-lv="${e(x)}" onclick="ModuleTriThuc.chonLinhVuc(this.dataset.lv)">${e(x)}</button>`).join('')}
       </div>` : ''}
 
-      ${d.loi ? `<div class="trong" style="color:var(--c-red)">⚠️ Kho tri thức: ${e(d.loi)} – danh sách để trống, không dùng số mẫu.</div>` : ''}
+      ${d.loi ? `<div class="canh-bao-nguon loi" role="alert" style="margin-bottom:12px;"><span>⚠️ <strong>Kho tri thức:</strong> ${e(d.loi)} – máy anh chạy đồng bộ kho tri thức (quét <code>05_TriThuc</code> → Drive) để nạp chỉ mục lên Hub. Danh sách để trống, không dùng số mẫu.</span></div>` : ''}
       <div id="ttXem"></div>
 
       <details class="tq-gon" id="ttDoThiKhoi">
@@ -178,16 +182,20 @@ const ModuleTriThuc = {
     const chip = ma => { const u = this._ds.find(x => x.ma === ma); return `<button class="chip-chon" data-ma="${e(ma)}" onclick="ModuleTriThuc.xemTaiLieu(this.dataset.ma)" title="${e(u ? u.ten : ma)}">${e(ma)}</button>`; };
     const nhom = (nhan, ds) => `<div class="tt-nhom"><div class="chu-phu"><strong>${nhan} · ${ds.length}</strong></div><div class="tt-chips">${ds.join('') || '<span class="chu-phu">—</span>'}</div></div>`;
     const tomTat = e(t.tomTat || '').replace(/\[\[([^\]]+)\]\]/g, (_, x) => `<strong>${x.split('|').pop()}</strong>`);
-    el.innerHTML = `<div class="card tt-xem">
-      <div class="card-header">
-        <div><span class="badge xam">${e(t.linhVuc || '')}</span><div class="card-title" style="margin-top:4px;">[${e(t.ma)}] ${e(t.ten)}</div></div>
-        <button class="btn-icon" onclick="ModuleTriThuc.xemTaiLieu('')" aria-label="Đóng">✕</button>
+    el.innerHTML = `<div class="card tt-xem" style="padding:14px;">
+      <div class="card-header" style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px;">
+        <div style="flex:1; min-width:0;">
+          <div style="margin-bottom:4px;"><span class="badge xam">${e(t.linhVuc || 'Khác')}</span></div>
+          <div class="card-title" style="margin:4px 0 0; word-break:break-word; overflow-wrap:break-word; line-height:1.45; font-size:16px; font-weight:800;">[${e(t.ma)}] ${e(t.ten)}</div>
+          <div class="chu-phu" style="margin-top:4px; line-height:1.4;">Cập nhật: ${e(t.capNhat || '—')}${t.dinhDang ? ' · ' + e(t.dinhDang) : ''}</div>
+        </div>
+        <button class="btn-icon" onclick="ModuleTriThuc.xemTaiLieu('')" aria-label="Đóng" style="min-width:44px; min-height:44px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">✕</button>
       </div>
-      ${tomTat ? `<p class="chu-phu" style="margin:8px 0;">${tomTat}</p>` : ''}
+      ${tomTat ? `<p class="chu-phu" style="margin:10px 0; word-break:break-word; overflow-wrap:break-word; line-height:1.5;">${tomTat}</p>` : ''}
       ${nhom('➜ Liên kết ra', dt.ra[t.ma].map(chip))}
       ${nhom('⬅ Liên kết ngược', dt.vao[t.ma].map(chip))}
       ${dt.treo[t.ma].length ? nhom('⚠️ Liên kết treo (chưa có bài)', dt.treo[t.ma].map(x => `<span class="badge vang">${e(x)}</span>`)) : ''}
-      <p class="chu-phu">Nội dung đầy đủ: kho <code>05_TriThuc</code> – v1 chưa có máy chủ cho kho tri thức.</p>
+      <p class="chu-phu" style="margin-top:12px;">Hub chỉ trả chỉ mục + tóm tắt (L28a) – nội dung đầy đủ đọc trong kho <code>05_TriThuc</code>.</p>
     </div>`;
   },
 
@@ -197,20 +205,43 @@ const ModuleTriThuc = {
     const e = ShinApp.esc, q = this._tim;
     const ds = this.timKiem(this._ds, q, this._linhVuc);
     if (dem) dem.textContent = `TÀI LIỆU · ${ds.length}${ds.length !== this._ds.length ? ' / ' + this._ds.length : ''}`;
+
+    if (!this._ds || this._ds.length === 0) {
+      if (this._loi) {
+        el.innerHTML = `<div class="trong">Chưa có dữ liệu do lỗi kết nối hoặc kho tri thức chưa được đồng bộ.</div>`;
+      } else if (this._live) {
+        el.innerHTML = `<div class="trong" style="padding:28px 12px;">
+          <div style="font-size:32px; margin-bottom:8px;" aria-hidden="true">📭</div>
+          <div style="font-weight:700; color:var(--text); margin-bottom:4px;">Kho tri thức Live hiện chưa có tài liệu nào</div>
+          <div class="chu-phu">Máy anh chạy đồng bộ kho tri thức (quét <code>05_TriThuc</code> → Drive) để nạp tài liệu và chỉ mục lên Hub.</div>
+        </div>`;
+      } else {
+        el.innerHTML = `<div class="trong">Chưa có tài liệu nào trong danh sách mẫu.</div>`;
+      }
+      return;
+    }
+
+    if (ds.length === 0) {
+      el.innerHTML = `<div class="trong">Không tìm thấy tài liệu khớp với "${e(q || this._linhVuc)}".</div>`;
+      return;
+    }
+
     el.innerHTML = ds.map(t => `
-      <div class="card" role="button" tabindex="0" data-ma="${e(t.ma)}" onclick="ModuleTriThuc.xemTaiLieu(this.dataset.ma)" style="cursor:pointer;">
-        <div class="card-header">
-          <div>
-            <span class="badge xam">${this.toDam(t.linhVuc, q)}</span>
-            <div class="card-title" style="margin-top:4px;">${this.toDam(t.ten, q)}</div>
+      <div class="card" role="button" tabindex="0" data-ma="${e(t.ma)}" onclick="ModuleTriThuc.xemTaiLieu(this.dataset.ma)"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();ModuleTriThuc.xemTaiLieu(this.dataset.ma);}"
+        style="cursor:pointer; min-height:44px; padding:12px 14px;">
+        <div class="card-header" style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:8px;">
+          <div style="flex:1; min-width:0;">
+            <div style="margin-bottom:4px;"><span class="badge xam">${this.toDam(t.linhVuc || 'Khác', q)}</span></div>
+            <div class="card-title" style="margin:4px 0 0; word-break:break-word; overflow-wrap:break-word; line-height:1.45; font-size:15px; font-weight:700;">${this.toDam(t.ten, q)}</div>
           </div>
-          <span class="dong-arrow" aria-hidden="true">›</span>
+          <span class="dong-arrow" aria-hidden="true" style="font-size:18px; color:var(--text-muted); line-height:1; padding-top:2px; flex-shrink:0;">›</span>
         </div>
-        <div class="chu-phu" style="display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-top:8px;">
-          <span>Mã: <strong>${this.toDam(t.ma, q)}</strong> · ${e(t.dinhDang || '')}</span>
-          <span>Cập nhật: ${e(t.capNhat || '')}</span>
+        <div class="chu-phu" style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-top:6px; line-height:1.4;">
+          <span style="word-break:break-word;">Mã: <strong>${this.toDam(t.ma, q)}</strong>${t.dinhDang ? ' · ' + e(t.dinhDang) : ''}</span>
+          <span style="white-space:nowrap;">Cập nhật: ${e(t.capNhat || '—')}</span>
         </div>
-      </div>`).join('') || `<div class="trong">Không thấy tài liệu khớp "${e(q)}".</div>`;
+      </div>`).join('');
   },
 
   doiTim: function(v) { this._tim = String(v || ''); this.veDs(); },
