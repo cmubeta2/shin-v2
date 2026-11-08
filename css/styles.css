@@ -2183,3 +2183,11 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
   font-size: calc(14px * var(--font-scale, 1)); font-weight: 600; line-height: 1.4;
   overflow-wrap: anywhere;
 }
+
+/* v2.13.7 – 🗓️ Xin nghỉ (PTKH) */
+.xn-hop { display: flex; flex-direction: column; gap: 10px; }
+.xn-loai, .xn-ngay { display: flex; flex-wrap: wrap; gap: 8px; }
+.xn-ngay .chip-chon { padding: 0 10px; }
+.xn-ngay .chip-chon:disabled { opacity: .5; cursor: default; }
+.xn-hang { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.xn-hop textarea.form-input { resize: vertical; }

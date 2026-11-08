@@ -24,13 +24,16 @@ const ModulePTKH = {
     // v2.7.7: thêm 📝 Báo cáo 14 ngày (webLichSu) + 📅 Lịch tổ tuần này (webLichTo) – gọi song song, lỗi khối nào báo khối đó
     // v2.9.8: + webLichSuThang tháng này & tháng trước (tuần ISO vắt tháng) cho 🧭 Nhịp tháng (NTC M5.5 · cảm nhận M5.6)
     const bay = new Date(), th = this.thangKhoa(bay), thTruoc = this.thangKhoa(new Date(bay.getFullYear(), bay.getMonth() - 1, 1));
-    const [db, ls, lt, lsN, lsT] = await Promise.all([
+    // v2.13.7: + webLichNghiNV (ngày lễ / đã xin / hạn tuần sau) cho 🗓️ Xin nghỉ
+    const [db, ls, lt, lsN, lsT, lnv] = await Promise.all([
       SHIN_API.goiPTKH(link, 'webDashboard', ['thang']),
       SHIN_API.goiPTKH(link, 'webLichSu', []),
       SHIN_API.goiPTKH(link, 'webLichTo', ['']),
       SHIN_API.goiPTKH(link, 'webLichSuThang', [th]),
-      SHIN_API.goiPTKH(link, 'webLichSuThang', [thTruoc])
+      SHIN_API.goiPTKH(link, 'webLichSuThang', [thTruoc]),
+      SHIN_API.goiPTKH(link, 'webLichNghiNV', [])
     ]);
+    if (lnv.ok) d.lichNghi = lnv.data || {}; else d.lichNghiLoi = SHIN_API.moTaLoi(lnv);
     d.thang = th;
     if (lsN.ok) d.lsThang = (Array.isArray(lsN.data) ? lsN.data : []).concat(lsT.ok && Array.isArray(lsT.data) ? lsT.data : []);
     else d.lsThangLoi = SHIN_API.moTaLoi(lsN);
@@ -181,6 +184,137 @@ const ModulePTKH = {
         <div class="chu-phu">Chỉ của riêng anh/chị – chỉ số tinh thần cả tổ cần cổng tổng hợp ẩn danh của PTKH.</div></div>` : ''}`;
   },
 
+  /* ===== v2.13.7 – 🗓️ XIN NGHỈ (đối chiếu P3 #1): gửi đơn thẳng vào PTKH qua webGoi ➜ webGuiNghiPhep (đã có trong HAM_WEBGOI_).
+   * Loại gửi mới theo v1 (LOAI_NGHI_CHON_): Lịch nghỉ tuần (chọn ngày trong 4 tuần tới) · Nghỉ ốm (từ ngày – đến ngày, buổi, lý do).
+   * Đổi ca (chọn người + ca) vẫn mở app PTKH. Máy chủ PTKH là trọng tài (hạn 15h thứ Sáu, tuần đã chốt, mốc giấy ốm…). */
+  BUOI: ['Cả ngày', 'Sáng', 'Chiều'],
+  THU: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+
+  /** THUẦN – bản sao ngayCacTuanToi (17_NghiLe.gs): 7×soTuan ngày bắt đầu từ thứ Hai tuần sau, khóa 'yyyy-mm-dd'. */
+  cacNgayTuanToi: function(homNay, soTuan) {
+    const [y, m, dd] = String(homNay).split('-').map(Number), d = new Date(y, m - 1, dd), thu = d.getDay() || 7, kq = [];
+    for (let i = 0; i < 7 * (soTuan || 4); i++) kq.push(this.khoaNgay(new Date(y, m - 1, dd + 8 - thu + i)));
+    return kq;
+  },
+  khoaNgay: function(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); },
+
+  /** THUẦN – kiểm đơn như loiNghiPhep của PTKH (phần không cần sheet) ➜ {loi} | {p}. hetHanTuanSau: tuần đầu bị khóa. */
+  kiemDonNghi: function(m, homNay, hetHanTuanSau) {
+    const lyDo = String(m.lyDo || '').trim();
+    if (lyDo.length > 300) return { loi: 'Lý do tối đa 300 ký tự.' };
+    if (/(^|\D)(\+?84|0)\d{9}(\D|$)/.test(lyDo.replace(/[ .-]/g, ''))) return { loi: 'Không ghi số điện thoại vào lý do (KHONG_DUA_VAO).' };
+    if (m.loai === 'Lịch nghỉ tuần') {
+      const tuan = this.cacNgayTuanToi(homNay, 4), ds = (m.ngay || []).slice().sort();
+      if (!ds.length) return { loi: 'Bấm chọn ít nhất 1 ngày nghỉ.' };
+      for (let i = 0; i < ds.length; i++) {
+        if (tuan.indexOf(ds[i]) < 0) return { loi: 'Ngày ' + ds[i] + ' không thuộc 4 tuần tới – tải lại rồi chọn lại.' };
+        if (ds.indexOf(ds[i]) !== i) return { loi: 'Một ngày chỉ chọn 1 lần.' };
+        if (hetHanTuanSau && tuan.indexOf(ds[i]) < 7) return { loi: 'Đã quá hạn đăng ký lịch nghỉ tuần sau – liên hệ lãnh đạo phòng.' };
+      }
+      return { p: { loai: 'Lịch nghỉ tuần', ngay: ds, lyDo: lyDo } };
+    }
+    if (m.loai !== 'Nghỉ ốm') return { loi: 'Chọn loại đơn.' };
+    const tu = String(m.tuNgay || ''), den = String(m.denNgay || m.tuNgay || ''), buoi = m.buoi || 'Cả ngày';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(tu)) return { loi: 'Chọn ngày bắt đầu nghỉ.' };
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(den)) return { loi: 'Ngày kết thúc không hợp lệ.' };
+    if (den < tu) return { loi: 'Ngày kết thúc phải từ ngày bắt đầu trở đi.' };
+    const soNgay = Math.round((new Date(den) - new Date(tu)) / 864e5) + 1;
+    if (soNgay > 31) return { loi: 'Mỗi giấy nghỉ ốm tối đa 31 ngày – dài hơn tách làm nhiều đơn.' };
+    if (this.BUOI.indexOf(buoi) < 0) return { loi: 'Chọn buổi nghỉ.' };
+    if (buoi !== 'Cả ngày' && den !== tu) return { loi: 'Nghỉ nửa buổi chỉ chọn 1 ngày.' };
+    if (!lyDo) return { loi: 'Ghi lý do ngắn gọn (không ghi chẩn đoán, số giấy tờ).' };
+    return { p: { loai: 'Nghỉ ốm', tuNgay: tu, denNgay: den, buoi: buoi, lyDo: lyDo } };
+  },
+
+  veXinNghi: function(d) {
+    const e = ShinApp.esc, mau = d.live ? '' : ' (mẫu)';
+    if (d.lichNghiLoi) return `<div class="hn-tieu"><span>🗓️ XIN NGHỈ</span></div><div class="canh-bao-nguon loi">⚠️ Lịch nghỉ PTKH: ${e(d.lichNghiLoi)} – xin nghỉ ở app PTKH.</div>`;
+    const ln = d.lichNghi;
+    if (!ln) return '';
+    const f = this._fn || (this._fn = { loai: 'Lịch nghỉ tuần', ngay: [] });
+    const hn = this.khoaNgay(new Date()), ds = this.cacNgayTuanToi(hn, ln.soTuan || 4), le = ln.le || {}, daXin = ln.daXin || {};
+    const tuan = [];
+    for (let i = 0; i < ds.length; i += 7) tuan.push(ds.slice(i, i + 7));
+    const chip = (k, iTuan) => {
+      const [y, m, dd] = k.split('-').map(Number), thu = this.THU[new Date(y, m - 1, dd).getDay()];
+      const xin = daXin[k], khoa = !!le[k] || !!xin || (iTuan === 0 && ln.hanTuanSau === false);
+      const phu = le[k] ? ' 🎌' : xin ? ' ✓' : '';
+      return `<button type="button" class="chip-chon${f.ngay.indexOf(k) >= 0 ? ' dang-chon' : ''}" ${khoa ? 'disabled' : ''}
+        title="${e(le[k] || (xin ? 'Đã xin: ' + (xin.loai || xin) : ''))}" onclick="ModulePTKH.chonNgayNghi('${k}')">${thu} ${dd}/${m}${phu}</button>`;
+    };
+    const don = Array.isArray(d.donNghi) ? d.donNghi.slice(0, 5) : [];
+    return `
+      <div class="hn-tieu"><span>🗓️ XIN NGHỈ${mau}</span></div>
+      <div class="the xn-hop">
+        <div class="xn-loai">${['Lịch nghỉ tuần', 'Nghỉ ốm'].map(l => `<button type="button" class="chip-chon${f.loai === l ? ' dang-chon' : ''}" onclick="ModulePTKH.doiLoaiNghi('${l}')">${l === 'Nghỉ ốm' ? '🤒 ' : '📅 '}${l}</button>`).join('')}</div>
+        ${f.loai === 'Lịch nghỉ tuần' ? `
+          <div class="chu-phu">Chọn ngày nghỉ trong ${ln.soTuan || 4} tuần tới · hạn đăng ký tuần sau: ${e(ln.hanChu || '15h00 thứ Sáu')}${ln.hanTuanSau === false ? ' – <b style="color:var(--c-red)">đã quá hạn tuần sau</b>' : ''}${ln.tenTo ? ' · tổ ' + e(ln.tenTo) : ''}</div>
+          ${tuan.map((t, i) => `<div class="xn-tuan"><div class="chu-phu">Tuần ${i + 1} · từ ${e(t[0].split('-').reverse().slice(0, 2).join('/'))}</div><div class="xn-ngay">${t.map(k => chip(k, i)).join('')}</div></div>`).join('')}
+          ${Object.keys(ln.canhBaoTo || {}).length ? `<div class="chu-phu">⚠️ Ngày tổ đã đủ người nghỉ: ${Object.keys(ln.canhBaoTo).map(k => e(k.split('-').reverse().slice(0, 2).join('/'))).join(', ')} – vẫn gửi được, lãnh đạo phòng cân nhắc.</div>` : ''}
+          <label class="chu-phu" for="xnLyDo">Ghi chú (không bắt buộc)</label>` : `
+          <div class="xn-hang">
+            <div><label class="chu-phu" for="xnTu">Từ ngày</label><input id="xnTu" type="date" class="form-input" value="${e(f.tuNgay || hn)}"></div>
+            <div><label class="chu-phu" for="xnDen">Đến ngày</label><input id="xnDen" type="date" class="form-input" value="${e(f.denNgay || f.tuNgay || hn)}"></div>
+          </div>
+          <label class="chu-phu" for="xnBuoi">Buổi</label>
+          <select id="xnBuoi" class="form-input">${this.BUOI.map(b => `<option${(f.buoi || 'Cả ngày') === b ? ' selected' : ''}>${b}</option>`).join('')}</select>
+          <label class="chu-phu" for="xnLyDo">Lý do (ngắn gọn – không ghi chẩn đoán, số giấy tờ)</label>`}
+        <textarea id="xnLyDo" class="form-input" rows="2" maxlength="300">${e(f.lyDo || '')}</textarea>
+        <button class="btn-primary" id="xnNut" onclick="ModulePTKH.guiNghi(this)">📤 Gửi đơn vào PTKH</button>
+        <button class="btn-secondary" onclick="ModulePTKH.moApp()">🔁 Đổi ca – mở app PTKH</button>
+        <div class="chu-phu">Gửi sau 6 giây (có Hoàn tác) · đơn chờ lãnh đạo phòng duyệt như gửi ở app PTKH.</div>
+      </div>
+      ${don.length ? `<div class="hn-list">${don.map(x => `
+        <div class="hn-dong"><div class="dong-content">
+          <div class="dong-title">${e(x.loai)} · ${e(x.tuHien || x.tu || '')}${x.denHien ? ' – ' + e(x.denHien) : ''}</div>
+          <div class="dong-sub">${e(x.ma || '')}${x.buoi && x.buoi !== 'Cả ngày' ? ' · ' + e(x.buoi) : ''}${x.ghiChu ? ' · ' + e(x.ghiChu) : ''}</div>
+        </div><div class="dong-meta"><span class="badge ${/Đồng ý/.test(x.trangThai) ? 'xanh' : /Không|hủy/.test(x.trangThai) ? 'do' : 'vang'}">${e(x.trangThai || 'Chờ duyệt')}</span></div></div>`).join('')}</div>` : ''}`;
+  },
+
+  _luuForm: function() {
+    const f = this._fn || (this._fn = { loai: 'Lịch nghỉ tuần', ngay: [] }), g = id => { const el = document.getElementById(id); return el ? el.value : undefined; };
+    if (g('xnLyDo') !== undefined) f.lyDo = g('xnLyDo');
+    if (g('xnTu') !== undefined) { f.tuNgay = g('xnTu'); f.denNgay = g('xnDen'); f.buoi = g('xnBuoi'); }
+    return f;
+  },
+  _veLai: function() { const c = document.getElementById('appContent'); if (c && this._d) this.render(c, this._d); },
+  doiLoaiNghi: function(l) { this._luuForm().loai = l; this._veLai(); },
+  chonNgayNghi: function(k) {
+    const f = this._luuForm(), i = f.ngay.indexOf(k);
+    if (i >= 0) f.ngay.splice(i, 1); else f.ngay.push(k);
+    this._veLai();
+  },
+
+  /** Kiểm ➜ tường lửa M9.5 ➜ Toast Hoàn tác 6s ➜ webGoi webGuiNghiPhep(token, p) đúng 1 lần (khóa _dangGuiNghi). Demo: không gửi. */
+  guiNghi: function(nut) {
+    const f = this._luuForm(), ln = (this._d && this._d.lichNghi) || {};
+    const kq = this.kiemDonNghi(f, this.khoaNgay(new Date()), ln.hanTuanSau === false);
+    if (kq.loi) return ShinApp.toast(kq.loi, 'error');
+    const vp = SHIN_API.soatKhongDuaVao(kq.p);
+    if (vp) return ShinApp.toast(`Ô "${vp.truong}" có ${vp.loai} – xóa đi rồi gửi lại (KHONG_DUA_VAO).`, 'error');
+    if (!this._d || !this._d.live || !SHIN_API.layToken()) return ShinApp.toast('Đang ở Demo – không gửi đơn. Đăng nhập Hub để gửi thật.', 'info');
+    if (this._dangGuiNghi) return;
+    this._dangGuiNghi = true;
+    const link = ShinApp.linkV1('PTKH') || this._d.linkThe || '';
+    const khoaNut = on => { if (nut && nut.isConnected) { nut.disabled = on; nut.innerHTML = on ? '⏳ Chờ 6 giây…' : '📤 Gửi đơn vào PTKH'; } };
+    const moTa = kq.p.loai === 'Nghỉ ốm' ? 'giấy nghỉ ốm ' + kq.p.tuNgay.split('-').reverse().join('/') : 'lịch nghỉ ' + kq.p.ngay.length + ' ngày';
+    ShinApp.hanhDongHoanTac('Sẽ gửi ' + moTa + ' vào PTKH.', {
+      lamTruoc: () => khoaNut(true),
+      traLai: () => { this._dangGuiNghi = false; khoaNut(false); },
+      thucHien: async () => {
+        const r = await SHIN_API.goiPTKH(link, 'webGuiNghiPhep', [kq.p]);
+        if (!r.ok) throw new Error('Chưa gửi được: ' + SHIN_API.moTaLoi(r) + ' – kiểm danh sách đơn ở app PTKH trước khi gửi lại.');
+        const x = r.data || {}, phep = x.phep || {};
+        this._dangGuiNghi = false;
+        this._fn = { loai: f.loai, ngay: [] };
+        this._d.donNghi = Array.isArray(phep.cuaToi) ? phep.cuaToi : [];
+        if (phep.daXin) this._d.lichNghi = Object.assign({}, this._d.lichNghi, { daXin: phep.daXin, hanTuanSau: phep.hanTuanSau, canhBaoTo: phep.canhBaoTo || {} });
+        ShinApp.toast(x.tin || 'Đã gửi đơn.', x.canhBao ? 'warn' : 'success');
+        this._veLai();
+      }
+    });
+  },
+
   /** THUẦN. webHomNay ➜ phần của PTKH (thẻ tieuDe 'PTKH' + việc cùng tên app). */
   tuHub: function(h) {
     h = h || {};
@@ -235,6 +369,7 @@ const ModulePTKH = {
       ${this.veLichSu(d)}
       ${this.veLichTo(d)}
       ${this.veNhip(d)}
+      ${this.veXinNghi(d)}
 
       <div class="hn-tieu"><span>VIỆC TỪ PTKH · ${viec.length}</span></div>
       ${viec.length ? `<div class="hn-list">${viec.map((v, i) => `
@@ -253,7 +388,7 @@ const ModulePTKH = {
 
       <details class="tq-gon">
         <summary><span>ⓘ Kết nối với app PTKH gốc</span></summary>
-        <p class="chu-phu">Số và việc ở đây do Hub kéo từ app PTKH (khoảng 90 phút / lần; bấm ↻ trên 🏠 Hôm nay để kéo ngay). Các nút mở thẳng app PTKH bằng token Hub của anh/chị – không cần link PTKH riêng. Khối 📊 Tổng quan tháng (v2.7.5), 📝 Báo cáo 14 ngày và 📅 Lịch tổ (v2.7.7), 🧭 Nhịp tháng (v2.9.8 – webLichSuThang) đọc thẳng app PTKH qua cổng webGoi – chỉ đọc; nộp / sửa vẫn mở app PTKH.</p>
+        <p class="chu-phu">Số và việc ở đây do Hub kéo từ app PTKH (khoảng 90 phút / lần; bấm ↻ trên 🏠 Hôm nay để kéo ngay). Các nút mở thẳng app PTKH bằng token Hub của anh/chị – không cần link PTKH riêng. Khối 📊 Tổng quan tháng (v2.7.5), 📝 Báo cáo 14 ngày và 📅 Lịch tổ (v2.7.7), 🧭 Nhịp tháng (v2.9.8 – webLichSuThang) đọc thẳng app PTKH qua cổng webGoi – chỉ đọc. 🗓️ Xin nghỉ (v2.13.7) gửi đơn Lịch nghỉ tuần / Nghỉ ốm qua webGuiNghiPhep; báo cáo ngày, đổi ca, duyệt vẫn mở app PTKH.</p>
       </details>
     `;
   },

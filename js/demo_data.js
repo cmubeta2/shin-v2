@@ -631,3 +631,9 @@ window.SHIN_DEMO_DATA.marketing = {
     { id: 'L05', bai: 'Bài mẫu 5 – Câu chuyện khách hàng', kenh: 'facebook', ngay: '07/11/2026', reach: 3100, tuongTac: 260, click: 51, lead: 5 }
   ]
 };
+// v2.13.7 – 🗓️ Xin nghỉ (khuôn webLichNghiNV của PTKH, số mẫu)
+window.SHIN_DEMO_DATA.ptkh.lichNghi = { soTuan: 4, hanTuanSau: true, hanChu: '15h00 thứ Sáu', tenTo: 'Tổ 1', le: {}, daXin: {}, canhBaoTo: {} };
+window.SHIN_DEMO_DATA.ptkh.donNghi = [
+  { ma: 'NP-MAU-01', loai: 'Lịch nghỉ tuần', tuHien: 'T3 03/11', buoi: 'Cả ngày', trangThai: 'Đồng ý' },
+  { ma: 'NP-MAU-02', loai: 'Nghỉ ốm', tuHien: 'T5 29/10', denHien: 'T6 30/10', buoi: 'Cả ngày', trangThai: 'Chờ duyệt' }
+];
