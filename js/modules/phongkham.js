@@ -161,8 +161,10 @@ const ModulePhongKham = {
           <div class="dong-meta" style="display:flex;align-items:center;gap:6px;">
             <span class="badge ${this.MUC[v.muc] || 'xam'}" id="pkTd_${e(v.id).replace(/[^A-Za-z0-9_-]/g, '_')}">${e(ShinApp.soVN(v.tienDo || 0))}%</span>
             ${(v.tienDo || 0) < 100 ? `<button class="btn-secondary" style="min-height:44px;" onclick="ModulePhongKham.tangTienDo('${e(v.id)}')" aria-label="Tăng tiến độ 25%">+25%</button>` : ''}
+            <button class="btn-secondary" style="min-height:44px;min-width:44px;" onclick="ModulePhongKham.moChiTietViec('${e(v.id)}')" aria-label="Chi tiết việc">📋</button>
           </div>
-        </div>`).join('')}</div>
+        </div>
+        <div id="pkCT_${this.idAnToan(v.id)}" class="the" hidden></div>`).join('')}</div>
       ${ds.length ? '' : '<div class="trong">Chưa có việc nào.</div>'}
       <div class="the" style="margin-top:12px;">
         <label class="form-label" for="pkViecTen">THÊM VIỆC CỦA TÔI</label>
@@ -170,6 +172,92 @@ const ModulePhongKham = {
         <input id="pkViecHan" class="form-input" style="font-size:16px;margin-top:8px;" type="date" aria-label="Hạn">
         <div class="hang-nut"><button class="btn-primary" onclick="ModulePhongKham.themViec(this)">＋ Thêm việc</button></div>
       </div>`;
+  },
+
+  /* v2.13.11 – 📋 Chi tiết việc (PK `webChiTietViec` ➜ {id, ten, moTa, han, tienDo, viecCon:[{id, ten, xong}], traoDoi:[{nguoi, luc, chu}]})
+     + lưu tick việc con / trao đổi mới qua `webCapNhatViec` ({id, viecConXong:[id đang tick], traoDoiMoi}) – cổng có sẵn trong PK v1.0.4. */
+  idAnToan: function(id) { return String(id || '').replace(/[^A-Za-z0-9_-]/g, '_'); },
+
+  /** THUẦN – chi tiết hiện tại + tick mới + trao đổi ➜ {loi} | {goi: tham số webCapNhatViec}. Chỉ gửi phần đổi. */
+  lenhLuuViec: function(ct, tick, traoDoi) {
+    ct = ct || {};
+    const td = String(traoDoi || '').replace(/\s+/g, ' ').trim();
+    const con = ct.viecCon || [], dat = {};
+    (tick || []).forEach(id => { dat[String(id)] = true; });
+    const doiCon = con.some(c => !!dat[c.id] !== !!c.xong);
+    if (td.length > 1000) return { loi: 'Trao đổi tối đa 1000 ký tự.' };
+    if (td && ct.loai === 'canhan') return { loi: 'Việc cá nhân không có trao đổi – ghi vào ghi chú việc.' };
+    if (td && /(^|\D)\d{12}(?!\d)|\b[A-Z]{2}[1-5]\d{12}\b/.test(td)) return { loi: 'Trao đổi không được chứa CCCD / mã BHYT.' };
+    if (!doiCon && !td) return { loi: 'Không có gì thay đổi.' };
+    const goi = { id: ct.id };
+    if (doiCon) goi.viecConXong = con.filter(c => dat[c.id]).map(c => c.id);
+    if (td) goi.traoDoiMoi = td;
+    return { goi };
+  },
+
+  moChiTietViec: async function(id) {
+    const khung = document.getElementById('pkCT_' + this.idAnToan(id));
+    if (!khung) return;
+    if (!khung.hidden) { khung.hidden = true; return; }
+    khung.hidden = false;
+    khung.innerHTML = '<div class="chu-phu">Đang tải chi tiết…</div>';
+    const ds = ((this._live ? this._cache.congviec : this.demo().congViec) || {}).viec || [];
+    const v = ds.find(x => String(x.id) === String(id)) || {};
+    let ct;
+    try {
+      if (this._live) {
+        const kq = await SHIN_API.goi('PK', 'webChiTietViec', { id });
+        if (!kq.ok) throw new Error(SHIN_API.moTaLoi(kq));
+        ct = kq.data || {};
+      } else ct = Object.assign({ id, ten: v.ten, han: v.han, tienDo: v.tienDo }, (this.demo().chiTietViec || {})[id] || { moTa: 'Mẫu: chưa có việc con.', viecCon: [], traoDoi: [] });
+    } catch (err) {
+      khung.innerHTML = `<div class="canh-bao-nguon">⚠️ Chưa đọc được chi tiết việc: ${ShinApp.esc(err.message)}</div>`;
+      return;
+    }
+    ct.loai = v.loai;
+    this._ct = this._ct || {}; this._ct[id] = ct;
+    this.veChiTietViec(id);
+  },
+
+  veChiTietViec: function(id) {
+    const e = ShinApp.esc, ct = (this._ct || {})[id], k = this.idAnToan(id);
+    const khung = document.getElementById('pkCT_' + k);
+    if (!ct || !khung) return;
+    const con = ct.viecCon || [], td = ct.traoDoi || [], xong = con.filter(c => c.xong).length;
+    khung.innerHTML = `
+      ${ct.moTa ? `<div class="chu-phu" style="overflow-wrap:anywhere;">${e(ct.moTa)}</div>` : ''}
+      <div class="form-label" style="margin-top:8px;">VIỆC CON · ${xong}/${con.length}</div>
+      ${con.length ? con.map((c, i) => `
+        <label class="hang-tru" style="min-height:44px;cursor:pointer;gap:10px;justify-content:flex-start;">
+          <input type="checkbox" class="pk-con-${k}" value="${e(c.id)}" ${c.xong ? 'checked' : ''} style="width:22px;height:22px;flex:0 0 auto;" id="pkCon_${k}_${i}">
+          <span style="overflow-wrap:anywhere;">${e(c.ten)}</span></label>`).join('') : '<div class="chu-phu">Chưa có việc con.</div>'}
+      ${ct.loai === 'canhan' ? '' : `
+        <div class="form-label" style="margin-top:10px;">TRAO ĐỔI · ${td.length}</div>
+        ${td.map(t => `<div class="hang-tru"><span>${e([t.nguoi, t.luc].filter(Boolean).join(' · '))}</span><b style="font-weight:400;overflow-wrap:anywhere;">${e(t.chu)}</b></div>`).join('') || '<div class="chu-phu">Chưa có trao đổi.</div>'}
+        <textarea id="pkTD_${k}" class="form-input" style="font-size:16px;margin-top:8px;" rows="2" maxlength="1000" placeholder="Ghi trao đổi với người giao việc…" aria-label="Trao đổi mới"></textarea>`}
+      <div class="hang-nut"><button class="btn-primary" onclick="ModulePhongKham.luuChiTietViec('${e(id)}', this)">💾 Lưu việc con / trao đổi</button></div>`;
+  },
+
+  luuChiTietViec: function(id, nut) {
+    const ct = (this._ct || {})[id], k = this.idAnToan(id);
+    if (!ct) return;
+    const tick = [...document.querySelectorAll('.pk-con-' + k)].filter(x => x.checked).map(x => x.value);
+    const kq = this.lenhLuuViec(ct, tick, (document.getElementById('pkTD_' + k) || {}).value);
+    if (kq.loi) return ShinApp.toast(kq.loi, kq.loi === 'Không có gì thay đổi.' ? 'info' : 'error');
+    if (!this._live) return ShinApp.toast('Demo: không gửi máy chủ.', 'info');
+    if (this._dangLuuViec) return;
+    this._dangLuuViec = true;
+    if (nut) nut.disabled = true;
+    ShinApp.hanhDongHoanTac('Sẽ lưu ' + [kq.goi.viecConXong ? 'việc con' : '', kq.goi.traoDoiMoi ? 'trao đổi' : ''].filter(Boolean).join(' + ') + ' của "' + (ct.ten || '') + '".', {
+      traLai: () => { this._dangLuuViec = false; if (nut && nut.isConnected) nut.disabled = false; },
+      thucHien: async () => {
+        try { await this.gui('webCapNhatViec', kq.goi); }
+        finally { this._dangLuuViec = false; if (nut && nut.isConnected) nut.disabled = false; }
+        ShinApp.toast('Đã lưu vào PTKH.', 'success');
+        const khung = document.getElementById('pkCT_' + k);
+        if (khung) { khung.hidden = true; this.moChiTietViec(id); }
+      }
+    });
   },
 
   tangTienDo: function(id) {
