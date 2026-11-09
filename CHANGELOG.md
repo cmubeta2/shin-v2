@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.15] – 09/11/2026 (🩺 KHẢO SÁT – 🛠️ QUẢN LÝ KHẢO SÁT NGAY TRÊN v2)
+
+### 🩺 Khảo sát (cổng KS L1 có sẵn từ app KS v1.0.2 – không cần cổng v1 mới)
+- Khối mới 🛠️ Quản lý khảo sát (nút trên Hero thay cho "mở app KS"): danh sách khảo sát + nút ▶ Mở / ⏸ Đóng / ↩ Về nháp, ✏️ Sửa, ⧉ Nhân bản, 🗑 Xóa (đổi trạng thái + xóa: Toast Hoàn tác 6s, Hoàn tác thì không gửi gì).
+- Form tạo / sửa: tiêu đề, mô tả, đối tượng, hạn dd/mm/yyyy, cho trả lời nhiều lần, cách hiện câu; tick câu từ ngân hàng ➜ `cauHinh` (giữ thứ tự câu cũ).
+- 📚 Ngân hàng câu hỏi: thêm / sửa câu (10 loại, lựa chọn mỗi dòng 1), câu người khác tạo ➜ ⧉ Nhân bản để sửa. 🔑 Cấp quyền Quản lý khảo sát / Admin (máy chủ chỉ cho Admin).
+- Hàm thuần `kiemKS`, `cauHinhTu`, `kiemCau`, `kiemQuyen`, `nutTrangThai` (15 ca đạt). Demo: dữ liệu mẫu 3 khảo sát + 4 câu, không ghi.
+- CSS: nhãn ô nhập `.tc-form-nhom .nhan-o` 13px ➜ 14px (đúng chuẩn chữ ≥ 14px, áp cả form Tài chính).
+
 ## [2.13.14] – 09/11/2026 (🏥 PHÒNG KHÁM – 🗓️ LỊCH CẢ TỔ CHO TỔ TRƯỞNG)
 
 ### 🏥 Phòng Khám (cổng PK `webBangXepLich`, app PK v1.0.7 đã lên app – không cần cổng v1 mới)

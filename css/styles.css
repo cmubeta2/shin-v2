@@ -2049,7 +2049,7 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 }
 .tc-form-nhom .nhan-o {
   margin: 0;
-  font-size: calc(13px * var(--font-scale));
+  font-size: calc(14px * var(--font-scale));
   font-weight: 600;
   color: var(--text-muted);
 }
@@ -2760,3 +2760,17 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
   font-size: calc(14px * var(--font-scale, 1));
   color: var(--text-muted);
 }
+
+/* v2.13.15 – 🛠️ Quản lý khảo sát */
+.ks-ql-nut { display: flex; flex-wrap: wrap; gap: 8px; }
+.ks-ql-nut > button { min-height: 44px; flex: 1 1 auto; }
+.ks-ql-the { margin: 0; }
+.ks-ql-the .ks-ql-nut { margin-top: 8px; }
+.ks-ql-khung { display: flex; flex-direction: column; gap: 12px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--bg); }
+.ks-ql-khung[hidden] { display: none !important; }
+.ks-ql-khung:empty { display: none; }
+.ks-ql-cau { display: flex; flex-direction: column; gap: 2px; max-height: 360px; overflow-y: auto; }
+.ks-ql-chon { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 8px 0; font-size: calc(14px * var(--font-scale)); color: var(--text); cursor: pointer; overflow-wrap: anywhere; }
+.ks-ql-chon input[type="checkbox"] { width: 22px; height: 22px; flex: 0 0 22px; margin-top: 1px; accent-color: var(--primary); }
+.ks-ql-loi { padding: 10px 12px; border-radius: 10px; background: var(--c-red-soft); color: var(--c-red); font-size: calc(14px * var(--font-scale)); }
+.ks-ql-nho { min-height: 44px; flex: 0 0 auto; }

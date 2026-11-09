@@ -658,3 +658,15 @@ window.SHIN_DEMO_DATA.ptkh.donNghi = [
   { ma: 'NP-MAU-01', loai: 'Lịch nghỉ tuần', tuHien: 'T3 03/11', buoi: 'Cả ngày', trangThai: 'Đồng ý' },
   { ma: 'NP-MAU-02', loai: 'Nghỉ ốm', tuHien: 'T5 29/10', denHien: 'T6 30/10', buoi: 'Cả ngày', trangThai: 'Chờ duyệt' }
 ];
+/* v2.13.15 – 🛠️ Quản lý khảo sát (Demo, không ghi) */
+window.SHIN_DEMO_DATA.khaosat.khaoSat = [
+  { ma: 'KS001', ten: 'Hài lòng ngoại trú T11', trangThai: 'Đang mở', soPhieu: 128, moTu: '', dongLuc: '30/11/2026', moTa: 'Mời anh/chị dành 1 phút góp ý.', doiTuong: 'Người bệnh ngoại trú', nhieuLan: false, soCau: 3, cauHinh: { cau: [{ maCH: 'CH0001', phienBan: 1, batBuoc: true }, { maCH: 'CH0002', phienBan: 1, batBuoc: true }, { maCH: 'CH0004', phienBan: 1, batBuoc: false }], moiTrang: '1cau' } },
+  { ma: 'KS002', ten: 'Khám sức khỏe doanh nghiệp', trangThai: 'Nháp', soPhieu: 0, moTu: '', dongLuc: '', moTa: '', doiTuong: 'Khách đoàn', nhieuLan: false, soCau: 0, cauHinh: { cau: [], moiTrang: 'catrang' } },
+  { ma: 'KS003', ten: 'Hài lòng ngoại trú T10', trangThai: 'Đã đóng', soPhieu: 412, moTu: '', dongLuc: '31/10/2026', moTa: '', doiTuong: 'Người bệnh ngoại trú', nhieuLan: false, soCau: 2, cauHinh: { cau: [{ maCH: 'CH0001', phienBan: 1, batBuoc: true }, { maCH: 'CH0003', phienBan: 1, batBuoc: true }], moiTrang: '1cau' } }
+];
+window.SHIN_DEMO_DATA.khaosat.cauHoi = [
+  { maCH: 'CH0001', phienBan: 1, loai: '5muc', noiDung: 'Thủ tục đăng ký khám nhanh gọn', luaChon: [], batBuoc: true, nhom: 'A. Tiếp cận & Thủ tục', suaDuoc: true },
+  { maCH: 'CH0002', phienBan: 1, loai: '5muc', noiDung: 'Bác sĩ giải thích rõ ràng, dễ hiểu', luaChon: [], batBuoc: true, nhom: 'C. Bác sĩ', suaDuoc: true },
+  { maCH: 'CH0003', phienBan: 2, loai: 'chon1', noiDung: 'Anh/chị biết phòng khám qua kênh nào?', luaChon: ['Người quen', 'Facebook', 'Zalo', 'Khác'], batBuoc: true, nhom: '', suaDuoc: false },
+  { maCH: 'CH0004', phienBan: 1, loai: 'nps', noiDung: 'Anh/chị có giới thiệu phòng khám cho người thân?', luaChon: [], batBuoc: false, nhom: 'E. Kết quả', suaDuoc: true }
+];

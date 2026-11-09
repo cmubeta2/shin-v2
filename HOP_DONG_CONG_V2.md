@@ -31,12 +31,19 @@ Giao thức chung là của `00_Loi/Loi_Web.gs` (giữ nguyên, không đổi):
 webDsKhaoSat({})        → { ok, ds:[{maKS, tieuDe, moTa, doiTuong, trangThai:'Nháp'|'Đang mở'|'Đã đóng', han, nhieuLan, soCau, ngayTao}], dem:{dangMo, nhap, daDong} }
 webKetQuaKS({maKS, nguon?, tu?, den?}) → { ok, maKS, tieuDe, soPhieu, choXacMinh, theoNgay:[{ngay, n}], cau:[{maCH, phienBan, loai, noiDung, n, tb?, nps?, yKien?}] }
 webXuatKS({maKS, kieu:'csv'|'sheet'}) → { ok, csv, tenTep } | { ok, link }
+// L1 quản lý (v1.0.2) – v2.13.15 dùng:
+webLuuKhaoSat({maKS?, TieuDe, MoTa, DoiTuong, Han, NhieuLan, cauHinh?:{cau:[{maCH, phienBan, batBuoc}], moiTrang:'1cau'|'catrang'}}) → { ok, ks, msg }  // không maKS = tạo (Nháp, bỏ qua cauHinh)
+webDoiTrangThaiKS({maKS, trangThai}) → { ok, trangThaiCu, msg } · webNhanBanKS({maKS}) → { ok, ks, msg } · webXoaKS({maKS, hoanTac?}) → { ok, msg }
+webDsCauHoi({}) → { ok, ds:[{maCH, phienBan, loai, noiDung, luaChon[], batBuoc, nhom, suaDuoc}] } · webLuuCauHoi({maCH?, Loai, NoiDung, LuaChon[], BatBuoc, Nhom}) → { ok, maCH, phienBan, msg } · webNhanBanCau({maCH})
+webLuuQuyen({maNguoi, hoTen, vaiTro:'Admin'|'QuanLyKS'|''}) → { ok, msg }   // chỉ Admin
+webNhapHo / webDsNguon / webTaoNguon (L2) – v2 chưa dùng
 liên thông ksSoLieu (Hub ký HMAC – trình duyệt không gọi được)   ·   webCongKhai* (điền phiếu công khai, không token)
 ```
 
 - **Quyền:** Admin và "Quản lý khảo sát" (QuanLyKS chỉ thấy KS của mình).
 - **v2 dùng (v2.7.2):** webDsKhaoSat + webKetQuaKS (≤ 6 KS, ưu tiên Đang mở) + webXuatKS csv. Màn KHÔNG hiện câu loại `lienhe` / ý kiến (QK4). 5 trụ ACHSI chưa có ở v1 ➜ v2 hiện điểm TB câu 5 mức theo từng khảo sát.
 - **KS L6 (v1.4.4, lên app @5 05/11):** `webTongHopKS({thang?:'mm/yyyy'})` → `{ ok, thang:{soPhieu, haiLong 0..1|null, canXuLy}, tru:[5 {ma, ten, diem|null, tyLe|null}], canXuLy:[≤ 50 {maPhieu, khaoSat, cau, diem, ngay, noiDung}] }` – chỉ đọc; quản lý chỉ thấy KS mình. **v2.8.7 dùng**: Hero tháng + 5 trụ + ≤ 2★; KHÔNG hiện `noiDung` (ý kiến tự do – QK4).
+- **v2.13.15 – 🛠️ Quản lý khảo sát:** tạo / sửa KS (tạo xong mới gửi `cauHinh` ở lần gọi thứ 2 vì `ksMoi_` bỏ qua), chọn câu từ ngân hàng, thêm / sửa / nhân bản câu, đổi trạng thái + xóa mềm (Toast Hoàn tác 6s – không gửi gì khi Hoàn tác), cấp quyền (Admin). Cổng KS không có `maGui` ➜ tạo KS / câu có thể trùng nếu mạng đứt sau khi máy chủ đã ghi (nút khóa khi đang gửi).
 
 ### HUB – Telegram Mini App `webTelegram` (HUB L8, Hub v1.13.3 ✅)
 
