@@ -112,7 +112,7 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 - Chống chèn công thức bằng `chongCongThuc`.
 - **Cấm lưu dữ liệu người bệnh.**
 
-**HUB L29 (shin-v2 08/11 – Sếp đã duyệt 08/11, CHƯA code) – giai đoạn + sổ tương tác.** v2.13.3 đã dựng sẵn phía màn, tự bật khi cổng trả trường mới:
+**HUB L29 (shin-v2 08/11 – Sếp đã duyệt 08/11; LÊN APP Hub v1.20.2 @20) – giai đoạn + sổ tương tác.** v2.13.3 dựng phía màn; v2.13.9 nối ghi tương tác + đánh dấu lead. Theo mã thật (`10_Hub/81_CRM.gs`): kênh ∈ Gọi / Zalo / Email / Gặp / Khác; mã đối tác DT001, mã lead LD001 (`webCRM.leadMoi[]` trả thêm `ma`, `trangThai`); maGui `^[A-Za-z0-9_-]{6,40}$` ➜ mã `TT-<maGui>`; `webDanhDauLead` trả `{ ok, ma, trangThai }`.
 - `webCRM` trả thêm `doiTac[].giaiDoan` ∈ {'', 'Tiếp cận', 'Báo giá', 'Hợp đồng', 'Triển khai', 'Tái ký'} (trống ➜ v2 suy từ `trangThai`) và `tuongTac: [{ ma, maDoiTac, maLead, ngay:'dd/mm/yyyy', kenh, noiDung, nguoiGhi }]` (50 dòng mới nhất).
 - `webLuuDoiTac` nhận `doiTac.giaiDoan` (giá trị lạ ➜ lỗi câu Việt).
 - `webGhiTuongTac(token, { maDoiTac | maLead, kenh, noiDung ≤ 500, maGui })` ➜ `{ ok, ma, moi }`; maGui chống ghi trùng; tường lửa không nhận SĐT / CCCD / BHYT / tên người bệnh.

@@ -236,39 +236,104 @@ const ModulePTKH = {
     const tuan = [];
     for (let i = 0; i < ds.length; i += 7) tuan.push(ds.slice(i, i + 7));
     const chip = (k, iTuan) => {
-      const [y, m, dd] = k.split('-').map(Number), thu = this.THU[new Date(y, m - 1, dd).getDay()];
-      const xin = daXin[k], khoa = !!le[k] || !!xin || (iTuan === 0 && ln.hanTuanSau === false);
-      const phu = le[k] ? ' 🎌' : xin ? ' ✓' : '';
-      return `<button type="button" class="chip-chon${f.ngay.indexOf(k) >= 0 ? ' dang-chon' : ''}" ${khoa ? 'disabled' : ''}
-        title="${e(le[k] || (xin ? 'Đã xin: ' + (xin.loai || xin) : ''))}" onclick="ModulePTKH.chonNgayNghi('${k}')">${thu} ${dd}/${m}${phu}</button>`;
+      const [y, m, dd] = k.split('-').map(Number);
+      const thu = this.THU[new Date(y, m - 1, dd).getDay()];
+      const xin = daXin[k];
+      const isLe = !!le[k];
+      const isKhoa = isLe || !!xin || (iTuan === 0 && ln.hanTuanSau === false);
+      const isChon = f.ngay.indexOf(k) >= 0;
+      const ddStr = String(dd).padStart(2, '0');
+      const mStr = String(m).padStart(2, '0');
+      const tt = isLe ? ('Nghỉ lễ: ' + le[k]) : xin ? ('Đã xin: ' + (xin.loai || xin)) : (iTuan === 0 && ln.hanTuanSau === false) ? 'Đã quá hạn đăng ký tuần sau' : ('Chọn nghỉ ' + thu + ' ' + ddStr + '/' + mStr);
+      let cls = 'chip-chon xn-chip';
+      if (isChon) cls += ' dang-chon';
+      if (isLe) cls += ' ngay-le';
+      if (xin) cls += ' da-xin';
+      if (isKhoa && !isLe && !xin) cls += ' bi-khoa';
+
+      return `<button type="button" class="${cls}" ${isKhoa ? 'disabled' : ''}
+        title="${e(tt)}" onclick="ModulePTKH.chonNgayNghi('${k}')">
+        <span class="xn-chip-thu">${thu}</span>
+        <span class="xn-chip-ngay">${ddStr}/${mStr}${isLe ? ' 🎌' : xin ? ' ✓' : ''}</span>
+      </button>`;
     };
     const don = Array.isArray(d.donNghi) ? d.donNghi.slice(0, 5) : [];
+    const soNgayChon = (f.ngay || []).length;
+    const dsNgayChon = (f.ngay || []).slice().sort().map(k => {
+      const [y, m, dd] = k.split('-').map(Number);
+      const thu = this.THU[new Date(y, m - 1, dd).getDay()];
+      return `${thu} ${String(dd).padStart(2, '0')}/${String(m).padStart(2, '0')}`;
+    }).join(', ');
+
     return `
       <div class="hn-tieu"><span>🗓️ XIN NGHỈ${mau}</span></div>
       <div class="the xn-hop">
-        <div class="xn-loai">${['Lịch nghỉ tuần', 'Nghỉ ốm'].map(l => `<button type="button" class="chip-chon${f.loai === l ? ' dang-chon' : ''}" onclick="ModulePTKH.doiLoaiNghi('${l}')">${l === 'Nghỉ ốm' ? '🤒 ' : '📅 '}${l}</button>`).join('')}</div>
+        <div class="xn-loai">${['Lịch nghỉ tuần', 'Nghỉ ốm'].map(l => `<button type="button" class="chip-chon xn-tab-loai${f.loai === l ? ' dang-chon' : ''}" onclick="ModulePTKH.doiLoaiNghi('${l}')">${l === 'Nghỉ ốm' ? '🤒 ' : '📅 '}${l}</button>`).join('')}</div>
         ${f.loai === 'Lịch nghỉ tuần' ? `
-          <div class="chu-phu">Chọn ngày nghỉ trong ${ln.soTuan || 4} tuần tới · hạn đăng ký tuần sau: ${e(ln.hanChu || '15h00 thứ Sáu')}${ln.hanTuanSau === false ? ' – <b style="color:var(--c-red)">đã quá hạn tuần sau</b>' : ''}${ln.tenTo ? ' · tổ ' + e(ln.tenTo) : ''}</div>
-          ${tuan.map((t, i) => `<div class="xn-tuan"><div class="chu-phu">Tuần ${i + 1} · từ ${e(t[0].split('-').reverse().slice(0, 2).join('/'))}</div><div class="xn-ngay">${t.map(k => chip(k, i)).join('')}</div></div>`).join('')}
-          ${Object.keys(ln.canhBaoTo || {}).length ? `<div class="chu-phu">⚠️ Ngày tổ đã đủ người nghỉ: ${Object.keys(ln.canhBaoTo).map(k => e(k.split('-').reverse().slice(0, 2).join('/'))).join(', ')} – vẫn gửi được, lãnh đạo phòng cân nhắc.</div>` : ''}
-          <label class="chu-phu" for="xnLyDo">Ghi chú (không bắt buộc)</label>` : `
-          <div class="xn-hang">
-            <div><label class="chu-phu" for="xnTu">Từ ngày</label><input id="xnTu" type="date" class="form-input" value="${e(f.tuNgay || hn)}"></div>
-            <div><label class="chu-phu" for="xnDen">Đến ngày</label><input id="xnDen" type="date" class="form-input" value="${e(f.denNgay || f.tuNgay || hn)}"></div>
+          <div class="chu-phu xn-thong-tin">Chọn ngày nghỉ trong ${ln.soTuan || 4} tuần tới · Hạn đăng ký tuần sau: <b>${e(ln.hanChu || '15h00 thứ Sáu')}</b>${ln.hanTuanSau === false ? ' – <b class="xn-canh-bao-khoa">đã quá hạn tuần sau</b>' : ''}${ln.tenTo ? ' · Tổ ' + e(ln.tenTo) : ''}</div>
+          <div class="xn-chu-giai">
+            <span class="xn-cg-item"><span class="xn-cg-dot dang-chon"></span> Đang chọn</span>
+            <span class="xn-cg-item"><span class="xn-cg-dot da-xin">✓</span> Đã xin</span>
+            <span class="xn-cg-item"><span class="xn-cg-dot ngay-le">🎌</span> Lễ</span>
+            <span class="xn-cg-item"><span class="xn-cg-dot bi-khoa">✕</span> Khóa</span>
           </div>
-          <label class="chu-phu" for="xnBuoi">Buổi</label>
-          <select id="xnBuoi" class="form-input">${this.BUOI.map(b => `<option${(f.buoi || 'Cả ngày') === b ? ' selected' : ''}>${b}</option>`).join('')}</select>
-          <label class="chu-phu" for="xnLyDo">Lý do (ngắn gọn – không ghi chẩn đoán, số giấy tờ)</label>`}
-        <textarea id="xnLyDo" class="form-input" rows="2" maxlength="300">${e(f.lyDo || '')}</textarea>
-        <button class="btn-primary" id="xnNut" onclick="ModulePTKH.guiNghi(this)">📤 Gửi đơn vào PTKH</button>
-        <button class="btn-secondary" onclick="ModulePTKH.moApp()">🔁 Đổi ca – mở app PTKH</button>
-        <div class="chu-phu">Gửi sau 6 giây (có Hoàn tác) · đơn chờ lãnh đạo phòng duyệt như gửi ở app PTKH.</div>
+          ${tuan.map((t, i) => `
+            <div class="xn-tuan">
+              <div class="xn-tuan-dau">
+                <span class="xn-tuan-ten">Tuần ${i + 1}</span>
+                <span class="xn-tuan-ngay">${e(t[0].split('-').reverse().slice(0, 2).join('/'))} – ${e(t[6].split('-').reverse().slice(0, 2).join('/'))}</span>
+                ${i === 0 && ln.hanTuanSau === false ? '<span class="badge do xn-badge-nho">Đã khóa</span>' : ''}
+              </div>
+              <div class="xn-ngay-luoi">${t.map(k => chip(k, i)).join('')}</div>
+            </div>
+          `).join('')}
+          ${Object.keys(ln.canhBaoTo || {}).length ? `<div class="canh-bao-nguon xn-canh-bao">⚠️ Ngày tổ đã đủ người nghỉ: ${Object.keys(ln.canhBaoTo).map(k => e(k.split('-').reverse().slice(0, 2).join('/'))).join(', ')} – vẫn gửi được, lãnh đạo phòng cân nhắc.</div>` : ''}
+          <div class="xn-dem-hop${soNgayChon ? ' co-chon' : ''}">
+            <div class="xn-dem-dong">
+              <span class="xn-dem-nhan">🗓️ Đã chọn nghỉ:</span>
+              <b class="xn-dem-so">${soNgayChon} ngày</b>
+            </div>
+            ${soNgayChon ? `<div class="xn-dem-ds">${e(dsNgayChon)}</div>` : '<div class="xn-dem-trong">Chạm vào các ô ngày ở lịch trên để chọn ngày nghỉ</div>'}
+          </div>
+          <label class="chu-phu xn-nhan-input" for="xnLyDo">Ghi chú (không bắt buộc)</label>` : `
+          <div class="xn-hang">
+            <div><label class="chu-phu xn-nhan-input" for="xnTu">Từ ngày</label><input id="xnTu" type="date" class="form-input" value="${e(f.tuNgay || hn)}"></div>
+            <div><label class="chu-phu xn-nhan-input" for="xnDen">Đến ngày</label><input id="xnDen" type="date" class="form-input" value="${e(f.denNgay || f.tuNgay || hn)}"></div>
+          </div>
+          <div class="xn-hang-buoi">
+            <label class="chu-phu xn-nhan-input" for="xnBuoi">Buổi</label>
+            <select id="xnBuoi" class="form-input">${this.BUOI.map(b => `<option${(f.buoi || 'Cả ngày') === b ? ' selected' : ''}>${b}</option>`).join('')}</select>
+          </div>
+          <label class="chu-phu xn-nhan-input" for="xnLyDo">Lý do (ngắn gọn – không ghi chẩn đoán, số giấy tờ)</label>`}
+        <textarea id="xnLyDo" class="form-input" rows="2" maxlength="300" placeholder="Thêm ghi chú nếu cần...">${e(f.lyDo || '')}</textarea>
+        <button class="btn-primary xn-btn-gui" id="xnNut" onclick="ModulePTKH.guiNghi(this)">📤 Gửi đơn vào PTKH</button>
+        <button class="btn-secondary xn-btn-phu" onclick="ModulePTKH.moApp()">🔁 Đổi ca – mở app PTKH</button>
+        <div class="chu-phu xn-luu-y">
+          <span class="xn-luu-y-icon">ℹ️</span>
+          <span>Gửi sau 6 giây (có Hoàn tác) · đơn chờ lãnh đạo phòng duyệt như gửi ở app PTKH.</span>
+        </div>
       </div>
-      ${don.length ? `<div class="hn-list">${don.map(x => `
-        <div class="hn-dong"><div class="dong-content">
-          <div class="dong-title">${e(x.loai)} · ${e(x.tuHien || x.tu || '')}${x.denHien ? ' – ' + e(x.denHien) : ''}</div>
-          <div class="dong-sub">${e(x.ma || '')}${x.buoi && x.buoi !== 'Cả ngày' ? ' · ' + e(x.buoi) : ''}${x.ghiChu ? ' · ' + e(x.ghiChu) : ''}</div>
-        </div><div class="dong-meta"><span class="badge ${/Đồng ý/.test(x.trangThai) ? 'xanh' : /Không|hủy/.test(x.trangThai) ? 'do' : 'vang'}">${e(x.trangThai || 'Chờ duyệt')}</span></div></div>`).join('')}</div>` : ''}`;
+      ${don.length ? `
+        <div class="hn-tieu"><span>📋 ĐƠN ĐÃ GỬI GẦN ĐÂY · ${don.length}</span></div>
+        <div class="xn-ds-don">${don.map(x => `
+          <div class="xn-don-the" onclick="ModulePTKH.moApp()" title="Bấm để mở app PTKH xem chi tiết">
+            <div class="xn-don-icon">${x.loai === 'Nghỉ ốm' ? '🤒' : '📅'}</div>
+            <div class="xn-don-nd">
+              <div class="xn-don-hang1">
+                <span class="xn-don-loai">${e(x.loai)}</span>
+                <span class="xn-don-ngay">${e(x.tuHien || x.tu || '')}${x.denHien ? ' – ' + e(x.denHien) : ''}</span>
+              </div>
+              <div class="xn-don-hang2">
+                <span class="xn-don-ma">${e(x.ma || '')}</span>
+                ${x.buoi && x.buoi !== 'Cả ngày' ? `<span class="xn-don-dot">·</span><span>${e(x.buoi)}</span>` : ''}
+                ${x.ghiChu ? `<span class="xn-don-dot">·</span><span class="xn-don-gc">${e(x.ghiChu)}</span>` : ''}
+              </div>
+            </div>
+            <div class="xn-don-trangthai">
+              <span class="badge ${/Đồng ý/.test(x.trangThai) ? 'xanh' : /Không|hủy/.test(x.trangThai) ? 'do' : 'vang'}">${e(x.trangThai || 'Chờ duyệt')}</span>
+              <span class="dong-arrow">›</span>
+            </div>
+          </div>`).join('')}</div>` : ''}`;
   },
 
   _luuForm: function() {

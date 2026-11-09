@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.6** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.9** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,17 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.9 ✅ – 👥 CRM NỐI HUB L29: GHI LIÊN HỆ + ĐÁNH DẤU LEAD (09/11/2026, lượt tự động ⑤ 10h – mục T6 "nối cổng v1 mới đã lên app")
+- **Bối cảnh:** HUB L29 đã lên app (Hub v1.20.2 @20): `webCRM` trả `giaiDoan` + `tuongTac` + `leadMoi[].ma/trangThai`, có `webGhiTuongTac`, `webDanhDauLead` trong `congWeb_`. Ô giai đoạn + khung lịch sử (v2.13.3) tự bật; lượt này nối 2 cổng ghi.
+- **Nội dung:** 💬 Ghi lần liên hệ trong chi tiết đối tác (kiểm thuần `kiemTuongTac` theo luật Hub ➜ Toast Hoàn tác 6s ➜ ghi đúng 1 lần, maGui chống trùng); ✅ Đánh dấu đã chăm sóc ở lead mới (Hoàn tác 6s ➜ `webDanhDauLead`); lead đã chăm sóc bỏ khỏi nhắc. HOP_DONG mục CRM sửa theo mã thật.
+- **Kiểm:** node --check; ca thuần k1–k9 (2 mã cùng lúc, mã DT01 sai dạng, kênh lạ, rỗng, SĐT "0912.345.678", "BN", số tiền + ngày KHÔNG bị chặn, gộp khoảng trắng, > 500 ký tự); Edge 320: Demo 0 lần gọi; Live giả lập: lý do có SĐT ➜ 0 lần gọi, bấm đúp ➜ đúng 1 lần `webGhiTuongTac` (đúng tham số + maGui), lịch sử 5 ➜ 6 dòng; đánh dấu bấm đúp ➜ 1 lần `webDanhDauLead`, nhãn ✓ hiện; 17 màn × 375 / 1280: 0 cuộn ngang, 0 lỗi console, 0 vùng bấm < 44px.
+- **Chờ anh:** ghi thử 1 lần liên hệ thật từ v2 (👥 CRM › mở 1 đối tác) và đánh dấu 1 lead – kiểm sheet TuongTac / LeadMoi của Hub.
+
+### PHIÊN BẢN v2.13.8 ✅ – 🗓️ XIN NGHỈ: GIAO DIỆN LỊCH TUẦN (09/11/2026, lượt tự động ⑤ 10h – nhận phiếu agy 11090620_V2_M5.3_giao-dien)
+- **Bối cảnh:** lịch tuần T2–T6 đã xong ở các bản trước; ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Lượt này nhận kết quả giao diện của agy cho khối Xin nghỉ (v2.13.7), xác minh rồi đưa vào bản.
+- **Nội dung:** 4 thẻ tuần, lưới 4 cột (điện thoại) / 7 cột (≥ 768px), chip thứ / ngày 48px, chú giải trạng thái, hộp đếm "Đã chọn n ngày", thẻ đơn gần đây. Em sửa thêm phần agy lệch luật: màu viết cứng ➜ `var(--on-primary)`, chữ 10–13px ➜ 14px.
+- **Kiểm:** node --check; ca thuần k1–k6 giữ nguyên kết quả; 320px: 28 chip rộng 55px, 0 chip tràn chữ, 0 cuộn ngang; Demo 0 lần gọi, lý do có SĐT chặn, Live giả lập bấm đúp ➜ đúng 1 lần `webGuiNghiPhep`; 17 màn × 375 / 1280: 0 cuộn ngang, 0 lỗi console, 0 vùng bấm < 44px, 0 chữ < 14px.
 
 ### PHIÊN BẢN v2.13.7 ✅ – 🗓️ XIN NGHỈ NGAY TRÊN v2 (09/11/2026, lượt tự động ⑤ 06h – mục #1 bảng đối chiếu P3 của agy, không cần cổng v1 mới)
 - **Bối cảnh:** lịch tuần T2–T6 đã xong ở các bản trước (ưu tiên số 1 HUB L26 ➜ M6.4 🟢 từ v2.12.2). Phiếu agy 11081816_V2_P3_danh-gia (99 chức năng: 80 ✅ · 8 🟡 · 5 ⏳ · 6 bảo lưu v1) xếp "Xin nghỉ phép" là khoảng trống dùng nhiều nhất mà cổng PTKH đã có trong `HAM_WEBGOI_`.
