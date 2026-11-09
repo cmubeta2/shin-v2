@@ -4,6 +4,23 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.18] – 10/11/2026 (RÀ UX SÂU TAB CON + GỘP NHẬP HỘ VÀO KHẢO SÁT)
+
+### 🔍 Rà UX (kéo trước một phần T7 14/11 – không thêm tính năng)
+- Kịch bản Edge headless mới: mỗi màn bấm lần lượt từng tab con (`.tab-nut` / `.hang-tab` / `.chip-chon` / `.hang-chip`) – 17 màn, 126 tab con × 375 + 1280: 0 cuộn ngang, 0 chữ < 14px, 0 ô nhập < 16px, 0 nút < 44px.
+- Rung phản hồi (`ShinApp` haptic): bỏ qua khi trang chưa có cử chỉ thật của người dùng (`navigator.userActivation`) – hết 60 dòng lỗi console "Blocked call to navigator.vibrate".
+
+### 🩺 Khảo sát
+- Bỏ lớp bọc tạm `ModuleKhaoSat.veQuanLy` của v2.13.16: khaosat.js gọi thẳng `ModuleKsNhapHo.veKhoi(d)`; nút chip câu nhập hộ dùng lớp `.ks-nh-chip` thay style= nội dòng.
+
+## [2.13.17] – 10/11/2026 (🩺 KHẢO SÁT – GIAO DIỆN QUẢN LÝ, phiếu agy M1.5)
+
+### 🎨 Giao diện (Viết: agy sandbox 11100334 · Soát chéo + chép về: Claude)
+- Thẻ khảo sát: lưới 2 cột nút (≥ 44px), nút trạng thái nổi bật, 🗑 Xóa viền đỏ.
+- Form sửa: mỗi câu 1 thẻ tự cao theo nội dung – STT + ô tick 1 cột, nội dung giữa, ▲▼ 44×44 xếp dọc để đổi thứ tự (lưu theo thứ tự trên màn), tự khóa ở câu đầu / cuối.
+- 📚 Ngân hàng câu hỏi: ô tìm + chip lọc Nhóm / Loại (wrap, ≥ 44px), dòng thống kê "Hiển thị x / y".
+- Mọi chữ ≥ 14px, không cuộn ngang 320 / 375; bỏ style= nội dòng agy thêm (thay lớp CSS), #fff → var(--on-primary).
+
 ## [2.13.16] – 10/11/2026 (🩺 KHẢO SÁT – 📝 NHẬP HỘ PHIẾU GIẤY)
 
 ### 🩺 Khảo sát (cổng KS L2 `webNhapHo` + `webCongKhaiDocKS` có sẵn – không cần cổng v1 mới)

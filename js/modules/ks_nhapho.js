@@ -139,7 +139,7 @@ const ModuleKsNhapHo = {
       const chon = gt => this.nhieu(c) ? (Array.isArray(v) && v.includes(gt)) : String(v) === gt;
       return `<div class="tc-form-nhom" role="group" aria-label="${e(c.noiDung)}">
         <span class="nhan-o">${nhan}${this.nhieu(c) ? ' <span class="chu-phu">(chọn nhiều)</span>' : ''}</span>
-        <div class="hang-chip">${lc.map((gt, j) => `<button type="button" style="min-width:44px" class="chip-chon ${chon(gt) ? 'dang-chon' : ''}" aria-pressed="${chon(gt)}" onclick="ModuleKsNhapHo.chon(${i}, ${j})">${e(c.loai === '5muc' ? gt + '★' : gt)}</button>`).join('')}</div>
+        <div class="hang-chip">${lc.map((gt, j) => `<button type="button" class="chip-chon ks-nh-chip ${chon(gt) ? 'dang-chon' : ''}" aria-pressed="${chon(gt)}" onclick="ModuleKsNhapHo.chon(${i}, ${j})">${e(c.loai === '5muc' ? gt + '★' : gt)}</button>`).join('')}</div>
       </div>`;
     }
     const id = 'ksnh_' + i, gt = e(v == null ? '' : String(v));
@@ -198,21 +198,12 @@ const ModuleKsNhapHo = {
 };
 
 /**
- * Gắn khối 📝 Nhập hộ vào 🛠️ Quản lý khảo sát (thay dòng "chưa có trên v2").
- * Tạm bọc veQuanLy vì khaosat.js đang có phiếu agy giao-dien (11100334) – gộp thẳng vào khaosat.js khi phiếu trả.
+ * Khối 📝 Nhập hộ trong 🛠️ Quản lý khảo sát – khaosat.js gọi thẳng (v2.13.18, bỏ lớp bọc veQuanLy tạm của v2.13.16).
  */
-(function() {
-  if (typeof ModuleKhaoSat === 'undefined' || ModuleKhaoSat._bocNhapHo) return;
-  const goc = ModuleKhaoSat.veQuanLy;
-  ModuleKhaoSat._bocNhapHo = true;
-  ModuleKhaoSat.veQuanLy = function(d) {
-    const html = goc.call(this, d), e = ShinApp.esc;
-    const mo = ((d && d.khaoSat) || []).filter(x => x.trangThai === 'Đang mở');
-    const khoi = `<div class="tc-form-nhom"><span class="nhan-o">📝 Nhập hộ phiếu giấy</span>
-      ${mo.length ? `<div class="hang-chip">${mo.map(x => `<button type="button" class="chip-chon" data-ma="${e(x.ma)}" data-ten="${e(x.ten)}" onclick="ModuleKsNhapHo.mo(this.dataset.ma, this.dataset.ten, this)">📝 ${e(x.ten)}</button>`).join('')}</div>`
-        : '<p class="chu-phu">Chưa có khảo sát Đang mở – mở 1 khảo sát rồi mới nhập hộ được.</p>'}
-      <p class="chu-phu">Câu đã có người trả lời khi sửa sẽ thành phiên bản mới, khảo sát cũ giữ bản trước.</p></div>`;
-    const re = /<p class="chu-phu">Nhập hộ phiếu giấy chưa có trên v2[\s\S]*?<\/p>/;
-    return re.test(html) ? html.replace(re, khoi) : html.replace(/<\/details>\s*$/, khoi + '</details>');
-  };
-})();
+ModuleKsNhapHo.veKhoi = function(d) {
+  const e = ShinApp.esc;
+  const mo = ((d && d.khaoSat) || []).filter(x => x.trangThai === 'Đang mở');
+  return `<div class="tc-form-nhom"><span class="nhan-o">📝 Nhập hộ phiếu giấy</span>
+    ${mo.length ? `<div class="hang-chip">${mo.map(x => `<button type="button" class="chip-chon" data-ma="${e(x.ma)}" data-ten="${e(x.ten)}" onclick="ModuleKsNhapHo.mo(this.dataset.ma, this.dataset.ten, this)">📝 ${e(x.ten)}</button>`).join('')}</div>`
+      : '<p class="chu-phu">Chưa có khảo sát Đang mở – mở 1 khảo sát rồi mới nhập hộ được.</p>'}</div>`;
+};

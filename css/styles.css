@@ -1540,6 +1540,7 @@ details.tq-gon > .nut-rong { width: calc(100% - 24px); max-width: none; }
 .hang-chip { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .chip-chon { min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; font-size: calc(14px * var(--font-scale)); font-weight: 600; cursor: pointer; }
 .chip-chon.dang-chon { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+.ks-nh-chip { min-width: 44px; }
 .luoi-o-so { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 6px; margin-bottom: 10px; }
 .o-so-loc { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 64px; padding: 6px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font: inherit; font-size: calc(12px * var(--font-scale)); text-align: center; }
 button.o-so-loc { cursor: pointer; }
@@ -2763,14 +2764,56 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 
 /* v2.13.15 – 🛠️ Quản lý khảo sát */
 .ks-ql-nut { display: flex; flex-wrap: wrap; gap: 8px; }
-.ks-ql-nut > button { min-height: 44px; flex: 1 1 auto; }
+.ks-ql-nut > button { min-height: 44px; flex: 1 1 auto; font-size: calc(14px * var(--font-scale, 1)); }
 .ks-ql-the { margin: 0; }
 .ks-ql-the .ks-ql-nut { margin-top: 8px; }
+.ks-ql-the-nut { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+@media (min-width: 768px) {
+  .ks-ql-the-nut { display: flex; flex-wrap: wrap; }
+  .ks-ql-the-nut > button { flex: 0 0 auto; }
+}
+.ks-ql-the-nut > button { min-height: 44px; font-size: calc(14px * var(--font-scale, 1)); font-weight: 500; display: inline-flex; align-items: center; justify-content: center; }
+.ks-ql-the-nut > button:first-child:nth-last-child(odd) { grid-column: 1 / -1; }
+.ks-ql-the-nut .nut-do { color: var(--c-red); border-color: var(--c-red-soft, rgba(239, 68, 68, 0.3)); }
+.ks-ql-the-nut .nut-do:hover { background: var(--c-red-soft, rgba(239, 68, 68, 0.1)); }
+
 .ks-ql-khung { display: flex; flex-direction: column; gap: 12px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--bg); }
 .ks-ql-khung[hidden] { display: none !important; }
 .ks-ql-khung:empty { display: none; }
-.ks-ql-cau { display: flex; flex-direction: column; gap: 2px; max-height: 360px; overflow-y: auto; }
-.ks-ql-chon { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 8px 0; font-size: calc(14px * var(--font-scale)); color: var(--text); cursor: pointer; overflow-wrap: anywhere; }
-.ks-ql-chon input[type="checkbox"] { width: 22px; height: 22px; flex: 0 0 22px; margin-top: 1px; accent-color: var(--primary); }
-.ks-ql-loi { padding: 10px 12px; border-radius: 10px; background: var(--c-red-soft); color: var(--c-red); font-size: calc(14px * var(--font-scale)); }
-.ks-ql-nho { min-height: 44px; flex: 0 0 auto; }
+
+/* Danh sách câu hỏi trong form sửa khảo sát */
+.ks-ql-cau { display: flex; flex-direction: column; gap: 8px; max-height: 440px; overflow-y: auto; padding-right: 4px; }
+.ks-ql-dong-cau { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); box-sizing: border-box; transition: border-color 0.15s, background 0.15s; }
+.ks-ql-dong-cau.da-chon { border-color: var(--primary); }
+
+.ks-ql-cot-chon { flex: 0 0 44px; min-width: 44px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; padding-top: 2px; }
+.ks-ql-stt { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; border-radius: 999px; font-size: calc(14px * var(--font-scale, 1)); font-weight: 600; line-height: 1; background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+.ks-ql-dong-cau.da-chon .ks-ql-stt { background: var(--primary); color: var(--on-primary, #fff); border-color: var(--primary); }
+.ks-ql-cot-chon input[type="checkbox"] { width: 22px; height: 22px; min-height: 22px; margin: 0; accent-color: var(--primary); cursor: pointer; }
+
+.ks-ql-noi-dung { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 4px; cursor: pointer; overflow-wrap: anywhere; word-break: break-word; }
+.ks-ql-cau-nd { font-size: calc(14px * var(--font-scale, 1)); line-height: 1.45; color: var(--text); font-weight: 500; }
+.ks-ql-cau-phu { font-size: calc(14px * var(--font-scale, 1)); line-height: 1.35; color: var(--text-muted); }
+
+.ks-ql-cot-nut { flex: 0 0 44px; min-width: 44px; display: flex; flex-direction: column; gap: 4px; align-items: center; justify-content: center; }
+.ks-ql-nut-len, .ks-ql-nut-xuong { width: 44px; height: 44px; min-width: 44px; min-height: 44px; padding: 0; display: inline-flex; align-items: center; justify-content: center; font-size: calc(14px * var(--font-scale, 1)); border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; transition: background 0.15s; }
+.ks-ql-nut-len:hover:not(:disabled), .ks-ql-nut-xuong:hover:not(:disabled) { background: var(--bg); }
+.ks-ql-nut-len:disabled, .ks-ql-nut-xuong:disabled { opacity: 0.25; cursor: not-allowed; }
+
+.ks-ql-chon { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; padding: 8px 0; font-size: calc(14px * var(--font-scale, 1)); color: var(--text); cursor: pointer; overflow-wrap: anywhere; }
+.ks-ql-chon input[type="checkbox"] { width: 22px; height: 22px; min-height: 22px; flex: 0 0 22px; margin-top: 1px; accent-color: var(--primary); }
+.ks-ql-loi { padding: 10px 12px; border-radius: 10px; background: var(--c-red-soft); color: var(--c-red); font-size: calc(14px * var(--font-scale, 1)); }
+.ks-ql-nho { min-height: 44px; min-width: 44px; flex: 0 0 auto; font-size: calc(14px * var(--font-scale, 1)); }
+
+/* Tìm kiếm & Lọc Ngân hàng câu hỏi */
+.ks-ql-nh-tim { margin-bottom: 8px; }
+.ks-ql-nh-o { width: 100%; font-size: 16px; min-height: 44px; box-sizing: border-box; }
+.ks-ql-chip-nhom { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.ks-ql-chip-label { font-size: calc(14px * var(--font-scale, 1)); font-weight: 600; color: var(--text-muted); }
+.ks-ql-chip-hang { display: flex; flex-wrap: wrap; gap: 8px; }
+.ks-ql-chip { min-height: 44px; min-width: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: calc(14px * var(--font-scale, 1)); font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease; box-sizing: border-box; }
+.ks-ql-chip.active { background: var(--primary); color: var(--on-primary, #fff); border-color: var(--primary); }
+.ks-ql-nh-thongke { font-size: calc(14px * var(--font-scale, 1)); color: var(--text-muted); margin: 4px 0 8px; }
+.ks-ql-nh-cau { display: flex; flex-direction: column; gap: 8px; }
+.ks-ql-nh-dong { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); box-sizing: border-box; }
+.ks-ql-nh-nd { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
