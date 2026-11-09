@@ -215,12 +215,20 @@ const ModuleCRM = {
         <details class="tq-gon" open>
           <summary><span>🔔 Lead mới từ web phễu</span><span class="tom-tat">${d.leadMoi.length}${quaHanLead ? ' · ⏰ ' + quaHanLead : ''}</span></summary>
           ${luongLead ? `<p class="chu-phu">🧭 Phân luồng (M8.3): ${Object.keys(demLuong).map(k => e(ModuleMarketing.LUONG_LEAD[k].nhan.split(' ')[0]) + ' ' + demLuong[k]).join(' · ')}</p>` : ''}
-          ${d.leadMoi.map((l, i) => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); const lu = luongLead ? luongLead[i] : null; return `
-            <div class="hang-tru crm-lead crm-lead-${m || 'xam'}" style="flex-wrap:wrap"><span style="flex:1 1 60%;min-width:0"><b>${e(l.ten)}</b><br><span class="chu-phu">${e([l.nguon, l.soDt, l.slKham || l.khoa || l.ghiChu].filter(Boolean).join(' · '))}</span></span>
-              <span class="chu-phu">${e(l.thoiGian)}${m === 'vang' || m === 'do' ? '<br>' + this.NHAN_LEAD[m] : ''}</span>
-              ${lu ? `<button class="btn-secondary" style="flex-basis:100%;min-height:44px;font-size:14px;margin-top:6px" title="${e(lu.lyDo)}" onclick="ShinApp.chuyenModule('${lu.module}')">${e(lu.nhan)}</button>` : ''}
-              ${l.trangThai ? `<span class="badge xanh" style="margin-top:6px">✓ ${e(l.trangThai)}</span>` : coDanhDau && l.ma ? `<button class="btn-secondary" style="flex-basis:100%;min-height:44px;font-size:14px;margin-top:6px" onclick="ModuleCRM.danhDauLead(${i}, 'Đã chăm sóc', this)">✅ Đánh dấu đã chăm sóc</button>` : ''}</div>`; }).join('')}
-          ${quaHanLead ? `<button class="btn-secondary" style="min-height:44px; font-size:14px; width:100%; margin-top:8px;" onclick="ModuleCRM.saoChepNhacLead()">📋 Sao chép nhắc chăm sóc (${quaHanLead} lead > 24 giờ)</button>` : ''}
+          ${d.leadMoi.map((l, i) => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); const lu = luongLead ? luongLead[i] : null; const daCS = !!l.trangThai; return `
+            <div class="hang-tru crm-lead crm-lead-${m || 'xam'} crm-tt-lead-hang ${daCS ? 'crm-tt-lead-da-cham' : ''}">
+              <div class="crm-tt-lead-thong-tin">
+                <b>${e(l.ten)}</b>
+                <div class="chu-phu crm-tt-lead-nguon">${e([l.nguon, l.soDt, l.slKham || l.khoa || l.ghiChu].filter(Boolean).join(' · '))}</div>
+              </div>
+              <div class="crm-tt-lead-thoigian">
+                <span class="chu-phu">${e(l.thoiGian)}</span>
+                ${m === 'vang' || m === 'do' ? `<span class="crm-tt-lead-canh-bao">${this.NHAN_LEAD[m]}</span>` : ''}
+              </div>
+              ${lu ? `<button class="btn-secondary crm-tt-btn-luong" title="${e(lu.lyDo)}" onclick="ShinApp.chuyenModule('${lu.module}')">${e(lu.nhan)}</button>` : ''}
+              ${daCS ? `<span class="badge xanh crm-tt-lead-badge">✓ ${e(l.trangThai)}</span>` : coDanhDau && l.ma ? `<button class="btn-secondary crm-tt-btn-cham-soc" onclick="ModuleCRM.danhDauLead(${i}, 'Đã chăm sóc', this)">✅ Đánh dấu đã chăm sóc</button>` : ''}
+            </div>`; }).join('')}
+          ${quaHanLead ? `<button class="btn-secondary crm-tt-btn-sao-chep" onclick="ModuleCRM.saoChepNhacLead()">📋 Sao chép nhắc chăm sóc (${quaHanLead} lead > 24 giờ)</button>` : ''}
         </details>` : ''}
 
       ${b2b.length ? `
@@ -292,16 +300,51 @@ const ModuleCRM = {
     const e = ShinApp.esc;
     const sdt = String(x.dienThoai || '').replace(/[^\d+]/g, '');
     const tt = this.tuongTacCua(this._d.tuongTac, x.ma);
+    const iconKenh = { 'Gọi': '📞', 'Zalo': '💬', 'Email': '✉️', 'Gặp': '🤝', 'Khác': '📝' };
+
+    const timelineHTML = tt ? (tt.length ? `
+      <div class="crm-tt-timeline-khung">
+        <div class="crm-tt-timeline-tieu">⏳ Lịch sử tương tác (${tt.length})</div>
+        <div class="crm-tt-timeline-ds">
+          ${tt.map(t => `
+            <div class="crm-tt-item">
+              <div class="crm-tt-item-head">
+                <span class="crm-tt-kenh-tag">${iconKenh[t.kenh] || '💬'} ${e(t.kenh || 'Khác')}</span>
+                <span class="crm-tt-ngay">📅 ${e(t.ngay || '')}</span>
+              </div>
+              <div class="crm-tt-noidung">${e(t.noiDung || '')}</div>
+              ${t.nguoiGhi ? `<div class="crm-tt-nguoighi">✍️ ${e(t.nguoiGhi)}</div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      </div>`
+      : '<p class="chu-phu">🗂️ Chưa có lần liên hệ nào được ghi.</p>')
+      : '<p class="chu-phu">🗂️ Lịch sử tương tác: tải CRM ở chế độ Live (Hub v1.20.2) để xem và ghi.</p>';
+
+    const ghiMoiHTML = tt ? `
+      <div class="crm-tt-ghi-khung">
+        <label class="crm-tt-nhan" for="ttNoi${i}">💬 Ghi lần liên hệ mới</label>
+        <input type="hidden" id="ttKenh${i}" value="Gọi">
+        <div class="crm-tt-chips" role="radiogroup" aria-label="Chọn kênh liên hệ">
+          ${this.KENH_TT.map((k, idx) => `
+            <button type="button" class="crm-tt-chip ${idx === 0 ? 'dang-chon' : ''}" data-kenh="${e(k)}" onclick="ModuleCRM.chonKenh(${i}, '${e(k)}', this)">
+              ${iconKenh[k] || '💬'} ${e(k)}
+            </button>
+          `).join('')}
+        </div>
+        <textarea id="ttNoi${i}" class="form-input crm-tt-textarea" rows="2" maxlength="500" placeholder="Đã gọi báo giá gói KSK… (không ghi SĐT, thông tin người bệnh)" oninput="ModuleCRM.capNhatDem(${i}, this)"></textarea>
+        <div class="crm-tt-dem-thanh">
+          <span class="crm-tt-luu-y">🔒 Không ghi SĐT, thông tin người bệnh</span>
+          <span id="ttDem${i}" class="crm-tt-dem">0/500</span>
+        </div>
+      </div>` : '';
+
     khung.innerHTML = `
       <div class="hang-tru"><span>Người liên hệ</span><b>${e(x.nguoiLienHe || '–')}</b></div>
       <div class="hang-tru"><span>Quy mô</span><b>${e(x.quyMo || '–')}</b></div>
       ${x.loai === 'B2B Khám Sức Khỏe' ? `<div class="hang-tru"><span>Giai đoạn</span><b>${e(this.gdCua(x))}</b></div>` : ''}
-      ${tt ? (tt.length ? tt.map(t => `<div class="hang-tru"><span>${e([t.ngay, t.kenh].filter(Boolean).join(' · '))}</span><b style="font-weight:400">${e(t.noiDung)}</b></div>`).join('')
-        : '<p class="chu-phu">🗂️ Chưa có lần liên hệ nào được ghi.</p>')
-        : '<p class="chu-phu">🗂️ Lịch sử tương tác: tải CRM ở chế độ Live (Hub v1.20.2) để xem và ghi.</p>'}
-      ${tt ? `<label class="nhan-o" for="ttKenh${i}">💬 Ghi lần liên hệ mới</label>
-      <select id="ttKenh${i}" class="form-input">${this.KENH_TT.map(k => `<option>${k}</option>`).join('')}</select>
-      <textarea id="ttNoi${i}" class="form-input" rows="2" maxlength="500" placeholder="Đã gọi báo giá gói KSK… (không ghi SĐT, thông tin người bệnh)"></textarea>` : ''}
+      ${timelineHTML}
+      ${ghiMoiHTML}
       <div class="hang-nut">
         ${tt ? `<button class="btn-primary" onclick="ModuleCRM.ghiTuongTac(${i}, this)">💬 Ghi lần liên hệ</button>` : ''}
         ${sdt.length >= 9 ? `<a class="btn-secondary" href="tel:${e(sdt)}">📞 Gọi</a>` : ''}
@@ -358,5 +401,24 @@ const ModuleCRM = {
     }
   },
 
-  themDoiTac: function() { this.moForm(-1); }
+  themDoiTac: function() { this.moForm(-1); },
+chonKenh: function(i, kenh, nut) {
+    const hidden = document.getElementById('ttKenh' + i);
+    if (hidden) hidden.value = kenh;
+    if (nut && nut.parentElement) {
+      nut.parentElement.querySelectorAll('.crm-tt-chip').forEach(c => c.classList.remove('dang-chon'));
+      nut.classList.add('dang-chon');
+    }
+    ShinApp.rung('nhe');
+  },
+
+  capNhatDem: function(i, el) {
+    const dem = document.getElementById('ttDem' + i);
+    if (!dem || !el) return;
+    const len = (el.value || '').length;
+    dem.textContent = len + '/500';
+    if (len >= 500) dem.style.color = 'var(--c-red)';
+    else if (len >= 450) dem.style.color = 'var(--c-yellow)';
+    else dem.style.color = '';
+  },
 };

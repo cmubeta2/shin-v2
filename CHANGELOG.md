@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.13] – 09/11/2026 (👥 CRM – GIAO DIỆN LỊCH SỬ TƯƠNG TÁC + LEAD CHĂM SÓC)
+
+### 👥 CRM (nhận phiếu agy 11091025_V2_M2.4_giao-dien)
+- Lịch sử tương tác dạng dòng thời gian gọn (biểu tượng kênh, ngày, người ghi); chọn kênh bằng nhóm chip 1 chạm (≥ 44px) thay ô chọn; ô nội dung có đếm ký tự /500 + lưu ý không ghi SĐT / thông tin người bệnh.
+- Hàng lead mới chuyển inline style sang lớp `crm-tt-*`; lead đã chăm sóc mờ nhẹ + viền xanh.
+- Em rà lại: gỡ đoạn agy tự thêm tự mở chi tiết qua `?ct=` (ngoài phạm vi); nâng mọi chữ 12–13px của khối mới lên 14px theo chuẩn thiết kế. Logic gửi (`webGhiTuongTac`, `webDanhDauLead`) không đổi.
+
 ## [2.13.12] – 09/11/2026 (⚙️ KẾT NỐI TELEGRAM CÁ NHÂN NGAY TRÊN v2)
 
 ### ⚙️ Cài đặt
