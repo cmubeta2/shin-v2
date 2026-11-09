@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.12** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.13** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.13 ✅ – 👥 CRM: GIAO DIỆN LỊCH SỬ TƯƠNG TÁC (09/11/2026, lượt tự động ⑤ 12h – nhận phiếu agy 11091025_V2_M2.4_giao-dien)
+- **Nội dung:** dòng thời gian tương tác, chip chọn kênh 1 chạm, đếm ký tự /500, hàng lead dùng lớp `crm-tt-*` (bỏ inline style). Em gỡ đoạn tự mở `?ct=` agy thêm ngoài phạm vi, nâng chữ 12–13px lên 14px.
+- **Kiểm:** node --check; kịch bản CRM (Edge): Demo 0 lần gọi, ghi liên hệ ➜ đúng 1 lần `webGhiTuongTac` kênh mặc định "Gọi", đánh dấu lead ➜ 1 lần `webDanhDauLead`; 17 màn × 375 / 1280: 0 cuộn ngang, 0 lỗi console, 0 chữ < 14px.
+- **Còn lại tuần:** T7 14/11 rà UX + bảng đối chiếu v1↔v2 + chốt **v2.14.0 RC**.
 
 ### PHIÊN BẢN v2.13.12 ✅ – ⚙️ KẾT NỐI TELEGRAM CÁ NHÂN (09/11/2026, lượt tự động ⑤ 10h – mục P3 #6, cổng Hub có sẵn)
 - **Nội dung:** ⚙️ Cài đặt thêm thẻ 🤖 Telegram: `webMaTG` (Hub v1.8.5 L5a) ➜ mở bot bằng mã 15 phút; `webXacNhanTG` ➜ gán chat. Kiểm thuần `linkTGHopLe` chỉ nhận `https://t.me/<bot>?start=<mã>`; Hub chưa cài TG_TEN_BOT ➜ báo lỗi rõ.
