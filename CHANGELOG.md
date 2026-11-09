@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.14] – 09/11/2026 (🏥 PHÒNG KHÁM – 🗓️ LỊCH CẢ TỔ CHO TỔ TRƯỞNG)
+
+### 🏥 Phòng Khám (cổng PK `webBangXepLich`, app PK v1.0.7 đã lên app – không cần cổng v1 mới)
+- Thẻ mới 🗓️ Lịch cả tổ (chỉ tổ trưởng / admin thấy): từng ngày trong tuần liệt kê người theo vị trí (kèm ca), người nghỉ, người chưa xếp; Hero 3 số (người trong tổ, vị trí, ngày cần xem).
+- Hàm thuần `tomTatXepLich`: ⚠️ khi ngày có ≥ 2 người nghỉ, người đi làm dưới nửa tổ, hoặc vị trí có trong tuần mà ngày đó không ai đứng. Chỉ xem – xếp / sửa ca vẫn làm trên app PK.
+- Gỡ dòng 🟡 "bảng xếp lịch toàn phòng" của bảng đối chiếu P3.
+
 ## [2.13.13] – 09/11/2026 (👥 CRM – GIAO DIỆN LỊCH SỬ TƯƠNG TÁC + LEAD CHĂM SÓC)
 
 ### 👥 CRM (nhận phiếu agy 11091025_V2_M2.4_giao-dien)

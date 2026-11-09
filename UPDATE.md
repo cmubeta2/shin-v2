@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.13** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.14** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.14 ✅ – 🗓️ LỊCH CẢ TỔ CHO TỔ TRƯỞNG (09/11/2026, lượt tự động ⑤ 16h – dòng 🟡 bảng đối chiếu P3, cổng PK có sẵn)
+- **Bối cảnh:** lịch tuần T2–T6 đã xong; mọi cổng v1 "shin-v2" đã lên app đều đã nối (HUB L26, L29; KPI L10; KS L6). Bảng đối chiếu P3 (agy 11081816) còn 🟡 "bảng xếp lịch tuần toàn phòng" – cổng `webBangXepLich` có ở PK v1.0.7 (L5, đã lên app @3).
+- **Nội dung:** 🏥 Phòng Khám thêm thẻ 🗓️ Lịch cả tổ (quyền tổ trưởng / admin như thẻ ☑️ Duyệt): mỗi ngày người theo vị trí + ca, người nghỉ, chưa xếp; ⚠️ thiếu vị trí / ≥ 2 nghỉ / đi làm < nửa tổ. Chỉ đọc – xếp ca vẫn trên app PK. Lỗi cổng ➜ khung đỏ, không thay số mẫu.
+- **Kiểm:** node --check; Edge 375 / 1280: Demo 0 lần gọi mạng, 8 thẻ, 2 ngày ⚠️ đúng (07/11 hai người nghỉ + thiếu Tổng đài; 08/11 thiếu Tổng đài); 17 màn × 375 / 1280: 0 cuộn ngang, 0 lỗi console, 0 chữ < 14px.
+- **Đối chiếu P3 cập nhật (so với nháp agy 08/11):** đã gỡ 🟡/⏳ – Telegram mã ghép (v2.13.12), chi tiết việc con PK (v2.13.11), gửi đơn nghỉ (v2.13.7), lưu bài học (v2.13.10), CRM giai đoạn + tương tác (HUB L29 lên app v1.20.2), xếp lịch cả tổ (v2.13.14). Còn 🟡 phía v2 (form quản trị KS: tạo / sửa khảo sát, câu hỏi, phân quyền, nhập hộ – cổng KS có sẵn, để tuần sau vì ít dùng); ⏳ duyệt đơn nghỉ PTKH cho quản lý (Còn chờ v1: cổng đọc danh sách chờ duyệt – chưa duyệt); ⬜ bảo lưu v1: HTNV, giám sát / vinh danh, quy trình SOP tương tác, khiếu nại, xuất TC-NS.
+- **Còn lại tuần:** T7 14/11 rà UX + bảng đối chiếu đầy đủ + chốt **v2.14.0 RC**.
 
 ### PHIÊN BẢN v2.13.13 ✅ – 👥 CRM: GIAO DIỆN LỊCH SỬ TƯƠNG TÁC (09/11/2026, lượt tự động ⑤ 12h – nhận phiếu agy 11091025_V2_M2.4_giao-dien)
 - **Nội dung:** dòng thời gian tương tác, chip chọn kênh 1 chạm, đếm ký tự /500, hàng lead dùng lớp `crm-tt-*` (bỏ inline style). Em gỡ đoạn tự mở `?ct=` agy thêm ngoài phạm vi, nâng chữ 12–13px lên 14px.

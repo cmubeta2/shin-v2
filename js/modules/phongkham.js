@@ -25,13 +25,14 @@ const ModulePhongKham = {
     ['congviec', '✅ Công việc', 'webCongViec', ''],
     ['baocao', '📝 Báo cáo', 'webBaoCao', ''],
     ['lich', '📅 Lịch tuần', 'webLichTuan', ''],
+    ['xeplich', '🗓️ Lịch cả tổ', 'webBangXepLich', 'duyet'],
     ['thongbao', '🔔 Thông báo', 'webThongBao', ''],
     ['duyet', '☑️ Duyệt', 'webChoDuyet', 'duyet'],
     ['nhansu', '👥 Nhân sự', 'webNhanSu', 'quanly'],
     ['gopy', '💬 Góp ý', 'webGopYCuaToi', ''],
     ['hoso', '👤 Hồ sơ', 'webHoSo', '']
   ],
-  KHOA_DEMO: { homnay: 'homNay', congviec: 'congViec', baocao: 'baoCao', lich: 'lichTuan', thongbao: 'thongBao', duyet: 'choDuyet', nhansu: 'nhanSu', gopy: 'gopY', hoso: 'hoSo' },
+  KHOA_DEMO: { homnay: 'homNay', congviec: 'congViec', baocao: 'baoCao', lich: 'lichTuan', xeplich: 'bangXepLich', thongbao: 'thongBao', duyet: 'choDuyet', nhansu: 'nhanSu', gopy: 'gopY', hoso: 'hoSo' },
   MUC: { do: 'do', vang: 'vang', xanh: 'xanh', xam: 'xam' },
   TT_BC: { da_duyet: ['Đã duyệt', 'xanh'], cho: ['Chờ duyệt', 'vang'], tra_lai: ['Trả lại', 'do'] },
   TT_NGHI: { cho: ['Chờ duyệt', 'vang'], da_duyet: ['Đã duyệt', 'xanh'], tra_lai: ['Trả lại', 'do'] },
@@ -398,6 +399,49 @@ const ModulePhongKham = {
         </div>`).join('')}</div>
       <div class="hang-nut"><span class="chu-phu">Xin nghỉ / đổi ca: làm trên app PTKH (v2 chỉ xem).</span>
         <button class="btn-secondary" onclick="ShinApp.moV1('PK', 'Xin nghỉ / đổi ca')">Mở app PK</button></div>`;
+  },
+
+  /* ---------- 🗓️ Lịch cả tổ (webBangXepLich – tổ trưởng / admin, chỉ đọc) ---------- */
+  /** v2.13.14 – hàm thuần: bảng {nguoi, ngay, o['ma|dd/mm'], viTri} ➜ mỗi ngày: người theo vị trí, người nghỉ,
+   *  người chưa xếp, vị trí trong tuần mà ngày đó không ai đứng (thiếu), cờ cảnh báo (≥ 2 nghỉ hoặc đi làm < nửa tổ). */
+  tomTatXepLich: function(d) {
+    const nguoi = (d && d.nguoi) || [], o = (d && d.o) || {}, dsVT = (d && d.viTri) || [];
+    return ((d && d.ngay) || []).map(ng => {
+      const theoVT = {}, nghi = [], chuaXep = [];
+      nguoi.forEach(n => {
+        const c = o[n.ma + '|' + ng];
+        const ten = n.hoTen || n.ma;
+        if (!c) chuaXep.push(ten);
+        else if (c.nghi) nghi.push(ten);
+        else { const vt = c.viTri || 'Chưa ghi vị trí'; (theoVT[vt] = theoVT[vt] || []).push(ten + (c.ca ? ' (' + c.ca + ')' : '')); }
+      });
+      const diLam = Object.keys(theoVT).reduce((s, k) => s + theoVT[k].length, 0);
+      const thieu = dsVT.filter(v => !theoVT[v]);
+      return { ngay: ng, theoVT, nghi, chuaXep, thieu, diLam, canhBao: nghi.length >= 2 || (nguoi.length > 0 && diLam * 2 < nguoi.length) || thieu.length > 0 };
+    });
+  },
+
+  ve_xeplich: function(d) {
+    const e = ShinApp.esc, ds = this.tomTatXepLich(d), nguoi = d.nguoi || [];
+    const soCB = ds.filter(x => x.canhBao).length;
+    const ten = x => x.join(', ');
+    return `
+      <div class="the">
+        <div class="form-label">TUẦN ${e(d.tuan || '')}${d.to ? ' · ' + e(d.to) : ''}</div>
+        ${this.o3([['Người trong tổ', nguoi.length, 'var(--c-blue)'], ['Vị trí', (d.viTri || []).length, 'var(--c-gray)'], ['Ngày cần xem', soCB, soCB ? 'var(--c-red)' : 'var(--c-green)']])}
+        <div class="chu-phu">⚠️ = có ≥ 2 người nghỉ, người đi làm dưới nửa tổ, hoặc vị trí trong tuần không ai đứng.</div>
+      </div>
+      ${ds.map(x => `
+        <div class="the" style="${x.canhBao ? 'border-left:4px solid var(--c-yellow);' : ''}">
+          <div class="form-label">${x.canhBao ? '⚠️ ' : ''}${e(x.ngay)} · đi làm ${e(String(x.diLam))}/${e(String(nguoi.length))}</div>
+          ${Object.keys(x.theoVT).sort().map(vt => `<div class="hang-tru"><span><b>${e(vt)}</b></span><span>${e(ten(x.theoVT[vt]))}</span></div>`).join('')}
+          ${x.thieu.length ? `<div class="hang-tru"><span>${this.badge(['Thiếu người', 'do'])}</span><span>${e(ten(x.thieu))}</span></div>` : ''}
+          ${x.nghi.length ? `<div class="hang-tru"><span>${this.badge(['Nghỉ', 'xam'])}</span><span>${e(ten(x.nghi))}</span></div>` : ''}
+          ${x.chuaXep.length ? `<div class="hang-tru"><span>${this.badge(['Chưa xếp', 'vang'])}</span><span>${e(ten(x.chuaXep))}</span></div>` : ''}
+        </div>`).join('')}
+      ${ds.length ? '' : '<div class="the"><div class="trong">Tuần này tổ chưa có lịch.</div></div>'}
+      <div class="hang-nut"><span class="chu-phu">Xếp / sửa ca: làm trên app PTKH (v2 chỉ xem).</span>
+        <button class="btn-secondary" onclick="ShinApp.moV1('PK', 'Xếp lịch tổ')">Mở app PK</button></div>`;
   },
 
   /* ---------- 🔔 Thông báo (webThongBao · webDaDocThongBao) ---------- */
