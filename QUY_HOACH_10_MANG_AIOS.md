@@ -135,7 +135,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 |---|---|---|---|
 | M5.1 | Báo cáo ca ngày (lượt khám, doanh thu, tồn đọng) | 🟢 v2.7.0 – Hôm nay + nộp / lịch sử / duyệt báo cáo ngày qua cổng PK thật | v2.4.0 |
 | M5.2 | Minh chứng ảnh nén → Drive (Base64 qua `21_PhongPTKH`) | 🟢 v2.7.0 (nén JPEG ≤ 1600px, ≤ 6 ảnh → `webNopBaoCao`) | v2.4.0 (v1 mở cổng trước) |
-| M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | 🟢 xem lịch tuần + đơn nghỉ (`webLichTuan`) · 🟢 v2.9.5 cảnh báo trùng lịch cá nhân (ca ↔ đơn nghỉ) / 🟢 v2.9.7 trùng nghỉ cả tổ (`webLichTo`, 🏥 PTKH) · 🟢 v2.13.7 gửi đơn Lịch nghỉ tuần / Nghỉ ốm thẳng PTKH (`webGuiNghiPhep`, 📋 PTKH Gốc) · đổi ca + duyệt đơn nghỉ (làm trên PTKH) | v2.3.0 |
+| M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | 🟢 xem lịch tuần + đơn nghỉ (`webLichTuan`) · 🟢 v2.9.5 cảnh báo trùng lịch cá nhân (ca ↔ đơn nghỉ) / 🟢 v2.9.7 trùng nghỉ cả tổ (`webLichTo`, 🏥 PTKH) · 🟢 v2.13.7 gửi đơn Lịch nghỉ tuần / Nghỉ ốm thẳng PTKH (`webGuiNghiPhep`, 📋 PTKH Gốc; v2.13.8 lịch 4 tuần dạng lưới + đếm ngày chọn) · đổi ca + duyệt đơn nghỉ (làm trên PTKH) | v2.3.0 |
 | M5.4 | Bóc tách tăng ca & bù giờ TC-NS | ⬜ (logic có ở M-PTKH-03) | v2.4.0 |
 | M5.5 | Kiểm soát vi phạm NTC (> 3 lần trễ → trừ 0,5 công) | 🟢 v2.9.8 của tôi: Ca NTC tuần x/3 + ngày công bị trừ (`webLichSuThang`, luật L111c) / ⬜ cả tổ (cần cổng v1) | v2.4.0 |
 | M5.6 | Team Morale Index – cảm nhận sau ca 1–5★ | 🟢 v2.9.8 của tôi: trung bình + phân bố tháng (`webLichSuThang`) / ⬜ chỉ số cả tổ ẩn danh (cần cổng v1) | v2.4.0 |

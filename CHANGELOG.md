@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.8] – 09/11/2026 (🗓️ XIN NGHỈ – GIAO DIỆN LỊCH TUẦN, phiếu agy 11090620)
+
+### 📋 PTKH gốc
+- Khối 🗓️ Xin nghỉ làm lại giao diện (chỉ giao diện, không đổi logic / cổng): 2 nút loại đơn chia đôi; 28 ngày chia 4 thẻ tuần (khoảng ngày + nhãn "Đã khóa" khi quá hạn), lưới 4 cột ở điện thoại / 7 cột từ 768px, chip 2 dòng thứ / ngày cao 48px; phân biệt Đang chọn / Đã xin ✓ / Lễ 🎌 / Khóa + chú giải; hộp "Đã chọn n ngày" kèm danh sách ngay trên nút gửi; đơn đã gửi dạng thẻ gọn (bấm mở app PTKH).
+- Rà theo luật thiết kế: bỏ màu viết cứng (#fff / rgba) ➜ `var(--on-primary)`; mọi chữ trong khối ≥ 14px.
+
 ## [2.13.7] – 09/11/2026 (🗓️ XIN NGHỈ NGAY TRÊN v2 – đối chiếu P3 #1)
 
 ### 📋 PTKH gốc
