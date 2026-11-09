@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.10** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.11** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.11 ✅ – 🩺 CHI TIẾT VIỆC PK: VIỆC CON + TRAO ĐỔI (09/11/2026, lượt tự động ⑤ 10h – mục P3 còn lại, cổng PK đã có)
+- **Bối cảnh:** bảng đối chiếu P3 (agy 11081816) còn "chi tiết việc con PK"; cổng `webChiTietViec` + `webCapNhatViec` (nhận `viecConXong`, `traoDoiMoi`) có sẵn ở PK từ v1.0.4 (L3, đã lên app).
+- **Nội dung:** nút 📋 trên từng việc ➜ khung chi tiết (mô tả, việc con dạng ô tick ≥ 44px, trao đổi); `lenhLuuViec` thuần chỉ gửi phần đổi, chặn trao đổi rỗng / > 1000 / có CCCD-BHYT, việc cá nhân không trao đổi; lưu xong đọc lại chi tiết.
+- **Kiểm:** node --check; ca thuần l1–l5 (không đổi gì, tick thêm, chỉ trao đổi + gộp khoảng trắng, CCCD, việc cá nhân); Edge 320: 3 nút 📋, Demo 0 lần gọi; Live giả lập bấm đúp ➜ đúng 1 lần `webCapNhatViec` {id, viecConXong} rồi 1 lần đọc lại; 17 màn × 375 / 1280: 0 cuộn ngang, 0 lỗi console.
+- **Còn lại P3 (lượt sau):** form mã ghép Telegram; duyệt đơn nghỉ cho quản lý (Còn chờ v1: cổng đọc danh sách chờ duyệt).
 
 ### PHIÊN BẢN v2.13.10 ✅ – 🧠 GỬI BÀI HỌC VÀO KHO TRI THỨC (09/11/2026, lượt tự động ⑤ 10h – nối cổng v1 đã lên app)
 - **Bối cảnh:** HUB L28a+L28b lên app Hub v1.20.2 @20 (`webTriThuc` đọc – v2 đã nối từ v2.13.2; `webLuuBaiHoc` ghi – chưa nối). Kho tri thức Sếp duyệt 08/11 đã có dòng HUB L28 ➜ lượt này KHÔNG thêm dòng v1 mới.

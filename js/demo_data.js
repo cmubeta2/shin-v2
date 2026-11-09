@@ -549,6 +549,11 @@ window.SHIN_DEMO_DATA.phongkhamV1 = {
     { id: 'PC|2', ten: 'Cập nhật bảng giá gói khám mới', loai: 'giao', han: '04/11/2026', tienDo: 25, nguoiGiao: 'Trưởng phòng Mẫu', muc: 'do' },
     { id: 'CN|3', ten: 'Soạn kịch bản tư vấn KSK doanh nghiệp', loai: 'canhan', han: '06/11/2026', tienDo: 0, nguoiGiao: '', muc: 'vang' }
   ] },
+  // v2.13.11 – chi tiết việc mẫu (PK webChiTietViec)
+  chiTietViec: {
+    'PC|1': { moTa: 'Mẫu: gọi lại khách đã hẹn, ghi kết quả vào sổ.', viecCon: [{ id: 'C1', ten: 'Lọc danh sách hẹn tuần này', xong: true }, { id: 'C2', ten: 'Gọi nhóm sáng', xong: false }, { id: 'C3', ten: 'Gọi nhóm chiều', xong: false }], traoDoi: [{ nguoi: 'Trưởng phòng Mẫu', luc: '02/11/2026 08:30', chu: 'Ưu tiên khách hẹn quá 7 ngày.' }] },
+    'CN|3': { moTa: 'Mẫu: việc cá nhân.', viecCon: [{ id: 'C4', ten: 'Viết dàn ý', xong: false }], traoDoi: [] }
+  },
   baoCao: { soDaNop: 18, soChuaNop: 3, soChoDuyet: 2,
     mau: [{ ma: 'luotTiepDon', nhan: 'Lượt tiếp đón', kieu: 'so', batBuoc: true }, { ma: 'cuocGoi', nhan: 'Cuộc gọi chăm sóc', kieu: 'so', batBuoc: false }, { ma: 'ghiChu', nhan: 'Việc nổi bật / vướng mắc', kieu: 'chu', batBuoc: false }],
     lichSu: [

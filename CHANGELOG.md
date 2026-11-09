@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.11] – 09/11/2026 (🩺 PHÒNG KHÁM – 📋 CHI TIẾT VIỆC: VIỆC CON + TRAO ĐỔI)
+
+### 🩺 Phòng khám › ✅ Công việc
+- Mỗi việc có nút 📋 mở chi tiết đọc thật `webChiTietViec` (mô tả, việc con, trao đổi với người giao). Tick / bỏ tick việc con và ghi trao đổi mới ➜ Toast Hoàn tác 6s ➜ `webCapNhatViec` 1 lần, chỉ gửi phần đổi (`viecConXong`, `traoDoiMoi`). Việc cá nhân không có ô trao đổi (đúng luật PK). Lỗi đọc ➜ dải cảnh báo, không thay số mẫu. Demo: chi tiết mẫu, không gửi.
+
 ## [2.13.10] – 09/11/2026 (🧠 GỬI BÀI HỌC VÀO KHO TRI THỨC – HUB L28 webLuuBaiHoc)
 
 ### 🗂️ Dự án › Ma trận vướng mắc

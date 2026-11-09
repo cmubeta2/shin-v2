@@ -153,7 +153,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M7.1 | Task Event Bus: nhận sự kiện từ mọi mảng, tự sinh việc | ⬜ | v2.3.0 |
-| M7.2 | Universal Kanban 3 cột đa nguồn | ✅ | – |
+| M7.2 | Universal Kanban 3 cột đa nguồn | ✅ · 🟢 v2.13.11 việc PK có 📋 chi tiết: việc con tick + trao đổi (`webChiTietViec` / `webCapNhatViec`, 🩺 Phòng khám › Công việc) | – |
 | M7.3 | Phân luồng việc theo RBAC (M0.2) | ✅ v2.9.1 phía trình duyệt (ẩn việc mảng không có quyền theo chốt chặn v1 + chip 👤 Của tôi) / ⬜ phân luồng phía máy chủ (cần Task Bus M7.1) | v2.5.0 |
 | M7.4 | Giám sát SLA Xanh → Vàng → Đỏ + báo Telegram | ✅ v2.8.4 đèn SLA + lọc + sao chép tin cảnh báo phía trình duyệt / ⬜ tự gửi Telegram (cần Task Bus M7.1 phía v1) | v2.4.0 |
 
