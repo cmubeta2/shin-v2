@@ -147,7 +147,7 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 
 ### Tri thức – `webTriThuc` (HUB L28a, lên app Hub v1.18.5 – `84_TriThuc.gs`) – v2.13.2 nối
 - **Đọc:** `webTriThuc(token, {})` – mọi người dùng Hub đã đăng nhập ➜ `{ ok, capNhat, taiLieu: [{ ma ≤120, ten ≤200, linhVuc, capNhat 'dd/mm/yyyy'|'', dinhDang, tomTat ≤400, lienKet: [≤50], duongDan }], baiHoc: [], loi? }`. Nguồn: `_TacVu/tri_thuc_chi_muc.json` trên Drive (máy anh quét `05_TriThuc`, đã lọc SĐT / CCCD / BHYT). Chưa có / hỏng chỉ mục ➜ `taiLieu: []` + `loi` (v2 báo đỏ, không thay số mẫu).
-- **Ghi (còn chờ v1 – HUB L28 phần ghi):** `webLuuBaiHoc` ghi bài học trích từ Flash Report, tường lửa KHONG_DUA_VAO phía máy chủ.
+- **Ghi (LÊN APP Hub v1.20.2 @20 – v2 nối từ v2.13.10):** `webLuuBaiHoc(token, { baiHoc: { chuDe, vanDe 5–500, cachLam 5–1000, nguon ≤ 120 }, maGui })` ➜ `{ ok, ma: 'BH-<maGui>', moi }`; chủ đề ∈ Nhân sự / Thiết bị & Hậu cần / Tài chính / Khách hàng & Hợp đồng / Tiến độ & Quy trình / Khác; bài vào trạng thái 'Chờ' (Admin duyệt); tường lửa KHONG_DUA_VAO phía máy chủ. v2 tạo maGui ổn định theo nội dung ➜ gửi lại không trùng.
 
 ## v2.6.0 – Quản trị người dùng & app · Nối PTKH gốc
 

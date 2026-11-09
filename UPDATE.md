@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.9** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.10** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.10 ✅ – 🧠 GỬI BÀI HỌC VÀO KHO TRI THỨC (09/11/2026, lượt tự động ⑤ 10h – nối cổng v1 đã lên app)
+- **Bối cảnh:** HUB L28a+L28b lên app Hub v1.20.2 @20 (`webTriThuc` đọc – v2 đã nối từ v2.13.2; `webLuuBaiHoc` ghi – chưa nối). Kho tri thức Sếp duyệt 08/11 đã có dòng HUB L28 ➜ lượt này KHÔNG thêm dòng v1 mới.
+- **Nội dung:** 🗂️ Dự án › 🧱 Ma trận vướng mắc: nút 📤 gửi bài học (M9.4) vào sổ BaiHoc; kiểm thuần `kiemBaiHoc` + `maGuiBaiHoc` (băm nội dung ➜ mã ổn định); gửi tuần tự, lỗi giữa chừng báo phần đã gửi + bấm gửi lại an toàn.
+- **Kiểm:** node --check; ca thuần (chủ đề lạ ➜ Khác, vấn đề < 5 ký tự, SĐT có dấu chấm, cách làm > 1000, mã ổn định / khác nhau / đúng dạng Hub với nội dung 500 ký tự); Edge 320: Demo 0 lần gọi; Live giả lập bấm đúp ➜ 2 bài = 2 lần gọi; gửi lại ➜ 2 lần gọi, 0 bài mới ("2 bài đã có sẵn"); 17 màn × 375 / 1280: 0 cuộn ngang, 0 lỗi console.
+- **Còn chờ v1:** HUB L28 bước 5 – máy chép bài Đã duyệt ➜ `05_TriThuc` (để bài hiện trong chỉ mục 🧠 Tri thức). **Chờ anh:** gửi thử 1 lần từ v2 rồi duyệt ở sổ BaiHoc.
 
 ### PHIÊN BẢN v2.13.9 ✅ – 👥 CRM NỐI HUB L29: GHI LIÊN HỆ + ĐÁNH DẤU LEAD (09/11/2026, lượt tự động ⑤ 10h – mục T6 "nối cổng v1 mới đã lên app")
 - **Bối cảnh:** HUB L29 đã lên app (Hub v1.20.2 @20): `webCRM` trả `giaiDoan` + `tuongTac` + `leadMoi[].ma/trangThai`, có `webGhiTuongTac`, `webDanhDauLead` trong `congWeb_`. Ô giai đoạn + khung lịch sử (v2.13.3) tự bật; lượt này nối 2 cổng ghi.
