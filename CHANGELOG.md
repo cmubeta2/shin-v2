@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.12] – 09/11/2026 (⚙️ KẾT NỐI TELEGRAM CÁ NHÂN NGAY TRÊN v2)
+
+### ⚙️ Cài đặt
+- Thẻ 🤖 Nhận thông báo qua Telegram: Bước 1 gọi HUB `webMaTG` ➜ mở bot `t.me/<bot>?start=<mã 15 phút>` (chỉ mở link đúng dạng t.me – link lạ bị chặn); Bước 2 "Tôi đã bấm Start" gọi `webXacNhanTG` ➜ báo đã kết nối. Khóa bấm đúp; Demo không gọi.
+
 ## [2.13.11] – 09/11/2026 (🩺 PHÒNG KHÁM – 📋 CHI TIẾT VIỆC: VIỆC CON + TRAO ĐỔI)
 
 ### 🩺 Phòng khám › ✅ Công việc

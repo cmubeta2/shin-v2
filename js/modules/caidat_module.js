@@ -80,7 +80,48 @@ const ModuleCaiDat = {
         <p class="chu-phu">v2 gọi thẳng 5 máy chủ Apps Script mà v1 đang dùng (POST text/plain, không preflight). Mọi cổng đòi token Hub ký HMAC; quyền của từng người do từng app v1 giữ.</p>
         <button class="btn-secondary" onclick="ShinApp.moCaiDat()">🔑 Nhập / đổi Token · 🎨 Giao diện</button>
       </div>
+
+      <div class="hn-tieu"><span>🤖 NHẬN THÔNG BÁO QUA TELEGRAM</span></div>
+      <div class="the" id="cdTG">${this.veTG()}</div>
     `;
+  },
+
+  /* v2.13.12 – Kết nối Telegram cá nhân ngay trên v2 (HUB `webMaTG` ➜ link t.me/<bot>?start=<mã 15 phút>; `webXacNhanTG` sau khi bấm Start).
+     Cổng có từ Hub v1.8.5 (L5a). Demo: không gọi. */
+  _tg: { buoc: 0, link: '' },
+
+  /** THUẦN – link bot hợp lệ (chỉ https://t.me/<tên bot>?start=<mã>) – chặn mở link lạ. */
+  linkTGHopLe: function(link) { return /^https:\/\/t\.me\/[A-Za-z0-9_]{5,64}\?start=[A-Za-z0-9_-]{4,64}$/.test(String(link || '')); },
+
+  veTG: function() {
+    const t = this._tg, e = ShinApp.esc;
+    return `
+      <p class="chu-phu">Kết nối 1 lần để Hub nhắn việc, phê duyệt, nhắc báo cáo vào Telegram của anh/chị. Bước 1 lấy mã (hạn 15 phút) và mở bot, bấm <b>Start</b>; bước 2 quay lại bấm xác nhận.</p>
+      <button class="btn-secondary" style="min-height:44px; width:100%;" onclick="ModuleCaiDat.layMaTG(this)">🔗 Bước 1 – Lấy mã &amp; mở bot</button>
+      ${t.link ? `<p class="chu-phu" style="overflow-wrap:anywhere;">Không tự mở? <a href="${e(t.link)}" target="_blank" rel="noopener">Bấm vào đây để mở bot</a></p>` : ''}
+      <button class="btn-primary" style="min-height:44px; width:100%; margin-top:8px;" ${t.buoc >= 1 ? '' : 'disabled'} onclick="ModuleCaiDat.xacNhanTG(this)">✅ Bước 2 – Tôi đã bấm Start</button>
+      ${t.buoc === 2 ? '<p class="chu-phu" style="color:var(--c-green); font-weight:700;">✅ Đã kết nối Telegram.</p>' : ''}`;
+  },
+
+  veLaiTG: function() { const el = document.getElementById('cdTG'); if (el) el.innerHTML = this.veTG(); },
+
+  layMaTG: async function(nut) {
+    if (!SHIN_API.laCheDoLive() || !SHIN_API.layToken()) return ShinApp.toast('Đang ở Demo – đăng nhập Hub (🔑 Token) để kết nối Telegram.', 'info');
+    const kq = await ShinApp.goiNut(nut, 'Đang lấy mã…', () => ShinApp.goiBat('HUB', 'webMaTG', {}), 'cd-matg');
+    if (!kq) return;
+    if (!this.linkTGHopLe(kq.link)) return ShinApp.toast('Hub chưa cài tên bot (TG_TEN_BOT) – báo Admin.', 'error');
+    this._tg = { buoc: 1, link: kq.link };
+    this.veLaiTG();
+    try { window.open(kq.link, '_blank', 'noopener'); } catch (e) {}
+  },
+
+  xacNhanTG: async function(nut) {
+    if (!SHIN_API.laCheDoLive() || !SHIN_API.layToken()) return ShinApp.toast('Đang ở Demo – không gửi.', 'info');
+    const kq = await ShinApp.goiNut(nut, 'Đang kiểm…', () => ShinApp.goiBat('HUB', 'webXacNhanTG', {}), 'cd-xntg');
+    if (!kq) return;
+    this._tg = { buoc: 2, link: '' };
+    this.veLaiTG();
+    ShinApp.toast('Đã kết nối Telegram – từ nay Hub nhắn vào bot.', 'success');
   },
 
   veSucKhoe: function() {
