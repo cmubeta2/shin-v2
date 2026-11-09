@@ -53,8 +53,87 @@ const ModuleCRM = {
       coGiaiDoan: (c.doiTac || []).some(x => coKhoa(x, 'giaiDoan')),
       tuongTac: Array.isArray(c.tuongTac) ? c.tuongTac.map(t => ({ maDoiTac: t.maDoiTac || '', maLead: t.maLead || '', ngay: t.ngay || '', kenh: t.kenh || '', noiDung: t.noiDung || '', nguoiGhi: t.nguoiGhi || '' })) : null,
       danhBa: ds,
-      leadMoi: (c.leadMoi || []).map(l => ({ ten: l.ten || '', nguon: l.nguon || '', soDt: l.soDt || '', ghiChu: l.ghiChu || '', thoiGian: l.luc || '' }))
+      leadMoi: (c.leadMoi || []).map(l => ({ ma: l.ma || '', ten: l.ten || '', nguon: l.nguon || '', soDt: l.soDt || '', ghiChu: l.ghiChu || '', thoiGian: l.luc || '', trangThai: l.trangThai || '' }))
     };
+  },
+
+  /* v2.13.9 – HUB L29 lên app (Hub v1.20.2 @20): ghi lần liên hệ (`webGhiTuongTac`) + đánh dấu lead (`webDanhDauLead`). */
+  KENH_TT: ['Gọi', 'Zalo', 'Email', 'Gặp', 'Khác'],
+  TT_LEAD: ['Đã chăm sóc', 'Đã chuyển'],
+
+  /** THUẦN – kiểm 1 lần liên hệ theo luật Hub (kiemTuongTac): đúng 1 trong maDoiTac (DT001) / maLead (LD001), kênh hợp lệ,
+   *  nội dung 1–500 ký tự, không SĐT / CCCD / BHYT / chữ "BN" (người bệnh). ➜ {loi} | {goi: {maDoiTac|maLead, kenh, noiDung}}. */
+  kiemTuongTac: function(du) {
+    du = du || {};
+    const cat = v => String(v == null ? '' : v).trim();
+    const dt = cat(du.maDoiTac), ld = cat(du.maLead), kenh = cat(du.kenh) || 'Khác', noi = cat(du.noiDung).replace(/\s+/g, ' ');
+    if ((dt ? 1 : 0) + (ld ? 1 : 0) !== 1) return { loi: 'Chọn đúng 1 đối tác hoặc 1 lead để ghi tương tác.' };
+    if (dt && !/^DT\d{3,}$/.test(dt)) return { loi: 'Mã đối tác không hợp lệ (dạng DT001) – mở lại CRM ở chế độ Live.' };
+    if (ld && !/^LD\d{3,}$/.test(ld)) return { loi: 'Mã lead không hợp lệ (dạng LD001).' };
+    if (this.KENH_TT.indexOf(kenh) < 0) return { loi: 'Kênh chỉ nhận: ' + this.KENH_TT.join(' / ') + '.' };
+    if (!noi) return { loi: 'Vui lòng ghi nội dung lần liên hệ.' };
+    if (noi.length > 500) return { loi: 'Nội dung tối đa 500 ký tự.' };
+    if (/(^|\D)0\d{9}(?!\d)/.test(noi.replace(/[\s.-]/g, '')) || /(^|\D)\d{12}(?!\d)|\b[A-Z]{2}[1-5]\d{12}\b|\bBN\b/.test(noi)) return { loi: 'Nội dung không được chứa SĐT / CCCD / BHYT / thông tin người bệnh.' };
+    const goi = { kenh, noiDung: noi };
+    if (dt) goi.maDoiTac = dt; else goi.maLead = ld;
+    return { goi };
+  },
+
+  /** THUẦN – 'dd/mm/yyyy' của 1 Date. */
+  ngayVN: function(d) { const p = n => String(n).padStart(2, '0'); return p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear(); },
+
+  /** Ghi 1 lần liên hệ của đối tác i: kiểm ➜ Toast Hoàn tác 6s ➜ webGhiTuongTac đúng 1 lần (maGui giữ tới khi Hub nhận). Demo: không gửi. */
+  ghiTuongTac: function(i, nut) {
+    const x = (this._d.danhBa || [])[i];
+    if (!x) return;
+    const v = id => String((document.getElementById(id) || {}).value || '');
+    const kq = this.kiemTuongTac({ maDoiTac: x.ma, kenh: v('ttKenh' + i), noiDung: v('ttNoi' + i) });
+    if (kq.loi) return ShinApp.toast(kq.loi, 'error');
+    if (!SHIN_API.laCheDoLive() || !this._d.live || !SHIN_API.layToken()) return ShinApp.toast('Đang ở Demo – không ghi lên Hub.', 'info');
+    if (this._dangGhi) return;
+    const khoa = JSON.stringify(kq.goi);
+    if (this._maGhiCho !== khoa) { this._maGhiCho = khoa; this._maGhi = ModuleTaiChinh.taoMaGui(Date.now(), Math.random().toString(36).slice(2)); }
+    const du = Object.assign({}, kq.goi, { maGui: this._maGhi });
+    this._dangGhi = true;
+    const khoaNut = on => { if (nut && nut.isConnected) { nut.disabled = on; nut.innerHTML = on ? '⏳ Chờ 6 giây…' : '💬 Ghi lần liên hệ'; } };
+    ShinApp.hanhDongHoanTac('Sẽ ghi lần liên hệ (' + kq.goi.kenh + ') với ' + x.ten + '.', {
+      lamTruoc: () => khoaNut(true),
+      traLai: () => { this._dangGhi = false; khoaNut(false); },
+      thucHien: async () => {
+        const r = await SHIN_API.goi('HUB', 'webGhiTuongTac', du);
+        if (!r.ok) throw new Error('Chưa ghi được: ' + SHIN_API.moTaLoi(r) + ' – bấm ghi lại (không tạo dòng trùng).');
+        if (r.isDemo) throw new Error('Chưa có máy chủ Hub – không ghi.');
+        const d = r.data || {};
+        this._dangGhi = false; this._maGhi = ''; this._maGhiCho = '';
+        if (d.moi !== false && Array.isArray(this._d.tuongTac)) this._d.tuongTac.unshift({ maDoiTac: x.ma, maLead: '', ngay: this.ngayVN(new Date()), kenh: kq.goi.kenh, noiDung: kq.goi.noiDung, nguoiGhi: '' });
+        ShinApp.toast((d.moi === false ? 'Lần liên hệ đã có sẵn ' : 'Đã ghi ') + (d.ma || '') + '.', 'success');
+        const khung = document.getElementById('crmCT' + i);
+        if (khung) { khung.hidden = true; this.moChiTiet(i); }
+      }
+    });
+  },
+
+  /** Đánh dấu lead i "Đã chăm sóc" | "Đã chuyển": Toast Hoàn tác 6s ➜ webDanhDauLead (chỉ ghi ô TrangThai, không xóa lead). Demo: không gửi. */
+  danhDauLead: function(i, tt, nut) {
+    const l = (this._d.leadMoi || [])[i];
+    if (!l || this.TT_LEAD.indexOf(tt) < 0) return;
+    if (!SHIN_API.laCheDoLive() || !this._d.live || !SHIN_API.layToken()) return ShinApp.toast('Đang ở Demo – không ghi lên Hub.', 'info');
+    if (!/^LD\d{3,}$/.test(l.ma || '')) return ShinApp.toast('Lead chưa có mã trên Hub – tải lại CRM rồi thử lại.', 'error');
+    if (this._dangDanhDau) return;
+    this._dangDanhDau = true;
+    if (nut) nut.disabled = true;
+    ShinApp.hanhDongHoanTac('Sẽ đánh dấu ' + l.ten + ': ' + tt + '.', {
+      traLai: () => { this._dangDanhDau = false; if (nut && nut.isConnected) nut.disabled = false; },
+      thucHien: async () => {
+        const r = await SHIN_API.goi('HUB', 'webDanhDauLead', { maLead: l.ma, trangThai: tt });
+        if (!r.ok) throw new Error('Chưa ghi được: ' + SHIN_API.moTaLoi(r));
+        if (r.isDemo) throw new Error('Chưa có máy chủ Hub – không ghi.');
+        this._dangDanhDau = false;
+        l.trangThai = (r.data || {}).trangThai || tt;
+        ShinApp.toast('Đã đánh dấu ' + l.ten + ': ' + l.trangThai + '.', 'success');
+        this.render(document.getElementById('appContent'), this._d);
+      }
+    });
   },
 
   /* v2.9.3 (M2.4) – Nhắc chăm sóc lead PHÍA TRÌNH DUYỆT theo tuổi lead (cột Luc của LeadMoi, webCRM trả "dd/mm/yyyy HH:mm"):
@@ -76,7 +155,7 @@ const ModuleCRM = {
 
   /** THUẦN. Tin nhắc chăm sóc (lead 🔴 trước) để dán Telegram / ⚡ Giao việc. */
   tinNhacLead: function(ds, bayGio) {
-    const dong = (ds || []).map(l => ({ l, m: this.mucLead(this.tuoiLead(l.thoiGian, bayGio)) })).filter(x => x.m === 'do' || x.m === 'vang')
+    const dong = (ds || []).filter(l => !l.trangThai).map(l => ({ l, m: this.mucLead(this.tuoiLead(l.thoiGian, bayGio)) })).filter(x => x.m === 'do' || x.m === 'vang')
       .sort((a, b) => (a.m === 'do' ? 0 : 1) - (b.m === 'do' ? 0 : 1))
       .map(x => `${x.m === 'do' ? '🔴' : '🟡'} ${x.l.ten} – ${x.l.nguon}${x.l.thoiGian ? ' · từ ' + x.l.thoiGian : ''}`);
     return dong.length ? `⏰ Lead chưa chăm sóc (${dong.length})\n` + dong.join('\n') : '';
@@ -102,7 +181,8 @@ const ModuleCRM = {
     const demGD = ten => b2b.filter(x => this.gdCua(x) === ten).length;
     const luongLead = typeof ModuleMarketing !== 'undefined' ? (d.leadMoi || []).map(l => ModuleMarketing.phanLuongLead(l)) : null;
     const demLuong = {}; (luongLead || []).forEach(x => { demLuong[x.luong] = (demLuong[x.luong] || 0) + 1; });
-    const quaHanLead = (d.leadMoi || []).filter(l => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); return m === 'vang' || m === 'do'; }).length;
+    const coDanhDau = Array.isArray(d.tuongTac);   // v2.13.9: cổng L29 có mặt (webCRM trả tuongTac)
+    const quaHanLead = (d.leadMoi || []).filter(l => { if (l.trangThai) return false; const m = this.mucLead(this.tuoiLead(l.thoiGian)); return m === 'vang' || m === 'do'; }).length;
     const hien = ds.filter(x => (!loc || x.loai === loc) && (!gd || (x.loai === 'B2B Khám Sức Khỏe' && this.gdCua(x) === gd)));
 
     container.innerHTML = `
@@ -138,7 +218,8 @@ const ModuleCRM = {
           ${d.leadMoi.map((l, i) => { const m = this.mucLead(this.tuoiLead(l.thoiGian)); const lu = luongLead ? luongLead[i] : null; return `
             <div class="hang-tru crm-lead crm-lead-${m || 'xam'}" style="flex-wrap:wrap"><span style="flex:1 1 60%;min-width:0"><b>${e(l.ten)}</b><br><span class="chu-phu">${e([l.nguon, l.soDt, l.slKham || l.khoa || l.ghiChu].filter(Boolean).join(' · '))}</span></span>
               <span class="chu-phu">${e(l.thoiGian)}${m === 'vang' || m === 'do' ? '<br>' + this.NHAN_LEAD[m] : ''}</span>
-              ${lu ? `<button class="btn-secondary" style="flex-basis:100%;min-height:44px;font-size:14px;margin-top:6px" title="${e(lu.lyDo)}" onclick="ShinApp.chuyenModule('${lu.module}')">${e(lu.nhan)}</button>` : ''}</div>`; }).join('')}
+              ${lu ? `<button class="btn-secondary" style="flex-basis:100%;min-height:44px;font-size:14px;margin-top:6px" title="${e(lu.lyDo)}" onclick="ShinApp.chuyenModule('${lu.module}')">${e(lu.nhan)}</button>` : ''}
+              ${l.trangThai ? `<span class="badge xanh" style="margin-top:6px">✓ ${e(l.trangThai)}</span>` : coDanhDau && l.ma ? `<button class="btn-secondary" style="flex-basis:100%;min-height:44px;font-size:14px;margin-top:6px" onclick="ModuleCRM.danhDauLead(${i}, 'Đã chăm sóc', this)">✅ Đánh dấu đã chăm sóc</button>` : ''}</div>`; }).join('')}
           ${quaHanLead ? `<button class="btn-secondary" style="min-height:44px; font-size:14px; width:100%; margin-top:8px;" onclick="ModuleCRM.saoChepNhacLead()">📋 Sao chép nhắc chăm sóc (${quaHanLead} lead > 24 giờ)</button>` : ''}
         </details>` : ''}
 
@@ -217,8 +298,12 @@ const ModuleCRM = {
       ${x.loai === 'B2B Khám Sức Khỏe' ? `<div class="hang-tru"><span>Giai đoạn</span><b>${e(this.gdCua(x))}</b></div>` : ''}
       ${tt ? (tt.length ? tt.map(t => `<div class="hang-tru"><span>${e([t.ngay, t.kenh].filter(Boolean).join(' · '))}</span><b style="font-weight:400">${e(t.noiDung)}</b></div>`).join('')
         : '<p class="chu-phu">🗂️ Chưa có lần liên hệ nào được ghi.</p>')
-        : '<p class="chu-phu">🗂️ Lịch sử tương tác: còn chờ máy chủ Hub (dòng L29).</p>'}
+        : '<p class="chu-phu">🗂️ Lịch sử tương tác: tải CRM ở chế độ Live (Hub v1.20.2) để xem và ghi.</p>'}
+      ${tt ? `<label class="nhan-o" for="ttKenh${i}">💬 Ghi lần liên hệ mới</label>
+      <select id="ttKenh${i}" class="form-input">${this.KENH_TT.map(k => `<option>${k}</option>`).join('')}</select>
+      <textarea id="ttNoi${i}" class="form-input" rows="2" maxlength="500" placeholder="Đã gọi báo giá gói KSK… (không ghi SĐT, thông tin người bệnh)"></textarea>` : ''}
       <div class="hang-nut">
+        ${tt ? `<button class="btn-primary" onclick="ModuleCRM.ghiTuongTac(${i}, this)">💬 Ghi lần liên hệ</button>` : ''}
         ${sdt.length >= 9 ? `<a class="btn-secondary" href="tel:${e(sdt)}">📞 Gọi</a>` : ''}
         <button class="btn-secondary" onclick="ModuleCRM.moForm(${i})">✏️ Sửa</button>
       </div>`;

@@ -114,16 +114,22 @@ window.SHIN_DEMO_DATA = {
       nutChinh: { nhan: "＋ Thêm Đối Tác / Khách Mới", hanhDong: "themDoiTac" }
     },
     danhBa: [
-      { ma: "DT01", ten: "Công ty Cổ phần Thủy sản Minh Phú Cà Mau", loai: "B2B Khám Sức Khỏe", quyMo: "1.200 nhân sự", nguoiLienHe: "Anh Tuấn (Trưởng ban Nhân sự)", dienThoai: "0918.xxx.112", trangThai: "Đang đàm phán HĐ 2026", mau: "var(--c-blue)" },
-      { ma: "DT02", ten: "Công ty Điện Lực Cà Mau (PC Cà Mau)", loai: "B2B Khám Sức Khỏe", quyMo: "420 nhân sự", nguoiLienHe: "Chị Thảo (Phòng Tổ chức)", dienThoai: "0903.xxx.898", trangThai: "Đang triển khai khám", mau: "var(--c-green)" },
-      { ma: "DT03", ten: "Trường Đại học Gia Định (GDU)", loai: "Đối tác Đào tạo", quyMo: "Đào tạo từ xa", nguoiLienHe: "Thầy Hưng (Trung tâm Tuyển sinh)", dienThoai: "0938.xxx.445", trangThai: "Hợp tác thường niên", mau: "var(--c-purple)" },
-      { ma: "DT04", ten: "Công ty Thiết bị Y tế Phương Đông", loai: "Nhà Cung Ứng", quyMo: "Vật tư xét nghiệm", nguoiLienHe: "Anh Khoa (Giám đốc kinh doanh)", dienThoai: "0912.xxx.678", trangThai: "Cung ứng ổn định", mau: "var(--c-gray)" },
-      { ma: "DT05", ten: "Anh Hoàng Minh Trí", loai: "CTV Tuyển sinh", quyMo: "Top 1 CTV Tháng 10", nguoiLienHe: "Cá nhân", dienThoai: "0944.xxx.221", trangThai: "Đã giới thiệu 18 lead", mau: "var(--c-yellow)" }
+      { ma: "DT001", ten: "Công ty Cổ phần Thủy sản Minh Phú Cà Mau", loai: "B2B Khám Sức Khỏe", quyMo: "1.200 nhân sự", nguoiLienHe: "Anh Tuấn (Trưởng ban Nhân sự)", dienThoai: "0918.xxx.112", trangThai: "Đang đàm phán HĐ 2026", mau: "var(--c-blue)" },
+      { ma: "DT002", ten: "Công ty Điện Lực Cà Mau (PC Cà Mau)", loai: "B2B Khám Sức Khỏe", quyMo: "420 nhân sự", nguoiLienHe: "Chị Thảo (Phòng Tổ chức)", dienThoai: "0903.xxx.898", trangThai: "Đang triển khai khám", mau: "var(--c-green)" },
+      { ma: "DT003", ten: "Trường Đại học Gia Định (GDU)", loai: "Đối tác Đào tạo", quyMo: "Đào tạo từ xa", nguoiLienHe: "Thầy Hưng (Trung tâm Tuyển sinh)", dienThoai: "0938.xxx.445", trangThai: "Hợp tác thường niên", mau: "var(--c-purple)" },
+      { ma: "DT004", ten: "Công ty Thiết bị Y tế Phương Đông", loai: "Nhà Cung Ứng", quyMo: "Vật tư xét nghiệm", nguoiLienHe: "Anh Khoa (Giám đốc kinh doanh)", dienThoai: "0912.xxx.678", trangThai: "Cung ứng ổn định", mau: "var(--c-gray)" },
+      { ma: "DT005", ten: "Anh Hoàng Minh Trí", loai: "CTV Tuyển sinh", quyMo: "Top 1 CTV Tháng 10", nguoiLienHe: "Cá nhân", dienThoai: "0944.xxx.221", trangThai: "Đã giới thiệu 18 lead", mau: "var(--c-yellow)" }
     ],
     leadMoi: [
-      { nguon: "Landing Page KSK Doanh nghiệp (Mảng 8)", ten: "Công ty May Xuất Khẩu An Xuyên", soDt: "0913.xxx.554", slKham: "350 người", thoiGian: "10 phút trước" },
-      { nguon: "Form Tuyển sinh Đại học Từ xa GDU", ten: "Lê Hoàng Yến", soDt: "0982.xxx.901", khoa: "Quản trị Kinh doanh", thoiGian: "45 phút trước" },
-      { nguon: "Landing Page KSK Doanh nghiệp (Mảng 8)", ten: "Công ty Mẫu Thủy Sản B", soDt: "0900.xxx.000", slKham: "120 người", thoiGian: "3 ngày trước" }
+      { ma: "LD001", nguon: "Landing Page KSK Doanh nghiệp (Mảng 8)", ten: "Công ty May Xuất Khẩu An Xuyên", soDt: "0913.xxx.554", slKham: "350 người", thoiGian: "10 phút trước" },
+      { ma: "LD002", nguon: "Form Tuyển sinh Đại học Từ xa GDU", ten: "Lê Hoàng Yến", soDt: "0982.xxx.901", khoa: "Quản trị Kinh doanh", thoiGian: "45 phút trước" },
+      { ma: "LD003", trangThai: "Đã chăm sóc", nguon: "Landing Page KSK Doanh nghiệp (Mảng 8)", ten: "Công ty Mẫu Thủy Sản B", soDt: "0900.xxx.000", slKham: "120 người", thoiGian: "3 ngày trước" }
+    ],
+    // v2.13.9 – sổ tương tác mẫu (HUB L29 webCRM.tuongTac)
+    tuongTac: [
+      { maDoiTac: "DT001", maLead: "", ngay: "06/11/2026", kenh: "Gặp", noiDung: "Mẫu: gặp ban nhân sự, gửi báo giá gói KSK định kỳ.", nguoiGhi: "Mẫu" },
+      { maDoiTac: "DT001", maLead: "", ngay: "02/11/2026", kenh: "Gọi", noiDung: "Mẫu: hẹn lịch gặp tuần sau.", nguoiGhi: "Mẫu" },
+      { maDoiTac: "DT002", maLead: "", ngay: "04/11/2026", kenh: "Email", noiDung: "Mẫu: gửi hồ sơ năng lực.", nguoiGhi: "Mẫu" }
     ]
   },
 

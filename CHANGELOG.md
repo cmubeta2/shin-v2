@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.9] – 09/11/2026 (👥 CRM – NỐI HUB L29: GHI LIÊN HỆ + ĐÁNH DẤU LEAD)
+
+### 👥 CRM
+- HUB L29 lên app (Hub v1.20.2 @20) ➜ chi tiết đối tác có ô 💬 Ghi lần liên hệ (kênh Gọi / Zalo / Email / Gặp / Khác + nội dung ≤ 500): kiểm như `kiemTuongTac` của Hub (chặn SĐT kể cả có dấu chấm, CCCD, BHYT, "BN") ➜ Toast Hoàn tác 6s ➜ `webGhiTuongTac` đúng 1 lần, `maGui` giữ tới khi Hub nhận (gửi lại không tạo dòng trùng); dòng mới hiện ngay trong lịch sử.
+- Lead mới từ web phễu: nút ✅ Đánh dấu đã chăm sóc ➜ `webDanhDauLead` (chỉ ghi ô TrangThai, không xóa lead); lead đã đánh dấu hiện nhãn ✓ và không còn tính vào nhắc > 24 giờ.
+- Demo: thêm sổ tương tác mẫu + mã DT001… / LD001…; không gửi gì.
+
 ## [2.13.8] – 09/11/2026 (🗓️ XIN NGHỈ – GIAO DIỆN LỊCH TUẦN, phiếu agy 11090620)
 
 ### 📋 PTKH gốc

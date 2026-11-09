@@ -106,9 +106,9 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M2.1 | Danh bạ hợp nhất: KSK Doanh nghiệp, Nhà cung ứng, Học viên, CTV | ✅ | – |
-| M2.2 | Hộp lead mới đổ về từ Web Phễu (M8.3) | ✅ mẫu / 🟡 tiếp nhận | v2.3.0 |
-| M2.3 | Pipeline B2B: Tiếp cận → Báo giá → Hợp đồng → Triển khai → Tái ký | 🟢 v2.8.2 đếm + lọc phía trình duyệt theo Trạng thái (`webCRM` + `webLuuDoiTac`, Hub v1.15.6 @15 06/11) · v2.13.3 ô chọn giai đoạn (cột GiaiDoan – tự bật khi HUB L29 lên app) | v2.3.0 |
-| M2.4 | Lịch sử tương tác & nhắc chăm sóc (đẩy việc sang Task Bus) | 🟡 v2.9.3 nhắc chăm sóc lead theo tuổi (🟡 > 24 giờ · 🔴 > 48 giờ, sao chép tin) · v2.13.3 khung lịch sử tương tác trong chi tiết đối tác (tự bật khi `webCRM` trả `tuongTac`) / ⬜ ghi lần liên hệ + đánh dấu lead (Còn chờ v1: HUB L29) | v2.3.0 |
+| M2.2 | Hộp lead mới đổ về từ Web Phễu (M8.3) | 🟢 lead thật `webCRM.leadMoi` · 🟢 v2.13.9 ✅ đánh dấu đã chăm sóc (`webDanhDauLead`, HUB L29) | v2.3.0 |
+| M2.3 | Pipeline B2B: Tiếp cận → Báo giá → Hợp đồng → Triển khai → Tái ký | 🟢 v2.8.2 đếm + lọc phía trình duyệt theo Trạng thái (`webCRM` + `webLuuDoiTac`, Hub v1.15.6 @15 06/11) · 🟢 v2.13.3 ô chọn giai đoạn (cột GiaiDoan – HUB L29 lên app Hub v1.20.2 @20) | v2.3.0 |
+| M2.4 | Lịch sử tương tác & nhắc chăm sóc (đẩy việc sang Task Bus) | 🟢 v2.9.3 nhắc chăm sóc lead theo tuổi (🟡 > 24 giờ · 🔴 > 48 giờ, sao chép tin) · 🟢 v2.13.9 lịch sử tương tác + 💬 ghi lần liên hệ (`webGhiTuongTac`, maGui chống trùng, Toast Hoàn tác 6s) + ✅ đánh dấu lead (`webDanhDauLead`) – HUB L29, Hub v1.20.2 · ⬜ đẩy nhắc sang Task Bus (M7.1, tuần sau) | v2.3.0 |
 
 > **Ràng buộc bất biến:** CRM **không lưu bệnh nhân** (tuân thủ `KHONG_DUA_VAO.md`). Lead "đặt lịch khám" đi thẳng về máy chủ PK của Mảng 5.
 
