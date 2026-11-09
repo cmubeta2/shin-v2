@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.14** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.16** · Cập nhật ngày: **10/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,14 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.16 ✅ – 📝 NHẬP HỘ PHIẾU GIẤY KHẢO SÁT (10/11/2026, lượt tự động ⑤ 04h – gỡ ⬜ cuối phía v2 của M1.5, cổng KS có sẵn)
+- **Bối cảnh:** lịch tuần T2–T6 đã xong ở các lượt trước; T3 10/11 không còn mục mới. Mục ⬜ phía v2 còn lại của bảng đối chiếu P3 là nhập hộ phiếu giấy (`webNhapHo`, KS L2 v1.3.2, đã lên app).
+- **Nội dung:** 🛠️ Quản lý khảo sát › 📝 Nhập hộ: nút theo từng khảo sát Đang mở ➜ đọc câu `webCongKhaiDocKS` ➜ form 10 loại câu ➜ kiểm (giống `loiPhieuKS` + CCCD / BHYT) ➜ Toast Hoàn tác 6s ➜ `webNhapHo` 1 lần (máy chủ ghi Kenh 'Nhập hộ' + người nhập; quyền Admin / Quản lý của KS). Khảo sát đã đóng / lỗi cổng ➜ khung đỏ, không thay bằng câu mẫu.
+- **Kiểm:** node --check; 10/10 ca hàm thuần; Edge 375 / 1280 (Demo): 1 nút nhập hộ (KS Đang mở), form 5 câu, chọn 5★ + chọn nhiều đúng, thiếu câu bắt buộc ➜ toast nêu tên câu, 0 lần gọi mạng; giả lập Live: bấm đúp + Hoàn tác ➜ 0 lần gửi; bấm đúp lần 2 ➜ đúng 1 lần `webNhapHo` {CH001:4, CH002:'Có', CH003:[…]} rồi form xóa; 17 màn × 375 / 1280: 0 cuộn ngang, 0 lỗi console, 0 nút < 44px.
+- **Tạm:** gắn qua lớp bọc `ModuleKhaoSat.veQuanLy` + 1 inline min-width (khaosat.js / styles.css đang có phiếu agy 11100334 giao-dien) – gộp vào khaosat.js + styles.css khi phiếu trả.
+- **Chờ anh:** nhập thử 1 phiếu thật ở 🩺 › 🛠️ › 📝 (lượt tự động không có token).
+- **Còn lại tuần:** T7 14/11 rà UX + bảng đối chiếu đầy đủ + chốt **v2.14.0 RC**.
 
 ### PHIÊN BẢN v2.13.15 ✅ – 🛠️ QUẢN LÝ KHẢO SÁT TRÊN v2 (09/11/2026, lượt tự động ⑤ 18h – gỡ dòng 🟡 cuối của bảng đối chiếu P3, cổng KS có sẵn)
 - **Bối cảnh:** lịch tuần T2–T6 đã xong ở các lượt trước; 0 phiếu agy V2 chờ. Dòng 🟡 phía v2 còn lại là form quản trị KS (app KS v1 "chỉ máy chủ, giao diện ở Shin v2" – trước đây chưa có màn nào để tạo khảo sát).
