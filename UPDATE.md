@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.11** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.12** · Cập nhật ngày: **09/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.12 ✅ – ⚙️ KẾT NỐI TELEGRAM CÁ NHÂN (09/11/2026, lượt tự động ⑤ 10h – mục P3 #6, cổng Hub có sẵn)
+- **Nội dung:** ⚙️ Cài đặt thêm thẻ 🤖 Telegram: `webMaTG` (Hub v1.8.5 L5a) ➜ mở bot bằng mã 15 phút; `webXacNhanTG` ➜ gán chat. Kiểm thuần `linkTGHopLe` chỉ nhận `https://t.me/<bot>?start=<mã>`; Hub chưa cài TG_TEN_BOT ➜ báo lỗi rõ.
+- **Kiểm:** node --check; Edge 320: Demo 0 lần gọi, bước 2 khóa tới khi có mã; Live giả lập bấm đúp bước 1 ➜ 1 lần `webMaTG` + mở bot 1 lần; bước 2 ➜ `webXacNhanTG` ➜ "Đã kết nối"; link lạ (evil.com) ➜ không mở; 17 màn × 375 / 1280: 0 cuộn ngang, 0 lỗi console.
+- **Chờ anh:** thử kết nối 1 lần bằng tài khoản của anh (Hub phải đang bật kết nối Telegram ở Hub, không ở PTKH – nếu không Hub báo "Đang dùng kết nối Telegram ở app PTKH").
+- **Còn lại P3:** duyệt đơn nghỉ cho quản lý – Còn chờ v1 (cổng đọc danh sách đơn chờ duyệt ở PTKH, cần Sếp duyệt mở cổng).
 
 ### PHIÊN BẢN v2.13.11 ✅ – 🩺 CHI TIẾT VIỆC PK: VIỆC CON + TRAO ĐỔI (09/11/2026, lượt tự động ⑤ 10h – mục P3 còn lại, cổng PK đã có)
 - **Bối cảnh:** bảng đối chiếu P3 (agy 11081816) còn "chi tiết việc con PK"; cổng `webChiTietViec` + `webCapNhatViec` (nhận `viecConXong`, `traoDoiMoi`) có sẵn ở PK từ v1.0.4 (L3, đã lên app).
