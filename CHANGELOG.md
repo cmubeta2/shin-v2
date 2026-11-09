@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.10] – 09/11/2026 (🧠 GỬI BÀI HỌC VÀO KHO TRI THỨC – HUB L28 webLuuBaiHoc)
+
+### 🗂️ Dự án › Ma trận vướng mắc
+- Nút 📤 Gửi bài học vào kho 🧠: mỗi bài học trích từ Flash (M9.4) kiểm theo luật Hub `kiemBaiHoc` (vấn đề 5–500, cách làm 5–1000, chặn SĐT / CCCD / BHYT / "BN") ➜ Toast Hoàn tác 6s ➜ `webLuuBaiHoc` từng bài 1 lần; mã gửi ổn định theo nội dung nên gửi lại chỉ báo "đã có sẵn", không tạo bài trùng. Bài vào sổ BaiHoc trạng thái Chờ – Admin duyệt. Demo: không gửi.
+
 ## [2.13.9] – 09/11/2026 (👥 CRM – NỐI HUB L29: GHI LIÊN HỆ + ĐÁNH DẤU LEAD)
 
 ### 👥 CRM

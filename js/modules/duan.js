@@ -358,6 +358,55 @@ const ModuleDuAn = {
     ).join('\n\n') + '\n';
   },
 
+  /* v2.13.10 – HUB L28 `webLuuBaiHoc` lên app (Hub v1.20.2 @20): gửi bài học vào sổ BaiHoc (trạng thái Chờ – Admin duyệt mới vào kho). */
+  /** THUẦN – mã gửi ỔN ĐỊNH theo nội dung (gửi lại cùng bài ➜ Hub trả moi:false, không trùng). Hub đòi ^[A-Za-z0-9_-]{6,40}$. */
+  maGuiBaiHoc: function(b) {
+    const s = [b.chuDe, b.vanDe, b.cachLam].join('|');
+    let h1 = 5381, h2 = 52711;
+    for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); h1 = (h1 * 33 ^ c) >>> 0; h2 = (h2 * 31 + c) >>> 0; }
+    return 'bh' + h1.toString(36) + h2.toString(36);
+  },
+
+  /** THUẦN – 1 bài học ➜ {goi: {baiHoc, maGui}} | {loi} theo luật Hub kiemBaiHoc (vấn đề 5–500, cách làm 5–1000, nguồn ≤ 120,
+   *  không SĐT / CCCD / BHYT / "BN"). */
+  kiemBaiHoc: function(b) {
+    const cat = v => String(v == null ? '' : v).replace(/\s+/g, ' ').trim();
+    const CD = this.CHU_DE_BH.map(([t]) => t).concat('Khác');
+    const bh = { chuDe: CD.indexOf(cat(b.chuDe)) >= 0 ? cat(b.chuDe) : 'Khác', vanDe: cat(b.vanDe), cachLam: cat(b.cachLam), nguon: cat(b.nguon).slice(0, 120) };
+    if (bh.vanDe.length < 5 || bh.vanDe.length > 500) return { loi: 'Vấn đề cần 5–500 ký tự.' };
+    if (bh.cachLam.length < 5 || bh.cachLam.length > 1000) return { loi: 'Cách làm cần 5–1000 ký tự.' };
+    const t = [bh.vanDe, bh.cachLam, bh.nguon].join(' ');
+    if (/(^|\D)0\d{9}(?!\d)/.test(t.replace(/[\s.-]/g, '')) || /(^|\D)\d{12}(?!\d)|\b[A-Z]{2}[1-5]\d{12}\b|\bBN\b/.test(t)) return { loi: 'Có SĐT / CCCD / BHYT / thông tin người bệnh.' };
+    return { goi: { baiHoc: bh, maGui: this.maGuiBaiHoc(bh) } };
+  },
+
+  /** Gửi mọi bài học hợp lệ vào kho (Toast Hoàn tác 6s ➜ mỗi bài 1 lần `webLuuBaiHoc`). Demo: không gửi. */
+  guiBaiHoc: function(nut) {
+    const bh = this.trichBaiHoc(this._maTran || []);
+    if (!bh.length) return ShinApp.toast('Chưa có vướng mắc nào kèm đề xuất để rút bài học.', 'info');
+    if (!SHIN_API.laCheDoLive() || !SHIN_API.layToken()) return ShinApp.toast('Đang ở Demo – không gửi lên Hub. Dùng 📋 để sao chép.', 'info');
+    if (this._dangGuiBH) return;
+    const kq = bh.map(b => this.kiemBaiHoc(b)), hop = kq.filter(k => k.goi), bo = kq.length - hop.length;
+    if (!hop.length) return ShinApp.toast('Không bài nào gửi được (' + (kq[0] || {}).loi + ').', 'error');
+    this._dangGuiBH = true;
+    const khoaNut = on => { if (nut && nut.isConnected) { nut.disabled = on; nut.innerHTML = on ? '⏳ Chờ 6 giây…' : '📤 Gửi bài học vào kho 🧠 (chờ Admin duyệt)'; } };
+    ShinApp.hanhDongHoanTac('Sẽ gửi ' + hop.length + ' bài học vào kho tri thức' + (bo ? ' (bỏ ' + bo + ' bài không hợp lệ)' : '') + '.', {
+      lamTruoc: () => khoaNut(true),
+      traLai: () => { this._dangGuiBH = false; khoaNut(false); },
+      thucHien: async () => {
+        let moi = 0, cu = 0, loi = '';
+        for (const k of hop) {
+          const r = await SHIN_API.goi('HUB', 'webLuuBaiHoc', k.goi);
+          if (!r.ok || r.isDemo) { loi = r.isDemo ? 'chưa có máy chủ Hub' : SHIN_API.moTaLoi(r); break; }
+          if ((r.data || {}).moi === false) cu++; else moi++;
+        }
+        this._dangGuiBH = false; khoaNut(false);
+        if (loi && !moi && !cu) throw new Error('Chưa gửi được: ' + loi + ' – bấm gửi lại (không tạo bài trùng).');
+        ShinApp.toast('Đã gửi ' + moi + ' bài mới' + (cu ? ', ' + cu + ' bài đã có sẵn' : '') + (loi ? ' – dừng giữa chừng: ' + loi + ', bấm gửi lại phần còn lại' : '') + ' · chờ Admin duyệt ở 🧠 Tri thức.', loi ? 'warn' : 'success');
+      }
+    });
+  },
+
   saoChepBaiHoc: function() {
     const bh = this.trichBaiHoc(this._maTran || []);
     if (!bh.length) return ShinApp.toast('Chưa có vướng mắc nào kèm đề xuất để rút bài học.', 'info');
@@ -377,6 +426,7 @@ const ModuleDuAn = {
         <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:6px;">💡 Bài học kinh nghiệm · ${bh.length}</div>
         <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">${[...new Set(bh.map(b => b.chuDe))].map(cd => `<span class="badge xam" style="font-size:14px;">${ShinApp.esc(cd)} · ${bh.filter(b => b.chuDe === cd).length}</span>`).join('')}</div>
         <button class="btn-secondary" style="min-height:44px; font-size:14px; width:100%;" onclick="ModuleDuAn.saoChepBaiHoc()">📋 Sao chép bài học (Markdown cho 📚 Tri thức)</button>
+        <button class="btn-primary" style="min-height:44px; font-size:14px; width:100%; margin-top:8px;" onclick="ModuleDuAn.guiBaiHoc(this)">📤 Gửi bài học vào kho 🧠 (chờ Admin duyệt)</button>
       </div>` : '';
     return dauBh + NHOM.map(([k, nhan, mau]) => {
       const nhom = ds.map((x, i) => ({ x, i })).filter(o => o.x.muc === k);

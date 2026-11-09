@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.13.9';
+  const PHIEN_BAN = 'v2.13.10';
 
   const MODULES = [
     ModuleHub,
