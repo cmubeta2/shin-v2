@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.13.17';
+  const PHIEN_BAN = 'v2.13.18';
 
   const MODULES = [
     ModuleHub,
@@ -162,6 +162,8 @@ const ShinApp = (function() {
   function rung(kieu) {
     try {
       if (!navigator.vibrate) return;
+      // v2.13.17: chưa có cử chỉ thật của người dùng thì trình duyệt chặn + ghi lỗi console – bỏ qua cho sạch
+      if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
       navigator.vibrate(kieu === 'xong' ? [10, 30, 10] : kieu === 'canh' ? 40 : 5);
     } catch (e) {}
   }

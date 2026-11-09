@@ -343,7 +343,8 @@ const ModuleKhaoSat = {
               <button class="btn-primary" onclick="ModuleKhaoSat.luuQuyen(this)">💾 Lưu quyền</button>
             </div>
           </details>
-          <p class="chu-phu">Nhập hộ phiếu giấy chưa có trên v2 (cổng <code>webNhapHo</code> có sẵn – làm sau). Câu đã có người trả lời khi sửa sẽ thành phiên bản mới, khảo sát cũ giữ bản trước.</p>
+          ${typeof ModuleKsNhapHo !== 'undefined' ? ModuleKsNhapHo.veKhoi(d) : ''}
+          <p class="chu-phu">Câu đã có người trả lời khi sửa sẽ thành phiên bản mới, khảo sát cũ giữ bản trước.</p>
         </div>
       </details>`;
   },

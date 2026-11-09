@@ -26,6 +26,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.13.18 ✅ – 🔍 RÀ UX SÂU TAB CON + GỘP NHẬP HỘ (10/11/2026, lượt tự động ⑤ 06h – kéo trước một phần T7)
+- **Bối cảnh:** lịch T2–T6 xong; L26 đã nối (v2.12.2). Lượt 05h40 đã chép phiếu agy 11100334 thành v2.13.17 nhưng CHƯA đẩy (nhánh cục bộ) – lượt này đẩy cùng.
+- **Nội dung:** rà UX sâu (bấm từng tab con mọi màn); chặn rung khi chưa có cử chỉ người dùng (sạch console); gộp khối 📝 Nhập hộ thẳng vào khaosat.js (`ModuleKsNhapHo.veKhoi`), bỏ style= nội dòng.
+- **Kiểm:** node --check 3 tệp; Edge 375 / 1280 Demo: 17 màn + 126 tab con – 0 cuộn ngang, 0 chữ < 14px, 0 nút < 44px, 0 lỗi console; 🩺 Khảo sát hiện 1 nút nhập hộ (KS Đang mở), không còn dòng "chưa có trên v2".
+- **Còn lại tuần:** T7 14/11 bảng đối chiếu v1↔v2 đầy đủ + cột trạng thái QUY_HOACH + chốt **v2.14.0 RC** (đúng ngày, không kéo trước); phiếu agy `ra-ux` T7 gửi lượt 04h07 14/11.
+
 ### PHIÊN BẢN v2.13.17 ✅ – 🎨 GIAO DIỆN QUẢN LÝ KHẢO SÁT (10/11/2026, viet-code 05h27 – chép phiếu agy 11100334_V2_M1.5_giao-dien)
 - **Nội dung:** thẻ KS lưới 2 cột nút; form sửa câu dạng thẻ có STT + ▲▼ đổi thứ tự; Ngân hàng câu có tìm + chip lọc. Chi tiết: CHANGELOG 2.13.17.
 - **Kiểm:** node --check; agy đo Edge 320/375/1280: 0 chữ < 14px, 0 nút < 44px, 0 cuộn ngang; Claude xem ảnh 375 form + ngân hàng: không chồng / cắt chữ.

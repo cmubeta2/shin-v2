@@ -1540,6 +1540,7 @@ details.tq-gon > .nut-rong { width: calc(100% - 24px); max-width: none; }
 .hang-chip { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .chip-chon { min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; font-size: calc(14px * var(--font-scale)); font-weight: 600; cursor: pointer; }
 .chip-chon.dang-chon { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+.ks-nh-chip { min-width: 44px; }
 .luoi-o-so { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 6px; margin-bottom: 10px; }
 .o-so-loc { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 64px; padding: 6px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font: inherit; font-size: calc(12px * var(--font-scale)); text-align: center; }
 button.o-so-loc { cursor: pointer; }
