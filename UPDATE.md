@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.16** · Cập nhật ngày: **10/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.17** · Cập nhật ngày: **10/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,10 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.17 ✅ – 🎨 GIAO DIỆN QUẢN LÝ KHẢO SÁT (10/11/2026, viet-code 05h27 – chép phiếu agy 11100334_V2_M1.5_giao-dien)
+- **Nội dung:** thẻ KS lưới 2 cột nút; form sửa câu dạng thẻ có STT + ▲▼ đổi thứ tự; Ngân hàng câu có tìm + chip lọc. Chi tiết: CHANGELOG 2.13.17.
+- **Kiểm:** node --check; agy đo Edge 320/375/1280: 0 chữ < 14px, 0 nút < 44px, 0 cuộn ngang; Claude xem ảnh 375 form + ngân hàng: không chồng / cắt chữ.
 
 ### PHIÊN BẢN v2.13.16 ✅ – 📝 NHẬP HỘ PHIẾU GIẤY KHẢO SÁT (10/11/2026, lượt tự động ⑤ 04h – gỡ ⬜ cuối phía v2 của M1.5, cổng KS có sẵn)
 - **Bối cảnh:** lịch tuần T2–T6 đã xong ở các lượt trước; T3 10/11 không còn mục mới. Mục ⬜ phía v2 còn lại của bảng đối chiếu P3 là nhập hộ phiếu giấy (`webNhapHo`, KS L2 v1.3.2, đã lên app).

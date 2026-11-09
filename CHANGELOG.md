@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.17] – 10/11/2026 (🩺 KHẢO SÁT – GIAO DIỆN QUẢN LÝ, phiếu agy M1.5)
+
+### 🎨 Giao diện (Viết: agy sandbox 11100334 · Soát chéo + chép về: Claude)
+- Thẻ khảo sát: lưới 2 cột nút (≥ 44px), nút trạng thái nổi bật, 🗑 Xóa viền đỏ.
+- Form sửa: mỗi câu 1 thẻ tự cao theo nội dung – STT + ô tick 1 cột, nội dung giữa, ▲▼ 44×44 xếp dọc để đổi thứ tự (lưu theo thứ tự trên màn), tự khóa ở câu đầu / cuối.
+- 📚 Ngân hàng câu hỏi: ô tìm + chip lọc Nhóm / Loại (wrap, ≥ 44px), dòng thống kê "Hiển thị x / y".
+- Mọi chữ ≥ 14px, không cuộn ngang 320 / 375; bỏ style= nội dòng agy thêm (thay lớp CSS), #fff → var(--on-primary).
+
 ## [2.13.16] – 10/11/2026 (🩺 KHẢO SÁT – 📝 NHẬP HỘ PHIẾU GIẤY)
 
 ### 🩺 Khảo sát (cổng KS L2 `webNhapHo` + `webCongKhaiDocKS` có sẵn – không cần cổng v1 mới)

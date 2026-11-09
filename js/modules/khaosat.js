@@ -323,11 +323,11 @@ const ModuleKhaoSat = {
             <div class="the ks-ql-the">
               <div class="the-tin-dau"><b>${e(x.ten)}</b><span class="badge ${mauTT[x.trangThai] || 'xam'}">${e(x.trangThai || 'Nháp')}</span></div>
               <div class="chu-phu">${e([x.ma, (x.soCau || 0) + ' câu', x.dongLuc ? 'hạn ' + x.dongLuc : '', x.nhieuLan ? 'trả lời nhiều lần' : ''].filter(Boolean).join(' · '))}</div>
-              <div class="ks-ql-nut">
-                ${this.nutTrangThai(x.trangThai).map(n => `<button class="btn-secondary" onclick="ModuleKhaoSat.doiTrangThai(${i}, '${n[0]}', this)">${n[1]}</button>`).join('')}
+              <div class="ks-ql-the-nut">
+                ${this.nutTrangThai(x.trangThai).map(n => `<button class="btn-primary" onclick="ModuleKhaoSat.doiTrangThai(${i}, '${n[0]}', this)">${n[1]}</button>`).join('')}
                 <button class="btn-secondary" onclick="ModuleKhaoSat.moFormKS(${i}, this)">✏️ Sửa</button>
                 <button class="btn-secondary" onclick="ModuleKhaoSat.nhanBan(${i}, this)">⧉ Nhân bản</button>
-                <button class="btn-secondary" onclick="ModuleKhaoSat.xoaKS(${i}, this)" aria-label="Xóa khảo sát ${e(x.ten)}">🗑 Xóa</button>
+                <button class="btn-secondary nut-do" onclick="ModuleKhaoSat.xoaKS(${i}, this)" aria-label="Xóa khảo sát ${e(x.ten)}">🗑 Xóa</button>
               </div>
             </div>`).join('')}
           ${ks.length ? '' : '<div class="trong">Chưa có khảo sát – bấm ➕ Tạo khảo sát.</div>'}
@@ -414,6 +414,29 @@ const ModuleKhaoSat = {
     const daChon = (ch.cau || []).map(c => c.maCH);
     const thuTu = nh ? daChon.map(m => nh.find(c => c.maCH === m)).filter(Boolean).concat(nh.filter(c => daChon.indexOf(c.maCH) < 0)) : [];
     const tenLoai = l => (this.LOAI_CAU.find(t => t[0] === l) || [l, l])[1];
+
+    let demSTT = 0;
+    const renderDongCau = c => {
+      const isChecked = daChon.indexOf(c.maCH) >= 0;
+      const stt = isChecked ? ++demSTT : '–';
+      const chkId = 'ks_cau_' + e(c.maCH);
+      return `
+        <div class="ks-ql-dong-cau ${isChecked ? 'da-chon' : ''}" data-mach="${e(c.maCH)}">
+          <div class="ks-ql-cot-chon">
+            <span class="ks-ql-stt">${stt}</span>
+            <input type="checkbox" id="${chkId}" class="ksChonCau" value="${e(c.maCH)}" ${isChecked ? 'checked' : ''} onchange="ModuleKhaoSat.doiChonCau(this)">
+          </div>
+          <label class="ks-ql-noi-dung" for="${chkId}">
+            <span class="ks-ql-cau-nd">${e(c.noiDung)}</span>
+            <span class="chu-phu ks-ql-cau-phu">${e([c.maCH + ' v' + (c.phienBan || 1), tenLoai(c.loai), c.nhom, c.batBuoc ? 'bắt buộc' : ''].filter(Boolean).join(' · '))}</span>
+          </label>
+          <div class="ks-ql-cot-nut">
+            <button type="button" class="btn-secondary ks-ql-nut-len" onclick="ModuleKhaoSat.diChuyenCau(this, -1)" title="Chuyển câu lên" aria-label="Chuyển câu lên">▲</button>
+            <button type="button" class="btn-secondary ks-ql-nut-xuong" onclick="ModuleKhaoSat.diChuyenCau(this, 1)" title="Chuyển câu xuống" aria-label="Chuyển câu xuống">▼</button>
+          </div>
+        </div>`;
+    };
+
     k.innerHTML = `
       <div class="hn-tieu"><span>${x ? '✏️ SỬA ' + e(x.ma) : '➕ KHẢO SÁT MỚI'}</span></div>
       <div class="tc-form-nhom"><label class="nhan-o" for="ksTD">Tiêu đề *</label><input id="ksTD" class="form-input" maxlength="200" value="${e(x ? x.ten : '')}"></div>
@@ -427,14 +450,75 @@ const ModuleKhaoSat = {
         <div class="tc-form-nhom"><label class="nhan-o" for="ksMTr">Cách hiện câu</label><select id="ksMTr" class="form-input"><option value="1cau">1 câu / trang</option><option value="catrang" ${ch.moiTrang === 'catrang' ? 'selected' : ''}>Cả trang</option></select></div>
       </div>
       <div class="hn-tieu"><span>CÂU HỎI · tick để đưa vào khảo sát</span></div>
-      ${nh ? `<div class="ks-ql-cau">${thuTu.map(c => `<label class="ks-ql-chon"><input type="checkbox" class="ksChonCau" value="${e(c.maCH)}" ${daChon.indexOf(c.maCH) >= 0 ? 'checked' : ''}><span>${e(c.noiDung)}<br><span class="chu-phu">${e([c.maCH + ' v' + (c.phienBan || 1), tenLoai(c.loai), c.nhom, c.batBuoc ? 'bắt buộc' : ''].filter(Boolean).join(' · '))}</span></span></label>`).join('') || '<div class="trong">Ngân hàng chưa có câu – mở 📚 Ngân hàng câu hỏi để thêm.</div>'}</div>`
+      ${nh ? `<div class="ks-ql-cau">${thuTu.map(renderDongCau).join('') || '<div class="trong">Ngân hàng chưa có câu – mở 📚 Ngân hàng câu hỏi để thêm.</div>'}</div>`
         : '<div class="ks-ql-loi">Chưa tải được ngân hàng câu hỏi – vẫn lưu được phần thông tin, giữ nguyên câu đang có.</div>'}
       <div class="ks-ql-nut">
         <button class="btn-primary" onclick="ModuleKhaoSat.luuKS(${i}, this)">💾 Lưu khảo sát</button>
         <button class="btn-secondary" onclick="document.getElementById('ksForm').hidden = true">Đóng</button>
       </div>`;
     k.hidden = false;
+    this.capNhatThuTuCauKS();
     k.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  },
+
+  doiChonCau: function(chk) {
+    const dong = chk.closest('.ks-ql-dong-cau');
+    if (dong) {
+      if (chk.checked) dong.classList.add('da-chon');
+      else dong.classList.remove('da-chon');
+    }
+    this.capNhatThuTuCauKS();
+  },
+
+  diChuyenCau: function(nut, huong) {
+    const dong = nut.closest('.ks-ql-dong-cau');
+    if (!dong) return;
+    const cha = dong.parentElement;
+    if (huong === -1) {
+      const truoc = dong.previousElementSibling;
+      if (truoc && truoc.classList.contains('ks-ql-dong-cau')) {
+        cha.insertBefore(dong, truoc);
+      }
+    } else if (huong === 1) {
+      const sau = dong.nextElementSibling;
+      if (sau && sau.classList.contains('ks-ql-dong-cau')) {
+        cha.insertBefore(sau, dong);
+      }
+    }
+    this.capNhatThuTuCauKS();
+  },
+
+  capNhatThuTuCauKS: function() {
+    const container = document.querySelector('#ksForm .ks-ql-cau');
+    if (!container) return;
+    const dongs = Array.from(container.querySelectorAll('.ks-ql-dong-cau'));
+    let stt = 0;
+    const dongsChon = [];
+    dongs.forEach(d => {
+      const chk = d.querySelector('.ksChonCau');
+      const sttEl = d.querySelector('.ks-ql-stt');
+      if (chk && chk.checked) {
+        stt++;
+        if (sttEl) sttEl.textContent = stt;
+        d.classList.add('da-chon');
+        dongsChon.push(d);
+      } else {
+        if (sttEl) sttEl.textContent = '–';
+        d.classList.remove('da-chon');
+      }
+    });
+    dongs.forEach(d => {
+      const len = d.querySelector('.ks-ql-nut-len');
+      const xuong = d.querySelector('.ks-ql-nut-xuong');
+      const idxChon = dongsChon.indexOf(d);
+      if (idxChon < 0) {
+        if (len) len.disabled = true;
+        if (xuong) xuong.disabled = true;
+      } else {
+        if (len) len.disabled = (idxChon === 0);
+        if (xuong) xuong.disabled = (idxChon === dongsChon.length - 1);
+      }
+    });
   },
 
   luuKS: async function(i, nut) {
@@ -472,18 +556,100 @@ const ModuleKhaoSat = {
     if (!k) return;
     const nh = await ShinApp.goiNut(nut, 'Đang tải câu…', () => this.taiNganHang(), 'ks-nh');
     if (!nh) { k.innerHTML = '<div class="ks-ql-loi">Chưa tải được ngân hàng câu hỏi – bấm lại 📚.</div>'; k.hidden = false; return; }
-    const e = ShinApp.esc, tenLoai = l => (this.LOAI_CAU.find(t => t[0] === l) || [l, l])[1];
+    const e = ShinApp.esc;
+    this._nhLoc = { tim: '', nhom: '', loai: '' };
+
+    const dsNhom = [...new Set((this._cau || []).map(x => x.nhom).filter(Boolean))];
+    const dsLoai = this.LOAI_CAU || [];
+
     k.innerHTML = `
       <div class="hn-tieu"><span>📚 NGÂN HÀNG CÂU HỎI · ${nh.length}</span></div>
       <div id="ksCauForm" class="ks-ql-khung"></div>
-      <div class="ks-ql-nut"><button class="btn-primary" onclick="ModuleKhaoSat.moFormCau(-1)">➕ Thêm câu hỏi</button>
-        <button class="btn-secondary" onclick="document.getElementById('ksNH').hidden = true">Đóng</button></div>
-      ${nh.map((c, j) => `
-        <div class="hang-tru"><span>${e(c.noiDung)}<br><span class="chu-phu">${e([c.maCH + ' v' + (c.phienBan || 1), tenLoai(c.loai), c.nhom, c.batBuoc ? 'bắt buộc' : 'không bắt buộc'].filter(Boolean).join(' · '))}</span></span>
-          ${c.suaDuoc || !(this._d && this._d.live) ? `<button class="btn-secondary ks-ql-nho" onclick="ModuleKhaoSat.moFormCau(${j})">✏️ Sửa</button>`
-            : `<button class="btn-secondary ks-ql-nho" onclick="ModuleKhaoSat.nhanBanCau(${j}, this)" title="Câu người khác tạo – nhân bản để sửa">⧉ Nhân bản</button>`}</div>`).join('')}`;
+      <div class="ks-ql-nut">
+        <button class="btn-primary" onclick="ModuleKhaoSat.moFormCau(-1)">➕ Thêm câu hỏi</button>
+        <button class="btn-secondary" onclick="document.getElementById('ksNH').hidden = true">Đóng</button>
+      </div>
+      <div class="ks-ql-nh-tim">
+        <input id="ksNhTim" class="form-input ks-ql-nh-o" placeholder="🔍 Tìm theo nội dung, mã, nhóm…" oninput="ModuleKhaoSat.locNganHang()">
+      </div>
+      <div class="ks-ql-chip-nhom">
+        <span class="ks-ql-chip-label">Nhóm (Trụ ACHSI):</span>
+        <div class="ks-ql-chip-hang" id="ksNhChipNhom">
+          <button type="button" class="ks-ql-chip active" onclick="ModuleKhaoSat.chonChipNH('nhom', '', this)">Tất cả</button>
+          ${dsNhom.map(n => `<button type="button" class="ks-ql-chip" onclick="ModuleKhaoSat.chonChipNH('nhom', '${e(n)}', this)">${e(n)}</button>`).join('')}
+        </div>
+      </div>
+      <div class="ks-ql-chip-nhom">
+        <span class="ks-ql-chip-label">Loại câu:</span>
+        <div class="ks-ql-chip-hang" id="ksNhChipLoai">
+          <button type="button" class="ks-ql-chip active" onclick="ModuleKhaoSat.chonChipNH('loai', '', this)">Tất cả</button>
+          ${dsLoai.map(t => `<button type="button" class="ks-ql-chip" onclick="ModuleKhaoSat.chonChipNH('loai', '${e(t[0])}', this)">${e(t[1])}</button>`).join('')}
+        </div>
+      </div>
+      <div class="ks-ql-nh-thongke" id="ksNhThongKe">Hiển thị ${nh.length} / ${nh.length} câu hỏi</div>
+      <div class="ks-ql-nh-cau" id="ksNhDs"></div>`;
     k.hidden = false;
+    this.locNganHang();
     k.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  },
+
+  chonChipNH: function(kieu, giaTri, nut) {
+    if (!this._nhLoc) this._nhLoc = { tim: '', nhom: '', loai: '' };
+    this._nhLoc[kieu] = giaTri;
+    const hang = nut ? nut.parentElement : null;
+    if (hang) {
+      Array.from(hang.querySelectorAll('.ks-ql-chip')).forEach(c => c.classList.remove('active'));
+      nut.classList.add('active');
+    }
+    this.locNganHang();
+  },
+
+  locNganHang: function() {
+    const dsContainer = document.getElementById('ksNhDs');
+    const thongKe = document.getElementById('ksNhThongKe');
+    if (!dsContainer) return;
+    const timInput = document.getElementById('ksNhTim');
+    const tuKhoa = (timInput ? timInput.value : '').trim();
+    if (!this._nhLoc) this._nhLoc = { tim: '', nhom: '', loai: '' };
+    this._nhLoc.tim = tuKhoa;
+
+    const nh = this._cau || [];
+    const boDau = s => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const tkNorm = boDau(tuKhoa);
+
+    const kq = nh.filter(c => {
+      if (this._nhLoc.nhom && c.nhom !== this._nhLoc.nhom) return false;
+      if (this._nhLoc.loai && c.loai !== this._nhLoc.loai) return false;
+      if (tkNorm) {
+        const full = boDau((c.noiDung || '') + ' ' + (c.maCH || '') + ' ' + (c.nhom || ''));
+        if (!full.includes(tkNorm)) return false;
+      }
+      return true;
+    });
+
+    if (thongKe) {
+      thongKe.textContent = `Hiển thị ${kq.length} / ${nh.length} câu hỏi`;
+    }
+
+    const e = ShinApp.esc, tenLoai = l => (this.LOAI_CAU.find(t => t[0] === l) || [l, l])[1];
+    if (!kq.length) {
+      dsContainer.innerHTML = '<div class="trong">Không tìm thấy câu hỏi phù hợp với bộ lọc.</div>';
+      return;
+    }
+
+    dsContainer.innerHTML = kq.map(c => {
+      const j = nh.indexOf(c);
+      return `
+        <div class="hang-tru ks-ql-nh-dong">
+          <div class="ks-ql-nh-nd">
+            <span class="ks-ql-cau-nd">${e(c.noiDung)}</span><br>
+            <span class="chu-phu ks-ql-cau-phu">${e([c.maCH + ' v' + (c.phienBan || 1), tenLoai(c.loai), c.nhom, c.batBuoc ? 'bắt buộc' : 'không bắt buộc'].filter(Boolean).join(' · '))}</span>
+          </div>
+          ${c.suaDuoc || !(this._d && this._d.live)
+            ? `<button class="btn-secondary ks-ql-nho" onclick="ModuleKhaoSat.moFormCau(${j})">✏️ Sửa</button>`
+            : `<button class="btn-secondary ks-ql-nho" onclick="ModuleKhaoSat.nhanBanCau(${j}, this)" title="Câu người khác tạo – nhân bản để sửa">⧉ Nhân bản</button>`}
+        </div>`;
+    }).join('');
   },
 
   moFormCau: function(j) {
