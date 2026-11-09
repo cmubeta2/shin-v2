@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.16] – 10/11/2026 (🩺 KHẢO SÁT – 📝 NHẬP HỘ PHIẾU GIẤY)
+
+### 🩺 Khảo sát (cổng KS L2 `webNhapHo` + `webCongKhaiDocKS` có sẵn – không cần cổng v1 mới)
+- 🛠️ Quản lý khảo sát có thêm dải 📝 Nhập hộ phiếu giấy: mỗi khảo sát Đang mở 1 nút ➜ form điền đúng phiên bản câu (`webCongKhaiDocKS`), câu dạng nút (5★, NPS 0–10, Có/Không, chọn 1, chọn nhiều – vùng bấm ≥ 44px) và ô chữ / số.
+- 📤 Lưu phiếu: kiểm như `loiPhieuKS` v1 (bắt buộc, khoảng điểm, lựa chọn lạ, chữ ≤ 200 / 2000) + tường lửa M9.5 (CCCD / BHYT / khóa) ➜ Toast Hoàn tác 6s (Hoàn tác = không gửi gì) ➜ `webNhapHo` đúng 1 lần, xong xóa form để nhập phiếu tiếp. Demo: điền thử, không ghi.
+- Tệp mới `js/modules/ks_nhapho.js` (VO_APP + PHIEN_BAN_SW shin-v2.13.16). Tạm gắn vào khối Quản lý qua lớp bọc `veQuanLy` vì khaosat.js đang có phiếu agy giao-dien – gộp thẳng khi phiếu trả.
+
 ## [2.13.15] – 09/11/2026 (🩺 KHẢO SÁT – 🛠️ QUẢN LÝ KHẢO SÁT NGAY TRÊN v2)
 
 ### 🩺 Khảo sát (cổng KS L1 có sẵn từ app KS v1.0.2 – không cần cổng v1 mới)
