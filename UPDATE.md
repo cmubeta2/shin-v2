@@ -26,6 +26,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.13.15 ✅ – 🛠️ QUẢN LÝ KHẢO SÁT TRÊN v2 (09/11/2026, lượt tự động ⑤ 18h – gỡ dòng 🟡 cuối của bảng đối chiếu P3, cổng KS có sẵn)
+- **Bối cảnh:** lịch tuần T2–T6 đã xong ở các lượt trước; 0 phiếu agy V2 chờ. Dòng 🟡 phía v2 còn lại là form quản trị KS (app KS v1 "chỉ máy chủ, giao diện ở Shin v2" – trước đây chưa có màn nào để tạo khảo sát).
+- **Nội dung:** 🩺 Khảo sát thêm khối 🛠️ Quản lý khảo sát: tạo / sửa (chọn câu từ ngân hàng ➜ `cauHinh`), ▶ Mở / ⏸ Đóng / ↩ Về nháp, ⧉ Nhân bản, 🗑 Xóa (Toast Hoàn tác 6s), 📚 ngân hàng câu (thêm / sửa / nhân bản), 🔑 cấp quyền (Admin). Cổng: `webLuuKhaoSat`, `webDoiTrangThaiKS`, `webNhanBanKS`, `webXoaKS`, `webDsCauHoi`, `webLuuCauHoi`, `webNhanBanCau`, `webLuuQuyen` (KS L1). Lỗi tải ngân hàng ➜ khung đỏ, vẫn lưu được phần thông tin, giữ câu cũ.
+- **Kiểm:** node --check; 15 ca hàm thuần đạt; Edge 375 / 1280 (Demo): mở form sửa KS001 (3/4 câu đã tick), ngân hàng 4 câu, form câu "chọn 1" hiện ô lựa chọn, bấm đổi trạng thái / lưu ở Demo ➜ toast "Đang ở Demo", 0 lần gọi mạng; 17 màn × 375 / 1280: 0 cuộn ngang, 0 lỗi console, 0 chữ < 14px.
+- **Chưa làm:** nhập hộ phiếu giấy (`webNhapHo` có sẵn – cần form điền phiếu theo 10 loại câu, để tuần sau). Chưa thử ghi thật (lượt tự động không có token) – Chờ anh: mở 🩺 › 🛠️ tạo 1 khảo sát nháp thử.
+- **Còn lại tuần:** T7 14/11 rà UX + bảng đối chiếu đầy đủ + chốt **v2.14.0 RC**.
+
 ### PHIÊN BẢN v2.13.14 ✅ – 🗓️ LỊCH CẢ TỔ CHO TỔ TRƯỞNG (09/11/2026, lượt tự động ⑤ 16h – dòng 🟡 bảng đối chiếu P3, cổng PK có sẵn)
 - **Bối cảnh:** lịch tuần T2–T6 đã xong; mọi cổng v1 "shin-v2" đã lên app đều đã nối (HUB L26, L29; KPI L10; KS L6). Bảng đối chiếu P3 (agy 11081816) còn 🟡 "bảng xếp lịch tuần toàn phòng" – cổng `webBangXepLich` có ở PK v1.0.7 (L5, đã lên app @3).
 - **Nội dung:** 🏥 Phòng Khám thêm thẻ 🗓️ Lịch cả tổ (quyền tổ trưởng / admin như thẻ ☑️ Duyệt): mỗi ngày người theo vị trí + ca, người nghỉ, chưa xếp; ⚠️ thiếu vị trí / ≥ 2 nghỉ / đi làm < nửa tổ. Chỉ đọc – xếp ca vẫn trên app PK. Lỗi cổng ➜ khung đỏ, không thay số mẫu.
