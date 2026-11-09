@@ -560,6 +560,16 @@ window.SHIN_DEMO_DATA.phongkhamV1 = {
       { ngay: '03/11/2026', trangThai: 'da_duyet', tomTat: 'Tiếp đón 42 lượt · 15 cuộc gọi', soAnh: 2, lyDoTraLai: '' },
       { ngay: '02/11/2026', trangThai: 'tra_lai', tomTat: 'Tiếp đón 38 lượt', soAnh: 0, lyDoTraLai: 'Bổ sung ảnh bảng trực' }
     ] },
+  bangXepLich: { tuan: 'T2 02/11 – CN 08/11', to: 'Tổ Tiếp đón (MẪU)', viTri: ['Tiếp đón', 'Tổng đài'],
+    nguoi: [{ ma: 'NV1', hoTen: 'Nhân viên A' }, { ma: 'NV2', hoTen: 'Nhân viên B' }, { ma: 'NV3', hoTen: 'Nhân viên C' }],
+    ngay: ['02/11', '03/11', '04/11', '05/11', '06/11', '07/11', '08/11'], caoDiem: [],
+    o: { 'NV1|02/11': { viTri: 'Tiếp đón', ca: 'Sáng', nghi: false }, 'NV2|02/11': { viTri: 'Tổng đài', ca: 'Chiều', nghi: false }, 'NV3|02/11': { viTri: '', ca: '', nghi: true },
+      'NV1|03/11': { viTri: 'Tiếp đón', ca: 'Sáng', nghi: false }, 'NV2|03/11': { viTri: 'Tổng đài', ca: 'Chiều', nghi: false }, 'NV3|03/11': { viTri: 'Tiếp đón', ca: 'Chiều', nghi: false },
+      'NV1|04/11': { viTri: 'Tổng đài', ca: 'Chiều', nghi: false }, 'NV2|04/11': { viTri: '', ca: '', nghi: true }, 'NV3|04/11': { viTri: 'Tiếp đón', ca: 'Sáng', nghi: false },
+      'NV1|05/11': { viTri: 'Tiếp đón', ca: 'Sáng', nghi: false }, 'NV2|05/11': { viTri: 'Tổng đài', ca: 'Sáng', nghi: false }, 'NV3|05/11': { viTri: 'Tiếp đón', ca: 'Chiều', nghi: false },
+      'NV1|06/11': { viTri: 'Tiếp đón', ca: 'Sáng', nghi: false }, 'NV2|06/11': { viTri: 'Tổng đài', ca: 'Chiều', nghi: false }, 'NV3|06/11': { viTri: 'Tiếp đón', ca: 'Chiều', nghi: false },
+      'NV1|07/11': { viTri: 'Tiếp đón', ca: 'Sáng', nghi: false }, 'NV2|07/11': { viTri: '', ca: '', nghi: true }, 'NV3|07/11': { viTri: '', ca: '', nghi: true },
+      'NV1|08/11': { viTri: '', ca: '', nghi: true }, 'NV2|08/11': { viTri: 'Tiếp đón', ca: 'Sáng', nghi: false } } },
   lichTuan: { tuan: 'T2 02/11 – CN 08/11', phepCon: 8, nghiBuCon: 1, donNghi: [{ id: 'N1', loai: 'nghi_tuan', tuNgay: '08/11/2026', denNgay: '08/11/2026', trangThai: 'cho', lyDo: 'Việc gia đình', lyDoTraLai: '' },
       { id: 'N2', loai: 'nghi_om', tuNgay: '07/11/2026', denNgay: '07/11/2026', trangThai: 'da_duyet', lyDo: 'Khám sức khỏe định kỳ (MẪU)', lyDoTraLai: '' }],
     ngay: [
