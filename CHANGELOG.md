@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.19] – 10/11/2026 (🌊 XƯỞNG PHỄU LẶN BIỂN – M8.5)
+
+### 📣 Marketing
+- Khối mới "🌊 Xưởng phễu Lặn Biển 0m ➜ -105m" (`js/modules/pheu_lanbien.js`): 5 tầng sâu (0m thu hút · -15m băn khoăn · -30m giải pháp & bằng chứng · -60m lời đề nghị + hỏi đáp · -105m chốt), 2 bộ MẪU (tuyển sinh, khám sức khỏe), thanh độ sâu đã điền, kiểm đủ trường + đường dẫn nút (chỉ https / tel / mailto) + từ cấm quảng cáo y tế + còn chữ "MẪU".
+- Xem trước trong khung cô lập (sandbox), 📋 sao chép HTML, ⬇️ tải 1 tệp `index.html` tĩnh tự chứa (CSS nội tuyến, không JS, có chế độ tối) + hướng dẫn đăng Netlify Drop / Cloudflare Pages / Vercel. Nạp mẫu / xóa nháp có Hoàn tác 6s. Nháp lưu trên máy.
+- Còn chờ v1: đăng tự động 1 chạm + form thu lead đổ về Tuyển sinh / CRM (`lead_web`).
+- sw.js: thêm tệp vào VO_APP, PHIEN_BAN_SW `shin-v2.13.19`.
+
 ## [2.13.18] – 10/11/2026 (RÀ UX SÂU TAB CON + GỘP NHẬP HỘ VÀO KHẢO SÁT)
 
 ### 🔍 Rà UX (kéo trước một phần T7 14/11 – không thêm tính năng)

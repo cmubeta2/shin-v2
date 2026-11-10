@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.17** · Cập nhật ngày: **10/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.19** · Cập nhật ngày: **10/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.19 ✅ – 🌊 XƯỞNG PHỄU LẶN BIỂN M8.5 (10/11/2026, lượt tự động ⑤ 12h – mục ⬜ cuối của Mảng 8, không cần cổng v1)
+- **Bối cảnh:** lịch T2–T6 xong, hộp agy trống; T7 (đối chiếu + RC) giữ đúng ngày. M8.5 là mục Mảng 8 còn trống duy nhất làm được thuần phía trình duyệt.
+- **Nội dung:** 📣 Marketing ➜ khối "🌊 Xưởng phễu Lặn Biển": điền 5 tầng 0m ➜ -105m, kiểm đủ + link nút + từ cấm y tế, xem trước, tải `index.html` tĩnh tự chứa, hướng dẫn đăng Netlify / Cloudflare Pages / Vercel; nháp lưu máy, nạp mẫu / xóa có Hoàn tác 6s.
+- **Kiểm:** node --check; 12 phép thử hàm thuần (link chặn `javascript:` + dấu nháy, thoát HTML, hỏi đáp, độ sâu, từ cấm); Edge headless 17 màn × 375 / 1280 mở hết `<details>` – 📣 Marketing 0 cuộn ngang, 0 lỗi console.
+- **Còn chờ v1:** đăng tự động 1 chạm + form thu lead về Tuyển sinh / CRM (cổng `lead_web`).
+- **Ghi chú rà UX (để T7):** màn 🎓 Tuyển sinh khi mở hết khối gập có 33 nhãn `.badge` 12px (< 14px).
 
 ### PHIÊN BẢN v2.13.18 ✅ – 🔍 RÀ UX SÂU TAB CON + GỘP NHẬP HỘ (10/11/2026, lượt tự động ⑤ 06h – kéo trước một phần T7)
 - **Bối cảnh:** lịch T2–T6 xong; L26 đã nối (v2.12.2). Lượt 05h40 đã chép phiếu agy 11100334 thành v2.13.17 nhưng CHƯA đẩy (nhánh cục bộ) – lượt này đẩy cùng.
