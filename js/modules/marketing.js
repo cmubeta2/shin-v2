@@ -136,6 +136,11 @@ const ModuleMarketing = {
         <div id="mkXuongNoi"></div>
       </details>
 
+      <details class="tq-gon" id="mkLanBien">
+        <summary><span>🌊 Xưởng phễu Lặn Biển 0m ➜ -105m (M8.5)</span></summary>
+        <div id="mkLanBienNoi"></div>
+      </details>
+
       <details class="tq-gon">
         <summary><span>📘 Kênh & giờ đăng gợi ý</span></summary>
         ${M.kenh.map(k => `<div class="hang-tru"><span><b>${e(k.bieuTuong)} ${e(k.ten)}</b><br><span class="chu-phu">${e(k.gioDangGoiY)} · ${e(k.gioiHanDoDai)}</span></span></div>`).join('')}
@@ -149,6 +154,7 @@ const ModuleMarketing = {
       </details>
     `;
     this.veHieuSuat();
+    if (typeof PheuLanBien !== 'undefined') PheuLanBien.render(document.getElementById('mkLanBienNoi'));
     if (this._bai) this.veXuong(true);
   },
 
