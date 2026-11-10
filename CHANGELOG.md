@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.20] – 10/11/2026 (🎨 GIAO DIỆN XƯỞNG PHỄU LẶN BIỂN – phiếu agy M8.5)
+
+### 📣 Marketing
+- Khối "🌊 Xưởng phễu Lặn Biển": bỏ mọi `style=` nội dòng ➜ lớp CSS `.lb-` (chỉ `var(--…)`, 8 bộ màu sáng/tối); mỗi tầng 1 thẻ có dải màu độ sâu nhạt ➜ đậm (color-mix với `--primary`) + nhãn độ sâu; thanh "Độ sâu đã điền" 5 ô xanh / vàng / xám + phần trăm.
+- Nút ⬇️ Tải index.html là nút chính (rộng hết trên di động), 👁 Xem trước + 📋 Sao chép xếp lưới 2 cột; vùng bấm ≥ 44px, ô nhập 16px. Logic hàm thuần + khóa nháp giữ nguyên.
+- Rà khi nhận: bỏ đoạn tự mở khối gập mỗi lần vẽ màn (giữ mặc định gập) và các màu dự phòng cứng.
+
+---
+
 ## [2.13.19] – 10/11/2026 (🌊 XƯỞNG PHỄU LẶN BIỂN – M8.5)
 
 ### 📣 Marketing

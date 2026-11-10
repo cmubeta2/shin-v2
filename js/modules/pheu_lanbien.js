@@ -124,37 +124,61 @@ details{background:rgba(255,255,255,.12);border-radius:12px;padding:12px 16px;ma
     if (!this._d) this._d = this.doc() || Object.assign({}, this.MAU.tuyensinh);
     const d = this._d, e = ShinApp.esc;
     const o = (f) => f.dong
-      ? `<textarea class="form-input" rows="3" data-k="${f.k}" aria-label="${e(f.nhan)}" oninput="PheuLanBien.nhap(this)">${e(d[f.k] || '')}</textarea>`
-      : `<input class="form-input" data-k="${f.k}" aria-label="${e(f.nhan)}" value="${e(d[f.k] || '')}" oninput="PheuLanBien.nhap(this)">`;
+      ? `<textarea class="form-input lb-input lb-textarea" rows="3" data-k="${f.k}" aria-label="${e(f.nhan)}" oninput="PheuLanBien.nhap(this)">${e(d[f.k] || '')}</textarea>`
+      : `<input class="form-input lb-input" data-k="${f.k}" aria-label="${e(f.nhan)}" value="${e(d[f.k] || '')}" oninput="PheuLanBien.nhap(this)">`;
     el.innerHTML = `
-      <p class="chu-phu">Điền nội dung từ mặt nước (thu hút) xuống đáy (chốt) ➜ xem trước ➜ tải <b>index.html</b> và kéo thả lên nơi đăng web. Nháp lưu trên máy này.</p>
-      <div class="hang-nut" role="group" aria-label="Nạp bộ mẫu">
-        <button class="btn-secondary" onclick="PheuLanBien.napMau('tuyensinh')">🎓 Mẫu tuyển sinh</button>
-        <button class="btn-secondary" onclick="PheuLanBien.napMau('ksk')">🏢 Mẫu khám sức khỏe</button>
-        <button class="btn-secondary" onclick="PheuLanBien.xoaNhap()">🧹 Trang trắng</button>
-      </div>
-      <label class="chu-phu" style="display:block;margin-top:12px">Tên trang<input class="form-input" data-k="tenTrang" value="${e(d.tenTrang || '')}" oninput="PheuLanBien.nhap(this)"></label>
-      <label class="chu-phu" style="display:block;margin-top:8px">Lĩnh vực (để kiểm từ cấm quảng cáo y tế)
-        <select class="form-input" data-k="mang" onchange="PheuLanBien.nhap(this)">${this.MANG.map(m => `<option value="${m.ma}"${d.mang === m.ma ? ' selected' : ''}>${e(m.ten)}</option>`).join('')}</select></label>
-      <div id="lbDoSau" style="margin-top:12px"></div>
-      ${this.TANG.map(t => `<div class="hang-tru" style="flex-direction:column;align-items:stretch;gap:8px;border-left:4px solid var(--primary);padding-left:12px;margin-top:12px">
-        <div><b>${e(t.sau)} · ${e(t.ten)}</b><div class="chu-phu">${e(t.goiY)}</div></div>
-        ${t.truong.map(f => `<label class="chu-phu" style="display:block">${e(f.nhan)}${f.bb ? ' *' : ''}${o(f)}</label>`).join('')}
-      </div>`).join('')}
-      <div id="lbKiem" style="margin-top:12px"></div>
-      <div class="hang-nut" style="margin-top:12px">
-        <button class="btn-secondary" onclick="PheuLanBien.xemTruoc()">👁 Xem trước</button>
-        <button class="btn-secondary" onclick="PheuLanBien.saoChep()">📋 Sao chép HTML</button>
-        <button class="btn-primary" onclick="PheuLanBien.taiVe()">⬇️ Tải index.html</button>
-      </div>
-      <div id="lbXem"></div>
-      <details class="tq-gon">
-        <summary><span>🚀 Đăng lên web (đa nền tảng)</span></summary>
-        <p class="chu-phu"><b>Netlify Drop:</b> mở app.netlify.com/drop ➜ kéo thả thư mục chứa index.html ➜ có link ngay.</p>
-        <p class="chu-phu"><b>Cloudflare Pages:</b> Bảng điều khiển ➜ Workers &amp; Pages ➜ Tạo ➜ Pages ➜ Tải lên tài sản ➜ chọn thư mục.</p>
-        <p class="chu-phu"><b>Vercel:</b> đưa thư mục lên 1 kho GitHub ➜ vercel.com/new ➜ nhập kho (không cần cấu hình build).</p>
-        <p class="chu-phu">Còn chờ v1: đăng tự động 1 chạm + form thu lead đổ về Tuyển sinh / CRM (cổng <code>lead_web</code>) – trang xuất hiện chỉ dùng nút liên hệ.</p>
-      </details>`;
+      <div class="lb-khung">
+        <p class="chu-phu lb-mo-dau">Điền nội dung từ mặt nước (thu hút) xuống đáy (chốt) ➜ xem trước ➜ tải <b>index.html</b> và kéo thả lên nơi đăng web. Nháp lưu trên máy này.</p>
+        <div class="lb-hang-mau" role="group" aria-label="Nạp bộ mẫu">
+          <button type="button" class="btn-secondary lb-btn-mau" onclick="PheuLanBien.napMau('tuyensinh')">🎓 Mẫu tuyển sinh</button>
+          <button type="button" class="btn-secondary lb-btn-mau" onclick="PheuLanBien.napMau('ksk')">🏢 Mẫu khám sức khỏe</button>
+          <button type="button" class="btn-secondary lb-btn-mau" onclick="PheuLanBien.xoaNhap()">🧹 Trang trắng</button>
+        </div>
+        <div class="lb-nhom-cauhinh">
+          <label class="lb-nhan-cauhinh">
+            <span class="lb-tieude-cauhinh">Tên trang</span>
+            <input class="form-input lb-input" data-k="tenTrang" value="${e(d.tenTrang || '')}" oninput="PheuLanBien.nhap(this)">
+          </label>
+          <label class="lb-nhan-cauhinh">
+            <span class="lb-tieude-cauhinh">Lĩnh vực (để kiểm từ cấm quảng cáo y tế)</span>
+            <select class="form-input lb-input lb-select" data-k="mang" onchange="PheuLanBien.nhap(this)">${this.MANG.map(m => `<option value="${m.ma}"${d.mang === m.ma ? ' selected' : ''}>${e(m.ten)}</option>`).join('')}</select>
+          </label>
+        </div>
+        <div id="lbDoSau" class="lb-dosau-khung"></div>
+        <div class="lb-danhsach-tang">
+          ${this.TANG.map(t => `<div class="lb-tang lb-tang-${t.ma}">
+            <div class="lb-tang-dau">
+              <span class="lb-tang-sau-nhan">${e(t.sau)}</span>
+              <div class="lb-tang-tieu-de-nhom">
+                <div class="lb-tang-ten">${e(t.ten)}</div>
+                <div class="lb-tang-goiy">${e(t.goiY)}</div>
+              </div>
+            </div>
+            <div class="lb-tang-than">
+              ${t.truong.map(f => `<label class="lb-nhan-truong">
+                <span class="lb-ten-truong">${e(f.nhan)}${f.bb ? ' <span class="lb-dau-bb">*</span>' : ''}</span>
+                ${o(f)}
+              </label>`).join('')}
+            </div>
+          </div>`).join('')}
+        </div>
+        <div id="lbKiem" class="lb-kiem-khung"></div>
+        <div class="lb-hang-xuat">
+          <button type="button" class="btn-primary lb-btn-chinh" onclick="PheuLanBien.taiVe()">⬇️ Tải index.html</button>
+          <div class="lb-hang-xuat-phu">
+            <button type="button" class="btn-secondary lb-btn-phu" onclick="PheuLanBien.xemTruoc()">👁 Xem trước</button>
+            <button type="button" class="btn-secondary lb-btn-phu" onclick="PheuLanBien.saoChep()">📋 Sao chép HTML</button>
+          </div>
+        </div>
+        <div id="lbXem" class="lb-xem-khung"></div>
+        <details class="tq-gon lb-huongdan-dang">
+          <summary><span>🚀 Đăng lên web (đa nền tảng)</span></summary>
+          <p class="chu-phu"><b>Netlify Drop:</b> mở app.netlify.com/drop ➜ kéo thả thư mục chứa index.html ➜ có link ngay.</p>
+          <p class="chu-phu"><b>Cloudflare Pages:</b> Bảng điều khiển ➜ Workers &amp; Pages ➜ Tạo ➜ Pages ➜ Tải lên tài sản ➜ chọn thư mục.</p>
+          <p class="chu-phu"><b>Vercel:</b> đưa thư mục lên 1 kho GitHub ➜ vercel.com/new ➜ nhập kho (không cần cấu hình build).</p>
+          <p class="chu-phu">Còn chờ v1: đăng tự động 1 chạm + form thu lead đổ về Tuyển sinh / CRM (cổng <code>lead_web</code>) – trang xuất hiện chỉ dùng nút liên hệ.</p>
+        </details>
+      </div>`;
     this.veKiem();
   },
   nhap: function(o) {
@@ -165,11 +189,38 @@ details{background:rgba(255,255,255,.12);border-radius:12px;padding:12px 16px;ma
   veKiem: function() {
     const e = ShinApp.esc, d = this._d;
     const ds = document.getElementById('lbDoSau'), kq = document.getElementById('lbKiem');
-    if (ds) ds.innerHTML = `<div class="chu-phu" style="margin-bottom:4px">Độ sâu đã điền</div><div style="display:flex;gap:4px">${this.doSau(d).map(x => `<div style="flex:1;min-width:0;text-align:center"><div style="height:8px;border-radius:4px;background:${x.pt >= 100 ? 'var(--c-green)' : x.pt > 0 ? 'var(--c-yellow)' : 'var(--border)'}"></div><div class="chu-phu">${e(x.sau)}</div></div>`).join('')}</div>`;
+    if (ds) {
+      const danhSach = this.doSau(d);
+      const hoanTat = danhSach.filter(x => x.pt >= 100).length;
+      ds.innerHTML = `
+        <div class="lb-dosau-tieu-de">
+          <span class="lb-dosau-chu">Độ sâu đã điền</span>
+          <span class="lb-dosau-tien-do ${hoanTat === danhSach.length ? 'lb-ds-da-du' : ''}">${hoanTat}/${danhSach.length} tầng (${Math.round(hoanTat * 100 / (danhSach.length || 1))}%)</span>
+        </div>
+        <div class="lb-dosau-thanh" role="progressbar" aria-valuenow="${hoanTat}" aria-valuemin="0" aria-valuemax="${danhSach.length}">
+          ${danhSach.map(x => {
+            const cls = x.pt >= 100 ? 'lb-ds-xanh' : (x.pt > 0 ? 'lb-ds-vang' : 'lb-ds-xam');
+            return `<div class="lb-dosau-o ${cls}">
+              <div class="lb-dosau-vach"></div>
+              <div class="lb-dosau-nhan">${e(x.sau)}</div>
+            </div>`;
+          }).join('')}
+        </div>`;
+    }
     if (!kq) return;
     const k = this.kiem(d);
-    kq.innerHTML = (!k.thieu.length && !k.loi.length) ? '<div class="chu-phu" style="color:var(--c-green)">✅ Đủ nội dung – sẵn sàng xuất.</div>'
-      : (k.thieu.length ? `<div class="chu-phu" style="color:var(--c-red)">Còn thiếu: ${e(k.thieu.join(' · '))}</div>` : '') + k.loi.map(x => `<div class="chu-phu" style="color:var(--c-yellow)">⚠️ ${e(x)}</div>`).join('');
+    if (!k.thieu.length && !k.loi.length) {
+      kq.innerHTML = '<div class="lb-thongbao lb-tb-thanhcong">✅ Đủ nội dung – sẵn sàng xuất.</div>';
+    } else {
+      let html = '';
+      if (k.thieu.length) {
+        html += `<div class="lb-thongbao lb-tb-loi">Còn thiếu: <b>${e(k.thieu.join(' · '))}</b></div>`;
+      }
+      k.loi.forEach(x => {
+        html += `<div class="lb-thongbao lb-tb-canhbao">⚠️ ${e(x)}</div>`;
+      });
+      kq.innerHTML = html;
+    }
   },
   _du: function() {
     const k = this.kiem(this._d);
@@ -179,8 +230,9 @@ details{background:rgba(255,255,255,.12);border-radius:12px;padding:12px 16px;ma
   },
   xemTruoc: function() {
     const el = document.getElementById('lbXem'); if (!el) return;
-    el.innerHTML = '<iframe title="Xem trước trang" sandbox="" style="width:100%;height:520px;border:1px solid var(--border);border-radius:var(--card-radius);margin-top:12px;background:var(--bg)"></iframe>';
+    el.innerHTML = '<iframe class="lb-iframe-xem" title="Xem trước trang" sandbox=""></iframe>';
     el.firstChild.srcdoc = this.taoHTML(this._d);
+    try { el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
   },
   saoChep: function() {
     if (!this._du()) return;

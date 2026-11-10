@@ -164,7 +164,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M8.2 | Xưởng AI Copywriter (PAS/AIDA, kịch bản video ngắn) | ✅ v2.11.0 xưởng 12 khuôn PAS / AIDA / 4P / video – điền chỗ trống, xem trước, kiểm từ cấm QC y tế (không gọi AI) · M7.2 (bản 1.0) | v2.4.0 |
 | M8.3 | **Smart Lead Dispatcher** – phân luồng lead (xem luồng A) | 🟢 v2.11.1 phân luồng lead mới `webCRM.leadMoi` + nút chuyển màn (👥 CRM) · ⬜ ghi luồng / giao tư vấn viên (chờ cổng ghi) · M8.3 (bản 1.0) | v2.3.0 |
 | M8.4 | Chốt chặn Human-in-the-Loop: bài chỉ xuất bản sau khi 0B duyệt | ✅ v2.11.0 Nháp ➜ Chờ duyệt ➜ Duyệt (Hoàn tác 6s) ➜ Sẵn sàng đăng, chỉ bài đã duyệt sao chép được (lưu máy) · ⬜ qua 0B (Còn chờ v1) · M7.3 (bản 1.0) | v2.4.0 |
-| M8.5 | Phễu Lặn Biển 0m → -105m & xuất bản đa nền tảng | ✅ v2.13.19 xưởng 5 tầng + kiểm + xem trước + tải `index.html` tĩnh, hướng dẫn Netlify / Cloudflare Pages / Vercel (📣 Marketing, lưu máy) · ⬜ đăng tự động + thu lead `lead_web` (Còn chờ v1) · M-WEB-01/02 | v2.6.0 |
+| M8.5 | Phễu Lặn Biển 0m → -105m & xuất bản đa nền tảng | ✅ v2.13.19 xưởng 5 tầng (giao diện `.lb-` v2.13.20) + kiểm + xem trước + tải `index.html` tĩnh, hướng dẫn Netlify / Cloudflare Pages / Vercel (📣 Marketing, lưu máy) · ⬜ đăng tự động + thu lead `lead_web` (Còn chờ v1) · M-WEB-01/02 | v2.6.0 |
 | M8.6 | Báo cáo hiệu suất truyền thông (reach, tương tác) | ✅ v2.12.0 tổng + từng kênh, nhập tay số từng bài, số mẫu chỉ ở Demo (📣 Marketing, lưu máy) · ⬜ lấy số tự động từ API kênh (Còn chờ v1) · M7.5 (bản 1.0) | v2.6.0 |
 
 ### 🧠 MẢNG 9 – TRI THỨC (SECOND BRAIN) · `trithuc` · Nordic Minimalist
