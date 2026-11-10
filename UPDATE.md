@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.19** · Cập nhật ngày: **10/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.20** · Cập nhật ngày: **10/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.20 ✅ – 🎨 GIAO DIỆN XƯỞNG PHỄU LẶN BIỂN (10/11/2026, lượt tự động ⑤ 18h – nhận phiếu agy 11101218_V2_M8.5_giao-dien)
+- **Bối cảnh:** lịch T2–T6 xong; T7 giữ đúng ngày. Hộp agy có kết quả làm đẹp M8.5 ➜ rà diff + chép về.
+- **Nội dung:** lớp `.lb-` thay style nội dòng, thẻ tầng có dải màu độ sâu, thanh độ sâu 5 ô, nút Tải là nút chính, Xem trước / Sao chép lưới 2 cột. Em bỏ phần agy tự mở `<details>` mỗi lần vẽ màn Marketing (làm màn dài ra) + 4 màu dự phòng cứng.
+- **Kiểm:** node --check; Edge headless 17 màn × 375 / 1280 mở hết khối gập – 📣 Marketing 0 cuộn ngang, 0 lỗi console, 0 chữ < 14px.
+- **Còn lại tuần:** T7 14/11 bảng đối chiếu v1↔v2 + cột QUY_HOACH + chốt **v2.14.0 RC**; nhãn `.badge` 12px ở 🎓 Tuyển sinh (để T7).
 
 ### PHIÊN BẢN v2.13.19 ✅ – 🌊 XƯỞNG PHỄU LẶN BIỂN M8.5 (10/11/2026, lượt tự động ⑤ 12h – mục ⬜ cuối của Mảng 8, không cần cổng v1)
 - **Bối cảnh:** lịch T2–T6 xong, hộp agy trống; T7 (đối chiếu + RC) giữ đúng ngày. M8.5 là mục Mảng 8 còn trống duy nhất làm được thuần phía trình duyệt.
