@@ -1711,9 +1711,9 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 }
 .filter-chip {
   padding: 6px 14px;
-  min-height: 36px;
+  min-height: 44px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: calc(14px * var(--font-scale));
   font-weight: 700;
   border: 1px solid var(--border);
   background: var(--card);

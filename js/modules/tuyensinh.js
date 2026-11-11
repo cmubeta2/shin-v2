@@ -236,8 +236,8 @@ const ModuleTuyenSinh = {
                 <input type="checkbox" class="tsLmsHV" value="${e(t)}" ${isChecked ? 'checked' : ''} style="width:22px;height:22px;flex:0 0 auto;accent-color:var(--primary);cursor:pointer">
                 <span style="flex:1;min-width:0;font-size:14px;color:var(--text-main);font-weight:500">${e(t)}</span>
                 ${c.canhBao 
-                  ? `<span class="badge do" title="Dưới ngưỡng 80% chuyên cần" style="flex:0 0 auto;font-size:12px">⚠️ ${c.co}/${c.tong} · ${c.phanTram}%</span>` 
-                  : `<span class="badge ${c.phanTram == null ? 'xam' : 'xanh'}" style="flex:0 0 auto;font-size:12px">${c.phanTram == null ? '–' : c.co + '/' + c.tong + ' · ' + c.phanTram + '%'}</span>`}
+                  ? `<span class="badge do" title="Dưới ngưỡng 80% chuyên cần" style="flex:0 0 auto">⚠️ ${c.co}/${c.tong} · ${c.phanTram}%</span>` 
+                  : `<span class="badge ${c.phanTram == null ? 'xam' : 'xanh'}" style="flex:0 0 auto">${c.phanTram == null ? '–' : c.co + '/' + c.tong + ' · ' + c.phanTram + '%'}</span>`}
               </label>
             `;
           }).join('')}
@@ -270,7 +270,7 @@ const ModuleTuyenSinh = {
               <details class="tq-gon" style="border:1px solid var(--border);border-radius:var(--radius-sm,6px);overflow:hidden;background:var(--bg-card)" ${laTuanMo ? 'open' : ''}>
                 <summary style="padding:10px 12px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;min-height:44px;background:var(--bg-card-hover, var(--bg-card))">
                   <span style="font-weight:600;font-size:14px;color:var(--text-main)">Tuần ${t}</span>
-                  <span class="badge ${baiXongTuan === baiTuan.length ? 'xanh' : baiXongTuan > 0 ? 'vang' : 'xam'}" style="font-size:12px">
+                  <span class="badge ${baiXongTuan === baiTuan.length ? 'xanh' : baiXongTuan > 0 ? 'vang' : 'xam'}">
                     ${baiXongTuan}/${baiTuan.length} bài
                   </span>
                 </summary>
@@ -285,7 +285,7 @@ const ModuleTuyenSinh = {
                             <b style="color:var(--primary);font-size:14px">${e(b.ma)}</b>
                             <span style="font-size:14px;color:var(--text-main);${x ? 'text-decoration:line-through;color:var(--text-muted)' : ''}">${e(b.ten)}</span>
                           </div>
-                          ${b.mucTieu ? `<div class="chu-phu" style="font-size:12px;margin-top:3px;color:var(--text-muted);line-height:1.4">${e(b.mucTieu)}</div>` : ''}
+                          ${b.mucTieu ? `<div class="chu-phu" style="margin-top:3px;color:var(--text-muted);line-height:1.4">${e(b.mucTieu)}</div>` : ''}
                         </div>
                       </label>
                     `;

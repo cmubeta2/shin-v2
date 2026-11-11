@@ -68,7 +68,7 @@ const ModuleWeb = {
               <span style="font-weight:700; font-size:13px; color:var(--primary);">📥 Cổng lead_web</span>
               <span class="badge xanh">Đã mở</span>
             </div>
-            <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+            <div style="font-size:14px; color:var(--text-muted); line-height:1.5;">
               Nhận form đăng ký từ các web xuất xưởng, tự động đẩy lead về <strong>Module Tuyển Sinh</strong> & <strong>CRM</strong>.
             </div>
           </div>
@@ -77,7 +77,7 @@ const ModuleWeb = {
               <span style="font-weight:700; font-size:13px; color:var(--primary);">⏰ Tác Vụ Cron Hằng Giờ</span>
               <span class="badge xanh">Active (0 */5 * * *)</span>
             </div>
-            <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+            <div style="font-size:14px; color:var(--text-muted); line-height:1.5;">
               Quét <code>YEU_CAU_WEB.json</code> vào mỗi 5 tiếng (00 phút), tự động dựng web và báo cáo về <strong>Executive Hub</strong>.
             </div>
           </div>
@@ -87,7 +87,7 @@ const ModuleWeb = {
       <!-- Danh Sách 7 Mẫu Web Chuẩn -->
       <div class="section-title">
         <span>7 BỘ MẪU GIAO DIỆN XƯỞNG WEB</span>
-        <button class="btn-secondary" style="min-height:36px; padding:4px 10px; font-size:12px;" onclick="ModuleWeb.xemHuongDanMau()">Quy chuẩn mẫu</button>
+        <button class="btn-secondary" style="min-height:44px; padding:4px 12px; font-size:14px;" onclick="ModuleWeb.xemHuongDanMau()">Quy chuẩn mẫu</button>
       </div>
 
       <div class="hn-list" style="margin-bottom:20px;">
@@ -111,7 +111,7 @@ const ModuleWeb = {
       <!-- Danh Bạ Web Đang Hoạt Động -->
       <div class="section-title">
         <span>DANH BẠ 12 WEBSITE ĐÃ XUẤT XƯỞNG</span>
-        <button class="btn-secondary" style="min-height:36px; padding:4px 10px; font-size:12px;" onclick="ModuleWeb.kiemTraTatCaWeb()">Kiểm định lại</button>
+        <button class="btn-secondary" style="min-height:44px; padding:4px 12px; font-size:14px;" onclick="ModuleWeb.kiemTraTatCaWeb()">Kiểm định lại</button>
       </div>
 
       <div class="hn-list" style="margin-bottom:20px;">
