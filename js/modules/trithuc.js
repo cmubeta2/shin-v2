@@ -6,6 +6,7 @@
  * tính liên kết ra / liên kết ngược (backlinks) / liên kết treo (chưa có bài), vẽ SVG vòng tròn, bấm tài liệu mở khung chi tiết.
  * v2.13.2 (M9.1 🟢): Live đọc thật HUB L28a `webTriThuc(token, {})` (Hub v1.18.5) ➜ {capNhat, taiLieu:[{ma, ten, linhVuc, capNhat,
  *   dinhDang, tomTat, lienKet, duongDan}], baiHoc:[], loi?} – chỉ mục 05_TriThuc do máy anh đồng bộ. Lỗi / chưa có chỉ mục ➜ báo đỏ, không thay số mẫu.
+ * v2.13.22: bỏ chữ cũ "Còn chờ v1: ghi bài học" – HUB L28 đã lên app đủ (v1.21.1 @21), ghi bài học ở 📁 Dự án từ v2.13.10.
  */
 
 const ModuleTriThuc = {
@@ -160,7 +161,7 @@ const ModuleTriThuc = {
 
       <details class="tq-gon">
         <summary><span>ⓘ Nguồn dữ liệu</span></summary>
-        <p class="chu-phu">${d.live ? 'Số thật: chỉ mục kho <code>05_TriThuc</code> (máy anh quét → Drive) đọc qua cổng Hub <code>webTriThuc</code> (L28a).' : 'Demo: danh sách là MẪU. Live đọc chỉ mục kho <code>05_TriThuc</code> qua cổng Hub <code>webTriThuc</code>.'} Tìm kiếm chạy ngay trên máy, không gửi câu tìm đi đâu. Còn chờ v1: ghi bài học từ Flash Report (<code>webLuuBaiHoc</code>, HUB L28 phần ghi).</p>
+        <p class="chu-phu">${d.live ? 'Số thật: chỉ mục kho <code>05_TriThuc</code> (máy anh quét → Drive) đọc qua cổng Hub <code>webTriThuc</code> (L28a).' : 'Demo: danh sách là MẪU. Live đọc chỉ mục kho <code>05_TriThuc</code> qua cổng Hub <code>webTriThuc</code>.'} Tìm kiếm chạy ngay trên máy, không gửi câu tìm đi đâu. Gửi bài học từ Flash Report: ở 📁 Dự án (cổng Hub <code>webLuuBaiHoc</code>, L28b) – bài vào sổ Chờ, Admin duyệt rồi máy anh chép vào kho (L28c).</p>
       </details>`;
     this.veDs();
     this.veXem();
