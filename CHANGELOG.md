@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.22] – 11/11/2026 (🧠 TRI THỨC: GỠ CHỮ "CÒN CHỜ v1" ĐÃ CŨ)
+
+### 🧠 Tri thức
+- Khung ⓘ Nguồn dữ liệu: bỏ dòng "Còn chờ v1: ghi bài học (`webLuuBaiHoc`, HUB L28 phần ghi)" – HUB L28 đã lên app đủ (L28a/b v1.20.2 @20, L28c v1.21.1 @21); thay bằng chỉ dẫn gửi bài học ở 📁 Dự án (có từ v2.13.10).
+- `sw.js`: PHIEN_BAN_SW ➜ `shin-v2.13.22` (tệp vỏ app đổi nội dung).
+
 ## [2.13.21] – 11/11/2026 (🔍 GỠ CHỮ < 14px / VÙNG BẤM < 44px)
 
 ### 🎓 Tuyển sinh · ⚙️ Cài đặt · chung

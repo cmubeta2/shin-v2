@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.21** · Cập nhật ngày: **11/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.22** · Cập nhật ngày: **11/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.22 ✅ – 🧠 GỠ CHỮ "CÒN CHỜ v1" ĐÃ CŨ Ở TRI THỨC (11/11/2026, lượt tự động ⑤ 18h)
+- **Bối cảnh:** lịch T2–T6 xong; ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Rà dòng "shin-v2" ở KE_HOACH các app v1: mọi cổng đã lên app (HUB L26 / L28 / L29, KPI L10, KS L6) đều đã nối; HUB L28 lên app đủ v1.21.1 @21 nhưng màn 🧠 Tri thức vẫn ghi "Còn chờ v1: ghi bài học" ➜ sửa chữ.
+- **Kiểm:** node --check; quét bí mật trên diff. Giao diện: chỉ đổi chữ trong khung gập, không đổi bố cục – chờ agy kiểm chung ở phiếu `ra-ux` T7.
+- **Phiếu agy:** hộp không có kết quả V2 mới; agy vắng từ 08:06 (AGY_VANG) – phiếu 11111014_V2_M4.5_ra-ux vẫn chờ.
+- **Còn lại tuần:** T7 14/11 rà UX (phiếu `ra-ux` lượt 04h07) + bảng đối chiếu v1↔v2 + cột QUY_HOACH + chốt **v2.14.0 RC**. Còn chờ v1 / chờ anh: duyệt đơn nghỉ cho quản lý (cổng đọc danh sách chờ duyệt PTKH – chờ anh chốt cổng).
 
 ### PHIÊN BẢN v2.13.21 ✅ – 🔍 GỠ CHỮ < 14px / VÙNG BẤM < 44px (11/11/2026, lượt tự động ⑤ 10h – lỗi UX đã ghi ở v2.13.19)
 - **Bối cảnh:** lịch T2–T6 xong; mọi cổng v1 "shin-v2" đã lên app (KPI L10, HUB L26 / L29, KS L6) đều đã nối; hộp agy không có kết quả V2 mới. T7 (đối chiếu + RC) giữ đúng ngày.
