@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.21] – 11/11/2026 (🔍 GỠ CHỮ < 14px / VÙNG BẤM < 44px)
+
+### 🎓 Tuyển sinh · ⚙️ Cài đặt · chung
+- LMS mini: bỏ `font-size:12px` nội dòng ở nhãn chuyên cần, nhãn tiến độ tuần và dòng mục tiêu bài M01–M20 (theo `.badge` 14px).
+- `.filter-chip` (Đánh giá 5T): 12px / 36px ➜ 14px (theo `--font-scale`) / 44px.
+- Thẻ chọn bộ màu ở Cài đặt: tên 13px, mô tả 11px ➜ 14px. `js/modules/web.js` (chưa nạp vào app): chữ 12px ➜ 14px, nút 36px ➜ 44px.
+
+---
+
 ## [2.13.20] – 10/11/2026 (🎨 GIAO DIỆN XƯỞNG PHỄU LẶN BIỂN – phiếu agy M8.5)
 
 ### 📣 Marketing

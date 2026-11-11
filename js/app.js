@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.13.20';
+  const PHIEN_BAN = 'v2.13.21';
 
   const MODULES = [
     ModuleHub,
@@ -910,10 +910,10 @@ const ShinApp = (function() {
              data-palette="${p.id}"
              onclick="ShinApp.apDungPalette('${p.id}')">
           <div style="display:flex; align-items:center; justify-content:space-between;">
-            <div style="font-weight:700; font-size:13px;">${p.ten}</div>
+            <div style="font-weight:700; font-size:14px;">${p.ten}</div>
             <div class="swatch" style="background:${p.mauChinh};"></div>
           </div>
-          <div style="font-size:11px; color:var(--text-muted);">${p.moTa}</div>
+          <div style="font-size:14px; color:var(--text-muted);">${p.moTa}</div>
         </div>
       `).join('');
     }
