@@ -100,7 +100,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M1.3 | KPI Toàn Viện: bản tin tạm tính (`webBanTin`) · soát lỗi (`webSoatLoi`) · AOP (`webAOP`) · báo cáo quý (`webBaoCaoQuy`) | 🟢 / 🟢 nháp AOP năm sau (v2.7.6 – `webNhap2027` + `webLuuTangTruong`; KPI v1.8.2 đã lên app @9 05/11) | – |
 | M1.4 | Trung tâm Telegram Bot (sự kiện `muc:'gap'`) | ⬜ (chạy phía Apps Script v1) · 🟢 v2.7.1 mở v2 trong Telegram Mini App (`webTelegram`, HUB L8) | v2.4.0 |
 | M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟢 v2.7.2 – số phiếu, chờ xác minh, điểm TB câu 5 mức, câu ≤ 2★, xuất CSV (webDsKhaoSat · webKetQuaKS · webXuatKS) · 🟢 v2.8.7 5 trụ ACHSI + hài lòng theo tháng (`webTongHopKS`, KS L6) · 🟢 v2.13.15 🛠️ quản lý khảo sát trên v2: tạo / sửa, chọn câu, ngân hàng câu, trạng thái, phân quyền (cổng KS L1) · 🟢 v2.13.16 📝 nhập hộ phiếu giấy (`webNhapHo` + `webCongKhaiDocKS`, KS L2) | v2.4.0 |
-| M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ⬜ | v2.4.0 |
+| M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ⬜ tuần sau (nhật ký `_TacVu` nằm ở máy, chưa có cổng đọc) | v2.4.0 |
 
 ### 👥 MẢNG 2 – KHÁCH HÀNG & ĐỐI TÁC (CRM) · `crm`
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
@@ -136,7 +136,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M5.1 | Báo cáo ca ngày (lượt khám, doanh thu, tồn đọng) | 🟢 v2.7.0 – Hôm nay + nộp / lịch sử / duyệt báo cáo ngày qua cổng PK thật | v2.4.0 |
 | M5.2 | Minh chứng ảnh nén → Drive (Base64 qua `21_PhongPTKH`) | 🟢 v2.7.0 (nén JPEG ≤ 1600px, ≤ 6 ảnh → `webNopBaoCao`) | v2.4.0 (v1 mở cổng trước) |
 | M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | 🟢 xem lịch tuần + đơn nghỉ (`webLichTuan`) · 🟢 v2.9.5 cảnh báo trùng lịch cá nhân (ca ↔ đơn nghỉ) / 🟢 v2.9.7 trùng nghỉ cả tổ (`webLichTo`, 🏥 PTKH) · 🟢 v2.13.7 gửi đơn Lịch nghỉ tuần / Nghỉ ốm thẳng PTKH (`webGuiNghiPhep`, 📋 PTKH Gốc; v2.13.8 lịch 4 tuần dạng lưới + đếm ngày chọn) · 🟢 v2.13.14 🗓️ Lịch cả tổ cho tổ trưởng (`webBangXepLich` PK: người theo vị trí từng ngày, cảnh báo thiếu vị trí / ≥ 2 nghỉ / đi làm < nửa tổ – 🏥 Phòng Khám) · đổi ca + duyệt đơn nghỉ (làm trên PTKH) | v2.3.0 |
-| M5.4 | Bóc tách tăng ca & bù giờ TC-NS | ⬜ (logic có ở M-PTKH-03) | v2.4.0 |
+| M5.4 | Bóc tách tăng ca & bù giờ TC-NS | ⬜ Còn chờ v1 (cổng giờ vào/ra PTKH; logic có ở M-PTKH-03) | v2.4.0 |
 | M5.5 | Kiểm soát vi phạm NTC (> 3 lần trễ → trừ 0,5 công) | 🟢 v2.9.8 của tôi: Ca NTC tuần x/3 + ngày công bị trừ (`webLichSuThang`, luật L111c) / ⬜ cả tổ (cần cổng v1) | v2.4.0 |
 | M5.6 | Team Morale Index – cảm nhận sau ca 1–5★ | 🟢 v2.9.8 của tôi: trung bình + phân bố tháng (`webLichSuThang`) / ⬜ chỉ số cả tổ ẩn danh (cần cổng v1) | v2.4.0 |
 | M5.7 | Danh bạ nhân sự khoa/phòng | 🟢 v2.7.0 (`webNhanSu`, quản lý) | v2.5.0 (đi cùng RBAC) |
@@ -152,7 +152,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 ### 📋 MẢNG 7 – CÔNG VIỆC LIÊN THÔNG (TASK BUS) · `congviec` · Executive Hub
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
-| M7.1 | Task Event Bus: nhận sự kiện từ mọi mảng, tự sinh việc | ⬜ | v2.3.0 |
+| M7.1 | Task Event Bus: nhận sự kiện từ mọi mảng, tự sinh việc | ⬜ tuần sau (Sếp chốt 08/11) | v2.3.0 |
 | M7.2 | Universal Kanban 3 cột đa nguồn | ✅ · 🟢 v2.13.11 việc PK có 📋 chi tiết: việc con tick + trao đổi (`webChiTietViec` / `webCapNhatViec`, 🩺 Phòng khám › Công việc) | – |
 | M7.3 | Phân luồng việc theo RBAC (M0.2) | ✅ v2.9.1 phía trình duyệt (ẩn việc mảng không có quyền theo chốt chặn v1 + chip 👤 Của tôi) / ⬜ phân luồng phía máy chủ (cần Task Bus M7.1) | v2.5.0 |
 | M7.4 | Giám sát SLA Xanh → Vàng → Đỏ + báo Telegram | ✅ v2.8.4 đèn SLA + lọc + sao chép tin cảnh báo phía trình duyệt / ⬜ tự gửi Telegram (cần Task Bus M7.1 phía v1) | v2.4.0 |
