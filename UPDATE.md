@@ -26,6 +26,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.13.24 ✅ – 🔁 ĐỔI CA & DUYỆT ĐƠN NGHỈ PTKH (12/11/2026, lượt tự động ⑤ 18h)
+- **Bối cảnh:** lịch T2–T6 xong; ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Rà bảng đối chiếu v2.13.23: 2 dòng PTKH còn hở (🟡 đổi ca, ⏳ duyệt đơn nghỉ). Đọc mã v1: `webBangLichNghi` (có trong `HAM_WEBGOI_`) trả `phep = duLieuNghiPhep_(x)` gồm `deNghiDoiCa`, `laDuyet`, `choDuyet` ➜ **không cần cổng v1 mới**; `webTraLoiDoiCa`, `webDuyetNghiPhep` cũng có sẵn, đều trả `phep` mới.
+- **Làm:** 📋 PTKH Gốc thêm khối 🔁 (bấm mới tải): trả lời đổi ca (Hoàn tác 6s; hoàn tác trả lời gửi ngay), duyệt / không duyệt đơn nghỉ (lý do bắt buộc khi không đồng ý, tường lửa M9.5), khóa gửi 1 lần, lỗi cổng báo đỏ + hướng mở app PTKH, Demo không gửi. QUY_HOACH M5.3 cập nhật.
+- **Bảng đối chiếu (cập nhật):** PTKH Gốc 5 ➜ 7 ✅, 🟡 1 ➜ 0, ⏳ 1 ➜ 0 ⇒ tổng **94 ✅ · 1 🟡 (nguồn QR KS) · 0 ⏳ · 5 ⬜ bảo lưu v1**.
+- **Kiểm:** node --check `js/modules/ptkh.js`, `js/app.js`, `sw.js`; quét bí mật trên diff. Chưa thử với tài khoản thật (cần người được mời đổi ca / người duyệt) – Giao diện: chờ agy kiểm ở phiếu `ra-ux` T7 (agy đang vắng – AGY_VANG từ 11/11 08:06).
+- **Còn lại tuần:** T7 14/11 rà UX + chốt **v2.14.0 RC**. Chờ anh: trộn PR nếu chế độ tự động chặn.
+
 ### PHIÊN BẢN v2.13.23 ✅ – 📋 BẢNG ĐỐI CHIẾU v1 ↔ v2 (NGHIỆM THU P3) – BẢN CẬP NHẬT 12/11 (12/11/2026, lượt tự động ⑤ 10h – kéo trước phần giấy tờ của T7)
 - **Bối cảnh:** lịch T2–T6 xong; ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Rà "shin-v2" ở KE_HOACH các app v1: HUB L8 / L26 / L29, KPI L10, KS L6 đều [x] và đã nối – không có cổng mới. Hộp agy: 0 kết quả V2 mới, AGY_VANG (lần chạy cuối 11/11 08:06). Bảng đối chiếu (nháp agy 11081816, 100 dòng) cập nhật theo các bản v2.13.7 – v2.13.22, để T7 chỉ còn rà UX + chốt RC.
 - **Bảng tổng theo app (100 chức năng người dùng thấy ở v1):**
