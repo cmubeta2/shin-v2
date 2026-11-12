@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.24] – 12/11/2026 (🔁 ĐỔI CA & DUYỆT ĐƠN NGHỈ PTKH)
+
+### ✨ Tính năng
+- `js/modules/ptkh.js`: khối 🔁 Đổi ca & duyệt đơn nghỉ trên 📋 PTKH Gốc – bấm mới tải (`webBangLichNghi` nặng, không gọi mỗi lần mở màn). Lời mời đổi ca chờ tôi: ✅ Đồng ý đổi / ❌ Không đổi (Toast Hoàn tác 6s ➜ `webTraLoiDoiCa`), ↩️ Hoàn tác trả lời (gửi ngay). Người duyệt (`phep.laDuyet`): đơn chờ duyệt + cảnh báo trùng tổ của v1, ✅ Đồng ý / ❌ Không đồng ý (bắt buộc lý do, tường lửa KHONG_DUA_VAO) ➜ `webDuyetNghiPhep`. Khóa gửi 1 lần; máy chủ trả `phep` mới ➜ vẽ lại. Demo: số mẫu, không gửi.
+- Cả 3 cổng đã có trong `HAM_WEBGOI_` của 20_PTKH – KHÔNG cần cổng v1 mới (gỡ mục "Chờ anh chốt cổng đọc đơn nghỉ chờ duyệt").
+- `js/app.js`, `index.html`: số bản v2.13.24; `sw.js`: PHIEN_BAN_SW ➜ `shin-v2.13.24`.
+
+---
+
 ## [2.13.23] – 12/11/2026 (📋 BẢNG ĐỐI CHIẾU v1 ↔ v2 CẬP NHẬT)
 
 ### 📄 Tài liệu
