@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.23] – 12/11/2026 (📋 BẢNG ĐỐI CHIẾU v1 ↔ v2 CẬP NHẬT)
+
+### 📄 Tài liệu
+- `UPDATE.md`: bảng đối chiếu nghiệm thu P3 cập nhật theo v2.13.7 – v2.13.22 – 100 chức năng v1: 92 ✅ · 2 🟡 (đổi ca PTKH, nguồn QR khảo sát) · 1 ⏳ (duyệt đơn nghỉ – chờ chốt cổng) · 5 ⬜ bảo lưu v1.
+- `QUY_HOACH_10_MANG_AIOS.md`: ghi lý do cho 3 dòng ⬜ còn lại (M1.6, M5.4, M7.1).
+- `js/app.js`, `index.html`: số bản v2.13.23; `sw.js`: PHIEN_BAN_SW ➜ `shin-v2.13.23` (tệp vỏ app đổi nội dung).
+
 ## [2.13.22] – 11/11/2026 (🧠 TRI THỨC: GỠ CHỮ "CÒN CHỜ v1" ĐÃ CŨ)
 
 ### 🧠 Tri thức

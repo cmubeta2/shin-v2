@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.22** · Cập nhật ngày: **11/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.13.23** · Cập nhật ngày: **12/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,33 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.13.23 ✅ – 📋 BẢNG ĐỐI CHIẾU v1 ↔ v2 (NGHIỆM THU P3) – BẢN CẬP NHẬT 12/11 (12/11/2026, lượt tự động ⑤ 10h – kéo trước phần giấy tờ của T7)
+- **Bối cảnh:** lịch T2–T6 xong; ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Rà "shin-v2" ở KE_HOACH các app v1: HUB L8 / L26 / L29, KPI L10, KS L6 đều [x] và đã nối – không có cổng mới. Hộp agy: 0 kết quả V2 mới, AGY_VANG (lần chạy cuối 11/11 08:06). Bảng đối chiếu (nháp agy 11081816, 100 dòng) cập nhật theo các bản v2.13.7 – v2.13.22, để T7 chỉ còn rà UX + chốt RC.
+- **Bảng tổng theo app (100 chức năng người dùng thấy ở v1):**
+
+| App v1 | Số chức năng | ✅ ngang | 🟡 một phần | ⏳ chờ v1 / chờ anh | ⬜ bảo lưu v1 |
+|---|---|---|---|---|---|
+| 10_Hub (Hub, Điều hành, Quản trị, 0B, CRM, Dự án, Tài chính, Tri thức) | 29 | 29 | – | – | – |
+| 21_PhongPTKH (🩺 Phòng khám) | 18 | 18 | – | – | – |
+| 20_PTKH (📋 PTKH Gốc) | 12 | 5 | 1 | 1 | 5 |
+| 30_KPI_ToanVien | 11 | 11 | – | – | – |
+| 70_KhaoSat | 9 | 8 | 1 | – | – |
+| 60_TuyenSinh | 12 | 12 | – | – | – |
+| Đánh giá 5T | 4 | 4 | – | – | – |
+| 05_TriThuc | 5 | 5 | – | – | – |
+| **Cộng** | **100** | **92** | **2** | **1** | **5** |
+
+- **Đã gỡ so với nháp 08/11 (80 ✅ ➜ 92 ✅):** Telegram mã ghép (v2.13.12) · việc con + trao đổi PK (v2.13.11) · xếp lịch cả tổ (v2.13.14) · gửi bài học vào kho ×2 dòng (v2.13.10 + HUB L28 lên app) · tạo / sửa / đổi trạng thái KS, ngân hàng câu, cấp quyền KS (v2.13.15) · nhập hộ phiếu giấy (v2.13.16) · xin nghỉ PTKH (v2.13.7, dòng gộp "nghỉ + đổi ca" còn 🟡 vì đổi ca).
+- **Còn lại (xếp theo mức dùng):**
+  1. 🟡 PTKH – **đổi ca** (`webTraLoiDoiCa` có trong `HAM_WEBGOI_`; cần danh sách lời mời đổi ca để trả lời) – phía v2, tuần sau; tạm mở app PTKH.
+  2. ⏳ PTKH – **duyệt đơn nghỉ cho quản lý** (`webDuyetNghiPhep` có, thiếu cổng đọc danh sách chờ duyệt) – Chờ anh chốt cổng.
+  3. 🟡 KS – **nguồn QR theo NV / tổ / vị trí** (`webDsNguon`, `webTaoNguon` có ở KS L2): v1 trả link `/exec?k=<mã>` nhưng `doGet` KS bỏ qua `k` (chỉ mở app quản trị cần token) ➜ chưa có trang điền phiếu công khai; v2 cần trang điền công khai (gọi `webCongKhaiDocKS` / `webCongKhaiGuiPhieu` + Turnstile) trước khi vẽ QR – tuần sau. Không vẽ QR dẫn tới trang không điền được.
+  4. ⬜ bảo lưu v1 (đề xuất chính thức giữ ở PTKH v1, theo phản biện agy): HTNV chấm điểm / chốt tháng · giám sát – ghi nhận – vinh danh · quy trình SOP tương tác · khiếu nại (dữ liệu người bệnh, KHONG_DUA_VAO) · xuất TC-NS (M3.5 / M5.4 – Còn chờ v1: giờ vào/ra).
+- **Chỉ có ở v2 (v1 không có):** 📣 Marketing M8.1–M8.6 (lịch nội dung, xưởng mẫu, duyệt bài, Smart Lead Dispatcher, báo cáo truyền thông, phễu lặn biển) · 🔳 VietQR M3.1 · 💸 hoa hồng ➜ đề xuất chi M3.3 · 🏫 LMS mini M4.5 · PWA offline · RBAC chặn mảng không quyền.
+- **QUY_HOACH mục 2:** còn 5 dòng ⬜ – M1.6 (tuần sau, nhật ký `_TacVu` ở máy chưa có cổng), M3.5 + M5.4 (Còn chờ v1: giờ vào/ra PTKH), M7.1 (tuần sau, Sếp chốt 08/11); đã ghi lý do vào cột trạng thái. Mọi dòng khác ✅ / 🟢.
+- **Kiểm:** node --check `js/app.js`, `sw.js`; quét bí mật trên diff. Không đổi giao diện (chỉ số bản) – Giao diện: chờ agy kiểm chung ở phiếu `ra-ux` T7.
+- **Còn lại tuần:** T7 14/11 rà UX 375 + 1280 (phiếu `ra-ux` lượt 04h07; agy vắng thì ghi "chưa rà UX được") + soát lại bảng này + chốt **v2.14.0 RC**. Chờ anh: chốt cổng đọc đơn nghỉ chờ duyệt PTKH; trộn PR lượt này nếu tự trộn bị chặn.
 
 ### PHIÊN BẢN v2.13.22 ✅ – 🧠 GỠ CHỮ "CÒN CHỜ v1" ĐÃ CŨ Ở TRI THỨC (11/11/2026, lượt tự động ⑤ 18h)
 - **Bối cảnh:** lịch T2–T6 xong; ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Rà dòng "shin-v2" ở KE_HOACH các app v1: mọi cổng đã lên app (HUB L26 / L28 / L29, KPI L10, KS L6) đều đã nối; HUB L28 lên app đủ v1.21.1 @21 nhưng màn 🧠 Tri thức vẫn ghi "Còn chờ v1: ghi bài học" ➜ sửa chữ.
