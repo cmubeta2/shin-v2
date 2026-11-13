@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light" data-palette="crimson">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Phiếu khảo sát ý kiến – SHIN">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0f172a">
+  <title>Khảo sát ý kiến – SHIN</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    (function() {
+      try {
+        var t = localStorage.getItem('shin_theme'), p = localStorage.getItem('shin_palette');
+        if (t) document.documentElement.setAttribute('data-theme', t);
+        else if (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.setAttribute('data-theme', 'dark');
+        if (p) document.documentElement.setAttribute('data-palette', p);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body class="dk-trang">
+  <main class="dk-khung">
+    <div id="dkBao" class="canh-bao-nguon mau" role="alert" hidden></div>
+    <div id="dkNoiDung"><div class="trong">⏳ Đang tải…</div></div>
+    <p class="dk-chan chu-phu">SHIN · phiếu ẩn danh – không thu thập họ tên.</p>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/modules/ks_nhapho.js"></script>
+  <script src="js/dienks.js"></script>
+</body>
+</html>

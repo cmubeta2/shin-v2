@@ -36,7 +36,7 @@ webLuuKhaoSat({maKS?, TieuDe, MoTa, DoiTuong, Han, NhieuLan, cauHinh?:{cau:[{maC
 webDoiTrangThaiKS({maKS, trangThai}) → { ok, trangThaiCu, msg } · webNhanBanKS({maKS}) → { ok, ks, msg } · webXoaKS({maKS, hoanTac?}) → { ok, msg }
 webDsCauHoi({}) → { ok, ds:[{maCH, phienBan, loai, noiDung, luaChon[], batBuoc, nhom, suaDuoc}] } · webLuuCauHoi({maCH?, Loai, NoiDung, LuaChon[], BatBuoc, Nhom}) → { ok, maCH, phienBan, msg } · webNhanBanCau({maCH})
 webLuuQuyen({maNguoi, hoTen, vaiTro:'Admin'|'QuanLyKS'|''}) → { ok, msg }   // chỉ Admin
-webNhapHo (v2.13.16 dùng) / webDsNguon / webTaoNguon (L2) – nguồn QR v2 chưa dùng
+webNhapHo (v2.13.16 dùng) / webDsNguon / webTaoNguon (L2) – v2.13.26 dùng (🔳 QR & nguồn; link điền = trang v2 `dienks.html?k=<MaKS|MaNguon>` gọi webCongKhaiDocKS / webCongKhaiGuiPhieu không token – link `/exec?k=` của v1 không dùng vì doGet KS bỏ qua k)
 liên thông ksSoLieu (Hub ký HMAC – trình duyệt không gọi được)   ·   webCongKhai* (điền phiếu công khai, không token)
 ```
 
