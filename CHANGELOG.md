@@ -4,6 +4,20 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.0] – 14/11/2026 (🏁 RC – CHỐT BẢN ỨNG VIÊN TUẦN 09–15/11)
+
+### 🎨 Giao diện (rà UX tĩnh)
+- Viên trạng thái Header (nút mở Cài đặt): 10px ➜ 14px, cao 28px + vùng bấm 44px, ẩn số bản ở màn ≤ 400px (số bản chuyển vào `title`), màu theo `var(--c-green)` / `var(--c-yellow)`.
+- Huy hiệu số đếm 10px ➜ 12px (thanh trái thu gọn 9px ➜ 11px).
+
+### 📋 Giấy tờ
+- UPDATE.md: bảng đối chiếu v1 ↔ v2 bản chốt RC (95 ✅ · 0 🟡 · 0 ⏳ · 5 ⬜ bảo lưu v1) + gom danh sách "Còn chờ v1 / Chờ anh".
+
+### 🔧 Kỹ thuật
+- `sw.js` PHIEN_BAN_SW `shin-v2.14.0`.
+
+---
+
 ## [2.13.26] – 13/11/2026 (🔳 TRANG ĐIỀN KHẢO SÁT CÔNG KHAI + QR THEO NGUỒN)
 
 ### ✨ Tính năng

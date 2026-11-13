@@ -1,6 +1,6 @@
 # BẢN QUY HOẠCH TOÀN DIỆN 10 MẢNG CHIẾN LƯỢC – HỆ SINH THÁI SHIN AIOS v2
 
-*Phiên bản quy hoạch: **2.1** · Cập nhật: **29/10/2026** · Áp dụng cho kho `shin-v2` từ bản **v2.2.0**.*
+*Phiên bản quy hoạch: **2.1** · Cập nhật: **29/10/2026** (cột trạng thái mục 2 rà lại 14/11/2026 ở v2.14.0 RC) · Áp dụng cho kho `shin-v2` từ bản **v2.2.0**.*
 *Nguồn đối chiếu: mã v1 trong `He sinh thai Shin` (Drive), tài liệu AGY (`KE_HOACH_SHIN_V2.md`, `PHAN_BIEN_CAU_TRUC_MODULE.md`), chuẩn giao diện `PHONG_CACH_APP_SHIN.md`.*
 *Thay thế bản quy hoạch 1.0 (commit `a42b247`). Danh mục di sản v1 vẫn tra cứu tại `DANH_MUC_MODULE_FRACTAL.md`.*
 

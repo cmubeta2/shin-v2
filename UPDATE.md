@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.13.26** · Cập nhật ngày: **13/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.14.0 RC** · Cập nhật ngày: **14/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,33 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.14.0 🏁 RC – CHỐT BẢN ỨNG VIÊN PHÁT HÀNH TUẦN 09–15/11 (14/11/2026, lượt tự động ⑤ 04h – T7)
+- **Bối cảnh:** T7 không thêm tính năng. Ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Rà "shin-v2" ở KE_HOACH các app v1: mọi dòng đều [x] và đã nối – không có cổng mới. Hộp agy: 0 kết quả V2, **AGY_VANG** (lần chạy cuối 11/11 08:06) ➜ đã rút phiếu `11111014_V2_M4.5_ra-ux`, **không gửi 4 phiếu `ra-ux`** (không ai nhận); em không mở trình duyệt (Sếp 11/11) ➜ **rà UX 375 + 1280 bằng mắt: CHƯA làm được**, chỉ rà tĩnh CSS.
+- **Rà UX tĩnh (lượt này):** quét mọi `font-size` < 14px trong `css/` + `js/` + `*.html`: còn 13 khai báo, 9 đã có lớp phủ 14px phía sau (nhóm thanh trái, nút chế độ màu, chip lọc, bảng 5T, viên mục…). Sửa nốt: **viên trạng thái Header** (là nút bấm) 10px / cao 20px ➜ 14px, cao 28px + vùng bấm giả 44px (`::before`), số bản ẩn khi màn ≤ 400px (vẫn có trong `title`), màu chuyển sang `var(--c-green)` / `var(--c-yellow)` thay mã màu cứng; huy hiệu số đếm 10px ➜ 12px (thanh trái thu gọn 9px ➜ 11px) – ngoại lệ có chủ ý: số 1–2 chữ số trong vòng tròn 18px, không phải chữ đọc.
+- **Bảng đối chiếu v1 ↔ v2 (nghiệm thu P3 "ngang tính năng v1") – bản chốt RC:**
+
+| App v1 | Số chức năng | ✅ ngang | 🟡 một phần | ⏳ chờ v1 / chờ anh | ⬜ bảo lưu v1 |
+|---|---|---|---|---|---|
+| 10_Hub (Hub, Điều hành, Quản trị, 0B, CRM, Dự án, Tài chính, Tri thức) | 29 | 29 | – | – | – |
+| 21_PhongPTKH (🩺 Phòng khám) | 18 | 18 | – | – | – |
+| 20_PTKH (📋 PTKH Gốc) | 12 | 7 | – | – | 5 |
+| 30_KPI_ToanVien | 11 | 11 | – | – | – |
+| 70_KhaoSat | 9 | 9 | – | – | – |
+| 60_TuyenSinh | 12 | 12 | – | – | – |
+| Đánh giá 5T | 4 | 4 | – | – | – |
+| 05_TriThuc | 5 | 5 | – | – | – |
+| **Cộng** | **100** | **95** | **0** | **0** | **5** |
+
+  - Đã gỡ từ bản 12/11 (92 ✅): đổi ca + duyệt đơn nghỉ PTKH (v2.13.24, cổng có sẵn) · nguồn QR khảo sát NV / tổ / vị trí + trang điền công khai (v2.13.26).
+  - ⬜ bảo lưu v1 (giữ ở PTKH v1): HTNV chấm điểm / chốt tháng · giám sát – ghi nhận – vinh danh · SOP tương tác · khiếu nại (dữ liệu người bệnh, KHONG_DUA_VAO) · xuất TC-NS.
+  - Chỉ có ở v2: 📣 Marketing M8.1–M8.6 · 🔳 VietQR M3.1 · 💸 hoa hồng ➜ đề xuất chi M3.3 · 🏫 LMS mini M4.5 · PWA offline · RBAC chặn mảng không quyền · trang điền KS công khai.
+- **QUY_HOACH mục 2 (đếm cột trạng thái 54 dòng):** 28 🟢 · 20 ✅ · 1 🟡 (M0.2 – ma trận quyền chỉ xem; chốt thật vẫn ở máy chủ v1) · 5 ⬜: M1.6 + M7.1 (tuần sau), M3.5 + M5.4 (Còn chờ v1: giờ vào/ra PTKH), M1.4 phần động cơ (chạy ở Apps Script v1). Cột trạng thái đã đúng theo các bản v2.13.x – lượt này không đổi dòng nào.
+- **GOM VIỆC CÒN CHỜ (cho tuần sau):**
+  - Còn chờ v1: cổng giờ vào/ra PTKH (M3.5 / M5.4 TC-NS) · SePay xác nhận thanh toán (M3.1) · đăng tự động + thu `lead_web` (M8.5) · Task Event Bus M7.1 · cổng đọc nhật ký `_TacVu` (M1.6).
+  - Chờ anh: (1) **rà UX 375 + 1280 bằng mắt** trên điện thoại + máy tính (agy vắng từ 11/11, em không mở trình duyệt) – nhất là Header ở 320px sau đổi viên trạng thái; (2) bật lại agy (Antigravity) nếu muốn giao phiếu; (3) quét thử 1 QR khảo sát bằng điện thoại (v2.13.26); (4) khóa site Turnstile cho KS công khai; (5) trộn PR lượt này nếu tự trộn bị chặn.
+- **Kiểm:** node --check `js/app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chưa ai kiểm bằng mắt (agy vắng) – Chờ anh (1).
+- **Còn lại tuần:** CN 15/11 dự phòng – sửa lỗi anh / agy báo trên RC.
 
 ### PHIÊN BẢN v2.13.26 ✅ – 🔳 TRANG ĐIỀN KHẢO SÁT CÔNG KHAI + QR THEO NGUỒN (13/11/2026, lượt tự động ⑤ 18h)
 - **Bối cảnh:** lịch T6 13/11 đã xong (xem v2.13.25); ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Hộp agy: 0 kết quả mới, AGY_VANG (lần chạy cuối 11/11 08:06) ➜ không gửi phiếu mới. Gỡ dòng 🟡 cuối cùng của bảng đối chiếu: **KS – nguồn QR theo NV / tổ / vị trí** – dùng cổng KS L2 có sẵn (v1.4.1, đã lên app @5), **không cần cổng v1 mới**.

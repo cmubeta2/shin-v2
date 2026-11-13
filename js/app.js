@@ -5,7 +5,7 @@
  */
 
 const ShinApp = (function() {
-  const PHIEN_BAN = 'v2.13.26';
+  const PHIEN_BAN = 'v2.14.0';
 
   const MODULES = [
     ModuleHub,
@@ -753,12 +753,12 @@ const ShinApp = (function() {
 
     if (SHIN_API.laCheDoLive()) {
       pill.className = 'header-status-pill live';
-      pill.innerHTML = `🟢 Live ${PHIEN_BAN}`;
-      pill.title = 'Đang dùng dữ liệu thật của các máy chủ v1 · Bấm để đổi Token';
+      pill.innerHTML = `🟢 Live <span class="pill-ban">${PHIEN_BAN}</span>`;
+      pill.title = `Đang dùng dữ liệu thật của các máy chủ v1 (${PHIEN_BAN}) · Bấm để đổi Token`;
     } else {
       pill.className = 'header-status-pill demo';
-      pill.innerHTML = `🟡 Demo ${PHIEN_BAN}`;
-      pill.title = 'Chế độ Trình diễn mẫu · Bấm để nhập Token thật';
+      pill.innerHTML = `🟡 Demo <span class="pill-ban">${PHIEN_BAN}</span>`;
+      pill.title = `Chế độ Trình diễn mẫu (${PHIEN_BAN}) · Bấm để nhập Token thật`;
     }
   }
 

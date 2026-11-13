@@ -3264,3 +3264,12 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .ksqr-link { font-size: calc(14px * var(--font-scale)); word-break: break-all; color: var(--text-muted); }
 .ksqr-nut { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
 .ksqr-nut > button { min-height: 44px; }
+
+/* v2.14.0 RC – rà UX tĩnh T7: viên trạng thái Header ≥ 14px + vùng bấm 44px (giả vùng ::before), số bản ẩn ở màn hẹp; huy hiệu số dễ đọc hơn; màu theo biến */
+.header-status-pill { position: relative; font-size: calc(14px * var(--font-scale, 1)); height: 28px; padding: 0 10px; border-radius: 14px; gap: 4px; }
+.header-status-pill::before { content: ""; position: absolute; left: -4px; right: -4px; top: -8px; bottom: -8px; }
+.header-status-pill.live { border-color: var(--c-green); background: var(--c-green-soft); color: var(--c-green); }
+.header-status-pill.demo { border-color: var(--c-yellow); background: var(--c-yellow-soft); color: var(--c-yellow); }
+@media (max-width: 400px) { .header-status-pill .pill-ban { display: none; } }
+.nav-badge, .badge-count { font-size: 12px; min-width: 18px; height: 18px; line-height: 18px; }
+.decagon-drawer:not(.open) .badge-count { font-size: 11px; min-width: 16px; height: 16px; line-height: 16px; }
