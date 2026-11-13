@@ -65,7 +65,7 @@ const ModuleWeb = {
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
           <div style="padding:10px; background:var(--bg); border:1px solid var(--border); border-radius:var(--card-radius);">
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
-              <span style="font-weight:700; font-size:13px; color:var(--primary);">📥 Cổng lead_web</span>
+              <span style="font-weight:700; font-size:14px; color:var(--primary);">📥 Cổng lead_web</span>
               <span class="badge xanh">Đã mở</span>
             </div>
             <div style="font-size:14px; color:var(--text-muted); line-height:1.5;">
@@ -74,7 +74,7 @@ const ModuleWeb = {
           </div>
           <div style="padding:10px; background:var(--bg); border:1px solid var(--border); border-radius:var(--card-radius);">
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
-              <span style="font-weight:700; font-size:13px; color:var(--primary);">⏰ Tác Vụ Cron Hằng Giờ</span>
+              <span style="font-weight:700; font-size:14px; color:var(--primary);">⏰ Tác Vụ Cron Hằng Giờ</span>
               <span class="badge xanh">Active (0 */5 * * *)</span>
             </div>
             <div style="font-size:14px; color:var(--text-muted); line-height:1.5;">
@@ -136,9 +136,9 @@ const ModuleWeb = {
       <div class="card">
         <div class="card-header">
           <div class="card-title">📥 Hàng Đợi Yêu Cầu Web (YEU_CAU_WEB.json)</div>
-          <button class="btn-secondary" style="min-height:32px; padding:2px 8px; font-size:11px;" onclick="ModuleWeb.lamMoiHangDoi()">↻ Làm mới</button>
+          <button class="btn-secondary" style="min-height:44px; padding:6px 14px; font-size:14px;" onclick="ModuleWeb.lamMoiHangDoi()">↻ Làm mới</button>
         </div>
-        <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
+        <div style="font-size:14px; color:var(--text-muted); margin-bottom:12px;">
           Lập lịch tự động chạy mỗi 5 tiếng qua Task Background Antigravity để quét và xuất xưởng web.
         </div>
         <div class="hn-list">

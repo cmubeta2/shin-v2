@@ -3241,3 +3241,7 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .lb-huongdan-dang {
   margin-top: 6px;
 }
+
+/* v2.13.25 – rà UX tĩnh (agy vắng): chữ ≥ 14px cho nút chọn sáng/tối + tiêu đề nhóm thanh trái; nút chế độ đủ vùng bấm 44px */
+.theme-mode-btn { font-size: calc(14px * var(--font-scale, 1)); min-height: 44px; }
+.decagon-group-title { font-size: calc(14px * var(--font-scale, 1)); letter-spacing: 0.4px; }
