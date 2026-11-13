@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.25] – 13/11/2026 (RÀ UX TĨNH – CHỮ ≥ 14px, VÙNG BẤM ≥ 44px)
+
+### 🎨 Giao diện
+- Rà tĩnh trên mã (agy vắng từ 11/11, không mở trình duyệt theo lệnh Sếp 11/11): `css/styles.css` nút chọn Sáng/Tối/Tự động 11px ➜ 14px + cao ≥ 44px; tiêu đề nhóm thanh trái 11px ➜ 14px.
+- `js/modules/web.js`: nút ↻ Làm mới hàng đợi web 32px / 11px ➜ 44px / 14px; nhãn 📥 Cổng lead_web, ⏰ Tác vụ hằng giờ và dòng mô tả 13px ➜ 14px.
+- Giữ nguyên (cố ý): số đếm trên huy hiệu (`.nav-badge`, `.badge-count`) và viên trạng thái trên Header (`.header-status-pill` 10px – sợ tràn Header ở 320px, để agy đo trước khi đổi).
+- `js/app.js`, `index.html`: số bản v2.13.25; `sw.js`: PHIEN_BAN_SW ➜ `shin-v2.13.25`.
+
 ## [2.13.24] – 12/11/2026 (🔁 ĐỔI CA & DUYỆT ĐƠN NGHỈ PTKH)
 
 ### ✨ Tính năng
