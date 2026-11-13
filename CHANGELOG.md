@@ -4,6 +4,18 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.13.26] – 13/11/2026 (🔳 TRANG ĐIỀN KHẢO SÁT CÔNG KHAI + QR THEO NGUỒN)
+
+### ✨ Tính năng
+- `dienks.html` + `js/dienks.js` (mới): trang điền phiếu cho người bệnh, mở bằng `dienks.html?k=<MaKS | MaNguon>`, không cần đăng nhập. Gọi cổng công khai KS L2 `webCongKhaiDocKS` / `webCongKhaiGuiPhieu` (không token); gửi mã thiết bị ngẫu nhiên (máy chủ băm), số giây điền, ô bẫy ẩn – chống phiếu rác do máy chủ quyết. Dùng chung luật kiểm + tường lửa M9.5 với 📝 Nhập hộ (`ModuleKsNhapHo`). Thiếu mã ➜ xem thử bằng câu mẫu, không gửi.
+- `js/modules/ks_qr.js` (mới): khối 🔳 QR điền phiếu trong 🛠️ Quản lý khảo sát – QR chung + QR từng nguồn (`webDsNguon`), ➕ tạo nguồn NV / Tổ / Vị trí / Cơ sở (`webTaoNguon`, Toast Hoàn tác 6s), 📋 chép link, ⬇ tải ảnh QR (SVG), 👁 mở thử. QR vẽ trên trình duyệt (bộ mã hóa của `vietqr.js`), không gọi dịch vụ ngoài.
+- `js/api.js`: thêm `SHIN_API.urlMayChu(app)`.
+
+### 🔧 Kỹ thuật
+- `sw.js` PHIEN_BAN_SW `shin-v2.13.26`, VO_APP + `dienks.html`, `js/dienks.js`, `js/modules/ks_qr.js`; `.gitignore` + `!/dienks.html`.
+
+---
+
 ## [2.13.25] – 13/11/2026 (RÀ UX TĨNH – CHỮ ≥ 14px, VÙNG BẤM ≥ 44px)
 
 ### 🎨 Giao diện

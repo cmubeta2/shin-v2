@@ -247,6 +247,8 @@ const SHIN_API = (function() {
     goiPTKH,
     laySucKhoe,
     moTaLoi,
-    soatKhongDuaVao
+    soatKhongDuaVao,
+    /** v2.13.26: link /exec của máy chủ (trang điền khảo sát công khai dienks.html gọi KS không token). */
+    urlMayChu: k => ENDPOINTS[k] || ''
   };
 })();

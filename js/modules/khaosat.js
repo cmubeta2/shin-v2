@@ -344,6 +344,7 @@ const ModuleKhaoSat = {
             </div>
           </details>
           ${typeof ModuleKsNhapHo !== 'undefined' ? ModuleKsNhapHo.veKhoi(d) : ''}
+          ${typeof ModuleKsQR !== 'undefined' ? ModuleKsQR.veKhoi(d) : ''}
           <p class="chu-phu">Câu đã có người trả lời khi sửa sẽ thành phiên bản mới, khảo sát cũ giữ bản trước.</p>
         </div>
       </details>`;
