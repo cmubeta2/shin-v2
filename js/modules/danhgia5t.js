@@ -47,7 +47,7 @@ const ModuleDanhGia5T = (function() {
       ten: 'TRÁCH NHIỆM',
       tenEn: 'Responsibility',
       icon: '🎯',
-      mau: '#0284c7',
+      mau: 'var(--c-sky)',
       moTa: 'Đảm bảo tiến độ, chất lượng công việc, giải quyết vấn đề đến cùng, có trách nhiệm giải trình và tư duy làm chủ.',
       tongTM: 15,
       nguong: { m2: 6, m3: 11, m4: 14, m5: 15 },
@@ -75,7 +75,7 @@ const ModuleDanhGia5T = (function() {
       ten: 'THẤU CẢM',
       tenEn: 'Empathy',
       icon: '❤️',
-      mau: '#0f766e',
+      mau: 'var(--c-teal)',
       moTa: 'Lắng nghe chân thành, thấu hiểu nỗi đau/khó khăn của người bệnh/khách hàng, kiểm soát cảm xúc và ứng xử nhân văn.',
       tongTM: 15,
       nguong: { m2: 7, m3: 11, m4: 14, m5: 15 },
@@ -103,7 +103,7 @@ const ModuleDanhGia5T = (function() {
       ten: 'TẬN TÂM',
       tenEn: 'Dedication',
       icon: '🔥',
-      mau: '#d97706',
+      mau: 'var(--c-amber)',
       moTa: 'Làm việc chu đáo, tỉ mỉ, phục vụ vượt kỳ vọng, dấn thân vì tập thể và không ngại khó khăn.',
       tongTM: 16,
       nguong: { m2: 7, m3: 12, m4: 15, m5: 16 },
@@ -132,7 +132,7 @@ const ModuleDanhGia5T = (function() {
       ten: 'TRI ÂN',
       tenEn: 'Gratitude',
       icon: '🙏',
-      mau: '#7c3aed',
+      mau: 'var(--c-purple)',
       moTa: 'Nuôi dưỡng lòng biết ơn người bệnh/khách hàng và đồng nghiệp, gìn giữ uy tín đơn vị và đóng góp cho cộng đồng.',
       tongTM: 15,
       nguong: { m2: 8, m3: 12, m4: 14, m5: 15 },
@@ -378,7 +378,7 @@ const ModuleDanhGia5T = (function() {
             <div class="tq-nhan">Tổng Điểm 5 Trụ Cột</div>
           </div>
           <div class="tq-o" style="cursor:pointer;" onclick="ModuleDanhGia5T.chuyenTab('danhgia')">
-            <div class="tq-so" style="color:${kq.coDiemLietM1 ? 'var(--c-red)' : '#8b5cf6'}; font-size:14px; font-weight:800; line-height:1.2; padding-top:4px;">
+            <div class="tq-so" style="color:${kq.coDiemLietM1 ? 'var(--c-red)' : 'var(--c-purple)'}; font-size:14px; font-weight:800; line-height:1.2; padding-top:4px;">
               ${kq.xepLoai.split('(')[0].trim()}
             </div>
             <div class="tq-nhan">Xếp Loại Hiện Tại</div>
@@ -485,13 +485,13 @@ const ModuleDanhGia5T = (function() {
             Không tìm thấy tiểu mục nào khớp với điều kiện lọc.
           </div>
         ` : danhSachLoc.map(tm => {
-          let badgeColor = '#64748b';
+          let badgeColor = 'var(--c-gray)';
           let badgeText = tm.muc;
           if (tm.muc === 'M1') { badgeColor = 'var(--c-red)'; badgeText = 'M1 · ĐIỂM LIỆT'; }
-          if (tm.muc === 'M2') { badgeColor = '#d97706'; badgeText = 'M2 · NỀN TẢNG'; }
-          if (tm.muc === 'M3') { badgeColor = '#0284c7'; badgeText = 'M3 · CHUẨN MỰC'; }
-          if (tm.muc === 'M4') { badgeColor = '#0f766e'; badgeText = 'M4 · CẢI TIẾN'; }
-          if (tm.muc === 'M5') { badgeColor = '#7c3aed'; badgeText = 'M5 · TINH HOA'; }
+          if (tm.muc === 'M2') { badgeColor = 'var(--c-amber)'; badgeText = 'M2 · NỀN TẢNG'; }
+          if (tm.muc === 'M3') { badgeColor = 'var(--c-sky)'; badgeText = 'M3 · CHUẨN MỰC'; }
+          if (tm.muc === 'M4') { badgeColor = 'var(--c-teal)'; badgeText = 'M4 · CẢI TIẾN'; }
+          if (tm.muc === 'M5') { badgeColor = 'var(--c-purple)'; badgeText = 'M5 · TINH HOA'; }
 
           return `
             <div class="card" style="border-left: 4px solid ${tm.tcMau};">
@@ -517,7 +517,7 @@ const ModuleDanhGia5T = (function() {
                   <div style="color:var(--text); margin-top:2px;">${tm.hdNV}</div>
                 </div>
                 <div style="background:var(--bg-sub); padding:8px 10px; border-radius:6px; border:1px solid var(--border);">
-                  <strong style="color:#0f766e;">🔍 Cách Quản lý kiểm tra (OK = Đạt):</strong>
+                  <strong style="color:var(--c-teal);">🔍 Cách Quản lý kiểm tra (OK = Đạt):</strong>
                   <div style="color:var(--text); margin-top:2px;">${tm.cachQL}</div>
                 </div>
               </div>
@@ -570,7 +570,7 @@ const ModuleDanhGia5T = (function() {
                     </td>
                     <td><strong>${k.soTMDuyet}</strong>/${k.tongTM}</td>
                     <td>
-                      <span class="diem-pill" style="background:${k.mau}20; color:${k.mau};">
+                      <span class="diem-pill" style="background:color-mix(in srgb, ${k.mau} 13%, transparent); color:${k.mau};">
                         Mức ${k.mucDiem}
                       </span>
                     </td>
@@ -691,7 +691,7 @@ const ModuleDanhGia5T = (function() {
                   </div>
                   <div style="display:flex; align-items:center; gap:8px;">
                     <span style="font-size:14px; font-weight:700;">Đạt ${k.soTMDuyet}/${tc.tongTM} TM</span>
-                    <span class="diem-pill" style="background:${tc.mau}20; color:${tc.mau};">Mức ${k.mucDiem}</span>
+                    <span class="diem-pill" style="background:color-mix(in srgb, ${tc.mau} 13%, transparent); color:${tc.mau};">Mức ${k.mucDiem}</span>
                   </div>
                 </div>
 
@@ -827,7 +827,7 @@ const ModuleDanhGia5T = (function() {
         <text x="${lx}" y="${ly}" font-size="13" font-weight="700" fill="var(--text)" text-anchor="middle" dominant-baseline="middle">
           ${labelNames[i]}
         </text>
-        <text x="${lx}" y="${ly + 15}" font-size="12" font-weight="800" fill="${tc.mau}" text-anchor="middle" dominant-baseline="middle">
+        <text x="${lx}" y="${ly + 15}" font-size="12" font-weight="800" style="fill:${tc.mau}" text-anchor="middle" dominant-baseline="middle">
           Mức ${tc.mucDiem}
         </text>
       `;
@@ -851,12 +851,12 @@ const ModuleDanhGia5T = (function() {
         <!-- Nan hoa -->
         ${axisLines}
         <!-- Vùng điểm đạt -->
-        <polygon points="${dataPoints.join(' ')}" fill="rgba(2, 132, 199, 0.35)" stroke="#0284c7" stroke-width="2.5" />
+        <polygon points="${dataPoints.join(' ')}" style="fill:var(--c-sky-soft); stroke:var(--c-sky);" stroke-width="2.5" />
         <!-- Các điểm chốt -->
         ${dataPoints.map((pt, idx) => {
           const coords = pt.split(',');
-          const tc = kqTC[idx] || { mau: '#0284c7' };
-          return `<circle cx="${coords[0]}" cy="${coords[1]}" r="4.5" fill="${tc.mau}" stroke="#ffffff" stroke-width="1.5" />`;
+          const tc = kqTC[idx] || { mau: 'var(--c-sky)' };
+          return `<circle cx="${coords[0]}" cy="${coords[1]}" r="4.5" style="fill:${tc.mau}; stroke:var(--card);" stroke-width="1.5" />`;
         }).join('')}
         <!-- Nhãn -->
         ${labels}

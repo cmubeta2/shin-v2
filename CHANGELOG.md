@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.2] – 15/11/2026 (CN – trả nợ UX phát hiện ở T7)
+
+### 🎨 Giao diện
+- Bộ token màu chung thêm `--c-sky`, `--c-teal`, `--c-amber`, `--c-purple` (+ `-soft`), có bản sáng và tối.
+- ⭐ Đánh giá 5T: 5 màu tiêu chí, huy hiệu M1–M5, điểm tổng, chữ hướng dẫn Quản lý, vùng + chấm + nhãn radar đổi mã màu cứng sang token (đổi theo chế độ tối); nền viên điểm `${mau}20` (hex alpha, hỏng khi dùng biến) ➜ `color-mix`. Bản in PDF giữ đen trắng như cũ.
+
 ## [2.14.1] – 14/11/2026 (sửa lỗi UX theo 3 phiếu agy rà 375 + 1280)
 
 ### 🎨 Giao diện
