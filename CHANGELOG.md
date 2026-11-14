@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.1] – 14/11/2026 (sửa lỗi UX theo 3 phiếu agy rà 375 + 1280)
+
+### 🎨 Giao diện
+- 📁 Dự án: nút 📤 Xuất PDF bỏ kiểu nội dòng chữ trắng (không đọc được trên Hero nền sáng) ➜ dùng `btn-secondary` chuẩn; 4 huy hiệu khối Daily Flash đổi mã màu cứng sang `var(--c-blue|red|green|yellow)`.
+- 🛡️ Quản trị: Hero thêm nút chính ➕ Thêm người dùng (`themNguoiNhanh` – về tab Người dùng rồi mở form).
+- ⭐ Đánh giá 5T: chữ bảng tiêu chí 12.5px / tiêu đề cột 11px ➜ 14px; nhãn radar 11/10px ➜ 13/12px, khung SVG nới 40px hai bên để nhãn dài (Trách Nhiệm) không bị cắt.
+- 🏠 Trang chủ: thẻ tin `.the-tin` cao tối thiểu 44px.
+
 ## [2.14.0] – 14/11/2026 (🏁 RC – CHỐT BẢN ỨNG VIÊN TUẦN 09–15/11)
 
 ### 🎨 Giao diện (rà UX tĩnh)

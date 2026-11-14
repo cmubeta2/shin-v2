@@ -104,7 +104,7 @@ const ModuleDuAn = {
           <button class="btn-primary" style="flex:1;" onclick="ModuleDuAn.moFormTaoMoi()">
             ＋ Tạo Dự Án Mới
           </button>
-          <button class="btn-secondary" style="background:rgba(255,255,255,0.2); color:#fff; border:1px solid rgba(255,255,255,0.4);" onclick="ModuleDuAn.xuatBaoCao()">
+          <button class="btn-secondary" onclick="ModuleDuAn.xuatBaoCao()">
             📤 Xuất PDF
           </button>
         </div>
@@ -150,7 +150,7 @@ const ModuleDuAn = {
       <div class="flash-card flash-k1">
         <div class="flash-head">
           <div class="flash-title">
-            <span class="flash-badge" style="background:#0284c7;">1</span>
+            <span class="flash-badge" style="background:var(--c-blue);">1</span>
             TRẠNG THÁI TIẾN ĐỘ DỰ ÁN
           </div>
           <span style="font-size:14px; color:var(--text-muted);">${k1.length} điểm tin chính</span>
@@ -164,7 +164,7 @@ const ModuleDuAn = {
       <div class="flash-card flash-k2">
         <div class="flash-head">
           <div class="flash-title">
-            <span class="flash-badge" style="background:#dc2626;">2</span>
+            <span class="flash-badge" style="background:var(--c-red);">2</span>
             VƯỚNG MẮC & ĐỀ XUẤT GIẢI PHÁP
           </div>
           <span class="status-pill danger" style="padding:2px 8px; font-size:14px;">Cần chú ý</span>
@@ -187,7 +187,7 @@ const ModuleDuAn = {
       <div class="flash-card flash-k3">
         <div class="flash-head">
           <div class="flash-title">
-            <span class="flash-badge" style="background:#16a34a;">3</span>
+            <span class="flash-badge" style="background:var(--c-green);">3</span>
             TÌNH HÌNH TÀI CHÍNH & PHÁT SINH
           </div>
           <div style="font-size:14px; font-weight:700; color:var(--text);">
@@ -219,7 +219,7 @@ const ModuleDuAn = {
       <div class="flash-card flash-k4">
         <div class="flash-head">
           <div class="flash-title">
-            <span class="flash-badge" style="background:#d97706;">4</span>
+            <span class="flash-badge" style="background:var(--c-yellow);">4</span>
             VIỆC ĐANG CHỜ SẾP PHÊ DUYỆT
           </div>
           <span class="status-pill warn" style="padding:2px 8px; font-size:14px;">${k4.length} mục chờ</span>

@@ -4,7 +4,7 @@
  * KHÔNG đụng tới máy chủ Apps Script (script.google.com) – số liệu luôn lấy thật, không lưu đệm.
  * Đổi PHIEN_BAN_SW mỗi khi đổi danh sách tệp vỏ app.
  */
-const PHIEN_BAN_SW = 'shin-v2.14.0';
+const PHIEN_BAN_SW = 'shin-v2.14.1';
 const VO_APP = [
   './', 'index.html', 'offline.html', 'danhgia5t.html', 'dienks.html', 'js/dienks.js', 'manifest.webmanifest', 'css/styles.css',
   'js/demo_data.js', 'js/api.js', 'js/app.js', 'js/vietqr.js',
