@@ -824,10 +824,10 @@ const ModuleDanhGia5T = (function() {
       const ly = center + (radius + 18) * Math.sin(axesAngles[i]);
       const tc = kqTC[i] || { mucDiem: 1 };
       labels += `
-        <text x="${lx}" y="${ly}" font-size="11" font-weight="700" fill="var(--text)" text-anchor="middle" dominant-baseline="middle">
+        <text x="${lx}" y="${ly}" font-size="13" font-weight="700" fill="var(--text)" text-anchor="middle" dominant-baseline="middle">
           ${labelNames[i]}
         </text>
-        <text x="${lx}" y="${ly + 12}" font-size="10" font-weight="800" fill="${tc.mau}" text-anchor="middle" dominant-baseline="middle">
+        <text x="${lx}" y="${ly + 15}" font-size="12" font-weight="800" fill="${tc.mau}" text-anchor="middle" dominant-baseline="middle">
           Mức ${tc.mucDiem}
         </text>
       `;
@@ -845,7 +845,7 @@ const ModuleDanhGia5T = (function() {
     }
 
     return `
-      <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="max-width:100%; height:auto;">
+      <svg width="${size + 80}" height="${size + 20}" viewBox="-40 -10 ${size + 80} ${size + 20}" overflow="visible" style="max-width:100%; height:auto;">
         <!-- Vòng lưới -->
         ${gridCircles}
         <!-- Nan hoa -->

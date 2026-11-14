@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.14.0 RC** · Cập nhật ngày: **14/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.14.1 RC** · Cập nhật ngày: **14/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -25,6 +25,14 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.14.1 – SỬA LỖI UX THEO KẾT QUẢ AGY RÀ 375 + 1280 (14/11/2026, lượt tự động ⑤ 10h – T7)
+- **Nguồn:** 3 phiếu `11140613_V2_M0.1_ra-ux` / `…ra-uxb` / `…ra-uxbb` (agy trả 07:11–07:16, đều ĐẠT: 0 lỗi console, không cuộn ngang ở 375 + 1280, 76 ảnh sáng + tối). Em xác minh từng điểm trong mã trước khi sửa.
+- **Đã sửa (lỗi có căn cứ):** (1) 📁 Dự án – nút 📤 Xuất PDF chữ trắng trên Hero nền sáng (mức Cao) ➜ `btn-secondary` chuẩn; huy hiệu Daily Flash ➜ token màu. (2) 🛡️ Quản trị – Hero thiếu nút chính ➜ ➕ Thêm người dùng. (3) ⭐ Đánh giá 5T – chữ bảng 12.5 / 11px ➜ 14px; nhãn radar 10–11px ➜ 12–13px + nới khung SVG. (4) 🏠 Trang chủ – thẻ tin cao 43px ➜ tối thiểu 44px.
+- **Báo nhầm (đã đối chiếu mã, không sửa):** checkbox Khẩn cấp (`.chon-khan` đã là nhãn 44px), checkbox chấm 5T (`.chk-vung-5t` 44 × 44px), bảng 5T 620px (đã nằm trong khung cuộn riêng – trang không cuộn ngang), checkbox học viên LMS (nhãn `.hang-tru` 44px), dữ liệu mẫu Tri thức trống (demo có `taiLieu`; số 0 chỉ khi Live chưa nạp chỉ mục – có dải báo lỗi).
+- **Để lại có chủ ý:** 🧠 Tri thức – Hero dùng ô tìm kiếm làm hành động chính (kho chỉ đọc, soạn tài liệu ở Obsidian) ➜ không thêm nút. 🏥 Phòng khám – hàng 7–8 tab cuộn ngang trong thanh tab (không cuộn trang) ➜ gom tab "Khác…" để tuần sau. ⭐ Đánh giá 5T – 5 màu tiêu chí còn mã cứng vì bộ token chưa có tím / xanh mòng két ➜ tuần sau.
+- **Chờ anh quyết:** 🌐 `js/modules/web.js` (Xưởng Web) có mã nhưng **chưa nạp vào app** (có chủ ý từ trước; tính năng web nằm ở 📣 Marketing M8.5). Agy đề xuất nạp – T7 không thêm tính năng nên em chưa nạp; anh chốt nạp hay bỏ tệp.
+- **Kiểm:** node --check `duan.js`, `quantri.js`, `danhgia5t.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm lại 4 màn đã sửa (phiếu `11141015_V2_M0.1_ra-ux`).
 
 ### PHIÊN BẢN v2.14.0 🏁 RC – CHỐT BẢN ỨNG VIÊN PHÁT HÀNH TUẦN 09–15/11 (14/11/2026, lượt tự động ⑤ 04h – T7)
 - **Bối cảnh:** T7 không thêm tính năng. Ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Rà "shin-v2" ở KE_HOACH các app v1: mọi dòng đều [x] và đã nối – không có cổng mới. Hộp agy: 0 kết quả V2, **AGY_VANG** (lần chạy cuối 11/11 08:06) ➜ đã rút phiếu `11111014_V2_M4.5_ra-ux`, **không gửi 4 phiếu `ra-ux`** (không ai nhận); em không mở trình duyệt (Sếp 11/11) ➜ **rà UX 375 + 1280 bằng mắt: CHƯA làm được**, chỉ rà tĩnh CSS.

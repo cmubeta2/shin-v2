@@ -125,6 +125,7 @@ const ModuleQuanTri = {
           <div class="tq-o" onclick="ModuleQuanTri.chonTab('app')"><div class="tq-so" style="color:${soLoi ? 'var(--c-red)' : 'var(--c-green)'}">${ShinApp.soVN(app.filter(u => u.bat).length)}/${ShinApp.soVN(app.length)}</div><div class="tq-nhan">App đang bật${soLoi ? ' · ' + soLoi + ' lỗi' : ''}</div></div>
           <div class="tq-o" onclick="ModuleQuanTri.chonTab('mang')"><div class="tq-so" style="color:${mangThieu ? 'var(--c-yellow)' : 'var(--c-green)'}">${ShinApp.soVN(pt.length)}</div><div class="tq-nhan">Mảng${mangThieu ? ' · ' + mangThieu + ' chưa có người' : ' có người phụ trách'}</div></div>
         </div>
+        <div class="hang-nut" style="margin-top:14px;"><button class="btn-primary" style="flex:1;" onclick="ModuleQuanTri.themNguoiNhanh()">➕ Thêm người dùng</button></div>
       </div>
 
       <div class="hang-tab" role="tablist">
@@ -201,6 +202,14 @@ const ModuleQuanTri = {
   TRANG_THAI: ['Đang dùng', 'Ngưng'],
 
   /** Form thêm (i = -1) / sửa 1 người. Mã không đổi khi sửa. */
+  // v2.14.1: nút chính ở Hero – về tab Người dùng rồi mở form thêm mới
+  themNguoiNhanh: function() {
+    if (this._tab !== 'nguoi') this.chonTab('nguoi');
+    this.moForm(-1);
+    const f = document.getElementById('qtForm');
+    if (f && f.scrollIntoView) f.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  },
+
   moForm: function(i) {
     const khung = document.getElementById('qtForm') || document.getElementById('qtNg' + i);
     const n = i >= 0 ? (this._d.danhBa || [])[i] : { ma: '', hoTen: '', vaiTro: 'Người dùng', trangThai: 'Đang dùng' };
