@@ -8,6 +8,15 @@
 
 ---
 
+## 0. VIỆC CÒN CHỜ CHO TUẦN 16–22/11 (gom 14/11, sau RC v2.14.1)
+- **Còn chờ v1 (cần cổng mới ở máy chủ v1):** giờ vào/ra PTKH ➜ M3.5 + M5.4 xuất TC-NS · SePay webhook xác nhận thanh toán ➜ M3.1 · đăng tự động 1 chạm + thu `lead_web` ➜ M8.5 · Task Event Bus ➜ M7.1 (Sếp chốt làm tuần sau) · cổng đọc nhật ký `_TacVu` ➜ M1.6 · chỉ số cả tổ (Morale / NTC cả tổ M5.5–M5.6) – Sếp chốt KHÔNG làm.
+- **Chờ anh quyết:** (1) 🌐 `js/modules/web.js` nạp vào app hay bỏ tệp (tính năng web hiện ở 📣 Marketing M8.5); (2) khóa site Turnstile cho trang điền KS công khai; (3) trộn PR nếu tự trộn bị chặn.
+- **Chờ anh thử 1 lần bằng token thật (lượt tự động không có token):** gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠, HUB L28) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝) · quét 1 QR khảo sát bằng điện thoại · kết nối Telegram mã ghép.
+- **Nợ kỹ thuật để tuần sau (không chặn RC):** 🏥 Phòng khám gom tab 7–8 vào "Khác…" · ⭐ Đánh giá 5T thêm token tím / xanh mòng két thay 5 mã màu cứng · nhập hộ phiếu giấy KS (`webNhapHo`) · KS hiện 1 câu / trang (`moiTrang`).
+- **Giao diện:** agy đã rà 375 + 1280 mọi màn (3 phiếu 14/11 07h, ĐẠT) và kiểm lại 4 màn sửa ở v2.14.1 (ĐẠT, UX TB 9.9) ➜ mục "Chờ anh rà UX bằng mắt" của v2.14.0 đã đóng.
+
+---
+
 ## 1. LỘ TRÌNH PHÁT TRIỂN PHIÊN BẢN (v2.Y.Z)
 
 Theo quy ước số phiên bản đã được Sếp duyệt:
@@ -32,7 +41,7 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 - **Báo nhầm (đã đối chiếu mã, không sửa):** checkbox Khẩn cấp (`.chon-khan` đã là nhãn 44px), checkbox chấm 5T (`.chk-vung-5t` 44 × 44px), bảng 5T 620px (đã nằm trong khung cuộn riêng – trang không cuộn ngang), checkbox học viên LMS (nhãn `.hang-tru` 44px), dữ liệu mẫu Tri thức trống (demo có `taiLieu`; số 0 chỉ khi Live chưa nạp chỉ mục – có dải báo lỗi).
 - **Để lại có chủ ý:** 🧠 Tri thức – Hero dùng ô tìm kiếm làm hành động chính (kho chỉ đọc, soạn tài liệu ở Obsidian) ➜ không thêm nút. 🏥 Phòng khám – hàng 7–8 tab cuộn ngang trong thanh tab (không cuộn trang) ➜ gom tab "Khác…" để tuần sau. ⭐ Đánh giá 5T – 5 màu tiêu chí còn mã cứng vì bộ token chưa có tím / xanh mòng két ➜ tuần sau.
 - **Chờ anh quyết:** 🌐 `js/modules/web.js` (Xưởng Web) có mã nhưng **chưa nạp vào app** (có chủ ý từ trước; tính năng web nằm ở 📣 Marketing M8.5). Agy đề xuất nạp – T7 không thêm tính năng nên em chưa nạp; anh chốt nạp hay bỏ tệp.
-- **Kiểm:** node --check `duan.js`, `quantri.js`, `danhgia5t.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm lại 4 màn đã sửa (phiếu `11141015_V2_M0.1_ra-ux`).
+- **Kiểm:** node --check `duan.js`, `quantri.js`, `danhgia5t.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm lại 4 màn đã sửa (phiếu `11141015_V2_M0.1_ra-ux`). ➜ **agy trả 11:18: ĐẠT, UX TB 9.9** (Dự án 10 · Quản trị 9.75 · Đánh giá 5T 10 · Trang chủ 10; 0 lỗi console, không cuộn ngang 375 + 1280, nút Xuất PDF tương phản ≥ 9.2:1 cả 8 bộ màu); kiem-tra 14/11 xác minh trong mã: themNguoiNhanh (quantri.js:206), nút Hero (quantri.js:128), btn Xuất PDF (duan.js:108), radar viewBox -40 (danhgia5t.js:848).
 
 ### PHIÊN BẢN v2.14.0 🏁 RC – CHỐT BẢN ỨNG VIÊN PHÁT HÀNH TUẦN 09–15/11 (14/11/2026, lượt tự động ⑤ 04h – T7)
 - **Bối cảnh:** T7 không thêm tính năng. Ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Rà "shin-v2" ở KE_HOACH các app v1: mọi dòng đều [x] và đã nối – không có cổng mới. Hộp agy: 0 kết quả V2, **AGY_VANG** (lần chạy cuối 11/11 08:06) ➜ đã rút phiếu `11111014_V2_M4.5_ra-ux`, **không gửi 4 phiếu `ra-ux`** (không ai nhận); em không mở trình duyệt (Sếp 11/11) ➜ **rà UX 375 + 1280 bằng mắt: CHƯA làm được**, chỉ rà tĩnh CSS.
@@ -60,7 +69,7 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
   - Còn chờ v1: cổng giờ vào/ra PTKH (M3.5 / M5.4 TC-NS) · SePay xác nhận thanh toán (M3.1) · đăng tự động + thu `lead_web` (M8.5) · Task Event Bus M7.1 · cổng đọc nhật ký `_TacVu` (M1.6).
   - Chờ anh: (1) **rà UX 375 + 1280 bằng mắt** trên điện thoại + máy tính (agy vắng từ 11/11, em không mở trình duyệt) – nhất là Header ở 320px sau đổi viên trạng thái; (2) bật lại agy (Antigravity) nếu muốn giao phiếu; (3) quét thử 1 QR khảo sát bằng điện thoại (v2.13.26); (4) khóa site Turnstile cho KS công khai; (5) trộn PR lượt này nếu tự trộn bị chặn.
 - **Kiểm:** node --check `js/app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chưa ai kiểm bằng mắt (agy vắng) – Chờ anh (1).
-- **Còn lại tuần:** CN 15/11 dự phòng – sửa lỗi anh / agy báo trên RC.
+- **Còn lại tuần:** CN 15/11 dự phòng – sửa lỗi anh / agy báo trên RC. ➜ Lượt 16h 14/11: đã gom việc còn chờ lên mục 0 đầu tệp (kéo việc CN lên); Chờ anh (1) + (2) đã đóng (agy chạy lại, rà UX ĐẠT).
 
 ### PHIÊN BẢN v2.13.26 ✅ – 🔳 TRANG ĐIỀN KHẢO SÁT CÔNG KHAI + QR THEO NGUỒN (13/11/2026, lượt tự động ⑤ 18h)
 - **Bối cảnh:** lịch T6 13/11 đã xong (xem v2.13.25); ưu tiên số 1 (HUB L26 ➜ M6.4) 🟢 từ v2.12.2. Hộp agy: 0 kết quả mới, AGY_VANG (lần chạy cuối 11/11 08:06) ➜ không gửi phiếu mới. Gỡ dòng 🟡 cuối cùng của bảng đối chiếu: **KS – nguồn QR theo NV / tổ / vị trí** – dùng cổng KS L2 có sẵn (v1.4.1, đã lên app @5), **không cần cổng v1 mới**.
