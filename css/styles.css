@@ -378,7 +378,7 @@ body {
   --c-amber: #92400e; --c-amber-soft: rgba(180, 83, 9, 0.15);
   --c-purple: #7c3aed; --c-purple-soft: rgba(124, 58, 237, 0.15);
 }
-[data-theme="dark"] {
+[data-theme="dark"], [data-palette="cyber"] {
   --c-gray: #9ca3af; --c-gray-soft: rgba(156, 163, 175, 0.18);
   --c-blue: #60a5fa; --c-blue-soft: rgba(96, 165, 250, 0.2);
   --c-yellow: #f59e0b; --c-yellow-soft: rgba(245, 158, 11, 0.2);
@@ -447,7 +447,7 @@ body {
 }
 
 .topbar-sub {
-  font-size: calc(12px * var(--font-scale));
+  font-size: calc(14px * var(--font-scale));
   opacity: 0.8;
   white-space: nowrap;
 }
@@ -1549,7 +1549,7 @@ details.tq-gon > .nut-rong { width: calc(100% - 24px); max-width: none; }
 .tab-khac { font-size: 16px; padding-right: 10px; max-width: 60vw; }
 .tab-khac option { color: var(--text); background: var(--card); }
 .hang-chip { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
-.chip-chon { min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; font-size: calc(14px * var(--font-scale)); font-weight: 600; cursor: pointer; }
+.chip-chon { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; font-size: calc(14px * var(--font-scale)); font-weight: 600; cursor: pointer; }
 .chip-chon.dang-chon { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
 .ks-nh-chip { min-width: 44px; }
 .luoi-o-so { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 6px; margin-bottom: 10px; }
@@ -3284,3 +3284,7 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 @media (max-width: 400px) { .header-status-pill .pill-ban { display: none; } }
 .nav-badge, .badge-count { font-size: 12px; min-width: 18px; height: 18px; line-height: 18px; }
 .decagon-drawer:not(.open) .badge-count { font-size: 11px; min-width: 16px; height: 16px; line-height: 16px; }
+
+/* v2.14.5 – nhãn thanh đáy >= 14px (agy 15/11), cắt bằng dấu … nếu chật */
+.nav-nhan { font-size: calc(14px * var(--font-scale, 1)); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar-sub { overflow: hidden; text-overflow: ellipsis; max-width: 100%; }

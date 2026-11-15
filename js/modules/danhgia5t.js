@@ -827,7 +827,7 @@ const ModuleDanhGia5T = (function() {
         <text x="${lx}" y="${ly}" font-size="14" font-weight="700" fill="var(--text)" text-anchor="middle" dominant-baseline="middle">
           ${labelNames[i]}
         </text>
-        <text x="${lx}" y="${ly + 16}" font-size="13" font-weight="800" style="fill:${tc.mau}" text-anchor="middle" dominant-baseline="middle">
+        <text x="${lx}" y="${ly + 16}" font-size="14" font-weight="800" style="fill:${tc.mau}" text-anchor="middle" dominant-baseline="middle">
           Mức ${tc.mucDiem}
         </text>
       `;

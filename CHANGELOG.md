@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.5] – 16/11/2026 (sửa theo phiếu agy kiểm v2.14.4)
+
+### 🎨 Giao diện
+- Bộ màu Cyber (nền tối) ở chế độ Sáng dùng bộ token `--c-*` sáng: huy hiệu 5T M2 / M4 hết tụt 2.0–2.2:1.
+- Nhãn radar 5T 13px ➜ 14px; chip lọc vai trò 🛡️ Quản trị căn giữa chữ (inline-flex).
+- Khung chung: nhãn thanh đáy `.nav-nhan` 11px ➜ 14px, `.topbar-sub` 12px ➜ 14px (chật thì cắt bằng dấu …).
+
 ## [2.14.4] – 15/11/2026 (CN – sửa theo phiếu agy kiểm v2.14.3)
 
 ### 🎨 Giao diện
