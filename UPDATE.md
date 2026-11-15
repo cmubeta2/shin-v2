@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.14.3 RC** · Cập nhật ngày: **15/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.14.5 RC** · Cập nhật ngày: **16/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -34,6 +34,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.14.5 – SỬA THEO AGY KIỂM v2.14.4: CYBER SÁNG + CHỮ ≥ 14px KHUNG CHUNG (16/11/2026, lượt tự động ⑤ 04h – đầu tuần 16–22/11)
+- **Nguồn:** phiếu `11151613_V2_M5.0_ra-ux` TRƯỢT (UX 7.5–9/10). Em xác minh trong mã: (1) đúng – `[data-palette="cyber"]` nền tối nhưng không nhận `--c-*` của `[data-theme="dark"]`, Cyber + Sáng ➜ m2 2.21:1, m4 2.02:1; (2) **không lỗi** – checkbox `.chk-5t` 28px nhưng đã nằm trong label `.chk-vung-5t` 44×44px (agy đo input, không đo vùng bấm); (3) đúng – nhãn radar 13px; (4) đúng – `.chip-chon` dạng `<span>` ở Quản trị không căn giữa dọc.
+- **Đã sửa:** selector `[data-theme="dark"], [data-palette="cyber"]` cho khối `--c-*` tối; nhãn radar 14px; `.chip-chon` inline-flex căn giữa; trả nợ khung chung của v2.14.4: `.nav-nhan` 14px + `…`, `.topbar-sub` 14px + `…` (pill Demo đã có vùng bấm `::before` 44px từ trước – không đổi).
+- **Chưa làm:** gộp 2 tầng tab 📋 Công việc ở 375 (đề xuất agy, không phải lỗi) – chờ agy kiểm lại xem còn cần.
+- **Kiểm:** node --check `app.js`, `danhgia5t.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm (phiếu `11160414_V2_M5.0_ra-ux`).
 
 ### PHIÊN BẢN v2.14.4 – SỬA THEO AGY KIỂM v2.14.3: TƯƠNG PHẢN M2/M4 + TAB XUỐNG DÒNG Ở 375 (15/11/2026, lượt tự động ⑤ 16h – CN dự phòng)
 - **Nguồn:** phiếu `11151014_V2_M5.0_ra-ux` TRƯỢT (tổng hợp ở mục v2.14.3 dưới). Em xác minh trong mã: đúng cả 2 lỗi.
