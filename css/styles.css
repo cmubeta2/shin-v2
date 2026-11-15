@@ -374,8 +374,8 @@ body {
   --c-green: #15803d; --c-green-soft: rgba(21, 128, 61, 0.15);
   --c-red: #b91c1c; --c-red-soft: rgba(185, 28, 28, 0.14);
   --c-sky: #0369a1; --c-sky-soft: rgba(3, 105, 161, 0.18);
-  --c-teal: #0f766e; --c-teal-soft: rgba(15, 118, 110, 0.15);
-  --c-amber: #b45309; --c-amber-soft: rgba(180, 83, 9, 0.15);
+  --c-teal: #115e59; --c-teal-soft: rgba(15, 118, 110, 0.15);
+  --c-amber: #92400e; --c-amber-soft: rgba(180, 83, 9, 0.15);
   --c-purple: #7c3aed; --c-purple-soft: rgba(124, 58, 237, 0.15);
 }
 [data-theme="dark"] {
@@ -1543,6 +1543,7 @@ details.tq-gon > .nut-rong { width: calc(100% - 24px); max-width: none; }
 /* v2.3.0 – thành phần dùng chung: thẻ tab, chip chọn, ô số lọc, thanh tiến độ, form */
 .hang-tab { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 10px 0 12px; padding-bottom: 2px; }
 .hang-tab::-webkit-scrollbar { display: none; }
+@media (max-width: 640px) { .hang-tab { flex-wrap: wrap; overflow-x: visible; } }
 .tab-nut { flex: 0 0 auto; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border); background: var(--card); color: var(--text); font: inherit; font-size: calc(14px * var(--font-scale)); font-weight: 700; cursor: pointer; }
 .tab-nut.dang-chon { background: var(--primary); border-color: var(--primary); color: #fff; }
 .tab-khac { font-size: 16px; padding-right: 10px; max-width: 60vw; }
