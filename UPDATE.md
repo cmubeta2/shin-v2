@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.14.2 RC** · Cập nhật ngày: **15/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.14.3 RC** · Cập nhật ngày: **15/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -12,7 +12,7 @@
 - **Còn chờ v1 (cần cổng mới ở máy chủ v1):** giờ vào/ra PTKH ➜ M3.5 + M5.4 xuất TC-NS · SePay webhook xác nhận thanh toán ➜ M3.1 · đăng tự động 1 chạm + thu `lead_web` ➜ M8.5 · Task Event Bus ➜ M7.1 (Sếp chốt làm tuần sau) · cổng đọc nhật ký `_TacVu` ➜ M1.6 · chỉ số cả tổ (Morale / NTC cả tổ M5.5–M5.6) – Sếp chốt KHÔNG làm.
 - **Chờ anh quyết:** (1) 🌐 `js/modules/web.js` nạp vào app hay bỏ tệp (tính năng web hiện ở 📣 Marketing M8.5); (2) khóa site Turnstile cho trang điền KS công khai; (3) trộn PR nếu tự trộn bị chặn.
 - **Chờ anh thử 1 lần bằng token thật (lượt tự động không có token):** gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠, HUB L28) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝) · quét 1 QR khảo sát bằng điện thoại · kết nối Telegram mã ghép.
-- **Nợ kỹ thuật để tuần sau (không chặn RC):** 🏥 Phòng khám gom tab 7–8 vào "Khác…" · nhập hộ phiếu giấy KS (`webNhapHo`) · KS hiện 1 câu / trang (`moiTrang`).
+- **Nợ kỹ thuật để tuần sau (không chặn RC):** nhập hộ phiếu giấy KS (`webNhapHo`) · KS hiện 1 câu / trang (`moiTrang`).
 - **Giao diện:** agy đã rà 375 + 1280 mọi màn (3 phiếu 14/11 07h, ĐẠT) và kiểm lại 4 màn sửa ở v2.14.1 (ĐẠT, UX TB 9.9) ➜ mục "Chờ anh rà UX bằng mắt" của v2.14.0 đã đóng.
 
 ---
@@ -34,6 +34,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.14.3 – SỬA THEO AGY KIỂM v2.14.2 + GOM TAB PHÒNG KHÁM (15/11/2026, lượt tự động ⑤ 10h – CN dự phòng)
+- **Nguồn:** phiếu `11150614_V2_M5.0_ra-ux` agy trả 07:32 **TRƯỢT** (UX 9/10): `.muc-pill.m2..m5` còn mã màu cứng, tương phản 2.6–2.8:1. Em xác minh trong `css/styles.css` (dòng 1848–1852 cũ): đúng.
+- **Đã sửa:** huy hiệu M1–M5 sang token `--c-*` (+ `-soft`); `--c-red` sáng #dc2626 ➜ #b91c1c; nhãn radar 14 / 13px; bộ Vàng sáng `--text-muted` ➜ #4b5563 (agy đo 4.32:1). 🏥 Phòng khám: > 6 thẻ thì 5 thẻ nút + ô chọn "⋯ Khác…" (gỡ nợ "gom tab 7–8" ở mục 0).
+- **Kiểm:** node --check `phongkham.js`, `danhgia5t.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm (phiếu `11151014_V2_M5.0_ra-ux`).
 
 ### PHIÊN BẢN v2.14.2 – TRẢ NỢ UX T7: TOKEN MÀU ĐÁNH GIÁ 5T (15/11/2026, lượt tự động ⑤ 06h – CN dự phòng)
 - **Bối cảnh:** CN 15/11 dự phòng. Không có PR mở, hộp agy 0 kết quả mới; danh sách chờ đã gom ở mục 0 (v2.14.1). Lấy 1 mục nợ UX agy báo ở T7 làm được ngay.

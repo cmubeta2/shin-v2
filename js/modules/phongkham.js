@@ -25,8 +25,8 @@ const ModulePhongKham = {
     ['congviec', '✅ Công việc', 'webCongViec', ''],
     ['baocao', '📝 Báo cáo', 'webBaoCao', ''],
     ['lich', '📅 Lịch tuần', 'webLichTuan', ''],
-    ['xeplich', '🗓️ Lịch cả tổ', 'webBangXepLich', 'duyet'],
     ['thongbao', '🔔 Thông báo', 'webThongBao', ''],
+    ['xeplich', '🗓️ Lịch cả tổ', 'webBangXepLich', 'duyet'],
     ['duyet', '☑️ Duyệt', 'webChoDuyet', 'duyet'],
     ['nhansu', '👥 Nhân sự', 'webNhanSu', 'quanly'],
     ['gopy', '💬 Góp ý', 'webGopYCuaToi', ''],
@@ -78,8 +78,16 @@ const ModulePhongKham = {
   veTab: function() {
     const el = document.getElementById('pkTab');
     if (!el) return;
-    el.innerHTML = this.THE.filter(t => this.coQuyen(t[3])).map(t =>
-      `<button class="tab-nut ${this._tab === t[0] ? 'dang-chon' : ''}" role="tab" aria-selected="${this._tab === t[0]}" onclick="ModulePhongKham.chuyen('${t[0]}')">${t[1]}</button>`).join('');
+    const the = this.THE.filter(t => this.coQuyen(t[3]));
+    // > 6 thẻ: giữ 5 thẻ dùng nhiều, phần còn lại gom vào ô chọn "Khác…" (thanh tab khỏi cuộn ngang ở 375px)
+    const chinh = the.length > 6 ? the.slice(0, 5) : the, khac = the.length > 6 ? the.slice(5) : [];
+    const coKhac = khac.some(t => t[0] === this._tab);
+    el.innerHTML = chinh.map(t =>
+      `<button class="tab-nut ${this._tab === t[0] ? 'dang-chon' : ''}" role="tab" aria-selected="${this._tab === t[0]}" onclick="ModulePhongKham.chuyen('${t[0]}')">${t[1]}</button>`).join('') +
+      (khac.length ? `<select class="tab-nut tab-khac ${coKhac ? 'dang-chon' : ''}" aria-label="Thẻ khác" onchange="if(this.value)ModulePhongKham.chuyen(this.value)">
+        <option value="" ${coKhac ? '' : 'selected'}>⋯ Khác…</option>
+        ${khac.map(t => `<option value="${t[0]}" ${this._tab === t[0] ? 'selected' : ''}>${t[1]}</option>`).join('')}
+      </select>` : '');
   },
 
   chuyen: function(tab) { this._tab = tab; ShinApp.rung('nhe'); this.veTab(); this.veXem(); },
