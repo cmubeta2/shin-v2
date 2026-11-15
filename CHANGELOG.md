@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.6] – 16/11/2026 (theo phản biện agy phiếu kiểm v2.14.5)
+
+### 🎨 Giao diện
+- 📋 Công việc: gộp 2 tầng lọc (Theo quyền / Của tôi + dải SLA) thành 1 hàng chip; "👤 Chỉ của tôi" là chip bật / tắt. Nút "📋 Sao chép cảnh báo" lên Hero. Ở 375 danh sách việc lên màn đầu.
+- Màn ≤ 640px: Toast nằm dưới topbar (không che tiêu đề, gợi ý vuốt mép trái).
+
 ## [2.14.5] – 16/11/2026 (sửa theo phiếu agy kiểm v2.14.4)
 
 ### 🎨 Giao diện

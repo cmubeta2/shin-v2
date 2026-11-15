@@ -133,21 +133,16 @@ const ModuleCongViec = {
         <button class="btn-primary" onclick="ModuleCongViec.taoViec()">
           ${hero.nutChinh ? hero.nutChinh.nhan : '＋ Tạo Công Việc Mới'}
         </button>
+        ${dem('do') + dem('vang') ? `<button class="btn-secondary cv-saochep" onclick="ModuleCongViec.saoChepCanhBao()">📋 Sao chép cảnh báo</button>` : ''}
       </div>
 
-      <!-- M7.3 – luồng việc theo quyền -->
-      <div class="hang-tab cv-luong" role="tablist" aria-label="Luồng việc">
-        <button class="chip-chon ${this._luong ? '' : 'dang-chon'}" data-l="" onclick="ModuleCongViec.luongLoc(this.dataset.l)">🧭 Theo quyền · ${lu.duocXem.length}</button>
-        <button class="chip-chon ${this._luong === 'toi' ? 'dang-chon' : ''}" data-l="toi" onclick="ModuleCongViec.luongLoc(this.dataset.l)" ${lu.cuaToi.length ? '' : 'disabled'}>👤 Của tôi · ${lu.cuaToi.length}</button>
-      </div>
-      ${lu.an ? `<div class="chu-phu cv-an">🔒 ${lu.an} việc thuộc mảng anh/chị không có quyền (hoặc đang tắt) – đã ẩn.</div>` : ''}
-
-      <!-- M7.4 – dải SLA -->
-      <div class="hang-tab cv-sla" role="tablist" aria-label="Lọc theo SLA">
+      <!-- v2.14.6 (agy 16/11): gộp M7.3 luồng việc + M7.4 dải SLA thành 1 hàng chip – ở 375 danh sách việc lên màn đầu -->
+      <div class="hang-tab cv-sla" role="toolbar" aria-label="Lọc việc">
+        <button class="chip-chon ${this._luong === 'toi' ? 'dang-chon' : ''}" aria-pressed="${this._luong === 'toi'}" data-l="${this._luong === 'toi' ? '' : 'toi'}" onclick="ModuleCongViec.luongLoc(this.dataset.l)" title="${this._luong === 'toi' ? 'Đang xem việc của tôi – bấm để xem theo quyền (' + lu.duocXem.length + ')' : 'Đang xem theo quyền – bấm để chỉ xem việc của tôi'}" ${lu.cuaToi.length || this._luong === 'toi' ? '' : 'disabled'}>👤 Chỉ của tôi · ${lu.cuaToi.length}</button>
         <button class="chip-chon ${this._loc ? '' : 'dang-chon'}" data-sla="" onclick="ModuleCongViec.locSla(this.dataset.sla)">Tất cả · ${this._ds.length}</button>
         ${['do', 'vang', 'xanh', 'xam'].filter(k => dem(k)).map(k => `<button class="chip-chon ${this._loc === k ? 'dang-chon' : ''}" data-sla="${k}" onclick="ModuleCongViec.locSla(this.dataset.sla)">${this.NHAN_SLA[k]} · ${dem(k)}</button>`).join('')}
-        ${dem('do') + dem('vang') ? `<button class="chip-chon" onclick="ModuleCongViec.saoChepCanhBao()">📋 Sao chép cảnh báo</button>` : ''}
       </div>
+      ${lu.an ? `<div class="chu-phu cv-an">🔒 ${lu.an} việc thuộc mảng anh/chị không có quyền (hoặc đang tắt) – đã ẩn.</div>` : ''}
 
       <!-- Bảng Kanban 3 Cột Liên Thông -->
       <div class="kanban-board">

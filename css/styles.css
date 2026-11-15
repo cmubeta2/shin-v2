@@ -1901,6 +1901,10 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .cv-chan { display: flex; justify-content: space-between; gap: 6px; flex-wrap: wrap; font-size: calc(14px * var(--font-scale)); color: var(--text-muted); }
 .cv-sla { flex-wrap: wrap; }
 .cv-luong { flex-wrap: wrap; }
+.cv-sla .chip-chon:disabled { opacity: .5; cursor: default; }
+.cv-saochep { margin-top: 8px; min-height: 44px; }
+/* v2.14.6 (agy 16/11): màn hẹp – toast nằm dưới topbar, không che tiêu đề */
+@media (max-width: 640px) { .toast-container { top: calc(var(--header-height) + var(--safe-top) + 8px); } }
 .cv-luong .chip-chon:disabled { opacity: .5; cursor: default; }
 .cv-an { margin: 4px 0 8px; font-size: calc(14px * var(--font-scale)); }
 
