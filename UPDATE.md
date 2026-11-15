@@ -35,6 +35,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.14.6 – GỘP LỌC 📋 CÔNG VIỆC + TOAST DƯỚI TOPBAR (16/11/2026, lượt tự động ⑤ 06h)
+- **Nguồn:** phiếu `11160414_V2_M5.0_ra-ux` agy trả 04:30 **ĐẠT** (v2.14.5 sửa đủ 5 lỗi; UX 9–9.5/10) ➜ đã `dung … dat`. Lấy 2 phản biện có căn cứ: (1) Công việc ở 375 – 2 tầng lọc rớt 4 dòng, đẩy cột CẦN LÀM xuống ~640px; (2) Toast gợi ý mép trái (top 14px) che topbar ở 320 / 375.
+- **Đã sửa:** `congviec.js` – 1 hàng chip: "👤 Chỉ của tôi" (bật / tắt, `aria-pressed`, tắt = theo quyền) + Tất cả + chip SLA; "📋 Sao chép cảnh báo" ➜ `btn-secondary` trong Hero. `styles.css` – ≤ 640px `.toast-container` top = topbar + 8px.
+- **Không sửa:** pill Demo 28px – đã có vùng bấm `::before` 44px từ trước (agy đo khung nhìn, không đo vùng bấm).
+- **Kiểm:** node --check `congviec.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm (phiếu ra-ux gửi lượt này).
+
 ### PHIÊN BẢN v2.14.5 – SỬA THEO AGY KIỂM v2.14.4: CYBER SÁNG + CHỮ ≥ 14px KHUNG CHUNG (16/11/2026, lượt tự động ⑤ 04h – đầu tuần 16–22/11)
 - **Nguồn:** phiếu `11151613_V2_M5.0_ra-ux` TRƯỢT (UX 7.5–9/10). Em xác minh trong mã: (1) đúng – `[data-palette="cyber"]` nền tối nhưng không nhận `--c-*` của `[data-theme="dark"]`, Cyber + Sáng ➜ m2 2.21:1, m4 2.02:1; (2) **không lỗi** – checkbox `.chk-5t` 28px nhưng đã nằm trong label `.chk-vung-5t` 44×44px (agy đo input, không đo vùng bấm); (3) đúng – nhãn radar 13px; (4) đúng – `.chip-chon` dạng `<span>` ở Quản trị không căn giữa dọc.
 - **Đã sửa:** selector `[data-theme="dark"], [data-palette="cyber"]` cho khối `--c-*` tối; nhãn radar 14px; `.chip-chon` inline-flex căn giữa; trả nợ khung chung của v2.14.4: `.nav-nhan` 14px + `…`, `.topbar-sub` 14px + `…` (pill Demo đã có vùng bấm `::before` 44px từ trước – không đổi).
