@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.4] – 15/11/2026 (CN – sửa theo phiếu agy kiểm v2.14.3)
+
+### 🎨 Giao diện
+- Token Sáng `--c-amber` #92400e, `--c-teal` #115e59: huy hiệu 5T M2 / M4 đạt ≥ 4.5:1 (agy đo cũ 4.08 / 4.43:1).
+- `.hang-tab` dưới 640px xuống dòng thay vì cuộn ngang ngầm – 🏥 Phòng khám thấy đủ 5 thẻ + "⋯ Khác…" ở 375px.
+
 ## [2.14.3] – 15/11/2026 (CN – sửa theo phiếu agy kiểm v2.14.2 + gom tab Phòng khám)
 
 ### 🎨 Giao diện

@@ -35,10 +35,17 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.14.4 – SỬA THEO AGY KIỂM v2.14.3: TƯƠNG PHẢN M2/M4 + TAB XUỐNG DÒNG Ở 375 (15/11/2026, lượt tự động ⑤ 16h – CN dự phòng)
+- **Nguồn:** phiếu `11151014_V2_M5.0_ra-ux` TRƯỢT (tổng hợp ở mục v2.14.3 dưới). Em xác minh trong mã: đúng cả 2 lỗi.
+- **Đã sửa:** token Sáng `--c-amber` #b45309 ➜ #92400e, `--c-teal` #0f766e ➜ #115e59 (theo số agy đo: 5.6 / 5.99:1) – huy hiệu `.muc-pill.m2` / `.m4` và mọi chỗ dùng 2 token này đậm hơn, nền `-soft` giữ nguyên. `.hang-tab` < 640px: `flex-wrap: wrap`, bỏ cuộn ngang (Phòng khám, Công việc, KPI, Quản trị, Tri thức) – ô "⋯ Khác…" không còn khuất.
+- **Chưa làm (phụ, khung chung):** pill Demo 28px, `.nav-nhan` 11px, `.topbar-sub` 12px – để tuần 16–22/11 cùng đợt rà khung.
+- **Kiểm:** node --check `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm (phiếu `11151613_V2_M5.0_ra-ux`).
+
 ### PHIÊN BẢN v2.14.3 – SỬA THEO AGY KIỂM v2.14.2 + GOM TAB PHÒNG KHÁM (15/11/2026, lượt tự động ⑤ 10h – CN dự phòng)
 - **Nguồn:** phiếu `11150614_V2_M5.0_ra-ux` agy trả 07:32 **TRƯỢT** (UX 9/10): `.muc-pill.m2..m5` còn mã màu cứng, tương phản 2.6–2.8:1. Em xác minh trong `css/styles.css` (dòng 1848–1852 cũ): đúng.
 - **Đã sửa:** huy hiệu M1–M5 sang token `--c-*` (+ `-soft`); `--c-red` sáng #dc2626 ➜ #b91c1c; nhãn radar 14 / 13px; bộ Vàng sáng `--text-muted` ➜ #4b5563 (agy đo 4.32:1). 🏥 Phòng khám: > 6 thẻ thì 5 thẻ nút + ô chọn "⋯ Khác…" (gỡ nợ "gom tab 7–8" ở mục 0).
 - **Kiểm:** node --check `phongkham.js`, `danhgia5t.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm (phiếu `11151014_V2_M5.0_ra-ux`).
+- **agy kiểm (③ 15/11 14h25 tổng hợp): TRƯỢT** – UX 5T 8.5 · Phòng khám 8.0. Em xác minh đúng 2 lỗi: (1) `.muc-pill.m2` 4.08:1, `.m4` 4.43:1 ở Sáng (< 4.5) – đề xuất chữ #92400e (5.6:1) / #115e59 (5.99:1) cho Sáng; (2) `.hang-tab` (`css/styles.css:1544`) vẫn `overflow-x:auto`, 5 nút + ô ⋯ Khác… rộng 739px > 349px ở 375 → ô Khác… khuất; đề xuất < 640px `flex-wrap: wrap` hoặc tính số nút theo bề rộng. Phụ (khung chung, không chặn): pill Demo 28px < 44px, `.nav-nhan` 11px, `.topbar-sub` 12px. ➜ ⑤ lượt sau sửa rồi gửi agy kiểm lại.
 
 ### PHIÊN BẢN v2.14.2 – TRẢ NỢ UX T7: TOKEN MÀU ĐÁNH GIÁ 5T (15/11/2026, lượt tự động ⑤ 06h – CN dự phòng)
 - **Bối cảnh:** CN 15/11 dự phòng. Không có PR mở, hộp agy 0 kết quả mới; danh sách chờ đã gom ở mục 0 (v2.14.1). Lấy 1 mục nợ UX agy báo ở T7 làm được ngay.
