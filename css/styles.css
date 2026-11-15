@@ -54,7 +54,7 @@ body {
   --border: #e5e7eb;
   --border-soft: #f1f2f4;
   --text: #1f2937;
-  --text-muted: #6b7280;
+  --text-muted: #4b5563; /* gold sáng: 4.32 ➜ ≥ 7:1 (agy 15/11) */
   --sidebar-bg: linear-gradient(165deg, #f0cf5e 0%, #d4a017 55%, #a97e10 100%);
   --sidebar-text: #3a2a06;
   --sidebar-text-muted: rgba(58, 42, 6, 0.7);
@@ -372,7 +372,7 @@ body {
   --c-blue: #2563eb; --c-blue-soft: rgba(37, 99, 235, 0.14);
   --c-yellow: #b45309; --c-yellow-soft: rgba(180, 83, 9, 0.15);
   --c-green: #15803d; --c-green-soft: rgba(21, 128, 61, 0.15);
-  --c-red: #dc2626; --c-red-soft: rgba(220, 38, 38, 0.15);
+  --c-red: #b91c1c; --c-red-soft: rgba(185, 28, 28, 0.14);
   --c-sky: #0369a1; --c-sky-soft: rgba(3, 105, 161, 0.18);
   --c-teal: #0f766e; --c-teal-soft: rgba(15, 118, 110, 0.15);
   --c-amber: #b45309; --c-amber-soft: rgba(180, 83, 9, 0.15);
@@ -1545,6 +1545,8 @@ details.tq-gon > .nut-rong { width: calc(100% - 24px); max-width: none; }
 .hang-tab::-webkit-scrollbar { display: none; }
 .tab-nut { flex: 0 0 auto; min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border); background: var(--card); color: var(--text); font: inherit; font-size: calc(14px * var(--font-scale)); font-weight: 700; cursor: pointer; }
 .tab-nut.dang-chon { background: var(--primary); border-color: var(--primary); color: #fff; }
+.tab-khac { font-size: 16px; padding-right: 10px; max-width: 60vw; }
+.tab-khac option { color: var(--text); background: var(--card); }
 .hang-chip { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
 .chip-chon { min-height: 44px; padding: 0 14px; border-radius: 22px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; font-size: calc(14px * var(--font-scale)); font-weight: 600; cursor: pointer; }
 .chip-chon.dang-chon { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
@@ -1845,11 +1847,11 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
   font-weight: 800;
   text-align: center;
 }
-.muc-pill.m1 { background: rgba(220, 38, 38, 0.15); color: #dc2626; border: 1px solid rgba(220, 38, 38, 0.3); }
-.muc-pill.m2 { background: rgba(217, 119, 6, 0.15); color: #d97706; border: 1px solid rgba(217, 119, 6, 0.3); }
-.muc-pill.m3 { background: rgba(2, 132, 199, 0.15); color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.3); }
-.muc-pill.m4 { background: rgba(15, 118, 110, 0.15); color: #0f766e; border: 1px solid rgba(15, 118, 110, 0.3); }
-.muc-pill.m5 { background: rgba(124, 58, 237, 0.15); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.3); }
+.muc-pill.m1 { background: var(--c-red-soft); color: var(--c-red); border: 1px solid var(--c-red-soft); }
+.muc-pill.m2 { background: var(--c-amber-soft); color: var(--c-amber); border: 1px solid var(--c-amber-soft); }
+.muc-pill.m3 { background: var(--c-sky-soft); color: var(--c-sky); border: 1px solid var(--c-sky-soft); }
+.muc-pill.m4 { background: var(--c-teal-soft); color: var(--c-teal); border: 1px solid var(--c-teal-soft); }
+.muc-pill.m5 { background: var(--c-purple-soft); color: var(--c-purple); border: 1px solid var(--c-purple-soft); }
 
 /* v2.8.2 – CRM: dải Pipeline B2B (M2.3), 5 ô xuống dòng ở màn hẹp, vùng bấm ≥ 44px */
 .crm-pipe {

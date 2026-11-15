@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.3] – 15/11/2026 (CN – sửa theo phiếu agy kiểm v2.14.2 + gom tab Phòng khám)
+
+### 🎨 Giao diện
+- ⭐ Đánh giá 5T: huy hiệu mức `.muc-pill.m1..m5` đổi mã màu cứng sang token `--c-red|amber|sky|teal|purple` (agy đo m4 / m5 tối 2.6:1, m2 sáng 2.6:1). `--c-red` sáng đậm hơn (#b91c1c). Nhãn radar 13 / 12px ➜ 14 / 13px.
+- Bộ màu Vàng sáng: `--text-muted` #6b7280 ➜ #4b5563 (agy đo chữ phụ 4.32:1 trên nền kem).
+- 🏥 Phòng khám: quá 6 thẻ thì giữ 5 thẻ dùng nhiều (Hôm nay, Công việc, Báo cáo, Lịch tuần, Thông báo), phần còn lại gom vào ô chọn "⋯ Khác…" (cao 44px, chữ 16px) – thanh tab khỏi cuộn ngang ở 375px.
+
 ## [2.14.2] – 15/11/2026 (CN – trả nợ UX phát hiện ở T7)
 
 ### 🎨 Giao diện
