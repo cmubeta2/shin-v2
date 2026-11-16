@@ -982,7 +982,7 @@ body {
 }
 .form-label {
   display: block;
-  font-size: calc(13px * var(--font-scale));
+  font-size: calc(14px * var(--font-scale));
   font-weight: 700;
   color: var(--text-muted);
   margin-bottom: 6px;
@@ -1336,7 +1336,7 @@ body {
   width: 28px;
 }
 .decagon-name {
-  font-size: calc(13.5px * var(--font-scale));
+  font-size: calc(14px * var(--font-scale));
   font-weight: 700;
   color: var(--text);
   line-height: 1.3;
@@ -1904,7 +1904,11 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .cv-sla .chip-chon:disabled { opacity: .5; cursor: default; }
 .cv-saochep { margin-top: 8px; min-height: 44px; }
 /* v2.14.6 (agy 16/11): màn hẹp – toast nằm dưới topbar, không che tiêu đề */
-@media (max-width: 640px) { .toast-container { top: calc(var(--header-height) + var(--safe-top) + 8px); } }
+/* v2.14.7 (agy 16/11): ≤ 640px toast xuống đáy, trên thanh điều hướng – không che tiêu đề trang */
+@media (max-width: 640px) { .toast-container { top: auto; bottom: calc(var(--nav-height) + var(--safe-bottom) + 10px); } }
+.cv-sla .chip-sep { align-self: stretch; width: 1px; margin: 6px 2px; background: var(--border); }
+@media (max-width: 480px) { .cv-sla .cv-chu { display: none; } }
+.cv-saochep:disabled { opacity: .6; cursor: default; }
 .cv-luong .chip-chon:disabled { opacity: .5; cursor: default; }
 .cv-an { margin: 4px 0 8px; font-size: calc(14px * var(--font-scale)); }
 
