@@ -3276,6 +3276,7 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .dk-tien-do > span { display: block; height: 100%; background: var(--primary); transition: width .2s; }
 .dk-nut { width: 100%; min-height: 48px; font-size: calc(16px * var(--font-scale)); margin-top: 8px; }
 .dk-bay { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.dk-so-cau { margin: 0 0 8px; font-weight: 700; }
 .dk-xong { text-align: center; padding: 28px 16px; }
 .dk-xong-icon { font-size: 48px; line-height: 1; margin-bottom: 8px; }
 .dk-chan { text-align: center; margin-top: 16px; }

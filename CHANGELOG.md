@@ -4,6 +4,11 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.8] – 16/11/2026 (trả nợ kỹ thuật tuần 16–22/11)
+
+### ✨ Tính năng
+- 🩺 Trang điền khảo sát công khai (`dienks.html`): chế độ **1 câu / trang** theo cấu hình `moiTrang` của khảo sát (máy chủ KS v1 đã trả trường này; mặc định `1cau`, `catrang` = cả trang như cũ). Có "Câu x / n", nút "Câu tiếp →" (kiểm câu bắt buộc trước khi sang) / "← Câu trước", Enter = sang câu kế; gửi thiếu câu bắt buộc ➜ tự nhảy tới câu thiếu. Ô bẫy chống máy giữ giá trị qua các trang.
+
 ## [2.14.7] – 16/11/2026 (theo agy kiểm v2.14.6, phiếu 11160614 ĐẠT 9/10)
 
 ### 🎨 Giao diện
