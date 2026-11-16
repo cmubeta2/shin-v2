@@ -39,13 +39,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 - **Nguồn:** rà KE_HOACH Hub thấy **HUB L27 [x] lên app v1.23.2 @23 (12/11)** – cổng `webTaskBus` / `webDayViec` / `webDoiTrangThaiViec` (`10_Hub/85_TaskBus.gs`) đã chạy nhưng v2 chưa nối (mục 0 vẫn ghi "Còn chờ v1"). Tên cổng lấy từ `congWeb_()` của Hub; đã thêm mục Task Bus vào HOP_DONG_CONG_V2.md.
 - **Đã làm:** `js/modules/congviec.js` – `mayChu: 'HUB'` + `taiLive` (`webTaskBus`) + `tuV1` THUẦN (Mới ➜ Cần làm, Đang làm, Xong / Bỏ ➜ Hoàn tất; nguồn ➜ nhãn "Mảng n" + mã module để M7.3 RBAC ẩn đúng); đèn SLA dùng `den` của máy chủ; khối ＋ đẩy việc (`kiemViec` THUẦN theo luật `kiemViecLT` + tường lửa M9.5, `webDayViec` với id chống trùng, Toast Hoàn tác 6s, ghi đúng 1 lần); nút ▶ / ✅ / ✖ trên thẻ (`webDoiTrangThaiViec`, Hoàn tác 6s). Demo: form điền thử được, không ghi. `styles.css` – `.cv-form`, `.cv-form-2`, `.cv-nut` (ô nhập 16px, nút ≥ 44px).
 - **QUY_HOACH:** M7.1 ⬜ ➜ 🟢; M7.4 hết phần "⬜ tự gửi Telegram" (Hub tự báo việc gấp + quá hạn).
-- **Kiểm:** node --check `congviec.js`, `app.js`, `sw.js`; kịch bản hàm thuần 14/14 (hạn, kiểm việc + tường lửa, tuV1, phân luồng theo mã mảng); quét bí mật trên diff. Chờ anh: đẩy thử 1 việc thật + bấm ▶ trên v2 (lượt tự động không có token). Giao diện: chờ agy kiểm (phiếu ghi ở dưới).
+- **Kiểm:** node --check `congviec.js`, `app.js`, `sw.js`; kịch bản hàm thuần 14/14 (hạn, kiểm việc + tường lửa, tuV1, phân luồng theo mã mảng); quét bí mật trên diff. Chờ anh: đẩy thử 1 việc thật + bấm ▶ trên v2 (lượt tự động không có token). Giao diện: chờ agy kiểm (phiếu `11161619_V2_M7.1_giao-dien`).
 
 ### PHIÊN BẢN v2.14.9 – SỬA THEO AGY KIỂM v2.14.8: KS DỄ CHẠM + TOAST CĂN ĐỀU (16/11/2026, lượt tự động ⑤ 16h)
 - **Nguồn:** phiếu `11161016_V2_M4.2_ra-ux` (dienks 1 câu / trang, ĐẠT 9/10) + `11161014_V2_M7.4_ra-ux` (Công việc, ĐẠT 9/10). Em xác minh trong mã: góp ý đúng.
 - **Đã sửa:** `js/dienks.js` – `chon` / `nhap` gọi `bao('')` khi câu đã có trả lời (dải đỏ tắt ngay). `styles.css` – `.dk-nut` 52px / 17px; `.dk-cau .chip-chon` ≥ 52 × 48px, `.dk-cau .hang-chip` gap 10px; ≤ 640px `.toast-container` left/right 12px. `congviec.js` – dấu "·" của chip SLA vào trong `.cv-chu` (ẩn ≤ 480px).
 - **Không đổi (có chủ ý):** không tự sang câu khi chọn đáp án (agy cũng khuyên không); pill Demo đã có vùng bấm `::before` 44px; badge số 12px giữ nguyên (chỉ là số đếm, không phải chữ đọc).
-- **Kiểm:** node --check `dienks.js`, `congviec.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm (phiếu ghi ở dưới).
+- **Kiểm:** node --check `dienks.js`, `congviec.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm (phiếu `11161619_V2_M4.2_ra-ux`).
 
 ### PHIÊN BẢN v2.14.8 – KS CÔNG KHAI: 1 CÂU / TRANG (16/11/2026, lượt tự động ⑤ 10h)
 - **Nguồn:** nợ kỹ thuật mục 0 ("KS hiện 1 câu / trang"). Cổng `webCongKhaiDocKS` (KS v1 `40_DienKS.gs:128`) đã trả `moiTrang` (mặc định `1cau`) – không cần cổng mới.
