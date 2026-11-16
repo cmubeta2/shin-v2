@@ -12,12 +12,20 @@
 const DienKS = (function() {
   'use strict';
   const NH = ModuleKsNhapHo;
-  const st = { ma: '', ks: null, tl: {}, batDau: 0, dangGui: false, xong: false, thu: false };
+  const st = { ma: '', ks: null, tl: {}, batDau: 0, dangGui: false, xong: false, thu: false, trang: 0, bay: '' };
   const $ = id => document.getElementById(id);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   /** THUẦN. Mã trong link: chỉ MaKS / MaNguon dạng chữ-số (chặn chuỗi lạ). */
   function maHopLe(m) { m = String(m || '').trim(); return /^[A-Za-z0-9_-]{2,30}$/.test(m) ? m : ''; }
+
+  /** THUẦN. v2.14.8: hiện 1 câu / trang khi cấu hình '1cau' và có ≥ 2 câu; 'catrang' / lạ ➜ cả trang. */
+  function moTungCau(moiTrang, soCau) { return moiTrang === '1cau' && soCau > 1; }
+  /** THUẦN. Chỉ số câu bắt buộc chưa trả lời đầu tiên (từ i0), -1 nếu đủ. */
+  function cauThieu(cau, tl, rong, i0) {
+    for (let i = i0 || 0; i < (cau || []).length; i++) if (cau[i].batBuoc && rong(tl[cau[i].maCH])) return i;
+    return -1;
+  }
 
   /** Mã thiết bị ngẫu nhiên lưu ở máy (máy chủ băm, không lưu mã thô). */
   function maThietBi() {
@@ -79,6 +87,12 @@ const DienKS = (function() {
       return;
     }
     const daTL = ks.cau.filter(c => !NH.rong(st.tl[c.maCH])).length;
+    const tung = moTungCau(ks.moiTrang, ks.cau.length), n = ks.cau.length;
+    if (st.trang >= n) st.trang = Math.max(0, n - 1);
+    const cuoi = !tung || st.trang === n - 1;
+    const than = !n ? '<div class="trong">Khảo sát chưa có câu hỏi.</div>'
+      : tung ? `<p class="chu-phu dk-so-cau" aria-live="polite">Câu ${st.trang + 1} / ${n}</p>${veCau(ks.cau[st.trang], st.trang)}`
+      : ks.cau.map(veCau).join('');
     k.innerHTML = `
       <div class="the dk-dau">
         <h1 class="dk-tieu-de">${esc(ks.tieuDe)}</h1>
@@ -86,10 +100,11 @@ const DienKS = (function() {
         <p class="chu-phu">${st.thu ? '👀 Xem thử bằng câu mẫu – phiếu không được gửi. ' : ''}Câu có <span class="dk-sao">*</span> là bắt buộc. Xin đừng ghi họ tên, số CCCD / BHYT hay số điện thoại.</p>
         <div class="dk-tien-do" role="progressbar" aria-valuemin="0" aria-valuemax="${ks.cau.length}" aria-valuenow="${daTL}" aria-label="Đã trả lời ${daTL}/${ks.cau.length} câu"><span style="width:${ks.cau.length ? Math.round(daTL * 100 / ks.cau.length) : 0}%"></span></div>
       </div>
-      <form class="the" onsubmit="event.preventDefault(); DienKS.gui();" novalidate>
-        ${ks.cau.length ? ks.cau.map(veCau).join('') : '<div class="trong">Khảo sát chưa có câu hỏi.</div>'}
-        <div class="dk-bay" aria-hidden="true"><label>Để trống ô này <input id="dkBay" type="text" tabindex="-1" autocomplete="off"></label></div>
-        <button type="submit" id="dkGui" class="btn-primary dk-nut" ${ks.cau.length ? '' : 'disabled'}>📤 Gửi phiếu</button>
+      <form class="the" onsubmit="event.preventDefault(); DienKS.nop();" novalidate>
+        ${than}
+        <div class="dk-bay" aria-hidden="true"><label>Để trống ô này <input id="dkBay" type="text" tabindex="-1" autocomplete="off" value="${esc(st.bay)}" oninput="DienKS.bay(this.value)"></label></div>
+        ${cuoi ? `<button type="submit" id="dkGui" class="btn-primary dk-nut" ${n ? '' : 'disabled'}>📤 Gửi phiếu</button>` : '<button type="submit" class="btn-primary dk-nut">Câu tiếp →</button>'}
+        ${tung && st.trang > 0 ? '<button type="button" class="btn-secondary dk-nut" onclick="DienKS.lui()">← Câu trước</button>' : ''}
       </form>`;
   }
 
@@ -107,7 +122,7 @@ const DienKS = (function() {
     st.ma = maHopLe(new URLSearchParams(location.search).get('k'));
     if (!st.ma) {
       st.thu = true;
-      st.ks = Object.assign({ nhieuLan: true }, NH.MAU);
+      st.ks = Object.assign({ nhieuLan: true, moiTrang: '1cau' }, NH.MAU);
       st.batDau = Date.now();
       bao('Link thiếu mã khảo sát – đang xem thử bằng câu mẫu. Hãy quét đúng mã QR phòng khám đưa.', 'mau');
       ve();
@@ -121,7 +136,7 @@ const DienKS = (function() {
       return;
     }
     const d = r.du || {};
-    st.ks = { tieuDe: d.tieuDe || 'Khảo sát', moTa: d.moTa || '', nhieuLan: !!d.nhieuLan, cau: Array.isArray(d.cau) ? d.cau : [] };
+    st.ks = { tieuDe: d.tieuDe || 'Khảo sát', moTa: d.moTa || '', nhieuLan: !!d.nhieuLan, moiTrang: d.moiTrang === 'catrang' ? 'catrang' : '1cau', cau: Array.isArray(d.cau) ? d.cau : [] };
     document.title = st.ks.tieuDe + ' – SHIN';
     st.batDau = Date.now();
     ve();
@@ -140,18 +155,35 @@ const DienKS = (function() {
     if (c) { st.tl[c.maCH] = gt; capNhatTienDo(); }
   }
 
+  function denCau(i) { st.trang = i; ve(); const k = $('dkNoiDung'); if (k) k.scrollIntoView({ block: 'start' }); const o = document.querySelector('.dk-cau input, .dk-cau textarea, .dk-cau .chip-chon'); if (o && o.focus) o.focus({ preventScroll: true }); }
+  /** Enter / nút chính: chế độ 1 câu ➜ kiểm câu hiện tại rồi sang câu kế; câu cuối ➜ gửi. */
+  function nop() {
+    const ks = st.ks;
+    if (!ks) return;
+    if (moTungCau(ks.moiTrang, ks.cau.length) && st.trang < ks.cau.length - 1) {
+      if (cauThieu(ks.cau, st.tl, NH.rong, st.trang) === st.trang) { bao('Câu này bắt buộc – xin trả lời trước khi sang câu kế.', 'loi'); return; }
+      bao(''); denCau(st.trang + 1); return;
+    }
+    gui();
+  }
+  function lui() { if (st.trang > 0) { bao(''); denCau(st.trang - 1); } }
+
   /** Gửi ngay (người bệnh không có Hoàn tác – nút khóa khi đang gửi để không gửi 2 lần). */
   async function gui() {
     const ks = st.ks;
     if (!ks || st.dangGui) return;
     const traLoi = NH.goiTraLoi(ks.cau, st.tl);
     const loi = NH.loiPhieu(ks.cau, traLoi);
-    if (loi) { bao(loi, 'loi'); return; }
+    if (loi) {
+      const t = moTungCau(ks.moiTrang, ks.cau.length) ? cauThieu(ks.cau, st.tl, NH.rong, 0) : -1;
+      if (t >= 0 && t !== st.trang) denCau(t);
+      bao(loi, 'loi'); return;
+    }
     if (st.thu) { bao('Đang xem thử – phiếu không được gửi.', 'mau'); return; }
     st.dangGui = true;
     const n = $('dkGui');
     if (n) { n.disabled = true; n.textContent = '⏳ Đang gửi…'; }
-    const bay = ($('dkBay') || {}).value || '';
+    const bay = ($('dkBay') || {}).value || st.bay || '';
     const r = await goiKS('webCongKhaiGuiPhieu', { ma: st.ma, traLoi, thietBi: maThietBi(), giay: Math.round((Date.now() - st.batDau) / 1000), bay });
     st.dangGui = false;
     const kq = (r.ok && r.du) || {};
@@ -160,8 +192,8 @@ const DienKS = (function() {
     bao(kq.msg || r.chiTiet || 'Chưa gửi được – thử lại.', 'loi');
   }
 
-  function lamLai() { st.tl = {}; st.xong = false; st.batDau = Date.now(); ve(); window.scrollTo(0, 0); }
+  function lamLai() { st.tl = {}; st.xong = false; st.trang = 0; st.batDau = Date.now(); ve(); window.scrollTo(0, 0); }
 
-  return { mo, chon, nhap, gui, lamLai, _nb: { maHopLe } };
+  return { mo, chon, nhap, gui, nop, lui, lamLai, bay: v => { st.bay = String(v || ''); }, _nb: { maHopLe, moTungCau, cauThieu } };
 })();
 if (typeof document !== 'undefined' && document.getElementById('dkNoiDung')) DienKS.mo();
