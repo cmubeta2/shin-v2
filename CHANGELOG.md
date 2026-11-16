@@ -4,6 +4,20 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.15.0] – 16/11/2026 (M7.1 Task Bus 🟢 – HUB L27)
+
+### ✨ Tính năng
+- 📋 Công việc chạy **số thật từ Task Bus Hub** (HUB L27, Hub v1.23.2): Live đọc sổ việc liên thông `webTaskBus` (việc theo quyền, đèn SLA do máy chủ tính), thẻ có ▶ Bắt đầu / ✅ Xong / ✖ Bỏ (`webDoiTrangThaiViec`).
+- ＋ **Đẩy việc vào Task Bus** (`webDayViec`): tiêu đề, mảng, mức (⚡ gấp ➜ Hub báo Telegram ngay), hạn, người nhận (trống = phụ trách mảng). Kiểm đủ trường + tường lửa SĐT / CCCD / BHYT, Toast Hoàn tác 6s, mã chống trùng – bấm lại không tạo việc trùng.
+- Hub tự báo Telegram việc quá hạn 1 lần / việc (máy chủ) – M7.4 hết phần "chờ v1".
+
+ – 16/11/2026 (theo agy kiểm v2.14.8, phiếu 11161016 + 11161014 ĐẠT 9/10)
+
+### 🎨 Giao diện
+- 🩺 `dienks.html`: dải đỏ "Câu này bắt buộc" tự tắt ngay khi người điền chọn / nhập câu trả lời; nút chính cao 52px chữ 17px; chip chọn (1★..5★) tối thiểu 52 × 48px, khoảng cách 10px – dễ chạm cho người lớn tuổi.
+- 🔔 Toast ở màn ≤ 640px căn đều 2 mép (12px).
+- 📋 Công việc: chip SLA ở màn ≤ 480px chỉ còn "🔴 1" (ẩn cả dấu "·" cùng nhãn chữ).
+
 ## [2.14.8] – 16/11/2026 (trả nợ kỹ thuật tuần 16–22/11)
 
 ### ✨ Tính năng

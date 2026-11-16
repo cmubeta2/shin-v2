@@ -146,13 +146,14 @@ const DienKS = (function() {
     const c = st.ks && st.ks.cau[i];
     if (!c) return;
     st.tl[c.maCH] = NH.bamLuaChon(c, st.tl[c.maCH], NH.luaChonCua(c)[j]);
+    if (!NH.rong(st.tl[c.maCH])) bao('');
     const y = window.scrollY;
     ve();
     window.scrollTo(0, y);
   }
   function nhap(i, gt) {
     const c = st.ks && st.ks.cau[i];
-    if (c) { st.tl[c.maCH] = gt; capNhatTienDo(); }
+    if (c) { st.tl[c.maCH] = gt; if (!NH.rong(gt)) bao(''); capNhatTienDo(); }
   }
 
   function denCau(i) { st.trang = i; ve(); const k = $('dkNoiDung'); if (k) k.scrollIntoView({ block: 'start' }); const o = document.querySelector('.dk-cau input, .dk-cau textarea, .dk-cau .chip-chon'); if (o && o.focus) o.focus({ preventScroll: true }); }

@@ -157,6 +157,12 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 - **Đọc:** `webTriThuc(token, {})` – mọi người dùng Hub đã đăng nhập ➜ `{ ok, capNhat, taiLieu: [{ ma ≤120, ten ≤200, linhVuc, capNhat 'dd/mm/yyyy'|'', dinhDang, tomTat ≤400, lienKet: [≤50], duongDan }], baiHoc: [], loi? }`. Nguồn: `_TacVu/tri_thuc_chi_muc.json` trên Drive (máy anh quét `05_TriThuc`, đã lọc SĐT / CCCD / BHYT). Chưa có / hỏng chỉ mục ➜ `taiLieu: []` + `loi` (v2 báo đỏ, không thay số mẫu).
 - **Ghi (LÊN APP Hub v1.20.2 @20 – v2 nối từ v2.13.10):** `webLuuBaiHoc(token, { baiHoc: { chuDe, vanDe 5–500, cachLam 5–1000, nguon ≤ 120 }, maGui })` ➜ `{ ok, ma: 'BH-<maGui>', moi }`; chủ đề ∈ Nhân sự / Thiết bị & Hậu cần / Tài chính / Khách hàng & Hợp đồng / Tiến độ & Quy trình / Khác; bài vào trạng thái 'Chờ' (Admin duyệt); tường lửa KHONG_DUA_VAO phía máy chủ. v2 tạo maGui ổn định theo nội dung ➜ gửi lại không trùng.
 
+### Task Bus – `85_TaskBus.gs` (HUB L27, lên app Hub v1.23.2 @23 12/11) – v2.15.0 nối (M7.1 / M7.4)
+- `webTaskBus({})` ➜ `{ok, viec:[{ma 'VL-…', nguon, loai, muc 'gap'|'thuong', tieuDe, lienKet, han 'dd/mm/yyyy'|'', nguoiNhan, nguoiTao, trangThai, den 'do'|'vang'|'xanh'|''}], trangThai:['Mới','Đang làm','Xong','Bỏ']}` – Admin thấy hết, người khác thấy việc mình nhận / mình tạo; 200 việc mới trước.
+- `webDayViec({id 6–40 ký tự [A-Za-z0-9_-], nguon: duan|crm|khaosat|phongkham|taichinh|marketing|tuyensinh|hub|zalo, loai, muc, tieuDe ≤ 200, han 'yyyy-mm-dd'|'', nguoiNhan?, lienKet?{ma,id}})` ➜ `{ok, ma, moi}`; trùng id ➜ `moi:false` (không ghi thêm). Trống người nhận ➜ người phụ trách mảng của nguồn. Gấp ➜ báo Telegram ngay. Tiêu đề có SĐT / CCCD / BHYT ➜ lỗi (v2 kiểm trước).
+- `webDoiTrangThaiViec({ma, trangThai})` ➜ `{ok, ma, trangThai}` – chỉ người nhận / người tạo / Admin; chỉ ghi ô TrangThai.
+- Không nằm trong `CONG_GHI` của api.js ➜ tường lửa M9.5 làm trong `ModuleCongViec.kiemViec`.
+
 ## v2.6.0 – Quản trị người dùng & app · Nối PTKH gốc
 
 ### Đã chạy được ngay (cổng có sẵn, v2 không cần chờ)

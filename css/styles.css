@@ -1905,7 +1905,7 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .cv-saochep { margin-top: 8px; min-height: 44px; }
 /* v2.14.6 (agy 16/11): màn hẹp – toast nằm dưới topbar, không che tiêu đề */
 /* v2.14.7 (agy 16/11): ≤ 640px toast xuống đáy, trên thanh điều hướng – không che tiêu đề trang */
-@media (max-width: 640px) { .toast-container { top: auto; bottom: calc(var(--nav-height) + var(--safe-bottom) + 10px); } }
+@media (max-width: 640px) { .toast-container { top: auto; left: 12px; right: 12px; bottom: calc(var(--nav-height) + var(--safe-bottom) + 10px); } }
 .cv-sla .chip-sep { align-self: stretch; width: 1px; margin: 6px 2px; background: var(--border); }
 @media (max-width: 480px) { .cv-sla .cv-chu { display: none; } }
 .cv-saochep:disabled { opacity: .6; cursor: default; }
@@ -3274,7 +3274,9 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .dk-sao { color: var(--c-red); font-weight: 700; }
 .dk-tien-do { height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; margin-top: 10px; }
 .dk-tien-do > span { display: block; height: 100%; background: var(--primary); transition: width .2s; }
-.dk-nut { width: 100%; min-height: 48px; font-size: calc(16px * var(--font-scale)); margin-top: 8px; }
+.dk-nut { width: 100%; min-height: 52px; font-size: calc(17px * var(--font-scale)); margin-top: 8px; }
+.dk-cau .hang-chip { gap: 10px; }
+.dk-cau .chip-chon { min-width: 52px; min-height: 48px; }
 .dk-bay { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .dk-so-cau { margin: 0 0 8px; font-weight: 700; }
 .dk-xong { text-align: center; padding: 28px 16px; }
@@ -3297,3 +3299,10 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 /* v2.14.5 – nhãn thanh đáy >= 14px (agy 15/11), cắt bằng dấu … nếu chật */
 .nav-nhan { font-size: calc(14px * var(--font-scale, 1)); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .topbar-sub { overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+/* v2.15.0 M7.1 – Task Bus: khối đẩy việc + nút đổi trạng thái trên thẻ */
+.cv-form { margin: 0 0 12px; display: flex; flex-direction: column; gap: 6px; }
+.cv-form .form-input { font-size: 16px; min-height: 44px; width: 100%; box-sizing: border-box; }
+.cv-form-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 8px; }
+.cv-nut { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.cv-nut .btn-secondary { min-height: 44px; flex: 1 1 auto; font-size: calc(14px * var(--font-scale)); }
