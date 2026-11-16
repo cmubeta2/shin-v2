@@ -122,9 +122,9 @@ const ModuleCongViec = {
         </div>
 
         <div class="tq-3so">
-          ${(hero.so || []).map(s => `
+          ${(hero.so || []).map((s, i) => `
             <div class="tq-o">
-              <div class="tq-so" style="color: ${s.mau}">${s.giaTri}</div>
+              <div class="tq-so" style="color: ${s.mau}">${this._luong === 'toi' && (hero.so || []).length === 3 ? demCot(['canLam', 'dangLam', 'hoanTat'][i]) : s.giaTri}</div>
               <div class="tq-nhan">${s.nhan}</div>
             </div>
           `).join('')}
@@ -133,14 +133,15 @@ const ModuleCongViec = {
         <button class="btn-primary" onclick="ModuleCongViec.taoViec()">
           ${hero.nutChinh ? hero.nutChinh.nhan : '＋ Tạo Công Việc Mới'}
         </button>
-        ${dem('do') + dem('vang') ? `<button class="btn-secondary cv-saochep" onclick="ModuleCongViec.saoChepCanhBao()">📋 Sao chép cảnh báo</button>` : ''}
+        ${dem('do') + dem('vang') ? `<button class="btn-secondary cv-saochep" onclick="ModuleCongViec.saoChepCanhBao()">📋 Sao chép cảnh báo</button>` : (this._luong === 'toi' ? `<button class="btn-secondary cv-saochep" disabled>📋 0 cảnh báo của tôi</button>` : '')}
       </div>
 
       <!-- v2.14.6 (agy 16/11): gộp M7.3 luồng việc + M7.4 dải SLA thành 1 hàng chip – ở 375 danh sách việc lên màn đầu -->
       <div class="hang-tab cv-sla" role="toolbar" aria-label="Lọc việc">
-        <button class="chip-chon ${this._luong === 'toi' ? 'dang-chon' : ''}" aria-pressed="${this._luong === 'toi'}" data-l="${this._luong === 'toi' ? '' : 'toi'}" onclick="ModuleCongViec.luongLoc(this.dataset.l)" title="${this._luong === 'toi' ? 'Đang xem việc của tôi – bấm để xem theo quyền (' + lu.duocXem.length + ')' : 'Đang xem theo quyền – bấm để chỉ xem việc của tôi'}" ${lu.cuaToi.length || this._luong === 'toi' ? '' : 'disabled'}>👤 Chỉ của tôi · ${lu.cuaToi.length}</button>
+        <button class="chip-chon ${this._luong === 'toi' ? 'dang-chon' : ''}" aria-pressed="${this._luong === 'toi'}" data-l="${this._luong === 'toi' ? '' : 'toi'}" onclick="ModuleCongViec.luongLoc(this.dataset.l)" title="${this._luong === 'toi' ? 'Đang xem việc của tôi – bấm để xem theo quyền (' + lu.duocXem.length + ')' : 'Đang xem theo quyền – bấm để chỉ xem việc của tôi'}" ${lu.cuaToi.length || this._luong === 'toi' ? '' : 'disabled'}>${this._luong === 'toi' ? '✓ ' : ''}👤 Chỉ của tôi · ${lu.cuaToi.length}</button>
+        <span class="chip-sep" aria-hidden="true"></span>
         <button class="chip-chon ${this._loc ? '' : 'dang-chon'}" data-sla="" onclick="ModuleCongViec.locSla(this.dataset.sla)">Tất cả · ${this._ds.length}</button>
-        ${['do', 'vang', 'xanh', 'xam'].filter(k => dem(k)).map(k => `<button class="chip-chon ${this._loc === k ? 'dang-chon' : ''}" data-sla="${k}" onclick="ModuleCongViec.locSla(this.dataset.sla)">${this.NHAN_SLA[k]} · ${dem(k)}</button>`).join('')}
+        ${['do', 'vang', 'xanh', 'xam'].filter(k => dem(k)).map(k => `<button class="chip-chon ${this._loc === k ? 'dang-chon' : ''}" data-sla="${k}" onclick="ModuleCongViec.locSla(this.dataset.sla)" aria-label="${this.NHAN_SLA[k].slice(this.NHAN_SLA[k].indexOf(' ') + 1)}: ${dem(k)} việc">${this.NHAN_SLA[k].split(' ')[0]}<span class="cv-chu">&nbsp;${this.NHAN_SLA[k].slice(this.NHAN_SLA[k].indexOf(' ') + 1)}</span> · ${dem(k)}</button>`).join('')}
       </div>
       ${lu.an ? `<div class="chu-phu cv-an">🔒 ${lu.an} việc thuộc mảng anh/chị không có quyền (hoặc đang tắt) – đã ẩn.</div>` : ''}
 

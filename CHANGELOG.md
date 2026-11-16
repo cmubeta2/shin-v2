@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.7] – 16/11/2026 (theo agy kiểm v2.14.6, phiếu 11160614 ĐẠT 9/10)
+
+### 🎨 Giao diện
+- 📋 Công việc: chip "👤 Chỉ của tôi" có dấu ✓ khi bật + vách ngăn với nhóm lọc SLA (không còn 2 chip cùng sáng như nhóm chọn 1). Số Hero (Cần làm / Đang làm / Hoàn tất) theo bộ lọc "Chỉ của tôi"; nút Sao chép cảnh báo giữ chỗ ("0 cảnh báo của tôi", tắt) để Hero không co giật.
+- ≤ 480px: chip SLA chỉ hiện biểu tượng + số (nhãn đầy đủ ở aria-label) – hàng chip từ 3 dòng còn 1–2 dòng.
+- ≤ 640px: Toast xuống đáy, ngay trên thanh điều hướng – không che tiêu đề trang lúc mở.
+- Chữ: `.form-label` 13 ➜ 14px, `.decagon-name` 13.5 ➜ 14px.
+
 ## [2.14.6] – 16/11/2026 (theo phản biện agy phiếu kiểm v2.14.5)
 
 ### 🎨 Giao diện
