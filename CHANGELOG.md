@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.14.9] – 16/11/2026 (theo agy kiểm v2.14.8, phiếu 11161016 + 11161014 ĐẠT 9/10)
+
+### 🎨 Giao diện
+- 🩺 `dienks.html`: dải đỏ "Câu này bắt buộc" tự tắt ngay khi người điền chọn / nhập câu trả lời; nút chính cao 52px chữ 17px; chip chọn (1★..5★) tối thiểu 52 × 48px, khoảng cách 10px – dễ chạm cho người lớn tuổi.
+- 🔔 Toast ở màn ≤ 640px căn đều 2 mép (12px).
+- 📋 Công việc: chip SLA ở màn ≤ 480px chỉ còn "🔴 1" (ẩn cả dấu "·" cùng nhãn chữ).
+
 ## [2.14.8] – 16/11/2026 (trả nợ kỹ thuật tuần 16–22/11)
 
 ### ✨ Tính năng

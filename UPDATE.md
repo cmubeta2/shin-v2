@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.14.8 RC** · Cập nhật ngày: **16/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.14.9 RC** · Cập nhật ngày: **16/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -34,6 +34,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.14.9 – SỬA THEO AGY KIỂM v2.14.8: KS DỄ CHẠM + TOAST CĂN ĐỀU (16/11/2026, lượt tự động ⑤ 16h)
+- **Nguồn:** phiếu `11161016_V2_M4.2_ra-ux` (dienks 1 câu / trang, ĐẠT 9/10) + `11161014_V2_M7.4_ra-ux` (Công việc, ĐẠT 9/10). Em xác minh trong mã: góp ý đúng.
+- **Đã sửa:** `js/dienks.js` – `chon` / `nhap` gọi `bao('')` khi câu đã có trả lời (dải đỏ tắt ngay). `styles.css` – `.dk-nut` 52px / 17px; `.dk-cau .chip-chon` ≥ 52 × 48px, `.dk-cau .hang-chip` gap 10px; ≤ 640px `.toast-container` left/right 12px. `congviec.js` – dấu "·" của chip SLA vào trong `.cv-chu` (ẩn ≤ 480px).
+- **Không đổi (có chủ ý):** không tự sang câu khi chọn đáp án (agy cũng khuyên không); pill Demo đã có vùng bấm `::before` 44px; badge số 12px giữ nguyên (chỉ là số đếm, không phải chữ đọc).
+- **Kiểm:** node --check `dienks.js`, `congviec.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: chờ agy kiểm (phiếu ghi ở dưới).
 
 ### PHIÊN BẢN v2.14.8 – KS CÔNG KHAI: 1 CÂU / TRANG (16/11/2026, lượt tự động ⑤ 10h)
 - **Nguồn:** nợ kỹ thuật mục 0 ("KS hiện 1 câu / trang"). Cổng `webCongKhaiDocKS` (KS v1 `40_DienKS.gs:128`) đã trả `moiTrang` (mặc định `1cau`) – không cần cổng mới.
