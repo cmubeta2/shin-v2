@@ -3299,3 +3299,10 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 /* v2.14.5 – nhãn thanh đáy >= 14px (agy 15/11), cắt bằng dấu … nếu chật */
 .nav-nhan { font-size: calc(14px * var(--font-scale, 1)); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .topbar-sub { overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+/* v2.15.0 M7.1 – Task Bus: khối đẩy việc + nút đổi trạng thái trên thẻ */
+.cv-form { margin: 0 0 12px; display: flex; flex-direction: column; gap: 6px; }
+.cv-form .form-input { font-size: 16px; min-height: 44px; width: 100%; box-sizing: border-box; }
+.cv-form-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 8px; }
+.cv-nut { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.cv-nut .btn-secondary { min-height: 44px; flex: 1 1 auto; font-size: calc(14px * var(--font-scale)); }

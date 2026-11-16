@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.14.9 RC** · Cập nhật ngày: **16/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.15.0** · Cập nhật ngày: **16/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -9,10 +9,10 @@
 ---
 
 ## 0. VIỆC CÒN CHỜ CHO TUẦN 16–22/11 (gom 14/11, sau RC v2.14.1)
-- **Còn chờ v1 (cần cổng mới ở máy chủ v1):** giờ vào/ra PTKH ➜ M3.5 + M5.4 xuất TC-NS · SePay webhook xác nhận thanh toán ➜ M3.1 · đăng tự động 1 chạm + thu `lead_web` ➜ M8.5 · Task Event Bus ➜ M7.1 (Sếp chốt làm tuần sau) · cổng đọc nhật ký `_TacVu` ➜ M1.6 · chỉ số cả tổ (Morale / NTC cả tổ M5.5–M5.6) – Sếp chốt KHÔNG làm.
+- **Còn chờ v1 (cần cổng mới ở máy chủ v1):** giờ vào/ra PTKH ➜ M3.5 + M5.4 xuất TC-NS · SePay webhook xác nhận thanh toán ➜ M3.1 · đăng tự động 1 chạm + thu `lead_web` ➜ M8.5 · ~~Task Event Bus ➜ M7.1~~ ✅ v2.15.0 (HUB L27 đã lên app 12/11) · cổng đọc nhật ký `_TacVu` ➜ M1.6 · chỉ số cả tổ (Morale / NTC cả tổ M5.5–M5.6) – Sếp chốt KHÔNG làm.
 - **Chờ anh quyết:** (1) 🌐 `js/modules/web.js` nạp vào app hay bỏ tệp (tính năng web hiện ở 📣 Marketing M8.5); (2) khóa site Turnstile cho trang điền KS công khai; (3) trộn PR nếu tự trộn bị chặn.
 - **Chờ anh thử 1 lần bằng token thật (lượt tự động không có token):** gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠, HUB L28) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝) · quét 1 QR khảo sát bằng điện thoại · kết nối Telegram mã ghép.
-- **Nợ kỹ thuật để tuần sau (không chặn RC):** nhập hộ phiếu giấy KS (`webNhapHo`) · ~~KS hiện 1 câu / trang (`moiTrang`)~~ ✅ v2.14.8.
+- **Nợ kỹ thuật để tuần sau (không chặn RC):** ~~nhập hộ phiếu giấy KS (`webNhapHo`)~~ đã có từ v2.13.16 (🩺 › 🛠️ › 📝 Nhập hộ – ghi chú cũ) · ~~KS hiện 1 câu / trang (`moiTrang`)~~ ✅ v2.14.8.
 - **Giao diện:** agy đã rà 375 + 1280 mọi màn (3 phiếu 14/11 07h, ĐẠT) và kiểm lại 4 màn sửa ở v2.14.1 (ĐẠT, UX TB 9.9) ➜ mục "Chờ anh rà UX bằng mắt" của v2.14.0 đã đóng.
 
 ---
@@ -34,6 +34,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.15.0 – M7.1 TASK BUS 🟢: 📋 CÔNG VIỆC CHẠY SỔ VIỆC LIÊN THÔNG CỦA HUB (16/11/2026, lượt tự động ⑤ 16h)
+- **Nguồn:** rà KE_HOACH Hub thấy **HUB L27 [x] lên app v1.23.2 @23 (12/11)** – cổng `webTaskBus` / `webDayViec` / `webDoiTrangThaiViec` (`10_Hub/85_TaskBus.gs`) đã chạy nhưng v2 chưa nối (mục 0 vẫn ghi "Còn chờ v1"). Tên cổng lấy từ `congWeb_()` của Hub; đã thêm mục Task Bus vào HOP_DONG_CONG_V2.md.
+- **Đã làm:** `js/modules/congviec.js` – `mayChu: 'HUB'` + `taiLive` (`webTaskBus`) + `tuV1` THUẦN (Mới ➜ Cần làm, Đang làm, Xong / Bỏ ➜ Hoàn tất; nguồn ➜ nhãn "Mảng n" + mã module để M7.3 RBAC ẩn đúng); đèn SLA dùng `den` của máy chủ; khối ＋ đẩy việc (`kiemViec` THUẦN theo luật `kiemViecLT` + tường lửa M9.5, `webDayViec` với id chống trùng, Toast Hoàn tác 6s, ghi đúng 1 lần); nút ▶ / ✅ / ✖ trên thẻ (`webDoiTrangThaiViec`, Hoàn tác 6s). Demo: form điền thử được, không ghi. `styles.css` – `.cv-form`, `.cv-form-2`, `.cv-nut` (ô nhập 16px, nút ≥ 44px).
+- **QUY_HOACH:** M7.1 ⬜ ➜ 🟢; M7.4 hết phần "⬜ tự gửi Telegram" (Hub tự báo việc gấp + quá hạn).
+- **Kiểm:** node --check `congviec.js`, `app.js`, `sw.js`; kịch bản hàm thuần 14/14 (hạn, kiểm việc + tường lửa, tuV1, phân luồng theo mã mảng); quét bí mật trên diff. Chờ anh: đẩy thử 1 việc thật + bấm ▶ trên v2 (lượt tự động không có token). Giao diện: chờ agy kiểm (phiếu ghi ở dưới).
 
 ### PHIÊN BẢN v2.14.9 – SỬA THEO AGY KIỂM v2.14.8: KS DỄ CHẠM + TOAST CĂN ĐỀU (16/11/2026, lượt tự động ⑤ 16h)
 - **Nguồn:** phiếu `11161016_V2_M4.2_ra-ux` (dienks 1 câu / trang, ĐẠT 9/10) + `11161014_V2_M7.4_ra-ux` (Công việc, ĐẠT 9/10). Em xác minh trong mã: góp ý đúng.
