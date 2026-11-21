@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.16.5** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.16.6** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -18,7 +18,7 @@
   - HUB L31 kho dữ liệu dùng chung `DuLieuV2` ➜ v2 📣 M8.1–M8.6 (lịch, bài, duyệt, báo cáo) · 🎓 M4.5 LMS · 💰 M3.1 cấu hình VietQR – chuyển từ "lưu trên máy" sang lưu Hub.
   - HUB L32 cổng đọc nhật ký `_TacVu` ➜ v2 🏠 M1.6 màn nhật ký động cơ tự động. **v2.16.5 đã nối sẵn** (tab ⚙️ Động cơ ở 🛡️ Quản trị) – chờ v1 lên app.
   - HUB L33 `webTimTriThuc` + `webDoThiTriThuc` ➜ v2 🧠 M9.2 tìm toàn văn + M9.3 đồ thị liên kết (thay dữ liệu MẪU). **v2.16.4 đã nối sẵn** – chờ v1 lên app.
-  - PTKH L581 (đề ghi L580 – đổi số vì trùng) cổng CHỈ ĐỌC giờ công / tăng ca ➜ v2 👥 M5.4 + 💰 M3.5 xuất TC-NS.
+  - PTKH L581 (đề ghi L580 – đổi số vì trùng) cổng CHỈ ĐỌC giờ công / tăng ca ➜ v2 👥 M5.4 + 💰 M3.5 xuất TC-NS. **v2.16.6 đã nối sẵn** (📋 PTKH › ⏱️ Giờ công) – chờ v1 code + lên app.
 - **Nhóm C – anh làm:** (1) thử 7 luồng ghi v2 bằng token thật: gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠 HUB L28) · đẩy việc Task Bus (📋 / 🗂️ Dự án) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝) · kết nối Telegram mã ghép; (2) V20 Menu Button Telegram; (3) chọn 1 tổ dùng thử (PK L6).
 - **Để sau:** SePay webhook xác nhận thanh toán (M3.1) – anh tự liên kết. Khóa site Turnstile cho trang điền KS công khai vẫn chờ anh.
 - **KHÔNG làm (Sếp chốt):** chỉ số cả tổ ẩn danh (Morale / NTC cả tổ M5.5–M5.6).
@@ -42,6 +42,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.16.6 – M5.4 + M3.5 ⏱️ GIỜ CÔNG & XUẤT TC-NS (NỐI SẴN PTKH L581) (21/11/2026, lượt tự động ⑤ 16h)
+- **Nguồn:** mục 0 nhóm B – PTKH L581 `webGioCongThang` Sếp duyệt 21/11 (hợp đồng HOP_DONG_CONG_V2.md mục PTKH; v1 chưa code). Màn v2 dựng trước.
+- **Đã làm (`js/modules/ptkh.js`):** khối gập **⏱️ Giờ công & tăng ca (TC-NS)** – nút Tháng này / Tháng trước ➜ `goiPTKH(link, 'webGioCongThang', ['yyyy-mm'])` (tải khi bấm, không làm chậm màn); THUẦN `tomTatGioCong` (số lạ ➜ 0, làm tròn 2 chữ số, tự cộng tổng) + `csvTCNS` (UTF-8 BOM, mọi ô trong ngoặc kép, chặn chèn công thức `= + - @`, dòng TỔNG); danh sách NV (đơn vị · tổng công · trừ NTC · huy hiệu giờ TC); nút **📤 Xuất bảng TC-NS (CSV) cho Kế toán** tải `TC-NS_<yyyy-mm>.csv` (Demo: `_MAU`). Quyền do app PTKH quyết (lãnh đạo phòng / Admin / BGĐ) – lỗi hiện nguyên câu, kèm ghi "Còn chờ v1 … L581 chưa lên app". Không số cả tổ ẩn danh, không lý do nghỉ (đúng hợp đồng).
+- **Demo:** `SHIN_DEMO_DATA.ptkh.gioCong` (3 NV mẫu, tên giả).
+- **QUY_HOACH:** M5.4 ⬜ ➜ ✅, M3.5 ⬜ ➜ ✅ (🟢 khi L581 lên app + anh thấy số thật).
+- **Kiểm:** node --check `ptkh.js`, `demo_data.js`, `app.js`, `sw.js`; `test/ptkh.test.js` 4 ca ➜ tổng 70/70; quét bí mật trên diff. Giao diện: chưa gửi phiếu agy (đã đủ 3 phiếu V2 đang chờ) – lượt sau gửi `ra-ux` cho 📋 PTKH › ⏱️ Giờ công.
 
 ### PHIÊN BẢN v2.16.5 – M1.6 TAB ⚙️ ĐỘNG CƠ (NỐI SẴN HUB L32) (21/11/2026, lượt tự động ⑤ 16h)
 - **Nguồn:** mục 0 nhóm B – HUB L32 `webNhatKyTacVu` Sếp duyệt 21/11, v1 «ĐÃ CODE v1.23.5» (chờ soát, CHƯA lên app). Hợp đồng HOP_DONG_CONG_V2.md mục Nhật ký động cơ.

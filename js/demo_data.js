@@ -540,6 +540,16 @@ window.SHIN_DEMO_DATA.quantri = {
 };
 
 window.SHIN_DEMO_DATA.ptkh = {
+  // v2.16.6 M5.4 / M3.5 – MẪU theo khuôn webGioCongThang (PTKH L581)
+  gioCong: {
+    thang: '2026-11', tenThang: '11/2026', ngay: [],
+    nv: [
+      { ma: '90001', hoTen: 'Nguyễn Văn A', donVi: 'Tổ Tư vấn', o: {}, ngayCong: 15, truNTC: 0, tongCong: 15, gioTC: 6 },
+      { ma: '90002', hoTen: 'Trần Thị B', donVi: 'Tổ Tư vấn', o: {}, ngayCong: 14, truNTC: 0.5, tongCong: 13.5, gioTC: 2.5 },
+      { ma: '90003', hoTen: 'Lê Văn C', donVi: 'Tổ Hành chính', o: {}, ngayCong: 15, truNTC: 0, tongCong: 15, gioTC: 0 }
+    ],
+    tong: { soNV: 3, ngayCong: 44, tongCong: 43.5, gioTC: 8.5 }
+  },
   so: [
     { nhan: '% hoàn thành phòng (tháng)', chu: '86 %', den: 'vang' },
     { nhan: 'Báo cáo chờ duyệt', chu: '4 báo cáo', den: 'vang' },

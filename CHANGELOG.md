@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.6] – 21/11/2026 (⏱️ Giờ công & xuất TC-NS)
+
+### ✨ Tính năng
+- 📋 PTKH: khối ⏱️ Giờ công & tăng ca (tháng này / tháng trước) + nút 📤 Xuất bảng TC-NS (CSV) cho Kế toán – đọc cổng PTKH `webGioCongThang` (L581, chưa lên app ➜ báo "Còn chờ v1"); Demo dùng bảng mẫu.
+
+### 🧪 Kiểm thử
+- `test/ptkh.test.js` (4 ca). Tổng 70 ca.
+
+---
+
 ## [2.16.5] – 21/11/2026 (M1.6 tab ⚙️ Động cơ)
 
 ### ✨ Tính năng

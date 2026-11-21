@@ -521,6 +521,7 @@ const ModulePTKH = {
       ${this.veNhip(d)}
       ${this.veXinNghi(d)}
       ${this.veDoiCa(d)}
+      <div id="ptGioCong">${this.veGioCong(d)}</div>
 
       <div class="hn-tieu"><span>VIỆC TỪ PTKH · ${viec.length}</span></div>
       ${viec.length ? `<div class="hn-list">${viec.map((v, i) => `
@@ -542,6 +543,81 @@ const ModulePTKH = {
         <p class="chu-phu">Số và việc ở đây do Hub kéo từ app PTKH (khoảng 90 phút / lần; bấm ↻ trên 🏠 Hôm nay để kéo ngay). Các nút mở thẳng app PTKH bằng token Hub của anh/chị – không cần link PTKH riêng. Khối 📊 Tổng quan tháng (v2.7.5), 📝 Báo cáo 14 ngày và 📅 Lịch tổ (v2.7.7), 🧭 Nhịp tháng (v2.9.8 – webLichSuThang) đọc thẳng app PTKH qua cổng webGoi – chỉ đọc. 🗓️ Xin nghỉ (v2.13.7) gửi đơn Lịch nghỉ tuần / Nghỉ ốm qua webGuiNghiPhep; 🔁 Đổi ca & duyệt đơn nghỉ (v2.13.24) qua webBangLichNghi / webTraLoiDoiCa / webDuyetNghiPhep; báo cáo ngày, duyệt báo cáo vẫn mở app PTKH.</p>
       </details>
     `;
+  },
+
+  /* ---------- v2.16.6 M5.4 + M3.5: ⏱️ Giờ công & tăng ca – PTKH L581 `webGioCongThang(token, 'yyyy-mm')` qua webGoi, CHỈ ĐỌC ----------
+     Quyền do máy chủ quyết (lãnh đạo phòng / Admin / Ban giám đốc – như 📤 Xuất bảng chấm công). Tải khi bấm, không tải cùng màn. */
+  _gc: null,   // {thang, dangTai} | {thang, du} | {thang, loi}
+
+  /** THUẦN. Kết quả webGioCongThang ➜ {thang, tenThang, nv:[{ma, hoTen, donVi, ngayCong, truNTC, tongCong, gioTC}], tong}. Số lạ ➜ 0. */
+  tomTatGioCong: function(du) {
+    du = du || {};
+    const s = v => String(v == null ? '' : v).trim().slice(0, 120);
+    const so = v => { const n = Number(v); return isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : 0; };
+    const nv = (Array.isArray(du.nv) ? du.nv : []).filter(x => x && (x.ma || x.hoTen)).map(x => ({ ma: s(x.ma), hoTen: s(x.hoTen), donVi: s(x.donVi),
+      ngayCong: so(x.ngayCong), truNTC: so(x.truNTC), tongCong: so(x.tongCong), gioTC: so(x.gioTC) }));
+    const cong = k => Math.round(nv.reduce((a, x) => a + x[k], 0) * 100) / 100;
+    return { thang: s(du.thang), tenThang: s(du.tenThang), nv, tong: { soNV: nv.length, ngayCong: cong('ngayCong'), tongCong: cong('tongCong'), gioTC: cong('gioTC') } };
+  },
+
+  /** THUẦN. Bảng TC-NS ➜ CSV (UTF-8 có BOM để Excel đọc đúng tiếng Việt; mọi ô trong ngoặc kép; chặn chèn công thức = + - @). */
+  csvTCNS: function(t) {
+    const o = v => { let x = String(v == null ? '' : v); if (/^[=+\-@\t\r]/.test(x)) x = "'" + x; return '"' + x.replace(/"/g, '""') + '"'; };
+    const dong = [['Mã NV', 'Họ tên', 'Đơn vị', 'Ngày công', 'Trừ NTC', 'Tổng công', 'Giờ tăng ca đã duyệt']];
+    t.nv.forEach(x => dong.push([x.ma, x.hoTen, x.donVi, x.ngayCong, x.truNTC, x.tongCong, x.gioTC]));
+    dong.push(['', 'TỔNG (' + t.tong.soNV + ' NV)', '', t.tong.ngayCong, '', t.tong.tongCong, t.tong.gioTC]);
+    return '﻿' + dong.map(r => r.map(o).join(',')).join('\r\n') + '\r\n';
+  },
+
+  veGioCong: function(d) {
+    const e = ShinApp.esc, so = ShinApp.soVN, g = this._gc;
+    const nay = new Date(), th = this.thangKhoa(nay), thTruoc = this.thangKhoa(new Date(nay.getFullYear(), nay.getMonth() - 1, 1));
+    const nut = (k, nhan) => `<button class="btn-secondary" style="min-height:44px; flex:1;" onclick="ModulePTKH.taiGioCong('${k}')">${nhan}</button>`;
+    let than = '';
+    const du = d.live ? (g && g.du) : (d.gioCong || null);
+    if (d.live && g && g.dangTai) than = '<div class="trong">Đang đọc giờ công từ app PTKH…</div>';
+    else if (d.live && g && g.loi) than = `<div class="canh-bao-nguon loi" role="alert"><span>⚠️ Giờ công: ${e(g.loi)}</span></div>
+      <p class="chu-phu">Còn chờ v1 nếu báo lỗi hàm: cổng PTKH L581 <code>webGioCongThang</code> (Sếp duyệt 21/11) chưa lên app.</p>`;
+    else if (du) {
+      const t = this.tomTatGioCong(du);
+      than = `<p class="chu-phu">${d.live ? 'Số thật' : '🟡 MẪU'} · tháng ${e(t.tenThang || t.thang)} · ${so(t.tong.soNV)} NV · ${String(t.tong.tongCong).replace('.', ',')} công · <b>${String(t.tong.gioTC).replace('.', ',')} giờ tăng ca</b> đã duyệt.</p>
+        ${t.nv.length ? `<div class="hn-list">${t.nv.map(x => `<div class="hn-dong" style="cursor:default;"><div class="dong-content">
+          <div class="dong-title">${e(x.hoTen || x.ma)}</div>
+          <div class="dong-sub">${e([x.donVi, String(x.tongCong).replace('.', ',') + ' công', x.truNTC ? 'trừ NTC ' + String(x.truNTC).replace('.', ',') : ''].filter(Boolean).join(' · '))}</div></div>
+          <div class="dong-meta">${x.gioTC ? `<span class="badge vang">${String(x.gioTC).replace('.', ',')} giờ TC</span>` : ''}</div></div>`).join('')}</div>
+        <div class="hang-nut" style="margin-top:10px;"><button class="btn-primary" style="flex:1; min-height:44px;" onclick="ModulePTKH.xuatTCNS()">📤 Xuất bảng TC-NS (CSV) cho Kế toán</button></div>` : '<div class="trong">Không có nhân viên trong phạm vi được xem.</div>'}`;
+    }
+    return `<details class="tq-gon"${g ? ' open' : ''}>
+      <summary><span>⏱️ Giờ công & tăng ca (TC-NS)</span></summary>
+      <p class="chu-phu">Chỉ lãnh đạo phòng, Admin, Ban giám đốc xem được (app PTKH kiểm). Chỉ đọc – số lấy đúng bảng chấm công của app PTKH.</p>
+      <div class="hang-nut">${nut(th, 'Tháng này')}${nut(thTruoc, 'Tháng trước')}</div>
+      ${than}
+    </details>`;
+  },
+
+  taiGioCong: async function(thang) {
+    if (!/^\d{4}-\d{2}$/.test(String(thang || ''))) return;
+    const d = this._d || {};
+    const ve = () => { const o = document.getElementById('ptGioCong'); if (o) o.innerHTML = this.veGioCong(d); };
+    if (!d.live) { this._gc = { thang }; ve(); ShinApp.toast('Demo: hiện bảng MẪU – có token Hub mới đọc số thật.', 'info'); return; }
+    this._gc = { thang, dangTai: true }; ve();
+    const r = await SHIN_API.goiPTKH(ShinApp.linkV1('PTKH') || d.linkThe || '', 'webGioCongThang', [thang]);
+    this._gc = r.ok ? { thang, du: r.data || {} } : { thang, loi: SHIN_API.moTaLoi(r) };
+    ve();
+  },
+
+  xuatTCNS: function() {
+    const d = this._d || {}, du = d.live ? (this._gc && this._gc.du) : d.gioCong;
+    if (!du) { ShinApp.toast('Chưa có bảng giờ công để xuất.', 'error'); return; }
+    const t = this.tomTatGioCong(du);
+    try {
+      const url = URL.createObjectURL(new Blob([this.csvTCNS(t)], { type: 'text/csv;charset=utf-8' }));
+      const a = document.createElement('a');
+      a.href = url; a.download = 'TC-NS_' + (t.thang || 'thang') + (d.live ? '' : '_MAU') + '.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      ShinApp.toast('Đã xuất ' + a.download + ' – gửi Kế toán.', 'success');
+    } catch (err) { ShinApp.toast('Trình duyệt không cho tải tệp.', 'error'); }
   },
 
   moApp: function() {
