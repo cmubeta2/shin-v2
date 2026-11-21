@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.3] – 21/11/2026 (Máy chủ Hub giả + kiểm luồng ghi)
+
+### 🧪 Kiểm thử
+- `test/may_chu_gia.js`: máy chủ Hub giả đúng giao thức `cuaWebPost_` của v1, 9 cổng ghi / đọc (đề xuất chi, Task Bus, bài học, CRM, DuLieuV2) có chống trùng + tường lửa phía máy chủ.
+- `test/luong_ghi.test.js` (12 ca): luồng ghi thật của v2 qua `SHIN_API.goi` không cần token. Tổng 53 ca.
+
+---
+
 ## [2.16.2] – 21/11/2026 (Bộ kiểm thử hàm thuần)
 
 ### 🧪 Kiểm thử

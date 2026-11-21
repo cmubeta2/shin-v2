@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * SHIN v2 – Bộ kiểm thử hàm THUẦN (v2.16.2, nhóm A tuần 23–29/11).
+ * SHIN v2 – Bộ kiểm thử hàm THUẦN (v2.16.2) + luồng ghi qua máy chủ giả test/may_chu_gia.js (v2.16.3).
  * Chạy: node test/chay.js            (mọi tệp test/*.test.js)
  *       node test/chay.js vietqr     (chỉ tệp có tên chứa "vietqr")
  * Không cần trình duyệt, không gọi mạng, không cần token: nạp tệp JS của app vào 1 ngữ cảnh vm
@@ -16,7 +16,8 @@ const assert = require('assert');
 const GOC = path.resolve(__dirname, '..');
 
 /** Tạo ngữ cảnh giả lập trình duyệt + nạp các tệp JS (đường dẫn tương đối gốc repo). */
-function napApp(tep) {
+function napApp(tep, tuyChon) {
+  tuyChon = tuyChon || {};
   const kho = {};
   const localStorage = {
     getItem: k => (Object.prototype.hasOwnProperty.call(kho, k) ? kho[k] : null),
@@ -40,7 +41,8 @@ function napApp(tep) {
     console, TextEncoder, TextDecoder, URL, URLSearchParams, setTimeout, clearTimeout, Math, Date, JSON,
     localStorage, sessionStorage: localStorage, document, ShinApp,
     navigator: { userAgent: 'node-test', onLine: true }, location: { href: 'https://localhost/', origin: 'https://localhost', search: '', hash: '' },
-    fetch: () => Promise.reject(new Error('Bộ kiểm thử không gọi mạng.'))
+    fetch: tuyChon.fetch || (() => Promise.reject(new Error('Bộ kiểm thử không gọi mạng.'))),
+    history: { replaceState() {} }
   };
   ctx.window = ctx; ctx.self = ctx; ctx.globalThis = ctx;
   vm.createContext(ctx);
@@ -68,10 +70,12 @@ tepKiem.forEach(f => require(path.join(__dirname, f)));
 let dat = 0;
 const truot = [];
 let nhomCu = '';
+(async () => {
 for (const c of ca) {
   if (c.nhom !== nhomCu) { console.log('\n▸ ' + c.nhom); nhomCu = c.nhom; }
-  try { c.ham(); dat++; console.log('  ✓ ' + c.ten); }
+  try { await c.ham(); dat++; console.log('  ✓ ' + c.ten); }
   catch (e) { truot.push(c); console.log('  ✗ ' + c.ten + '\n    ' + String(e && e.message || e).split('\n').join('\n    ')); }
 }
 console.log(`\nKET_QUA: ${dat}/${ca.length} đạt` + (truot.length ? ` · ${truot.length} TRƯỢT` : '') + ` · ${tepKiem.length} tệp`);
 process.exit(truot.length ? 1 : 0);
+})();

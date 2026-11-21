@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.16.2** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.16.3** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -12,7 +12,7 @@
 - **Nhóm A – ⑤ v2 tự làm (không cần cổng v1):**
   - ✅ v2.16.1 bỏ `js/modules/web.js` (tính năng web đã ở 📣 Marketing M8.5) · dọn nhánh `shin/v2-auto-*` đã trộn.
   - ✅ v2.16.2 bộ kiểm thử `test/` (`node test/chay.js`, 41 ca: VietQR, lệch dự toán, đề xuất chi / tạm ứng / thanh toán, hoa hồng, `kiemViec`, SLA, `maTuNguon`, `laCuaToi`, phân luồng RBAC + lead, tường lửa M9.5, vướng mắc ➜ Task Bus, Marketing).
-  - ⬜ Máy chủ giả đủ cổng ghi, đúng khuôn trả về của `Loi_Web.gs` – để lượt tự động tự thử luồng ghi không cần token thật.
+  - ✅ v2.16.3 máy chủ Hub giả `test/may_chu_gia.js` (giao thức `cuaWebPost_`, 9 cổng ghi / đọc: L26 đề xuất chi, L27 Task Bus, L28 bài học, L29 CRM, L31 DuLieuV2) + `test/luong_ghi.test.js` 12 ca – lượt tự động tự thử luồng ghi không cần token thật.
 - **Nhóm B – 5 cổng v1 mới ĐÃ DUYỆT 21/11 (luồng v1 làm trước, v2 nối màn khi lên app; hợp đồng ở HOP_DONG_CONG_V2.md):**
   - LOI L8 `chanDuLieuNhayCam_` – tường lửa phía máy chủ ➜ v2 🛡️ M9.5 (giữ chặn sớm phía trình duyệt, hiện nguyên câu lỗi máy chủ).
   - HUB L31 kho dữ liệu dùng chung `DuLieuV2` ➜ v2 📣 M8.1–M8.6 (lịch, bài, duyệt, báo cáo) · 🎓 M4.5 LMS · 💰 M3.1 cấu hình VietQR – chuyển từ "lưu trên máy" sang lưu Hub.
@@ -42,6 +42,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.16.3 – MÁY CHỦ HUB GIẢ + KIỂM LUỒNG GHI (21/11/2026, lượt tự động ⑤ 16h)
+- **Nguồn:** mục 0 nhóm A tuần 23–29/11 – máy chủ giả đủ cổng ghi, đúng khuôn `Loi_Web.gs`. Không cần cổng v1.
+- **Đã làm:** `test/may_chu_gia.js` – `taoMayChuGia({cong?, matMang?})` ➜ `{fetch, nhatKy, so, xuLy}`; mô phỏng đúng thứ tự `chonCongWeb_` / `xuLyCongWeb_` (thân hỏng ➜ `dang`, cổng lạ ➜ `hanh`, thiếu token ➜ `token`, `loiQuyen_` ➜ `quyen`, lỗi khác ➜ `loi` + `chiTiet` ≤ 200 ký tự); token `khong-quyen` giả lỗi quyền. 9 cổng theo HOP_DONG_CONG_V2.md: `webGuiDeXuatChi` (L26), `webDayViec` / `webDoiTrangThaiViec` (L27), `webLuuBaiHoc` (L28), `webGhiTuongTac` / `webDanhDauLead` / `webLuuDoiTac` (L29), `webDocDuLieuV2` / `webGhiDuLieuV2` (L31 – theo hợp đồng, chưa lên app: phienBan + `xungDot`, `taiKhoanQR` chỉ Admin) – kiểm trường như máy chủ, chống trùng theo `maGui` / `id`, tường lửa phía máy chủ bản rút gọn LOI L8 (SĐT / CCCD / BHYT / khóa / chữ người bệnh, câu lỗi "Nội dung không được chứa …"). `test/chay.js` chạy ca bất đồng bộ + `napApp(tep, {fetch})`.
+- **`test/luong_ghi.test.js` 12 ca:** gói gửi dựng bằng đúng hàm THUẦN của màn rồi đi qua `SHIN_API.goi` thật: không token ➜ Demo không gọi máy chủ · `hanh` / `quyen` / `mang` · đề xuất chi gửi 2 lần ➜ 1 phiếu · CCCD chặn ở trình duyệt (0 lần gọi) · SĐT ➜ máy chủ chặn, `moTaLoi` hiện nguyên câu · vướng mắc ➜ Task Bus 1 lần + đổi Xong · CRM ghi liên hệ + đánh dấu lead · bài học không trùng + chặn "bệnh nhân" · DuLieuV2 phiên bản / xung đột / quyền Admin.
+- **Chưa phủ:** Toast Hoàn tác 6s (cần DOM – vẫn để agy / anh thử trên màn); PTKH `webGoi` (đơn nghỉ ốm) và KS nhập phiếu – máy chủ khác, thêm khi cần.
+- **Kiểm:** node --check `test/*.js`, `js/app.js`, `sw.js`; `node test/chay.js` 53/53; quét bí mật trên diff. Giao diện không đổi.
 
 ### PHIÊN BẢN v2.16.2 – BỘ KIỂM THỬ HÀM THUẦN `test/` (21/11/2026, lượt tự động ⑤ 16h)
 - **Nguồn:** mục 0 nhóm A tuần 23–29/11 (Sếp "Duyệt tất cả" 21/11). Không cần cổng v1.
