@@ -6,6 +6,8 @@
  *   webCapLink({maNguoi}) ➜ {hoTen, link, linkDuPhong}      – link chứa token Hub KHÔNG thời hạn: không hiện chữ, chỉ chép / gửi
  *   v2.8.0 (HUB L25 «KIỂM ĐẠT v1.13.8»): webLuuNguoiDung({nguoi:{ma, hoTen, vaiTro, trangThai}}) ➜ webCaiDat (thêm / sửa / ngưng; Hub chặn ngưng Admin cuối)
  *   webLuuUngDung({ma, bat}) ➜ webCaiDat (bật / tắt app: hiện ngay, gửi sau 6 giây Hoàn tác).
+ * v2.16.5 (M1.6): tab ⚙️ Động cơ – HUB L32 `webNhatKyTacVu({soDong})` ➜ {capNhat, khoa, luot, hangDoi, loi?} (chỉ Admin, chỉ đọc,
+ *   tải khi mở tab). Chưa lên app ➜ dải vàng "Còn chờ v1"; Demo ➜ SHIN_DEMO_DATA.quantri.dongCo.
  */
 
 const ModuleQuanTri = {
@@ -129,12 +131,68 @@ const ModuleQuanTri = {
       </div>
 
       <div class="hang-tab" role="tablist">
-        ${[['nguoi', '👤 Người dùng'], ['app', '📱 Ứng dụng'], ['mang', '🧭 Phụ trách'], ['quyen', '🔑 Ma trận']].map(([k, t]) =>
+        ${[['nguoi', '👤 Người dùng'], ['app', '📱 Ứng dụng'], ['mang', '🧭 Phụ trách'], ['quyen', '🔑 Ma trận'], ['dongco', '⚙️ Động cơ']].map(([k, t]) =>
           `<button class="tab-nut ${tab === k ? 'dang-chon' : ''}" role="tab" aria-selected="${tab === k}" onclick="ModuleQuanTri.chonTab('${k}')">${t}</button>`).join('')}
       </div>
 
-      <div id="qtNoiDung">${tab === 'app' ? this.veApp(d) : tab === 'mang' ? this.veMang(d) : tab === 'quyen' ? this.veQuyen(d) : this.veNguoi(d)}</div>
+      <div id="qtNoiDung">${tab === 'app' ? this.veApp(d) : tab === 'mang' ? this.veMang(d) : tab === 'quyen' ? this.veQuyen(d) : tab === 'dongco' ? this.veDongCo(d) : this.veNguoi(d)}</div>
     `;
+    if (tab === 'dongco' && d.live && !this._nk) this.taiDongCo();
+  },
+
+  /* ---------------- ⚙️ Động cơ tự động (M1.6 – v2.16.5, HUB L32 `webNhatKyTacVu`, chỉ Admin, chỉ đọc) ---------------- */
+  _nk: null,   // {dangTai} | {ok, du} | {loi, chiTiet}
+
+  /** THUẦN. Kết quả webNhatKyTacVu ➜ khuôn màn. Lọc lại phía trình duyệt: bỏ chuỗi giống đường dẫn máy / khóa (hợp đồng cấm trả),
+   *  cắt ≤ 120 ký tự, số âm / lạ ➜ 0, tổng hàng đợi mỗi app, app tồn nhiều xếp trước. */
+  tomTatDongCo: function(du) {
+    du = du || {};
+    const BAN = /[A-Za-z]:[\\/]|(^|\s)\/[a-z]\/|Users[\\/]|AKfy|ya29\.|\bh1\.|\bsk-/;
+    const s = v => { const t = String(v == null ? '' : v).trim().slice(0, 120); return BAN.test(t) ? '' : t; };
+    const so = v => { const n = Math.floor(Number(v)); return isFinite(n) && n > 0 ? n : 0; };
+    const k = du.khoa && typeof du.khoa === 'object' ? { dangChay: !!du.khoa.dangChay, tacVu: s(du.khoa.tacVu), tu: s(du.khoa.tu) } : null;
+    const NHAN = ['choKH', 'coKH', 'daCode', 'kiemDat', 'traLai', 'tam'];
+    const hangDoi = (Array.isArray(du.hangDoi) ? du.hangDoi : []).map(h => {
+      const r = { app: s(h && h.app) || '?' }; let tong = 0;
+      NHAN.forEach(n => { r[n] = so(h && h[n]); if (n !== 'tam') tong += r[n]; });
+      r.tong = tong; return r;
+    }).sort((a, b) => b.tong - a.tong || a.app.localeCompare(b.app));
+    const luot = (Array.isArray(du.luot) ? du.luot : []).slice(0, 200).map(x => ({ luc: s(x && x.luc), tacVu: s(x && x.tacVu) })).filter(x => x.luc || x.tacVu);
+    return { capNhat: s(du.capNhat), khoa: k, luot, hangDoi, tongViec: hangDoi.reduce((a, h) => a + h.tong, 0), loi: s(du.loi) };
+  },
+
+  taiDongCo: async function() {
+    this._nk = { dangTai: true };
+    const kq = await SHIN_API.goi('HUB', 'webNhatKyTacVu', { soDong: 50 });
+    this._nk = kq.ok ? { ok: true, du: kq.data } : { loi: kq.loi || 'loi', chiTiet: kq.chiTiet || '' };
+    if (this._tab === 'dongco') { const o = document.getElementById('qtNoiDung'); if (o) o.innerHTML = this.veDongCo(this._d); }
+  },
+
+  lamMoiDongCo: function() { this._nk = null; ShinApp.rung('nhe'); this.chonTab('dongco'); },
+
+  veDongCo: function(d) {
+    const e = ShinApp.esc, nk = this._nk;
+    const nutMoi = d.live ? `<button class="btn-secondary" style="min-height:44px;" onclick="ModuleQuanTri.lamMoiDongCo()">↻ Tải lại nhật ký</button>` : '';
+    if (d.live && (!nk || nk.dangTai)) return '<div class="trong">Đang đọc nhật ký động cơ từ Hub…</div>';
+    if (d.live && nk.loi === 'hanh') return `<div class="canh-bao-nguon" role="status"><span>⚠️ Còn chờ v1: cổng nhật ký động cơ (Hub L32 <code>webNhatKyTacVu</code>) chưa lên app – màn đã sẵn, lên app là hiện số thật.</span></div>${nutMoi}`;
+    if (d.live && nk.loi) return `<div class="canh-bao-nguon loi" role="alert"><span>⚠️ ${e(SHIN_API.moTaLoi(nk))}</span></div>${nutMoi}`;
+    const t = this.tomTatDongCo(d.live ? nk.du : d.dongCo);
+    if (t.loi) return `<div class="canh-bao-nguon loi" role="alert"><span>⚠️ <strong>Nhật ký động cơ:</strong> ${e(t.loi)} – máy anh chạy đồng bộ Hub (<code>dong_bo_hub.py</code>, 15 phút/lần). Không dùng số mẫu.</span></div>${nutMoi}`;
+    const NHAN = [['choKH', 'Chờ KH'], ['coKH', 'Có KH'], ['daCode', 'Đã code'], ['kiemDat', 'Kiểm đạt'], ['traLai', 'Trả lại'], ['tam', '⏸ Tạm']];
+    const khoa = t.khoa && t.khoa.dangChay
+      ? `🔵 Đang chạy: <strong>${e(t.khoa.tacVu || 'không rõ')}</strong>${t.khoa.tu ? ' · từ ' + e(t.khoa.tu) : ''}`
+      : '🟢 Rảnh – không tác vụ nào giữ khóa';
+    return `
+      <p class="chu-phu">${d.live ? 'Số thật từ máy anh (đồng bộ Hub 15 phút/lần)' : '🟡 MẪU – Live đọc cổng Hub <code>webNhatKyTacVu</code> (L32)'}${t.capNhat ? ' · cập nhật ' + e(t.capNhat) : ''}. Chỉ xem, không điều khiển động cơ từ đây.</p>
+      <div class="card" style="padding:14px; margin-bottom:12px;"><div style="font-size:15px; line-height:1.5;">${khoa}</div></div>
+      <div class="hn-tieu"><span>HÀNG ĐỢI KẾ HOẠCH · ${ShinApp.soVN(t.tongViec)} việc</span></div>
+      ${t.hangDoi.length ? `<div style="overflow-x:auto; margin-bottom:12px;"><table class="qt-quyen">
+        <thead><tr><th scope="col">App</th>${NHAN.map(([, n]) => `<th scope="col">${n}</th>`).join('')}</tr></thead>
+        <tbody>${t.hangDoi.map(h => `<tr><th scope="row"><span class="qt-q-ten">${e(h.app)}</span></th>${NHAN.map(([k]) => `<td>${h[k] ? ShinApp.soVN(h[k]) : '·'}</td>`).join('')}</tr>`).join('')}</tbody>
+      </table></div>` : '<div class="trong">Hàng đợi trống.</div>'}
+      <div class="hn-tieu"><span>LƯỢT GẦN ĐÂY · ${t.luot.length}</span></div>
+      ${t.luot.length ? `<div class="card" style="padding:10px 14px; margin-bottom:12px;">${t.luot.slice(0, 50).map(x => `<div class="chu-phu" style="padding:6px 0; border-bottom:1px solid var(--border-soft); font-size:14px;">${e(x.luc)} · <strong style="color:var(--text)">${e(x.tacVu)}</strong></div>`).join('')}</div>` : '<div class="trong">Chưa có lượt nào.</div>'}
+      ${nutMoi}`;
   },
 
   chonTab: function(k) {

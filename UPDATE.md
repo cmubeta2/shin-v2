@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.16.4** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.16.5** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -16,7 +16,7 @@
 - **Nhóm B – 5 cổng v1 mới ĐÃ DUYỆT 21/11 (luồng v1 làm trước, v2 nối màn khi lên app; hợp đồng ở HOP_DONG_CONG_V2.md):**
   - LOI L8 `chanDuLieuNhayCam_` – tường lửa phía máy chủ ➜ v2 🛡️ M9.5 (giữ chặn sớm phía trình duyệt, hiện nguyên câu lỗi máy chủ).
   - HUB L31 kho dữ liệu dùng chung `DuLieuV2` ➜ v2 📣 M8.1–M8.6 (lịch, bài, duyệt, báo cáo) · 🎓 M4.5 LMS · 💰 M3.1 cấu hình VietQR – chuyển từ "lưu trên máy" sang lưu Hub.
-  - HUB L32 cổng đọc nhật ký `_TacVu` ➜ v2 🏠 M1.6 màn nhật ký động cơ tự động.
+  - HUB L32 cổng đọc nhật ký `_TacVu` ➜ v2 🏠 M1.6 màn nhật ký động cơ tự động. **v2.16.5 đã nối sẵn** (tab ⚙️ Động cơ ở 🛡️ Quản trị) – chờ v1 lên app.
   - HUB L33 `webTimTriThuc` + `webDoThiTriThuc` ➜ v2 🧠 M9.2 tìm toàn văn + M9.3 đồ thị liên kết (thay dữ liệu MẪU). **v2.16.4 đã nối sẵn** – chờ v1 lên app.
   - PTKH L581 (đề ghi L580 – đổi số vì trùng) cổng CHỈ ĐỌC giờ công / tăng ca ➜ v2 👥 M5.4 + 💰 M3.5 xuất TC-NS.
 - **Nhóm C – anh làm:** (1) thử 7 luồng ghi v2 bằng token thật: gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠 HUB L28) · đẩy việc Task Bus (📋 / 🗂️ Dự án) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝) · kết nối Telegram mã ghép; (2) V20 Menu Button Telegram; (3) chọn 1 tổ dùng thử (PK L6).
@@ -42,6 +42,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.16.5 – M1.6 TAB ⚙️ ĐỘNG CƠ (NỐI SẴN HUB L32) (21/11/2026, lượt tự động ⑤ 16h)
+- **Nguồn:** mục 0 nhóm B – HUB L32 `webNhatKyTacVu` Sếp duyệt 21/11, v1 «ĐÃ CODE v1.23.5» (chờ soát, CHƯA lên app). Hợp đồng HOP_DONG_CONG_V2.md mục Nhật ký động cơ.
+- **Đã làm:** `js/modules/quantri.js` thêm tab **⚙️ Động cơ** (🛡️ Quản trị – chỉ Admin): THUẦN `tomTatDongCo` (lọc lại chuỗi giống đường dẫn máy / khóa theo điều "cấm trả" của hợp đồng, cắt ≤ 120 ký tự, số lạ ➜ 0, tổng hàng đợi không tính ⏸, app tồn nhiều xếp trước); `taiDongCo` gọi `webNhatKyTacVu({soDong: 50})` khi mở tab (không làm chậm các tab khác), nút ↻ tải lại; khối khóa (🔵 đang chạy tác vụ / 🟢 rảnh), bảng hàng đợi theo app × nhãn (Chờ KH · Có KH · Đã code · Kiểm đạt · Trả lại · ⏸), 50 lượt gần đây. Chỉ xem, không điều khiển động cơ.
+- **Trạng thái cổng:** `hanh` ➜ dải vàng "Còn chờ v1: … Hub L32 chưa lên app"; `loi` máy chủ (chưa đồng bộ) ➜ đỏ, không dùng số mẫu; `quyen` ➜ đỏ. Demo ➜ `SHIN_DEMO_DATA.quantri.dongCo` (MẪU, ghi rõ).
+- **QUY_HOACH:** M1.6 ⬜ ➜ ✅ (🟢 khi L32 lên app + anh thấy số thật).
+- **Kiểm:** node --check `quantri.js`, `demo_data.js`, `app.js`, `sw.js`; `test/quantri.test.js` 7 ca (ma trận quyền, `tomTatDongCo` 3 ca, Demo, L32 chưa có / có / không quyền qua máy chủ giả) ➜ tổng 66/66; quét bí mật trên diff. Giao diện: chờ agy kiểm (phiếu `11211625_V2_M1.6_ra-ux`).
 
 ### PHIÊN BẢN v2.16.4 – 🧠 TRI THỨC NỐI SẴN HUB L33 (21/11/2026, lượt tự động ⑤ 16h)
 - **Nguồn:** mục 0 nhóm B – HUB L33 `webTimTriThuc` + `webDoThiTriThuc` Sếp duyệt 21/11, v1 «ĐÃ CODE v1.23.6» (chờ soát agy, CHƯA lên app). Màn v2 dựng trước theo hợp đồng HOP_DONG_CONG_V2.md mục Tri thức.
