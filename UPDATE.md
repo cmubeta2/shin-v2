@@ -35,6 +35,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.15.1 – GIAO DIỆN 📋 CÔNG VIỆC THEO AGY (21/11/2026, lượt tự động ⑤ 11h)
+- **Nguồn:** phiếu agy `11161619_V2_M7.1_giao-dien` (ĐÃ VIẾT, UX 9.5/10) – em rà diff + báo cáo, đúng phạm vi `.cv-*` + 1 khối nút trong `veForm`, không đổi logic gọi máy chủ ➜ `ap` về repo, `dung … dat`. Phiếu `11161619_V2_M4.2_ra-ux` (trang `dienks.html` 320 / 375 / 1280 sáng + tối) ĐẠT ➜ đóng.
+- **Đã làm:** `css/styles.css` (`.cv-form` tiêu đề 15px, nhãn 14px, `.cv-form-nut`, `.cv-nut` nút chia đều) + `js/modules/congviec.js` (gom 📤 Đẩy việc + Đóng vào `.cv-form-nut`).
+- **Kiểm:** node --check `congviec.js`, `app.js`, `sw.js`; quét bí mật trên diff. Giao diện: agy đã kiểm trong phiếu (0 cuộn ngang, 0 chữ < 14px, 0 vùng bấm < 44px).
+
 ### PHIÊN BẢN v2.15.0 – M7.1 TASK BUS 🟢: 📋 CÔNG VIỆC CHẠY SỔ VIỆC LIÊN THÔNG CỦA HUB (16/11/2026, lượt tự động ⑤ 16h)
 - **Nguồn:** rà KE_HOACH Hub thấy **HUB L27 [x] lên app v1.23.2 @23 (12/11)** – cổng `webTaskBus` / `webDayViec` / `webDoiTrangThaiViec` (`10_Hub/85_TaskBus.gs`) đã chạy nhưng v2 chưa nối (mục 0 vẫn ghi "Còn chờ v1"). Tên cổng lấy từ `congWeb_()` của Hub; đã thêm mục Task Bus vào HOP_DONG_CONG_V2.md.
 - **Đã làm:** `js/modules/congviec.js` – `mayChu: 'HUB'` + `taiLive` (`webTaskBus`) + `tuV1` THUẦN (Mới ➜ Cần làm, Đang làm, Xong / Bỏ ➜ Hoàn tất; nguồn ➜ nhãn "Mảng n" + mã module để M7.3 RBAC ẩn đúng); đèn SLA dùng `den` của máy chủ; khối ＋ đẩy việc (`kiemViec` THUẦN theo luật `kiemViecLT` + tường lửa M9.5, `webDayViec` với id chống trùng, Toast Hoàn tác 6s, ghi đúng 1 lần); nút ▶ / ✅ / ✖ trên thẻ (`webDoiTrangThaiViec`, Hoàn tác 6s). Demo: form điền thử được, không ghi. `styles.css` – `.cv-form`, `.cv-form-2`, `.cv-nut` (ô nhập 16px, nút ≥ 44px).

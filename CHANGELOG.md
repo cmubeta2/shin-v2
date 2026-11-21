@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.15.1] – 21/11/2026 (Giao diện 📋 Công việc theo phiếu agy)
+
+### 🎨 Giao diện
+- Khối ＋ Đẩy việc: tiêu đề khối 15px, nhãn 14px; nút 📤 Đẩy việc + Đóng gom 1 hàng `.cv-form-nut` (cạnh nhau ở máy tính, xếp dọc ở điện thoại) – bỏ class mượn `.cv-saochep`.
+- Nút ▶ / ✅ / ✖ trên thẻ chia đều (không lệch ở 320px). Theo phiếu agy `11161619_V2_M7.1_giao-dien` (agy tự kiểm 320 / 375 / 1280: 0 cuộn ngang, 0 chữ < 14px, 0 vùng bấm < 44px).
+
+---
+
 ## [2.15.0] – 16/11/2026 (M7.1 Task Bus 🟢 – HUB L27)
 
 ### ✨ Tính năng
