@@ -100,7 +100,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M1.3 | KPI Toàn Viện: bản tin tạm tính (`webBanTin`) · soát lỗi (`webSoatLoi`) · AOP (`webAOP`) · báo cáo quý (`webBaoCaoQuy`) | 🟢 / 🟢 nháp AOP năm sau (v2.7.6 – `webNhap2027` + `webLuuTangTruong`; KPI v1.8.2 đã lên app @9 05/11) | – |
 | M1.4 | Trung tâm Telegram Bot (sự kiện `muc:'gap'`) | ⬜ (chạy phía Apps Script v1) · 🟢 v2.7.1 mở v2 trong Telegram Mini App (`webTelegram`, HUB L8) | v2.4.0 |
 | M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟢 v2.7.2 – số phiếu, chờ xác minh, điểm TB câu 5 mức, câu ≤ 2★, xuất CSV (webDsKhaoSat · webKetQuaKS · webXuatKS) · 🟢 v2.8.7 5 trụ ACHSI + hài lòng theo tháng (`webTongHopKS`, KS L6) · 🟢 v2.13.15 🛠️ quản lý khảo sát trên v2: tạo / sửa, chọn câu, ngân hàng câu, trạng thái, phân quyền (cổng KS L1) · 🟢 v2.13.16 📝 nhập hộ phiếu giấy (`webNhapHo` + `webCongKhaiDocKS`, KS L2) · 🟢 v2.13.26 🔳 QR điền phiếu công khai: trang `dienks.html?k=` (không đăng nhập, `webCongKhaiDocKS` / `webCongKhaiGuiPhieu`) + QR chung / theo nguồn NV · Tổ · Vị trí · Cơ sở (`webDsNguon` / `webTaoNguon`, KS L2) | v2.4.0 |
-| M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ⬜ tuần sau (nhật ký `_TacVu` nằm ở máy, chưa có cổng đọc) | v2.4.0 |
+| M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ⬜ tuần sau (nhật ký `_TacVu` nằm ở máy, chưa có cổng đọc) · cổng v1 đã duyệt 21/11 – HUB L32 (đọc nhật ký `_TacVu`) | v2.4.0 |
 
 ### 👥 MẢNG 2 – KHÁCH HÀNG & ĐỐI TÁC (CRM) · `crm`
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
@@ -115,11 +115,11 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 ### 💰 MẢNG 3 – TÀI CHÍNH & THANH TOÁN · `taichinh` · *(module có từ v2.5.0 – màn 💰 Tài chính, cổng `webTaiChinh`)*
 | Mã | Micro-Module | Trạng thái · nguồn tái sử dụng | Phiên bản đích |
 |---|---|---|---|
-| M3.1 | Cổng VietQR SePay: sinh QR động, xác nhận thanh toán qua webhook | ✅ v2.10.4 sinh QR động / tĩnh offline trên máy (`js/vietqr.js`, số TK lưu máy người dùng) · ⬜ xác nhận thanh toán (Còn chờ v1: SePay) · M-WEB-03 (v1) | v2.3.0 |
+| M3.1 | Cổng VietQR SePay: sinh QR động, xác nhận thanh toán qua webhook | ✅ v2.10.4 sinh QR động / tĩnh offline trên máy (`js/vietqr.js`, số TK lưu máy người dùng) · ⬜ xác nhận thanh toán (SePay để sau – anh tự liên kết) · M-WEB-03 (v1) · lưu cấu hình: cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) | v2.3.0 |
 | M3.2 | Sổ chi phí phát sinh & cảnh báo lệch dự toán (cấp cho Mảng 6) | 🟢 v2.10.2 ngân sách vs đã chi + cảnh báo vượt / sắp chạm cấp dự án (`webDuAn`) · ⬜ theo khoản mục (v1 chưa có dự toán khoản mục) · M5.3 (bản 1.0) | v2.3.0 |
 | M3.3 | Chi trả hoa hồng CTV/đại lý (lấy kết quả tính từ M4.3) | 🟢 v2.13.3 nút ở 🎓 Tuyển sinh ➜ phiếu Thanh toán điền sẵn từ `webLeadCD.hoaHong` ➜ 📤 gửi thật vào 0B qua HUB L26 `webGuiDeXuatChi` (Hub v1.18.5, từ v2.12.2) · ⬜ sổ "đã chi" theo chiến dịch (Còn chờ v1) | v2.3.0 |
 | M3.4 | Đề nghị tạm ứng / thanh toán → gửi 0B duyệt | 🟢 v2.13.3 form gộp Chi / Tạm ứng / Thanh toán, kiểm luật L26 ➜ 📤 gửi thật vào 0B (`webGuiDeXuatChi` nhận loai, hanHoanUng, soChungTu – Hub v1.18.5, Toast Hoàn tác 6s, maGui chống trùng) – 💰 Tài chính | v2.3.0 |
-| M3.5 | Xuất bảng tăng ca TC-NS cho Kế toán (nhận từ M5.4) | ⬜ Còn chờ v1 (giờ vào/ra PTKH) · M-PTKH-03 | v2.4.0 |
+| M3.5 | Xuất bảng tăng ca TC-NS cho Kế toán (nhận từ M5.4) | ⬜ cổng v1 đã duyệt 21/11 – PTKH L581 (giờ công / tăng ca chỉ đọc) · M-PTKH-03 | v2.4.0 |
 
 ### 🎓 MẢNG 4 – GIÁO DỤC & TUYỂN SINH · `tuyensinh` · Fintech Growth
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
@@ -128,7 +128,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M4.2 | Lead theo chiến dịch (`webLeadCD`) · thêm/sửa (`webLuuLead`) · nhật ký · chuyển · xóa | 🟢 | – |
 | M4.3 | Bảng tính hoa hồng bậc thang 6 bậc | 🟢 theo từng chiến dịch | – |
 | M4.4 | Phễu ứng viên: Mới → Tư vấn → Hồ sơ → Nhập học → Hủy | ✅ | – |
-| M4.5 | LMS mini: lớp học, điểm danh, bài tập M01–M20 | ✅ v2.12.1 lớp mẫu + điểm danh theo ngày + chuyên cần (< 80% cảnh báo) + tiến độ M01–M20 (🎓 Tuyển sinh, lưu máy) · ⬜ lớp / học viên thật (Còn chờ v1) | v2.6.0 |
+| M4.5 | LMS mini: lớp học, điểm danh, bài tập M01–M20 | ✅ v2.12.1 lớp mẫu + điểm danh theo ngày + chuyên cần (< 80% cảnh báo) + tiến độ M01–M20 (🎓 Tuyển sinh, lưu máy) · ⬜ lớp / học viên thật: cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) | v2.6.0 |
 
 ### 🏥 MẢNG 5 – NHÂN SỰ & VẬN HÀNH PHÒNG KHÁM · `phongkham` · Hoàng Kim
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
@@ -136,7 +136,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M5.1 | Báo cáo ca ngày (lượt khám, doanh thu, tồn đọng) | 🟢 v2.7.0 – Hôm nay + nộp / lịch sử / duyệt báo cáo ngày qua cổng PK thật | v2.4.0 |
 | M5.2 | Minh chứng ảnh nén → Drive (Base64 qua `21_PhongPTKH`) | 🟢 v2.7.0 (nén JPEG ≤ 1600px, ≤ 6 ảnh → `webNopBaoCao`) | v2.4.0 (v1 mở cổng trước) |
 | M5.3 | Lịch trực tuần, kiểm tra xung đột, đổi ca → 0B duyệt | 🟢 xem lịch tuần + đơn nghỉ (`webLichTuan`) · 🟢 v2.13.24 trả lời lời mời đổi ca + duyệt đơn nghỉ cho người duyệt (📋 PTKH Gốc – `webBangLichNghi` / `webTraLoiDoiCa` / `webDuyetNghiPhep`, cổng có sẵn) · 🟢 v2.9.5 cảnh báo trùng lịch cá nhân (ca ↔ đơn nghỉ) / 🟢 v2.9.7 trùng nghỉ cả tổ (`webLichTo`, 🏥 PTKH) · 🟢 v2.13.7 gửi đơn Lịch nghỉ tuần / Nghỉ ốm thẳng PTKH (`webGuiNghiPhep`, 📋 PTKH Gốc; v2.13.8 lịch 4 tuần dạng lưới + đếm ngày chọn) · 🟢 v2.13.14 🗓️ Lịch cả tổ cho tổ trưởng (`webBangXepLich` PK: người theo vị trí từng ngày, cảnh báo thiếu vị trí / ≥ 2 nghỉ / đi làm < nửa tổ – 🏥 Phòng Khám) · đổi ca + duyệt đơn nghỉ (làm trên PTKH) | v2.3.0 |
-| M5.4 | Bóc tách tăng ca & bù giờ TC-NS | ⬜ Còn chờ v1 (cổng giờ vào/ra PTKH; logic có ở M-PTKH-03) | v2.4.0 |
+| M5.4 | Bóc tách tăng ca & bù giờ TC-NS | ⬜ cổng v1 đã duyệt 21/11 – PTKH L581 (giờ công / tăng ca chỉ đọc) | v2.4.0 |
 | M5.5 | Kiểm soát vi phạm NTC (> 3 lần trễ → trừ 0,5 công) | 🟢 v2.9.8 của tôi: Ca NTC tuần x/3 + ngày công bị trừ (`webLichSuThang`, luật L111c) / ⬜ cả tổ (cần cổng v1) | v2.4.0 |
 | M5.6 | Team Morale Index – cảm nhận sau ca 1–5★ | 🟢 v2.9.8 của tôi: trung bình + phân bố tháng (`webLichSuThang`) / ⬜ chỉ số cả tổ ẩn danh (cần cổng v1) | v2.4.0 |
 | M5.7 | Danh bạ nhân sự khoa/phòng | 🟢 v2.7.0 (`webNhanSu`, quản lý) | v2.5.0 (đi cùng RBAC) |
@@ -160,21 +160,21 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 ### 🚀 MẢNG 8 – TĂNG TRƯỞNG (MARKETING AI & WEB PHỄU) · `marketing` · *(module 📣 Marketing có từ v2.11.0 – M8.1 · M8.2 · M8.4 · M8.6 lưu trên máy)*
 | Mã | Micro-Module | Trạng thái · nguồn tái sử dụng | Phiên bản đích |
 |---|---|---|---|
-| M8.1 | Lịch nội dung đa kênh TOFU/MOFU/BOFU (Facebook, TikTok, Zalo, YouTube) | ✅ v2.11.0 lịch 4 tuần 12 bài mẫu, lọc tầng phễu (📣 Marketing, lưu máy) · M7.1 (bản 1.0) | v2.4.0 |
-| M8.2 | Xưởng AI Copywriter (PAS/AIDA, kịch bản video ngắn) | ✅ v2.11.0 xưởng 12 khuôn PAS / AIDA / 4P / video – điền chỗ trống, xem trước, kiểm từ cấm QC y tế (không gọi AI) · M7.2 (bản 1.0) | v2.4.0 |
+| M8.1 | Lịch nội dung đa kênh TOFU/MOFU/BOFU (Facebook, TikTok, Zalo, YouTube) | ✅ v2.11.0 lịch 4 tuần 12 bài mẫu, lọc tầng phễu (📣 Marketing, lưu máy) · M7.1 (bản 1.0) · cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) | v2.4.0 |
+| M8.2 | Xưởng AI Copywriter (PAS/AIDA, kịch bản video ngắn) | ✅ v2.11.0 xưởng 12 khuôn PAS / AIDA / 4P / video – điền chỗ trống, xem trước, kiểm từ cấm QC y tế (không gọi AI) · M7.2 (bản 1.0) · cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) | v2.4.0 |
 | M8.3 | **Smart Lead Dispatcher** – phân luồng lead (xem luồng A) | 🟢 v2.11.1 phân luồng lead mới `webCRM.leadMoi` + nút chuyển màn (👥 CRM) · ⬜ ghi luồng / giao tư vấn viên (chờ cổng ghi) · M8.3 (bản 1.0) | v2.3.0 |
-| M8.4 | Chốt chặn Human-in-the-Loop: bài chỉ xuất bản sau khi 0B duyệt | ✅ v2.11.0 Nháp ➜ Chờ duyệt ➜ Duyệt (Hoàn tác 6s) ➜ Sẵn sàng đăng, chỉ bài đã duyệt sao chép được (lưu máy) · ⬜ qua 0B (Còn chờ v1) · M7.3 (bản 1.0) | v2.4.0 |
-| M8.5 | Phễu Lặn Biển 0m → -105m & xuất bản đa nền tảng | ✅ v2.13.19 xưởng 5 tầng (giao diện `.lb-` v2.13.20) + kiểm + xem trước + tải `index.html` tĩnh, hướng dẫn Netlify / Cloudflare Pages / Vercel (📣 Marketing, lưu máy) · ⬜ đăng tự động + thu lead `lead_web` (Còn chờ v1) · M-WEB-01/02 | v2.6.0 |
-| M8.6 | Báo cáo hiệu suất truyền thông (reach, tương tác) | ✅ v2.12.0 tổng + từng kênh, nhập tay số từng bài, số mẫu chỉ ở Demo (📣 Marketing, lưu máy) · ⬜ lấy số tự động từ API kênh (Còn chờ v1) · M7.5 (bản 1.0) | v2.6.0 |
+| M8.4 | Chốt chặn Human-in-the-Loop: bài chỉ xuất bản sau khi 0B duyệt | ✅ v2.11.0 Nháp ➜ Chờ duyệt ➜ Duyệt (Hoàn tác 6s) ➜ Sẵn sàng đăng, chỉ bài đã duyệt sao chép được (lưu máy) · ⬜ lưu Hub thay lưu máy: cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) · ⬜ qua 0B (chưa có cổng) · M7.3 (bản 1.0) | v2.4.0 |
+| M8.5 | Phễu Lặn Biển 0m → -105m & xuất bản đa nền tảng | ✅ v2.13.19 xưởng 5 tầng (giao diện `.lb-` v2.13.20) + kiểm + xem trước + tải `index.html` tĩnh, hướng dẫn Netlify / Cloudflare Pages / Vercel (📣 Marketing, lưu máy) · ⬜ lưu Hub thay lưu máy: cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) · ⬜ đăng tự động + thu lead `lead_web` (chưa có cổng) · M-WEB-01/02 | v2.6.0 |
+| M8.6 | Báo cáo hiệu suất truyền thông (reach, tương tác) | ✅ v2.12.0 tổng + từng kênh, nhập tay số từng bài, số mẫu chỉ ở Demo (📣 Marketing, lưu máy) · ⬜ lưu Hub thay lưu máy: cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) · ⬜ lấy số tự động từ API kênh (chưa có cổng) · M7.5 (bản 1.0) | v2.6.0 |
 
 ### 🧠 MẢNG 9 – TRI THỨC (SECOND BRAIN) · `trithuc` · Nordic Minimalist
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M9.1 | Kho SOP 3 tầng: HowTos → Runbooks → References | 🟢 v2.13.2 đọc thật chỉ mục 05_TriThuc qua HUB L28a `webTriThuc` (🧠 Tri thức) · 🟢 v2.13.10 ghi bài học `webLuuBaiHoc` (HUB L28, Hub v1.20.2 – từ 🗂️ Dự án › Ma trận vướng mắc, chờ Admin duyệt) · ⬜ máy chép bài Đã duyệt ➜ 05_TriThuc (Còn chờ v1: HUB L28 bước 5) | – |
-| M9.2 | Tìm kiếm toàn văn (lọc phía trình duyệt trước, FTS5 sau) | ✅ v2.7.3 phía trình duyệt (không dấu, nhiều từ, lọc lĩnh vực, tô đậm) / ⬜ FTS5 máy chủ | v2.3.0 |
-| M9.3 | Đồ thị liên kết `[[wiki-links]]` | ✅ v2.8.3 phía trình duyệt (liên kết ra / ngược / treo, SVG) – dữ liệu MẪU tới khi v1 có máy chủ kho tri thức | v2.6.0 |
+| M9.2 | Tìm kiếm toàn văn (lọc phía trình duyệt trước, FTS5 sau) | ✅ v2.7.3 phía trình duyệt (không dấu, nhiều từ, lọc lĩnh vực, tô đậm) / ⬜ FTS5 máy chủ · cổng v1 đã duyệt 21/11 – HUB L33 (`webTimTriThuc`) | v2.3.0 |
+| M9.3 | Đồ thị liên kết `[[wiki-links]]` | ✅ v2.8.3 phía trình duyệt (liên kết ra / ngược / treo, SVG) – dữ liệu MẪU tới khi v1 có máy chủ kho tri thức · cổng v1 đã duyệt 21/11 – HUB L33 (`webDoThiTriThuc`) | v2.6.0 |
 | M9.4 | Trích bài học kinh nghiệm từ báo cáo ca / Flash Report | ✅ v2.9.2 phía trình duyệt từ Flash Khối 2 (chủ đề + Markdown [[wiki-link]]) · 🟢 v2.13.10 📤 gửi vào sổ BaiHoc qua `webLuuBaiHoc` (mã gửi ổn định theo nội dung – gửi lại không trùng, Toast Hoàn tác 6s) | v2.6.0 |
-| M9.5 | Tường lửa `KHONG_DUA_VAO.md` – chặn dữ liệu bệnh nhân vào AI | ✅ v2.8.9 chặn sớm phía trình duyệt mọi cổng ghi (CCCD · BHYT · khóa · token) / ⬜ chặn phía máy chủ v1 | v2.4.0 |
+| M9.5 | Tường lửa `KHONG_DUA_VAO.md` – chặn dữ liệu bệnh nhân vào AI | ✅ v2.8.9 chặn sớm phía trình duyệt mọi cổng ghi (CCCD · BHYT · khóa · token) / ⬜ chặn phía máy chủ v1 · cổng v1 đã duyệt 21/11 – LOI L8 (`chanDuLieuNhayCam_`) | v2.4.0 |
 
 ### 💼 TẦNG 3 – GÓI GIẢI PHÁP TƯ VẤN SỐ *(không có màn hình riêng trong app)*
 G1 Chẩn đoán sức khỏe quy trình · G2 Bộ chuẩn hóa SOP ACHSI/FMFT · G3 Offer Stack · G4 Lộ trình CĐS 3 giai đoạn.
