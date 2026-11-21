@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.16.8** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.16.9** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -14,7 +14,8 @@
   - ✅ v2.16.2 bộ kiểm thử `test/` (`node test/chay.js`, 41 ca: VietQR, lệch dự toán, đề xuất chi / tạm ứng / thanh toán, hoa hồng, `kiemViec`, SLA, `maTuNguon`, `laCuaToi`, phân luồng RBAC + lead, tường lửa M9.5, vướng mắc ➜ Task Bus, Marketing).
   - ✅ v2.16.3 máy chủ Hub giả `test/may_chu_gia.js` (giao thức `cuaWebPost_`, 9 cổng ghi / đọc: L26 đề xuất chi, L27 Task Bus, L28 bài học, L29 CRM, L31 DuLieuV2) + `test/luong_ghi.test.js` 12 ca – lượt tự động tự thử luồng ghi không cần token thật.
   - ✅ v2.16.8 bộ kiểm thử phần 2: 6 tệp module mới + `test/quet_bi_mat.js` (quét bí mật `git diff --cached`).
-  - **Kiểm thử: `node test/chay.js` – 133 ca** (13 tệp, mã thoát 1 khi trượt) · quét bí mật: `node test/quet_bi_mat.js` sau `git add`.
+  - ✅ v2.16.9 máy chủ giả phần 3 (token sai / hết hạn, mất mạng, mất trả lời, trả chậm, sổ lệnh ghi, KS + PTKH) + `test/luong_7.test.js` 81 ca cho 7 luồng ghi ➜ sửa 4 lỗi mã thật.
+  - **Kiểm thử: `node test/chay.js` – 214 ca** (14 tệp, mã thoát 1 khi trượt) · quét bí mật: `node test/quet_bi_mat.js` sau `git add`.
   - **Chờ anh duyệt:** thêm vào SKILL ⑤ mục 4 bước "(1b) `node test/chay.js` phải N/N ĐẠT + (3) chạy `node test/quet_bi_mat.js` thay quét tay" – em KHÔNG tự sửa SKILL.
 - **Nhóm B – 5 cổng v1 mới ĐÃ DUYỆT 21/11 (luồng v1 làm trước, v2 nối màn khi lên app; hợp đồng ở HOP_DONG_CONG_V2.md):**
   - LOI L8 `chanDuLieuNhayCam_` – tường lửa phía máy chủ ➜ v2 🛡️ M9.5 (giữ chặn sớm phía trình duyệt, hiện nguyên câu lỗi máy chủ).
@@ -22,7 +23,7 @@
   - HUB L32 cổng đọc nhật ký `_TacVu` ➜ v2 🏠 M1.6 màn nhật ký động cơ tự động. **v2.16.5 đã nối sẵn** (tab ⚙️ Động cơ ở 🛡️ Quản trị) – chờ v1 lên app.
   - HUB L33 `webTimTriThuc` + `webDoThiTriThuc` ➜ v2 🧠 M9.2 tìm toàn văn + M9.3 đồ thị liên kết (thay dữ liệu MẪU). **v2.16.4 đã nối sẵn** – chờ v1 lên app.
   - PTKH L581 (đề ghi L580 – đổi số vì trùng) cổng CHỈ ĐỌC giờ công / tăng ca ➜ v2 👥 M5.4 + 💰 M3.5 xuất TC-NS. **v2.16.6 đã nối sẵn** (📋 PTKH › ⏱️ Giờ công) – chờ v1 code + lên app.
-- **Nhóm C – anh làm:** (1) thử 7 luồng ghi v2 bằng token thật: gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠 HUB L28) · đẩy việc Task Bus (📋 / 🗂️ Dự án) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝) · kết nối Telegram mã ghép; (2) V20 Menu Button Telegram; (3) chọn 1 tổ dùng thử (PK L6).
+- **Nhóm C – anh làm:** (1) 7 luồng ghi v2 **đã thử trên máy chủ giả (v2.16.9, `test/luong_7.test.js` 81/81) – còn chờ anh nghiệm thu 1 lần bằng token thật**: gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠 HUB L28) · đẩy việc + đổi trạng thái Task Bus (📋 Công việc) · đẩy vướng mắc M6.3 (🗂️ Dự án) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝); kết nối Telegram mã ghép vẫn chỉ thử được bằng tay. Lưu ý khi nghiệm thu: PTKH `webGuiNghiPhep` và KS `webNhapHo` (v1) chưa có mã chống trùng – mất mạng giữa chừng thì xem danh sách trước khi gửi lại (màn đã nhắc); (2) V20 Menu Button Telegram; (3) chọn 1 tổ dùng thử (PK L6).
 - **Để sau:** SePay webhook xác nhận thanh toán (M3.1) – anh tự liên kết. Khóa site Turnstile cho trang điền KS công khai vẫn chờ anh.
 - **KHÔNG làm (Sếp chốt):** chỉ số cả tổ ẩn danh (Morale / NTC cả tổ M5.5–M5.6).
 
@@ -45,6 +46,14 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.16.9 – MÁY CHỦ GIẢ PHẦN 3 + KỊCH BẢN 7 LUỒNG GHI (21/11/2026, lượt vét hạn mức 20h27)
+- **Nguồn:** Nhóm A phần 3 (Sếp "Duyệt tất cả" kế hoạch cải thiện 21/11 – QUYET_DINH.md mục 21/11); khuôn trả lời theo v1 `00_Loi/Loi_Web.gs` (`chonCongWeb_` / `xuLyCongWeb_`), `10_Hub/Loi_Token.gs` (`loiTokenHub`), `70_KhaoSat/40_DienKS.gs` (`webNhapHo`), `20_PTKH/17_NghiLe.gs` (`webGuiNghiPhep`).
+- **Máy chủ giả:** token hợp lệ / `sai` / `het-han` / `khong-quyen`, mất mạng trước máy chủ, mất trả lời sau khi đã ghi, trả chậm; `nhatKyGhi` ghi mọi lệnh ghi tới máy chủ.
+- **Kịch bản:** `test/luong_7.test.js` bấm đúng hàm nút của màn (thay `ShinApp.hanhDongHoanTac` bằng bản giữ Toast để chọn Hoàn tác / hết 6s) – 9 lệnh × 9 phép kiểm = 81 ca. Tổng `node test/chay.js` **214/214**.
+- **Lỗi mã thật đã sửa:** (1) KS nhập hộ không token báo "Đã lưu" giả; (2) KS mất mạng không nhắc kiểm trùng; (3) Dự án gửi bài học MẪU lên Hub khi màn ở dữ liệu mẫu mà có token; (4) tường lửa `CONG_GHI` bỏ sót webDay / webDoi / webDanh / webNhap / webChuyen / webTraLoi. `PHIEN_BAN_SW` ➜ `shin-v2.16.9`.
+- **Còn chờ v1 (ghi nhận, chưa xin cổng):** PTKH `webGuiNghiPhep` + KS `webNhapHo` chưa có mã chống ghi trùng (`maGui`) – mất trả lời giữa chừng rồi gửi lại sẽ thành 2 đơn / 2 phiếu; v2 chỉ nhắc kiểm. Cần Sếp duyệt mới thêm dòng v1.
+- **Giao diện:** chỉ đổi câu toast / điều kiện gửi, không đổi bố cục – không cần phiếu agy.
 
 ### PHIÊN BẢN v2.16.8 – BỘ KIỂM THỬ v2 PHẦN 2 + QUÉT BÍ MẬT (21/11/2026, lượt vét hạn mức 18h27)
 - **Nguồn:** Nhóm A phần 2 (Sếp "Duyệt tất cả" kế hoạch cải thiện 21/11).

@@ -384,7 +384,8 @@ const ModuleDuAn = {
   guiBaiHoc: function(nut) {
     const bh = this.trichBaiHoc(this._maTran || []);
     if (!bh.length) return ShinApp.toast('Chưa có vướng mắc nào kèm đề xuất để rút bài học.', 'info');
-    if (!SHIN_API.laCheDoLive() || !SHIN_API.layToken()) return ShinApp.toast('Đang ở Demo – không gửi lên Hub. Dùng 📋 để sao chép.', 'info');
+    // v2.16.9: màn đang hiện dữ liệu MẪU (Hub lỗi / chưa nối) thì không gửi bài học mẫu lên Hub dù có token.
+    if (!SHIN_API.laCheDoLive() || !SHIN_API.layToken() || !(this._d && this._d.live)) return ShinApp.toast('Đang ở Demo – không gửi lên Hub. Dùng 📋 để sao chép.', 'info');
     if (this._dangGuiBH) return;
     const kq = bh.map(b => this.kiemBaiHoc(b)), hop = kq.filter(k => k.goi), bo = kq.length - hop.length;
     if (!hop.length) return ShinApp.toast('Không bài nào gửi được (' + (kq[0] || {}).loi + ').', 'error');

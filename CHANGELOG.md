@@ -4,6 +4,18 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.9] – 21/11/2026 (Máy chủ giả phần 3 + kịch bản 7 luồng ghi)
+
+### 🧪 Kiểm thử
+- `test/may_chu_gia.js` mở rộng: token `sai` / `het-han` đúng câu Hub v1 (`loiTokenHub` – lỗi thường ➜ `loi`), mất mạng trước máy chủ (`matMangLan`), mất trả lời SAU khi máy chủ đã ghi (`matTraLoiLan`), trả chậm (`chamMs`), sổ `nhatKyGhi` ghi mọi lệnh ghi đã tới máy chủ; thêm app KS `webNhapHo` và PTKH gốc `webGoi` ➜ `webGuiNghiPhep`.
+- `test/luong_7.test.js` – 81 ca: bấm đúng hàm nút của 9 lệnh ghi / 7 luồng (đề xuất chi 0B, CRM ghi liên hệ + đánh dấu lead, bài học, đơn nghỉ ốm PTKH, nhập hộ KS, Task Bus đẩy việc + đổi trạng thái, vướng mắc M6.3), mỗi lệnh 9 phép kiểm (đủ trường · Hoàn tác 6s không gửi · bấm 2 lần · mất mạng · mất trả lời · trả chậm · Demo / không token · token hết hạn / sai · tường lửa CCCD / SĐT). Tổng **214/214** · 14 tệp.
+
+### 🐞 Sửa lỗi mã thật (máy chủ giả phát hiện)
+- 🩺 Nhập hộ KS: KHÔNG token mà màn chưa ở Demo ➜ trước đây báo "Đã lưu phiếu" giả (SHIN_API trả dữ liệu mẫu) – nay coi là Demo, không gửi; `isDemo` ➜ báo lỗi.
+- 🩺 Nhập hộ KS: mất mạng khi đang lưu ➜ nhắc "phiếu có thể đã vào – kiểm danh sách phiếu trước khi lưu lại" (v1 `webNhapHo` chưa có mã chống trùng).
+- 🗂️ Dự án › gửi bài học: có token nhưng màn đang hiện dữ liệu MẪU ➜ trước đây gửi bài học mẫu lên Hub – nay chặn như Demo.
+- 🛡️ Tường lửa M9.5 (`api.js` CONG_GHI): thêm `webDay… / webDoi… / webDanh… / webNhap… / webChuyen… / webTraLoi…` (Task Bus, đánh dấu lead, nhập hộ KS, chuyển CD, trả lời đổi ca) – trước đây chỉ dựa vào hàm kiểm riêng của màn.
+
 ## [2.16.8] – 21/11/2026 (Bộ kiểm thử v2 phần 2 + quét bí mật)
 
 ### 🧪 Kiểm thử
