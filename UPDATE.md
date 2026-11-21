@@ -61,6 +61,7 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 - **Nội dung:** `js/vietqr.js` – mở khối gọi `ShinDongBo.khiMo('taiKhoanQR', …, {chiDoc: !Admin})`; Admin `luuTK` ➜ `danhDau` (ghi Hub sau 1,5 giây); người khác chỉ tải về khi máy trống. `js/dongbo_v2.js` – tùy chọn `chiDoc` (không gửi, không hỏi xung đột, máy khác Hub ➜ `khacHub`, giữ bản máy). "Đổi" tài khoản chỉ gỡ khỏi máy (không xóa trên Hub).
 - **Tường lửa:** v1 `chanDuLieuNhayCam_` chạy trên cả `noiDung` của `taiKhoanQR` ➜ số TK dạng SĐT (nhiều ngân hàng cho dùng SĐT làm số TK) hoặc 12 số bị chặn. v2 kiểm trước bằng `hubChan` ➜ không gửi, toast báo. **Còn chờ v1:** miễn trường `soTK` cho loại `taiKhoanQR` (chỉ Admin ghi).
 - **Kiểm:** `node test/chay.js` **233/233** (+4 ca trong `test/dongbo.test.js`); `PHIEN_BAN_SW` ➜ `shin-v2.17.1`; không thêm tệp (VO_APP giữ nguyên).
+- **Còn chờ v1 (ghi vào HOP_DONG mục DuLieuV2):** miễn `soTK` khỏi tường lửa cho `taiKhoanQR`; thêm loại `pheuLanBien` cho 📣 M8.5 (chưa có loại ➜ v1 từ chối, nên v2 chưa nối – giữ lưu máy); `tienDoLMS` theo người chỉ cần khi có học viên thật (tiến độ hiện theo lớp).
 - **Giao diện:** chỉ đổi chữ ghi chú + nhãn nút trong khối 🔳 khi cổng đã lên app – không đổi bố cục, không gửi phiếu agy (agy vắng > 3 giờ).
 
 ### PHIÊN BẢN v2.17.0 – ĐỒNG BỘ "LƯU MÁY ⇄ HUB" CHO DuLieuV2 (21/11/2026, lượt vét hạn mức 22h07)
