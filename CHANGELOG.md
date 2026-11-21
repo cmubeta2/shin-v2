@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.8] – 21/11/2026 (Bộ kiểm thử v2 phần 2 + quét bí mật)
+
+### 🧪 Kiểm thử
+- 6 tệp kiểm mới theo module: `crm.test.js` (giai đoạn pipeline, tuV1, kiemTuongTac, tuổi lead / nhắc), `khaosat.test.js` (kiemKS, cauHinhTu, kiemCau, kiemQuyen, nút trạng thái), `ks_nhapho.test.js` (nhập hộ + trang điền công khai `dienks.js` maHopLe / moTungCau / cauThieu + nguồn QR), `duan.test.js` (tuV1 thoát HTML, Blocker Matrix M6.3, trích bài học M9.4, kiemBaiHoc L28), `tuyensinh.test.js` (chuanSDT, LMS chuyên cần / tiến độ, link bot Telegram, phễu landing), `quet_bi_mat.test.js`.
+- `test/quet_bi_mat.js`: quét bí mật trên dòng thêm mới của `git diff --cached` (hoặc `--tat-ca`) – id Sheet, token h1, khóa API, token Telegram, link /exec mới, SĐT, CCCD, BHYT, STK, PEM; không in nguyên giá trị; bỏ qua có chủ ý bằng `quet:bo-qua`. Rà cả kho: sạch.
+- README mục 5 thêm "Phát triển & kiểm thử". Không phát hiện lỗi mã thật (mọi ca trượt ban đầu do ca kiểm). Tổng **133/133** ca · 13 tệp.
+
+---
+
 ## [2.16.7] – 21/11/2026 (Máy chủ giả khớp hợp đồng L31)
 
 ### 🧪 Kiểm thử
