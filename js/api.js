@@ -94,7 +94,9 @@ const SHIN_API = (function() {
     { loai: 'token Telegram Bot', re: /\b\d{8,10}:[A-Za-z0-9_-]{35}\b/ },
     { loai: 'token đăng nhập', re: /\bh1\.[\w-]+\.[\w-]+\.[\w-]{16,}/ }
   ];
-  const CONG_GHI = /^web(Luu|Ghi|Nop|Gui|Them|Sua|Tao|Duyet|Xoa|Dang|Cap)/;
+  // v2.16.9: thêm Day / Doi / Danh / Nhap / Chuyen / TraLoi (webDayViec, webDoiTrangThai…, webDanhDauLead, webNhapHo,
+  // webChuyenCD, webTraLoiDoiCa trước đây lọt khỏi tường lửa phía trình duyệt – chỉ còn hàm kiểm riêng của màn).
+  const CONG_GHI = /^web(Luu|Ghi|Nop|Gui|Them|Sua|Tao|Duyet|Xoa|Dang|Cap|Day|Doi|Danh|Nhap|Chuyen|TraLoi)/;
   function soatKhongDuaVao(du, truong, sau) {
     sau = sau || 0;
     if (du === null || du === undefined || sau > 6) return null;

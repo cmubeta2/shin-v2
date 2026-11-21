@@ -173,7 +173,8 @@ const ModuleKsNhapHo = {
     const traLoi = this.goiTraLoi(ks.cau, this._tl);
     const loi = this.loiPhieu(ks.cau, traLoi);
     if (loi) { ShinApp.toast(loi, 'warn'); return; }
-    if (ks.demo) { ShinApp.toast('Đang ở Demo – phiếu không được ghi lên app Khảo sát.', 'info'); return; }
+    // v2.16.9: không token cũng là Demo (trước đây SHIN_API.goi trả dữ liệu mẫu ➜ báo "Đã lưu phiếu" giả).
+    if (ks.demo || !SHIN_API.layToken()) { ShinApp.toast('Đang ở Demo – phiếu không được ghi lên app Khảo sát.', 'info'); return; }
     const du = { ma: ks.ma, traLoi, giay: Math.round((Date.now() - this._batDau) / 1000) };
     this._dangGui = true;
     if (nut) nut.disabled = true;
@@ -182,7 +183,9 @@ const ModuleKsNhapHo = {
       thucHien: async () => {
         try {
           const r = await SHIN_API.goi('KS', 'webNhapHo', du);
-          if (!r.ok) throw new Error(SHIN_API.moTaLoi(r));
+          if (r.isDemo) throw new Error('Chưa có máy chủ Khảo sát – phiếu chưa được ghi.');
+          // v2.16.9: v1 webNhapHo chưa chống ghi trùng (không có maGui) ➜ mất mạng giữa chừng thì phiếu CÓ THỂ đã vào.
+          if (!r.ok) throw new Error(r.loi === 'mang' ? 'Mất kết nối khi đang lưu – phiếu có thể đã vào app Khảo sát: kiểm danh sách phiếu trước khi lưu lại (app KS chưa chống ghi trùng).' : SHIN_API.moTaLoi(r));
           const kq = r.data || {};
           if (kq.ok === false) throw new Error(kq.msg || 'App Khảo sát không nhận phiếu.');
           ShinApp.toast('Đã lưu phiếu ' + (kq.maPhieu || '') + ' – form đã xóa để nhập phiếu tiếp.', 'success');
