@@ -1,5 +1,5 @@
 /**
- * SHIN v2.17.0 – ĐỒNG BỘ "lưu máy ⇄ Hub" cho kho dữ liệu dùng chung `DuLieuV2` (HUB L31a/b – Sếp duyệt 21/11,
+ * SHIN v2.17.1 – ĐỒNG BỘ "lưu máy ⇄ Hub" cho kho dữ liệu dùng chung `DuLieuV2` (HUB L31a/b – Sếp duyệt 21/11,
  * hợp đồng HOP_DONG_CONG_V2.md mục DuLieuV2):
  *   webDocDuLieuV2({loai}) ➜ {ok, loai, ds:[{ma, chuSo, noiDung, capNhat, phienBan}]}
  *   webGhiDuLieuV2({loai, ma?, noiDung, phienBan, maGui}) ➜ {ok, ma, phienBan, moi} | {ok:false, loi:'xungDot', ban:{ma, noiDung, phienBan, capNhat, nguoiGhi}}
@@ -11,7 +11,8 @@
  *  - Sửa trên máy ➜ đánh dấu "chưa gửi" ➜ có cổng + có mạng thì gửi sau 1,5 giây (gộp nhiều lần sửa).
  *  - maGui = băm(loai | ma | phienBan | nội dung) – gửi lại sau khi mất trả lời không thành 2 dòng.
  *  - Hub có bản mới hơn mà máy cũng đã sửa (hoặc máy chủ trả xungDot) ➜ HỎI giữ bản nào (Hub / máy này).
- * Mỗi `loai` = 1 dòng (1 kho) của module: baiViet ⇐ shin_mkt_bai · chiSoKenh ⇐ shin_mkt_hs · diemDanh ⇐ shin_lms.
+ * Mỗi `loai` = 1 dòng (1 kho) của module: baiViet ⇐ shin_mkt_bai · chiSoKenh ⇐ shin_mkt_hs · diemDanh ⇐ shin_lms
+ *   · taiKhoanQR ⇐ shin_vietqr_tk (v2.17.1 – Kế toán / Admin đọc, CHỈ Admin ghi ➜ người khác dùng tuyChon.chiDoc).
  */
 const ShinDongBo = (() => {
   const KHOA_META = 'shin_dbv2_meta';
@@ -102,7 +103,8 @@ const ShinDongBo = (() => {
   }
 
   /** Đồng bộ 1 kho: đọc Hub ➜ chonViec ➜ tải về / gửi lên / hỏi xung đột. ➜ {trangThai, doi?} */
-  async function dongBo(loai, khoa) {
+  async function dongBo(loai, khoa, tuyChon) {
+    const chiDoc = !!(tuyChon && tuyChon.chiDoc);
     if (!coTheGoi()) return { trangThai: 'may' };
     const kq = await SHIN_API.goi('HUB', 'webDocDuLieuV2', { loai });
     if (!kq.ok) return loiGoi(kq);
@@ -113,6 +115,9 @@ const ShinDongBo = (() => {
     const r = (m.ma && ds.find(x => x && x.ma === m.ma)) || ds[0] || null;
     const may = docJSON(khoa, null);
     const q = chonViec(m, r, may);
+    // v2.17.1 chiDoc (không có quyền ghi): không gửi, không hỏi xung đột – máy khác Hub thì giữ bản máy, báo 'khacHub'.
+    if (chiDoc && (q.viec === 'guiMoi' || q.viec === 'guiSua')) return { trangThai: 'may' };
+    if (chiDoc && q.viec === 'xungDot') return { trangThai: 'khacHub' };
     if (q.viec === 'giu') return { trangThai: 'dongBo' };
     if (q.viec === 'nhan') { datMeta(loai, { ma: r.ma, phienBan: Number(r.phienBan) || 1, chuaGui: false }); return { trangThai: 'dongBo' }; }
     if (q.viec === 'layMayChu') {
@@ -136,10 +141,10 @@ const ShinDongBo = (() => {
   }
 
   /** Gọi khi mở màn: đồng bộ 1 lần / phiên cho mỗi loai; Hub có bản khác ➜ khiDoi() để vẽ lại. */
-  function khiMo(loai, khoa, khiDoi) {
+  function khiMo(loai, khoa, khiDoi, tuyChon) {
     if (daMo[loai] || !coTheGoi()) return;
     daMo[loai] = true;
-    dongBo(loai, khoa).then(kq => baoKq(kq, khiDoi)).catch(() => {});
+    dongBo(loai, khoa, tuyChon).then(kq => baoKq(kq, khiDoi)).catch(() => {});
   }
 
   function baoKq(kq, khiDoi) {

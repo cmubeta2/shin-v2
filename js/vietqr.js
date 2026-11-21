@@ -5,6 +5,9 @@
  *   (không lộ số tài khoản / số tiền ra máy chủ thứ ba).
  * - Số tài khoản do người dùng nhập, chỉ lưu localStorage máy này (khóa shin_vietqr_tk) – KHÔNG có trong repo,
  *   không nằm trong mã cấu hình SHINCFG1 (danh sách khóa trắng).
+ * - v2.17.1 (HUB L31 DuLieuV2 `taiKhoanQR`, sau cờ): Admin lưu ➜ ghi thêm lên Hub cho Kế toán dùng chung; Kế toán mở khối
+ *   ➜ máy trống thì tải bản Hub về (chỉ đọc, không hỏi xung đột). Cổng chưa lên app ➜ y như cũ (chỉ lưu máy này).
+ *   Số TK mà tường lửa Hub sẽ chặn (dạng SĐT / CCCD – hubChan) ➜ không gửi, chỉ lưu máy này.
  * - Chưa xác nhận đã nhận tiền: Còn chờ v1 (webhook SePay).
  */
 const ShinVietQR = (function() {
@@ -205,10 +208,28 @@ const ShinVietQR = (function() {
     ['970443', 'SHB'], ['970437', 'HDBank'], ['970448', 'OCB'], ['970426', 'MSB'], ['970440', 'SeABank'], ['970431', 'Eximbank'], ['970449', 'LPBank']];
   const docTK = () => { try { const o = JSON.parse(localStorage.getItem(KHOA) || 'null'); return o && o.bin && o.soTK ? o : null; } catch (e) { return null; } };
   const an = tk => '•••• ' + String(tk).slice(-4);
+  const LOAI_DB = 'taiKhoanQR';
+  const coDB = () => typeof ShinDongBo !== 'undefined';
+  const laAdmin = () => typeof ShinApp !== 'undefined' && !!(ShinApp.live && ShinApp.live.laAdminHub);
+  /** THUẦN. Lý do tường lửa Hub (v1 chanDuLieuNhayCam_ / v2 MAU_CAM) sẽ chặn số TK này, '' nếu gửi được. */
+  function hubChan(soTK) {
+    const s = String(soTK || '').replace(/\s+/g, '');
+    if (/^(0|\+?84)\d{9}$/.test(s)) return 'giống số điện thoại';
+    if (/^\d{12}$/.test(s)) return 'giống số CCCD';
+    return '';
+  }
+  /** Dòng ghi chú nơi lưu: Hub (khi đã đồng bộ) hoặc máy này. */
+  function noiLuu() {
+    const n = coDB() ? ShinDongBo.nhan(LOAI_DB) : '';
+    return n ? n.replace('(dùng chung cả nhóm)', '(Kế toán dùng chung)') : 'chỉ lưu trên máy này';
+  }
+  const ghiHub = () => coDB() && laAdmin() && ShinDongBo.trangThaiCong() !== 'chuaCo' && typeof SHIN_API !== 'undefined' && SHIN_API.laCheDoLive();
 
   function veKhoi() {
     const e = ShinApp.esc, tk = docTK();
     const ten = tk ? ((NGAN_HANG.find(x => x[0] === tk.bin) || [])[1] || 'BIN ' + tk.bin) : '';
+    if (coDB()) ShinDongBo.khiMo(LOAI_DB, KHOA, lamMoi, { chiDoc: !laAdmin() });   // 1 lần / phiên, sau cờ
+    const hub = ghiHub();
     return `
       <details class="tq-gon" id="qrKhoi">
         <summary><span>🔳 Mã VietQR nhận tiền (M3.1)</span></summary>
@@ -219,12 +240,12 @@ const ShinVietQR = (function() {
               <div class="tc-tk-thongtin">
                 <div class="tc-tk-nganhang">${e(ten)}</div>
                 <div class="tc-tk-so">${e(an(tk.soTK))}</div>
-                <div class="chu-phu">${e(tk.chuTK || '')} · chỉ lưu trên máy này</div>
+                <div class="chu-phu">${e(tk.chuTK || '')} · ${e(noiLuu())}</div>
               </div>
             </div>
             <button class="btn-secondary tc-btn-doi-tk" onclick="ShinVietQR.doiTK()">Đổi</button>
           </div>` : `
-          <p class="chu-phu">Nhập tài khoản nhận tiền 1 lần – chỉ lưu trên máy này, không gửi đi đâu.</p>
+          <p class="chu-phu">${hub ? 'Nhập tài khoản nhận tiền 1 lần – lưu trên máy này và ghi lên Hub cho Kế toán dùng chung (chỉ Admin được sửa).' : 'Nhập tài khoản nhận tiền 1 lần – chỉ lưu trên máy này, không gửi đi đâu.'}</p>
           <div class="tc-form-nhom">
             <label class="nhan-o" for="qrBin">Ngân hàng *</label>
             <select id="qrBin" class="form-input"><option value="">– Chọn ngân hàng –</option>${NGAN_HANG.map(x => `<option value="${x[0]}">${e(x[1])}</option>`).join('')}</select>
@@ -239,7 +260,7 @@ const ShinVietQR = (function() {
               <input id="qrChu" class="form-input" maxlength="60" autocomplete="off" placeholder="VD: NGUYEN VAN A">
             </div>
           </div>
-          <button class="btn-secondary tc-btn-chinh" onclick="ShinVietQR.luuTK()">💾 Lưu trên máy này</button>`}
+          <button class="btn-secondary tc-btn-chinh" onclick="ShinVietQR.luuTK()">${hub ? '💾 Lưu (máy này + Hub)' : '💾 Lưu trên máy này'}</button>`}
           <div class="tc-form-hang-doi">
             <div class="tc-form-nhom">
               <label class="nhan-o" for="qrTien">Số tiền (đ) – bỏ trống để người chuyển tự nhập</label>
@@ -263,7 +284,10 @@ const ShinVietQR = (function() {
     const kt = chuoiVietQR({ bin: o.bin, soTK: o.soTK });
     if (kt.loi) return ShinApp.toast(kt.loi, 'error');
     try { localStorage.setItem(KHOA, JSON.stringify(o)); } catch (e) { return ShinApp.toast('Trình duyệt không cho lưu – vẫn tạo mã được ở lần này.', 'error'); }
-    ShinApp.toast('Đã lưu tài khoản trên máy này.', 'success');
+    const chan = hubChan(o.soTK);
+    if (ghiHub() && !chan) { ShinDongBo.danhDau(LOAI_DB, KHOA, lamMoi); ShinApp.toast('Đã lưu trên máy này – đang ghi lên Hub cho Kế toán.', 'success'); }
+    else if (ghiHub()) ShinApp.toast(`Đã lưu trên máy này. Hub chưa nhận số TK ${chan} (tường lửa) – còn chờ v1 miễn trường này.`, 'info');
+    else ShinApp.toast('Đã lưu tài khoản trên máy này.', 'success');
     lamMoi();
   }
 
@@ -309,5 +333,5 @@ const ShinVietQR = (function() {
       </div>`;
   }
 
-  return { maHoa, chuoiVietQR, crc16, noiDungSach, svg, veKhoi, luuTK, doiTK, taoMa, _nb: { nhanGF, duRS, boChiaRS, viTriCanChinh } };
+  return { maHoa, chuoiVietQR, crc16, noiDungSach, svg, veKhoi, luuTK, doiTK, taoMa, hubChan, _nb: { nhanGF, duRS, boChiaRS, viTriCanChinh } };
 })();

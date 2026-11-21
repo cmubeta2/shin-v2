@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.17.1] – 21/11/2026 (💰 VietQR dùng chung qua Hub – `taiKhoanQR`, sau cờ)
+
+### ✨ Tính năng (sau cờ – cổng HUB L31 chưa lên app thì giữ nguyên "chỉ lưu trên máy này")
+- 🔳 Mã VietQR (M3.1): Admin lưu tài khoản nhận tiền ➜ lưu máy + ghi lên Hub (`DuLieuV2` loại `taiKhoanQR`); Kế toán mở khối ➜ máy trống thì tải bản Hub về. Nhãn nút / ghi chú đổi theo nơi lưu.
+- `ShinDongBo.dongBo` / `khiMo` nhận `{chiDoc:true}` cho người không có quyền ghi: không gửi, không hỏi xung đột; máy có tài khoản riêng khác Hub ➜ giữ bản máy (`khacHub`).
+- `ShinVietQR.hubChan` (THUẦN): số TK dạng SĐT (0/84 + 9 số) hoặc 12 số (giống CCCD) sẽ bị tường lửa Hub chặn ➜ không gửi, toast "còn chờ v1 miễn trường này".
+
+### 🧪 Kiểm
+- `test/dongbo.test.js` +4 ca ➜ `node test/chay.js` **233/233**.
+
 ## [2.17.0] – 21/11/2026 (Đồng bộ "lưu máy ⇄ Hub" cho kho DuLieuV2 – dựng sẵn HUB L31)
 
 ### ✨ Tính năng (sau cờ – cổng chưa lên app thì giữ nguyên hành vi cũ)

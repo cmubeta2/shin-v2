@@ -168,3 +168,56 @@ kiem('📣 Marketing ghiKho / ghiHS + 🎓 LMS ghiLms ➜ đánh dấu chưa g�
   assert.strictEqual(meta.baiViet.chuaGui, true); assert.strictEqual(meta.chiSoKenh.chuaGui, true); assert.strictEqual(meta.diemDanh.chuaGui, true);
   assert.strictEqual(toast.length, 0); assert.strictEqual(mc.nhatKy.length, 1);
 });
+
+mo('🔄 Đồng bộ DuLieuV2 – 💰 VietQR taiKhoanQR (v2.17.1: Kế toán đọc, chỉ Admin ghi)');
+function mayQR(mc, token, admin, o) {
+  const app = napApp(['js/api.js', 'js/dongbo_v2.js', 'js/vietqr.js'], { fetch: mc.fetch });
+  app.localStorage.setItem('shin_token', token);
+  const toast = []; app.ShinApp.toast = (m, l) => toast.push([m, l]);
+  app.ShinApp.live = { laAdminHub: !!admin };
+  const o2 = o || {};
+  app.document.getElementById = id => (id === 'qrKhoi' ? null : { value: o2[id] || '' });
+  return { app, toast, DB: app.lay('ShinDongBo'), QR: app.lay('ShinVietQR'),
+    doc: () => JSON.parse(app.localStorage.getItem('shin_vietqr_tk') || 'null'),
+    meta: () => (JSON.parse(app.localStorage.getItem('shin_dbv2_meta') || '{}')).taiKhoanQR || {} };
+}
+const TK13 = '1' + '2'.repeat(12), TK_SDT = '09' + '1'.repeat(8), TK12 = '3'.repeat(12);
+kiem('hubChan THUẦN: dạng SĐT / CCCD ➜ có lý do; 13 số / 8 số ➜ ""', () => {
+  const { QR } = mayQR(taoMayChuGia(), 'admin', true);
+  assert.ok(QR.hubChan(TK_SDT).indexOf('điện thoại') >= 0);
+  assert.ok(QR.hubChan('84' + '1'.repeat(9)).indexOf('điện thoại') >= 0);
+  assert.ok(QR.hubChan(TK12).indexOf('CCCD') >= 0);
+  assert.strictEqual(QR.hubChan(TK13), ''); assert.strictEqual(QR.hubChan('12345678'), '');
+});
+kiem('Admin lưu ➜ đánh dấu chưa gửi ➜ đồng bộ ghi 1 dòng Hub; Kế toán (chiDoc) máy trống ➜ tải về', async () => {
+  const mc = taoMayChuGia();
+  const A = mayQR(mc, 'admin', true, { qrBin: '970436', qrTK: TK13, qrChu: 'Nguyen Van A' });
+  A.QR.luuTK();
+  assert.strictEqual(A.meta().chuaGui, true); assert.strictEqual(A.toast[0][1], 'success');
+  const r = await A.DB.dongBo('taiKhoanQR', 'shin_vietqr_tk');
+  assert.strictEqual(r.trangThai, 'daGui', JSON.stringify(r)); assert.strictEqual(mc.so.duLieuV2.length, 1);
+  assert.strictEqual(mc.so.duLieuV2[0].noiDung.soTK, TK13);
+  const K = mayQR(mc, 'tok-kt', false);
+  const r2 = await K.DB.dongBo('taiKhoanQR', 'shin_vietqr_tk', { chiDoc: true });
+  assert.strictEqual(r2.trangThai, 'daTai'); assert.deepStrictEqual(K.doc(), A.doc());
+});
+kiem('chiDoc: máy có TK riêng khác Hub ➜ "khacHub", KHÔNG hỏi, KHÔNG ghi, giữ bản máy; máy có TK mà Hub trống ➜ không gửi', async () => {
+  const mc = taoMayChuGia();
+  const A = mayQR(mc, 'admin', true, { qrBin: '970436', qrTK: TK13 }); A.QR.luuTK(); await A.DB.dongBo('taiKhoanQR', 'shin_vietqr_tk');
+  const K = mayQR(mc, 'tok-kt', false);
+  K.DB.datHoi(() => { throw new Error('không được hỏi'); });
+  K.app.localStorage.setItem('shin_vietqr_tk', JSON.stringify({ bin: '970418', soTK: '9'.repeat(13), chuTK: '' }));
+  const ghiTruoc = mc.nhatKyGhi.length;
+  const r = await K.DB.dongBo('taiKhoanQR', 'shin_vietqr_tk', { chiDoc: true });
+  assert.strictEqual(r.trangThai, 'khacHub'); assert.strictEqual(K.doc().bin, '970418'); assert.strictEqual(mc.nhatKyGhi.length, ghiTruoc);
+  const mc2 = taoMayChuGia(); const K2 = mayQR(mc2, 'tok-kt', false);
+  K2.app.localStorage.setItem('shin_vietqr_tk', JSON.stringify({ bin: '970418', soTK: TK13 }));
+  assert.strictEqual((await K2.DB.dongBo('taiKhoanQR', 'shin_vietqr_tk', { chiDoc: true })).trangThai, 'may');
+  assert.strictEqual(mc2.nhatKyGhi.length, 0);
+});
+kiem('Admin lưu số TK dạng SĐT ➜ chỉ lưu máy, KHÔNG đánh dấu gửi, toast báo còn chờ v1', () => {
+  const A = mayQR(taoMayChuGia(), 'admin', true, { qrBin: '970422', qrTK: TK_SDT });
+  A.QR.luuTK();
+  assert.strictEqual(A.doc().soTK, TK_SDT); assert.notStrictEqual(A.meta().chuaGui, true);
+  assert.strictEqual(A.toast[0][1], 'info'); assert.ok(A.toast[0][0].indexOf('chờ v1') >= 0);
+});
