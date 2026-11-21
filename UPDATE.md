@@ -1,19 +1,27 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.15.0** · Cập nhật ngày: **16/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.16.1** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
 
 ---
 
-## 0. VIỆC CÒN CHỜ CHO TUẦN 16–22/11 (gom 14/11, sau RC v2.14.1)
-- **Còn chờ v1 (cần cổng mới ở máy chủ v1):** giờ vào/ra PTKH ➜ M3.5 + M5.4 xuất TC-NS · SePay webhook xác nhận thanh toán ➜ M3.1 · đăng tự động 1 chạm + thu `lead_web` ➜ M8.5 · ~~Task Event Bus ➜ M7.1~~ ✅ v2.15.0 (HUB L27 đã lên app 12/11) · cổng đọc nhật ký `_TacVu` ➜ M1.6 · chỉ số cả tổ (Morale / NTC cả tổ M5.5–M5.6) – Sếp chốt KHÔNG làm.
-- **Chờ anh quyết:** (1) 🌐 `js/modules/web.js` nạp vào app hay bỏ tệp (tính năng web hiện ở 📣 Marketing M8.5); (2) khóa site Turnstile cho trang điền KS công khai; (3) trộn PR nếu tự trộn bị chặn.
-- **Chờ anh thử 1 lần bằng token thật (lượt tự động không có token):** gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠, HUB L28) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝) · quét 1 QR khảo sát bằng điện thoại · kết nối Telegram mã ghép.
-- **Nợ kỹ thuật để tuần sau (không chặn RC):** ~~nhập hộ phiếu giấy KS (`webNhapHo`)~~ đã có từ v2.13.16 (🩺 › 🛠️ › 📝 Nhập hộ – ghi chú cũ) · ~~KS hiện 1 câu / trang (`moiTrang`)~~ ✅ v2.14.8.
-- **Giao diện:** agy đã rà 375 + 1280 mọi màn (3 phiếu 14/11 07h, ĐẠT) và kiểm lại 4 màn sửa ở v2.14.1 (ĐẠT, UX TB 9.9) ➜ mục "Chờ anh rà UX bằng mắt" của v2.14.0 đã đóng.
+## 0. VIỆC TUẦN 23–29/11 (Sếp "Duyệt tất cả" kế hoạch cải thiện 21/11 – QUYET_DINH.md mục 21/11)
+- **Nhóm A – ⑤ v2 tự làm (không cần cổng v1):**
+  - ✅ v2.16.1 bỏ `js/modules/web.js` (tính năng web đã ở 📣 Marketing M8.5) · dọn nhánh `shin/v2-auto-*` đã trộn.
+  - ⬜ Bộ kiểm thử `test/` chạy bằng `node` cho các hàm THUẦN (VietQR, hoa hồng, lệch dự toán, `kiemViec`, tường lửa M9.5, `maTuNguon`, phân luồng lead…).
+  - ⬜ Máy chủ giả đủ cổng ghi, đúng khuôn trả về của `Loi_Web.gs` – để lượt tự động tự thử luồng ghi không cần token thật.
+- **Nhóm B – 5 cổng v1 mới ĐÃ DUYỆT 21/11 (luồng v1 làm trước, v2 nối màn khi lên app; hợp đồng ở HOP_DONG_CONG_V2.md):**
+  - LOI L8 `chanDuLieuNhayCam_` – tường lửa phía máy chủ ➜ v2 🛡️ M9.5 (giữ chặn sớm phía trình duyệt, hiện nguyên câu lỗi máy chủ).
+  - HUB L31 kho dữ liệu dùng chung `DuLieuV2` ➜ v2 📣 M8.1–M8.6 (lịch, bài, duyệt, báo cáo) · 🎓 M4.5 LMS · 💰 M3.1 cấu hình VietQR – chuyển từ "lưu trên máy" sang lưu Hub.
+  - HUB L32 cổng đọc nhật ký `_TacVu` ➜ v2 🏠 M1.6 màn nhật ký động cơ tự động.
+  - HUB L33 `webTimTriThuc` + `webDoThiTriThuc` ➜ v2 🧠 M9.2 tìm toàn văn + M9.3 đồ thị liên kết (thay dữ liệu MẪU).
+  - PTKH L581 (đề ghi L580 – đổi số vì trùng) cổng CHỈ ĐỌC giờ công / tăng ca ➜ v2 👥 M5.4 + 💰 M3.5 xuất TC-NS.
+- **Nhóm C – anh làm:** (1) thử 7 luồng ghi v2 bằng token thật: gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠 HUB L28) · đẩy việc Task Bus (📋 / 🗂️ Dự án) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝) · kết nối Telegram mã ghép; (2) V20 Menu Button Telegram; (3) chọn 1 tổ dùng thử (PK L6).
+- **Để sau:** SePay webhook xác nhận thanh toán (M3.1) – anh tự liên kết. Khóa site Turnstile cho trang điền KS công khai vẫn chờ anh.
+- **KHÔNG làm (Sếp chốt):** chỉ số cả tổ ẩn danh (Morale / NTC cả tổ M5.5–M5.6).
 
 ---
 
@@ -34,6 +42,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.16.1 – DỌN SỔ NHÓM A PHẦN 1: BỎ `web.js` (21/11/2026, lượt vét ⑤ 13h)
+- **Nguồn:** Sếp 21/11 "Duyệt tất cả" kế hoạch cải thiện SHIN v2 (QUYET_DINH.md mục 21/11) – nhóm A: bỏ `js/modules/web.js`, viết lại mục 0 cho tuần 23–29/11, dọn nhánh đã trộn.
+- **Đã làm:** xóa `js/modules/web.js` (chưa từng nạp vào app – không có trong `index.html` / `VO_APP` của `sw.js`; tính năng web ở 📣 Marketing M8.5). Sửa `ModuleCongViec.MANG_SO` mảng 8 trỏ `'web'` (module không tồn tại) ➜ `'marketing'` – việc Task Bus nguồn "Mảng 8" nay phân luồng đúng 📣 Marketing. Tăng `PHIEN_BAN_SW` ➜ `shin-v2.16.1` cho máy cũ tải lại vỏ app. Mục 0 viết lại thành VIỆC TUẦN 23–29/11; gỡ mục "Chờ anh quyết web.js". QUY_HOACH: M1.6 / M3.5 / M4.5 / M5.4 / M8.x / M9.2 / M9.3 / M9.5 ghi "cổng v1 đã duyệt 21/11" thay chữ "Còn chờ v1".
+- **Dọn nhánh:** xóa 3 nhánh `shin/v2-auto-*` đã trộn còn sót trên GitHub (0611-0412, 0711-1856, 0711-2007) + bản cục bộ; các nhánh khác đã tự xóa khi trộn PR. GIỮ 5 nhánh CHƯA trộn (0411-1618, 0411-1819, 0411-1919, 0511-1020, 0511-1221 – bản cũ trước v2.5, không có PR mở) – Chờ anh: bỏ hay giữ.
+- **Kiểm:** node --check `js/app.js`, `sw.js`, `js/modules/congviec.js`; quét bí mật trên diff. Giao diện không đổi.
 
 ### PHIÊN BẢN v2.16.0 – M6.3 BLOCKER MATRIX ➜ TASK BUS 🟢 (21/11/2026, lượt tự động ⑤ 11h)
 - **Nguồn:** QUY_HOACH M6.3 ghi "➜ Task Bus tạm sao chép" vì M7.1 chưa có máy chủ; nay HUB L27 (`webDayViec`) đã nối ở v2.15.0 ➜ gỡ phần tạm. Không cần cổng v1 mới.

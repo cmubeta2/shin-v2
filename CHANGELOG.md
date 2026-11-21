@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.1] – 21/11/2026 (Dọn sổ nhóm A phần 1 – bỏ web.js)
+
+### 🧹 Dọn dẹp
+- Bỏ `js/modules/web.js` (🌐 Xưởng Web chưa từng nạp vào app; tính năng đã ở 📣 Marketing M8.5) – Sếp duyệt 21/11. Tăng phiên bản service worker để máy cũ tải lại vỏ app.
+
+### 🐛 Sửa lỗi
+- 📋 Công việc: việc Task Bus có nguồn "Mảng 8" trỏ tới module `web` không tồn tại ➜ nay trỏ 📣 Marketing (phân luồng theo quyền đúng).
+
+---
+
 ## [2.16.0] – 21/11/2026 (M6.3 Blocker Matrix ➜ Task Bus 🟢)
 
 ### ✨ Tính năng

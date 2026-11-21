@@ -45,7 +45,7 @@ const ModuleCongViec = {
 
   /* v2.9.1 (M7.3) – Phân luồng việc theo RBAC PHÍA TRÌNH DUYỆT: việc thuộc mảng người dùng không được vào (cùng luật ẩn menu
      ShinApp.mangDuocHien = chốt chặn quyền của mã v1) bị ẩn; chip "👤 Của tôi" lọc việc giao đúng tên / mã người đang đăng nhập. */
-  MANG_SO: { 1: 'hub', 2: 'crm', 3: 'taichinh', 4: 'tuyensinh', 5: 'phongkham', 6: 'duan', 7: 'congviec', 8: 'web', 9: 'trithuc' },
+  MANG_SO: { 1: 'hub', 2: 'crm', 3: 'taichinh', 4: 'tuyensinh', 5: 'phongkham', 6: 'duan', 7: 'congviec', 8: 'marketing', 9: 'trithuc' },
   _luong: '',
 
   /** THUẦN. Nguồn việc ("Mảng 6 (Dự án)", "Tầng 0 (Core)", "0B …") ➜ mã module, '' nếu không rõ. */
