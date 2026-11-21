@@ -100,6 +100,13 @@ Mở trực tiếp đường dẫn: `https://cmubeta2.github.io/shin-v2/`
 - Ứng dụng chuyển sang `🟢 Live` và lấy số thật từ các máy chủ v1: **Hub** (Hôm nay, Thông báo, Việc riêng), **KPI** (Bản tin tạm tính), **Tuyển sinh** (Chiến dịch, Lead). Mảng chưa có cổng số liệu trên v1 vẫn hiện mẫu, có dải báo vàng ở đầu màn.
 - Token ở `?t=` được lưu vào máy rồi tự xóa khỏi thanh địa chỉ.
 
+### Phát triển & kiểm thử (bắt buộc trước khi đẩy)
+Chỉ cần Node (không cài gói, không trình duyệt, không token, không gọi mạng):
+1. `node --check <tệp js đã sửa>`
+2. `node test/chay.js` – chạy mọi `test/*.test.js` (hàm THUẦN của từng module + luồng ghi qua máy chủ Hub giả `test/may_chu_gia.js`). In `KET_QUA: N/N đạt`; có ca trượt ➜ mã thoát 1. Lọc 1 nhóm: `node test/chay.js crm`.
+3. `git add …` rồi `node test/quet_bi_mat.js` – quét các dòng thêm mới trong `git diff --cached`: id Google Sheet, token Hub `h1.…`, khóa API, token Telegram, link `/exec` mới, SĐT, CCCD, BHYT, số tài khoản ngân hàng. Rà cả kho: `node test/quet_bi_mat.js --tat-ca`. Vi phạm ➜ mã thoát 1, không đẩy.
+- Thêm module / hàm THUẦN mới ➜ thêm ca vào `test/<module>.test.js` (khung `mo('nhóm')` + `kiem('ca', () => assert…)`, nạp tệp bằng `napApp([...])`). Dữ liệu giả giống SĐT / CCCD phải ghép chuỗi lúc chạy (`'09' + '00…'`), không viết liền trong mã.
+
 ---
 
 ## 6. THÔNG TIN BẢN QUYỀN

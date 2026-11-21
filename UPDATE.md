@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.16.7** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.16.8** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -13,6 +13,9 @@
   - ✅ v2.16.1 bỏ `js/modules/web.js` (tính năng web đã ở 📣 Marketing M8.5) · dọn nhánh `shin/v2-auto-*` đã trộn.
   - ✅ v2.16.2 bộ kiểm thử `test/` (`node test/chay.js`, 41 ca: VietQR, lệch dự toán, đề xuất chi / tạm ứng / thanh toán, hoa hồng, `kiemViec`, SLA, `maTuNguon`, `laCuaToi`, phân luồng RBAC + lead, tường lửa M9.5, vướng mắc ➜ Task Bus, Marketing).
   - ✅ v2.16.3 máy chủ Hub giả `test/may_chu_gia.js` (giao thức `cuaWebPost_`, 9 cổng ghi / đọc: L26 đề xuất chi, L27 Task Bus, L28 bài học, L29 CRM, L31 DuLieuV2) + `test/luong_ghi.test.js` 12 ca – lượt tự động tự thử luồng ghi không cần token thật.
+  - ✅ v2.16.8 bộ kiểm thử phần 2: 6 tệp module mới + `test/quet_bi_mat.js` (quét bí mật `git diff --cached`).
+  - **Kiểm thử: `node test/chay.js` – 133 ca** (13 tệp, mã thoát 1 khi trượt) · quét bí mật: `node test/quet_bi_mat.js` sau `git add`.
+  - **Chờ anh duyệt:** thêm vào SKILL ⑤ mục 4 bước "(1b) `node test/chay.js` phải N/N ĐẠT + (3) chạy `node test/quet_bi_mat.js` thay quét tay" – em KHÔNG tự sửa SKILL.
 - **Nhóm B – 5 cổng v1 mới ĐÃ DUYỆT 21/11 (luồng v1 làm trước, v2 nối màn khi lên app; hợp đồng ở HOP_DONG_CONG_V2.md):**
   - LOI L8 `chanDuLieuNhayCam_` – tường lửa phía máy chủ ➜ v2 🛡️ M9.5 (giữ chặn sớm phía trình duyệt, hiện nguyên câu lỗi máy chủ).
   - HUB L31 kho dữ liệu dùng chung `DuLieuV2` ➜ v2 📣 M8.1–M8.6 (lịch, bài, duyệt, báo cáo) · 🎓 M4.5 LMS · 💰 M3.1 cấu hình VietQR – chuyển từ "lưu trên máy" sang lưu Hub.
@@ -42,6 +45,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.16.8 – BỘ KIỂM THỬ v2 PHẦN 2 + QUÉT BÍ MẬT (21/11/2026, lượt vét hạn mức 18h27)
+- **Nguồn:** Nhóm A phần 2 (Sếp "Duyệt tất cả" kế hoạch cải thiện 21/11).
+- **Nội dung:** thêm 6 tệp kiểm module (CRM, Khảo sát, Nhập hộ KS + dienks + QR nguồn, Dự án, Tuyển sinh + LMS + Cài đặt + Phễu landing, trình quét) – gom các kịch bản hàm thuần các lượt trước viết tạm (dienks 7 ca, duan, crm k1–k9) thành ca cố định; `test/quet_bi_mat.js` quét `git diff --cached` / `--tat-ca`; README mục 5 thêm bước kiểm.
+- **Kiểm:** `node test/chay.js` ➜ **133/133** đạt (13 tệp); `node test/quet_bi_mat.js --tat-ca` ➜ sạch (2 dương tính giả ban đầu – SĐT mẫu dãy 12345678 ở UPDATE.md, mã `GV…` ở demo_data – đã chỉnh luật). Không có lỗi mã thật ➜ không sửa mã app.
+- **Giao diện:** không đổi màn (chỉ thêm test) – không cần phiếu agy.
 
 ### PHIÊN BẢN v2.16.7 – MÁY CHỦ GIẢ KHỚP HỢP ĐỒNG L31 (21/11/2026, lượt tự động ⑤ 16h)
 - **Nguồn:** rà lại `test/may_chu_gia.js` (v2.16.3) với HOP_DONG_CONG_V2.md mục `DuLieuV2` trước khi nối màn – nhánh xung đột lệch hợp đồng.
