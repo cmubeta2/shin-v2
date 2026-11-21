@@ -6,6 +6,8 @@
  * tính liên kết ra / liên kết ngược (backlinks) / liên kết treo (chưa có bài), vẽ SVG vòng tròn, bấm tài liệu mở khung chi tiết.
  * v2.13.2 (M9.1 🟢): Live đọc thật HUB L28a `webTriThuc(token, {})` (Hub v1.18.5) ➜ {capNhat, taiLieu:[{ma, ten, linhVuc, capNhat,
  *   dinhDang, tomTat, lienKet, duongDan}], baiHoc:[], loi?} – chỉ mục 05_TriThuc do máy anh đồng bộ. Lỗi / chưa có chỉ mục ➜ báo đỏ, không thay số mẫu.
+ * v2.16.4 (M9.2 / M9.3): nối sẵn HUB L33 – đồ thị `webDoThiTriThuc` (đọc song song lúc tải) + tìm `webTimTriThuc` (hoãn 500ms, gộp với lọc
+ *   trên máy). Cổng chưa lên app / lỗi ➜ dải vàng "Còn chờ v1", vẫn tìm + vẽ trên máy từ chỉ mục thật (không dùng số mẫu).
  * v2.13.22: bỏ chữ cũ "Còn chờ v1: ghi bài học" – HUB L28 đã lên app đủ (v1.21.1 @21), ghi bài học ở 📁 Dự án từ v2.13.10.
  */
 
@@ -17,10 +19,35 @@ const ModuleTriThuc = {
   mayChu: 'HUB',
 
   taiLive: async function() {
-    const kq = await SHIN_API.goi('HUB', 'webTriThuc', {});
+    // v2.16.4: đọc đồ thị phía máy chủ (HUB L33) song song – lỗi / chưa lên app ➜ tự tính trên máy như cũ.
+    const [kq, dthi] = await Promise.all([SHIN_API.goi('HUB', 'webTriThuc', {}), SHIN_API.goi('HUB', 'webDoThiTriThuc', {})]);
     if (!kq.ok) return kq;
-    const d = kq.data || {};
-    return { ok: true, data: { live: true, capNhat: String(d.capNhat || ''), taiLieu: Array.isArray(d.taiLieu) ? d.taiLieu : [], loi: d.loi || '' } };
+    const d = kq.data || {}, g = dthi.ok ? (dthi.data || {}) : null;
+    return { ok: true, data: { live: true, capNhat: String(d.capNhat || ''), taiLieu: Array.isArray(d.taiLieu) ? d.taiLieu : [], loi: d.loi || '',
+      doThi: g && Array.isArray(g.canh) && !g.loi ? g : null, congL33: dthi.ok ? (g && g.loi ? 'loi' : 'ok') : (dthi.loi || 'loi') } };
+  },
+
+  /** THUẦN – v2.16.4 HUB L33: webDoThiTriThuc {nut, canh:[{tu, den}], treo:[{tu, den}]} ➜ khuôn của phanTichLienKet.
+   *  Chỉ giữ cạnh có cả 2 đầu trong ds; bỏ tự trỏ, bỏ trùng. */
+  tuDoThiMayChu: function(du, ds) {
+    const ra = {}, vao = {}, treo = {}, canh = [], co = {};
+    (ds || []).forEach(t => { ra[t.ma] = []; vao[t.ma] = []; treo[t.ma] = []; co[t.ma] = 1; });
+    const s = v => String(v == null ? '' : v).trim();
+    ((du && du.canh) || []).forEach(c => { const a = s(c && c.tu), b = s(c && c.den);
+      if (!co[a] || !co[b] || a === b || ra[a].includes(b)) return; ra[a].push(b); vao[b].push(a); canh.push([a, b]); });
+    ((du && du.treo) || []).forEach(c => { const a = s(c && c.tu), x = s(c && c.den); if (co[a] && x && !treo[a].includes(x)) treo[a].push(x); });
+    return { ra, vao, treo, canh };
+  },
+
+  /** THUẦN – v2.16.4 HUB L33: gộp kết quả webTimTriThuc (ds [{ma, diem}] đã xếp) với kết quả lọc trên máy.
+   *  Tài liệu máy chủ trả (có trong dsDu, đúng lĩnh vực) lên trước theo thứ tự máy chủ – kể cả bài chỉ khớp ở lienKet;
+   *  sau đó các bài lọc trên máy còn lại, giữ thứ tự cũ. */
+  hopKetQua: function(dsLoc, dsMayChu, dsDu, linhVuc) {
+    const theoMa = {}, da = {}, ra = [];
+    (dsDu || []).forEach(t => { theoMa[t.ma] = t; });
+    (dsMayChu || []).forEach(x => { const t = x && theoMa[x.ma]; if (t && !da[t.ma] && (!linhVuc || t.linhVuc === linhVuc)) { da[t.ma] = 1; ra.push(t); } });
+    (dsLoc || []).forEach(t => { if (!da[t.ma]) { da[t.ma] = 1; ra.push(t); } });
+    return ra;
   },
 
   _ds: [],
@@ -110,7 +137,9 @@ const ModuleTriThuc = {
     this._live = !!d.live;
     this._loi = d.loi || '';
     this._ds = d.taiLieu || [];
-    this._dt = this.phanTichLienKet(this._ds);
+    this._congL33 = d.live ? (d.congL33 || '') : '';
+    this._kqMayChu = null;
+    this._dt = d.doThi ? this.tuDoThiMayChu(d.doThi, this._ds) : this.phanTichLienKet(this._ds);
     if (this._xem && !this._ds.some(t => t.ma === this._xem)) this._xem = '';
     const lv = [...new Set(this._ds.map(t => t.linhVuc).filter(Boolean))];
     if (d.live) {
@@ -148,6 +177,7 @@ const ModuleTriThuc = {
       </div>` : ''}
 
       ${d.loi ? `<div class="canh-bao-nguon loi" role="alert" style="margin-bottom:12px;"><span>⚠️ <strong>Kho tri thức:</strong> ${e(d.loi)} – máy anh chạy đồng bộ kho tri thức (quét <code>05_TriThuc</code> → Drive) để nạp chỉ mục lên Hub. Danh sách để trống, không dùng số mẫu.</span></div>` : ''}
+      ${d.live && !d.loi && this._congL33 && this._congL33 !== 'ok' ? `<div class="canh-bao-nguon" role="status" style="margin-bottom:12px;"><span>⚠️ Còn chờ v1: cổng tìm kiếm + đồ thị phía máy chủ (Hub L33 <code>webTimTriThuc</code> / <code>webDoThiTriThuc</code>) chưa lên app – đang tìm và vẽ đồ thị trên máy từ chỉ mục thật.</span></div>` : ''}
       <div id="ttXem"></div>
 
       <details class="tq-gon" id="ttDoThiKhoi">
@@ -204,7 +234,9 @@ const ModuleTriThuc = {
     const el = document.getElementById('ttDs'), dem = document.getElementById('ttDem');
     if (!el) return;
     const e = ShinApp.esc, q = this._tim;
-    const ds = this.timKiem(this._ds, q, this._linhVuc);
+    let ds = this.timKiem(this._ds, q, this._linhVuc);
+    const mc = this._kqMayChu;
+    if (mc && mc.q === q && mc.lv === this._linhVuc) ds = this.hopKetQua(ds, mc.ds, this._ds, this._linhVuc);
     if (dem) dem.textContent = `TÀI LIỆU · ${ds.length}${ds.length !== this._ds.length ? ' / ' + this._ds.length : ''}`;
 
     if (!this._ds || this._ds.length === 0) {
@@ -245,12 +277,27 @@ const ModuleTriThuc = {
       </div>`).join('');
   },
 
-  doiTim: function(v) { this._tim = String(v || ''); this.veDs(); },
+  doiTim: function(v) { this._tim = String(v || ''); this.veDs(); this.henTimMayChu(); },
   chonLinhVuc: function(lv) {
     this._linhVuc = lv || '';
     document.querySelectorAll('[onclick^="ModuleTriThuc.chonLinhVuc"]').forEach(b => b.classList.toggle('dang-chon', (b.dataset.lv || '') === this._linhVuc));
     ShinApp.rung('nhe');
     this.veDs();
+    this.henTimMayChu();
+  },
+
+  /** v2.16.4 HUB L33: Live + cổng đã trả được + câu ≥ 2 ký tự ➜ sau 500ms hỏi webTimTriThuc (thêm bài khớp ở liên kết, xếp điểm máy chủ).
+   *  Danh sách lọc trên máy hiện ngay, không chờ. Câu tìm đã đổi khi máy chủ trả ➜ bỏ kết quả cũ. Lỗi ➜ giữ lọc trên máy. */
+  henTimMayChu: function() {
+    clearTimeout(this._henTim);
+    const q = this._tim.trim();
+    if (!this._live || this._congL33 !== 'ok' || q.length < 2 || q.length > 100) return;
+    this._henTim = setTimeout(async () => {
+      const q0 = this._tim, lv0 = this._linhVuc;
+      const r = await SHIN_API.goi('HUB', 'webTimTriThuc', { tu: q0.trim(), linhVuc: lv0, gioiHan: 50 });
+      if (q0 !== this._tim || lv0 !== this._linhVuc) return;
+      if (r.ok && r.data && Array.isArray(r.data.ds)) { this._kqMayChu = { q: q0, lv: lv0, ds: r.data.ds }; this.veDs(); }
+    }, 500);
   },
 
   xemTaiLieu: function(ma) {
