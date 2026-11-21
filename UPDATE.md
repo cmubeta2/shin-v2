@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.16.6** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.16.7** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -42,6 +42,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.16.7 – MÁY CHỦ GIẢ KHỚP HỢP ĐỒNG L31 (21/11/2026, lượt tự động ⑤ 16h)
+- **Nguồn:** rà lại `test/may_chu_gia.js` (v2.16.3) với HOP_DONG_CONG_V2.md mục `DuLieuV2` trước khi nối màn – nhánh xung đột lệch hợp đồng.
+- **Đã sửa:** `webGhiDuLieuV2` giả nay đúng hợp đồng L31a/b: `maGui` đã gặp ở bất kỳ lần ghi nào ➜ `{ok, ma, phienBan, moi:false}`; sửa đúng phiên bản ➜ tăng 1, `moi:true`; phiên bản cũ hơn ➜ `{ok:false, loi:'xungDot', ban:{ma, noiDung, phienBan, capNhat, nguoiGhi}}` (nằm trong `du` – lớp `SHIN_API.goi` vẫn `ok`); `ma` không có ➜ "Không tìm thấy bản ghi."; `noiDung` phải là đối tượng / danh sách; quá 40.000 ký tự ➜ câu đúng hợp đồng. `luong_ghi.test.js` +1 ca ➜ tổng **71/71**.
+- **Còn lại nhóm B – lượt sau:** nối HUB L31 vào 📣 Marketing (lịch / bài / duyệt / chỉ số kênh), 🎓 LMS, 💰 cấu hình VietQR – cần lớp dùng chung (lưu máy làm dự phòng, giữ `ma` + `phienBan` từng bản ghi, hộp chọn "giữ bản nào" khi `xungDot`). Chờ v1: L31a «ĐÃ CODE v1.23.4» chưa lên app, L31b (xung đột + tường lửa) chờ LOI L8.
+- **Kiểm:** node --check `test/*.js`, `app.js`, `sw.js`; 71/71; quét bí mật. Giao diện không đổi.
 
 ### PHIÊN BẢN v2.16.6 – M5.4 + M3.5 ⏱️ GIỜ CÔNG & XUẤT TC-NS (NỐI SẴN PTKH L581) (21/11/2026, lượt tự động ⑤ 16h)
 - **Nguồn:** mục 0 nhóm B – PTKH L581 `webGioCongThang` Sếp duyệt 21/11 (hợp đồng HOP_DONG_CONG_V2.md mục PTKH; v1 chưa code). Màn v2 dựng trước.

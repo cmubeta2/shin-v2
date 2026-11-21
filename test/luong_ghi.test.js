@@ -92,16 +92,26 @@ kiem('bài học: maGui ổn định ➜ gửi lại không trùng; chữ "bện
 });
 
 mo('🗄️ DuLieuV2 (HUB L31 – theo hợp đồng, chưa lên app)');
-kiem('ghi mới ➜ phienBan 1; sửa đúng phiên bản ➜ 2; phiên bản cũ ➜ xungDot + bản mới', async () => {
+kiem('ghi mới ➜ phienBan 1; sửa đúng phiên bản ➜ 2 (moi:true); phiên bản cũ ➜ {ok:false, loi:"xungDot", ban}', async () => {
   const { API } = dung();
   const r1 = await API.goi('HUB', 'webGhiDuLieuV2', { loai: 'lichNoiDung', noiDung: { tuan: 48, bai: 3 }, phienBan: 0, maGui: 'lnd-thu-01' });
-  assert.strictEqual(r1.data.phienBan, 1);
+  assert.strictEqual(r1.data.phienBan, 1); assert.strictEqual(r1.data.moi, true);
   const r2 = await API.goi('HUB', 'webGhiDuLieuV2', { loai: 'lichNoiDung', ma: r1.data.ma, noiDung: { tuan: 48, bai: 4 }, phienBan: 1, maGui: 'lnd-thu-02' });
-  assert.strictEqual(r2.data.phienBan, 2);
+  assert.strictEqual(r2.data.phienBan, 2); assert.strictEqual(r2.data.moi, true);
+  const lai = await API.goi('HUB', 'webGhiDuLieuV2', { loai: 'lichNoiDung', ma: r1.data.ma, noiDung: { tuan: 48, bai: 4 }, phienBan: 1, maGui: 'lnd-thu-02' });
+  assert.strictEqual(lai.data.moi, false, 'gửi lại cùng maGui ➜ không ghi, không báo xung đột');
   const r3 = await API.goi('HUB', 'webGhiDuLieuV2', { loai: 'lichNoiDung', ma: r1.data.ma, noiDung: { tuan: 48, bai: 9 }, phienBan: 1, maGui: 'lnd-thu-03' });
-  assert.strictEqual(r3.data.xungDot, true); assert.strictEqual(r3.data.banMoi.noiDung.bai, 4);
+  assert.strictEqual(r3.ok, true, 'xung đột nằm trong du – lớp api vẫn ok');
+  assert.strictEqual(r3.data.ok, false); assert.strictEqual(r3.data.loi, 'xungDot');
+  assert.strictEqual(r3.data.ban.noiDung.bai, 4); assert.strictEqual(r3.data.ban.phienBan, 2);
   const doc = await API.goi('HUB', 'webDocDuLieuV2', { loai: 'lichNoiDung' });
   assert.strictEqual(doc.data.ds.length, 1);
+});
+kiem('DuLieuV2: mã không có ➜ lỗi; nội dung chuỗi ➜ lỗi; SĐT trong nội dung ➜ máy chủ chặn', async () => {
+  const { API } = dung();
+  assert.ok(/Không tìm thấy/.test((await API.goi('HUB', 'webGhiDuLieuV2', { loai: 'baiViet', ma: 'x', noiDung: {}, phienBan: 1, maGui: 'bv-thu-01' })).chiTiet));
+  assert.ok(/đối tượng/.test((await API.goi('HUB', 'webGhiDuLieuV2', { loai: 'baiViet', noiDung: 'abc', phienBan: 0, maGui: 'bv-thu-02' })).chiTiet));
+  assert.ok(/số điện thoại/.test((await API.goi('HUB', 'webGhiDuLieuV2', { loai: 'baiViet', noiDung: { than: 'Gọi 09' + '00000000' }, phienBan: 0, maGui: 'bv-thu-03' })).chiTiet));
 });
 kiem('taiKhoanQR chỉ Admin ghi ➜ người thường nhận loi quyen', async () => {
   const r = await dung().API.goi('HUB', 'webGhiDuLieuV2', { loai: 'taiKhoanQR', noiDung: { bin: '970436' }, phienBan: 0, maGui: 'qr-thu-01' });
