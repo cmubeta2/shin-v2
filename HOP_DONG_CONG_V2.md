@@ -1,6 +1,6 @@
 # HỢP ĐỒNG CỔNG v1 ↔ v2 (HOP_DONG_CONG_V2.md)
 
-*Cập nhật 30/10/2026 · áp dụng từ SHIN v2.5.0.*
+*Cập nhật 30/10/2026 · áp dụng từ SHIN v2.5.0 · 21/11/2026: thêm 5 cổng Sếp duyệt (LOI L8, HUB L31–L33, PTKH L581).*
 
 Màn v2 của các mảng dưới đây **đã dựng xong** và đang chờ cổng của máy chủ v1.
 - Chưa có cổng: máy chủ trả `{ok:false, loi:'hanh'}`, v2 hiện dải vàng "chưa mở cổng" và dùng số MẪU.
@@ -156,12 +156,48 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 ### Tri thức – `webTriThuc` (HUB L28a, lên app Hub v1.18.5 – `84_TriThuc.gs`) – v2.13.2 nối
 - **Đọc:** `webTriThuc(token, {})` – mọi người dùng Hub đã đăng nhập ➜ `{ ok, capNhat, taiLieu: [{ ma ≤120, ten ≤200, linhVuc, capNhat 'dd/mm/yyyy'|'', dinhDang, tomTat ≤400, lienKet: [≤50], duongDan }], baiHoc: [], loi? }`. Nguồn: `_TacVu/tri_thuc_chi_muc.json` trên Drive (máy anh quét `05_TriThuc`, đã lọc SĐT / CCCD / BHYT). Chưa có / hỏng chỉ mục ➜ `taiLieu: []` + `loi` (v2 báo đỏ, không thay số mẫu).
 - **Ghi (LÊN APP Hub v1.20.2 @20 – v2 nối từ v2.13.10):** `webLuuBaiHoc(token, { baiHoc: { chuDe, vanDe 5–500, cachLam 5–1000, nguon ≤ 120 }, maGui })` ➜ `{ ok, ma: 'BH-<maGui>', moi }`; chủ đề ∈ Nhân sự / Thiết bị & Hậu cần / Tài chính / Khách hàng & Hợp đồng / Tiến độ & Quy trình / Khác; bài vào trạng thái 'Chờ' (Admin duyệt); tường lửa KHONG_DUA_VAO phía máy chủ. v2 tạo maGui ổn định theo nội dung ➜ gửi lại không trùng.
+- **Tìm + đồ thị phía máy chủ (HUB L33 – Sếp duyệt 21/11, hợp đồng ghi 21/11 ke-hoach) – cho v2 🧠 M9.2 / M9.3.** Nguồn: chính chỉ mục `docChiMuc_()` (ke-hoach chọn KHÔNG thêm sheet `ChiMucTriThuc` – tệp Drive đã có, tránh 2 bản lệch). Quyền như `webTriThuc` (mọi người dùng Hub đã đăng nhập). Chỉ đọc chỉ mục đã lọc ➜ không cần tường lửa LOI L8.
+  - `webTimTriThuc(token, {tu, linhVuc?, gioiHan})` ➜ `{ ok, tu, ds: [{ ma, ten, linhVuc, capNhat, tomTat, diem }], tong }`. `tu` 2–100 ký tự (ngắn hơn ➜ `Error('Gõ ít nhất 2 ký tự.')`); bỏ dấu + chữ thường, tách từ, **mọi từ** phải có trong `ten | ma | linhVuc | tomTat | lienKet`; điểm: khớp tên ×3, mã / liên kết ×2, lĩnh vực / tóm tắt ×1; xếp điểm giảm rồi `capNhat` mới trước; `linhVuc` lọc đúng (bỏ dấu); `gioiHan` 1–50 (mặc định 20). Hàm THUẦN `timTriThuc_(taiLieu, tu, linhVuc, gioiHan)`.
+  - `webDoThiTriThuc(token, {})` ➜ `{ ok, nut: [{ id: ma, ten, linhVuc, soRa, soVao }], canh: [{ tu, den }], treo: [{ tu, den: 'tên liên kết không có tài liệu' }] }`. Khớp `lienKet` với `ma` hoặc `ten` (bỏ dấu, bỏ đuôi `.md`, bỏ phần `|bí danh` và `#mục`); cạnh trùng ➜ 1. Hàm THUẦN `doThiTriThuc_(taiLieu)`; ≤ 2.000 cạnh.
+  - Chưa có / hỏng chỉ mục ➜ `ds:[]` / `nut:[]` + `loi` như `webTriThuc`.
 
 ### Task Bus – `85_TaskBus.gs` (HUB L27, lên app Hub v1.23.2 @23 12/11) – v2.15.0 nối (M7.1 / M7.4)
 - `webTaskBus({})` ➜ `{ok, viec:[{ma 'VL-…', nguon, loai, muc 'gap'|'thuong', tieuDe, lienKet, han 'dd/mm/yyyy'|'', nguoiNhan, nguoiTao, trangThai, den 'do'|'vang'|'xanh'|''}], trangThai:['Mới','Đang làm','Xong','Bỏ']}` – Admin thấy hết, người khác thấy việc mình nhận / mình tạo; 200 việc mới trước.
 - `webDayViec({id 6–40 ký tự [A-Za-z0-9_-], nguon: duan|crm|khaosat|phongkham|taichinh|marketing|tuyensinh|hub|zalo, loai, muc, tieuDe ≤ 200, han 'yyyy-mm-dd'|'', nguoiNhan?, lienKet?{ma,id}})` ➜ `{ok, ma, moi}`; trùng id ➜ `moi:false` (không ghi thêm). Trống người nhận ➜ người phụ trách mảng của nguồn. Gấp ➜ báo Telegram ngay. Tiêu đề có SĐT / CCCD / BHYT ➜ lỗi (v2 kiểm trước).
 - `webDoiTrangThaiViec({ma, trangThai})` ➜ `{ok, ma, trangThai}` – chỉ người nhận / người tạo / Admin; chỉ ghi ô TrangThai.
 - Không nằm trong `CONG_GHI` của api.js ➜ tường lửa M9.5 làm trong `ModuleCongViec.kiemViec`.
+
+
+### Tường lửa phía máy chủ – `chanDuLieuNhayCam_` (LOI L8 – Sếp duyệt 21/11, hợp đồng ghi 21/11 ke-hoach) – cho v2 M9.5
+- **Hàm THUẦN trong Lõi** `00_Loi/Loi_TienIch.gs`: `chanDuLieuNhayCam_(chu)` ➜ `{ hopLe: true }` hoặc `{ hopLe: false, lyDo: 'có số điện thoại' | 'có số CCCD' | 'có mã BHYT' | 'có khóa / token' | 'có thông tin người bệnh' }`. Không ném lỗi; `chu` không phải chuỗi ➜ ép `String`, `null` / `undefined` ➜ hợp lệ.
+- **Bắt:** SĐT `0xxxxxxxxx` / `+84…` / `84…` kể cả cách bằng dấu chấm / cách / gạch (gom như U6); CCCD 12 số liền; BHYT 2 chữ + 13 số; khóa / token (`AKfy…` ≥ 30 ký tự, `ya29.`, `sk-…` ≥ 20, khóa Telegram `số{5,}:[A-Za-z0-9_-]{30,}`, chuỗi base64url liền ≥ 40 ký tự **có đủ số + chữ thường + chữ hoa** – viet-code 21/11 v1.0.7: tránh chặn nhầm chuỗi "aaaa…" / từ dài); từ khóa người bệnh có dấu + không dấu theo `05_TriThuc/KHONG_DUA_VAO.md` (bệnh nhân, người bệnh, bệnh án, `BN` đứng riêng). **Không chặn nhầm:** năm "2026", "15 ca", số tiền "12.500.000", mã NV 5 số, ngày dd/mm/yyyy.
+- **Dùng ở máy chủ (Hub):** `coDuLieuNhayCam_(chu)` (83_TaiChinh.gs) giữ tên cũ, thân đổi thành `return !chanDuLieuNhayCam_(chu).hopLe` ➜ mọi cổng đang gọi (webLuuBaiHoc, webDayViec, webGhiTuongTac, webGuiDeXuatChi) tự dùng bản Lõi; cổng mới L31 gọi thẳng. Lỗi trả v2: `Error('Nội dung không được chứa ' + lyDo bỏ chữ "có " + '.')` – câu Việt, v2 hiện nguyên.
+- **Lõi chép sang** mọi app dùng `Loi_TienIch.gs` (KHUON, 02_ThuKhuonApp, HUB, PK, KPI, TS, KS) bằng `node 00_Loi/dong_bo.js <app>`; PTKH không nhận (chỉ `--lien-thong`).
+
+### Kho dữ liệu dùng chung – `DuLieuV2` (HUB L31a + L31b – Sếp duyệt 21/11, hợp đồng ghi 21/11 ke-hoach) – cho v2 📣 M8.1–M8.6 · 🎓 M4.5 · 💰 M3.1
+- **Sheet `DuLieuV2`** (tạo tự động qua `bangTaoKhiThieu_`, `SH.DU_LIEU_V2`): `Ma | Loai | ChuSo | NoiDung | CapNhat | PhienBan | MaGui | NguoiGhi`. `Ma` = `<loai>-<maGui lần đầu>`. `NoiDung` = JSON chuỗi ≤ 40.000 ký tự (Sheets tối đa 50.000 / ô). `PhienBan` = số nguyên, bản mới = 1, tăng 1 mỗi lần sửa.
+- **Loại & quyền** (Admin luôn được; "mảng X" = người phụ trách MaMang X trong sheet PhuTrach, như `laKeToan_`):
+
+  | loai | Đọc | Ghi |
+  |---|---|---|
+  | lichNoiDung, baiViet, chiSoKenh | mảng MARKETING | mảng MARKETING |
+  | lopHoc, diemDanh | mảng GIAO_DUC | mảng GIAO_DUC |
+  | tienDoLMS | mảng GIAO_DUC thấy hết; người khác chỉ dòng `ChuSo` = mình | mọi người đăng nhập, chỉ dòng của mình (ChuSo ép = mã người gửi) |
+  | taiKhoanQR | mảng TC (Kế toán) | **chỉ Admin** |
+
+- **`webDocDuLieuV2(token, {loai})`** ➜ `{ ok, loai, ds: [{ ma, chuSo, noiDung /* đã JSON.parse; hỏng ➜ null */, capNhat 'dd/mm/yyyy hh:mm', phienBan }] }` – 500 dòng mới nhất theo CapNhat. `loai` sai ➜ `Error('Loại dữ liệu không hợp lệ.')`; không quyền ➜ `loiQuyen_`.
+- **`webGhiDuLieuV2(token, {loai, ma?, noiDung, phienBan, maGui})`** (trong `LockService`):
+  - `maGui` `[A-Za-z0-9_-]{6,40}` bắt buộc; đã có dòng cùng `MaGui` ➜ `{ ok, ma, phienBan, moi:false }` (không ghi thêm – chống bấm 2 lần).
+  - Không `ma` ➜ thêm dòng `PhienBan 1` ➜ `{ ok, ma, phienBan:1, moi:true }` (L31a).
+  - Có `ma` (L31b): `phienBan` gửi lên = bản v2 đang giữ; bằng bản trên sheet ➜ ghi, tăng 1 ➜ `{ ok, ma, phienBan, moi:true }`; **nhỏ hơn** ➜ KHÔNG ghi ➜ `{ ok:false, loi:'xungDot', ban: { ma, noiDung, phienBan, capNhat, nguoiGhi } }` (v2 hỏi người dùng giữ bản nào rồi gửi lại với phienBan mới). `ma` không có ➜ `Error('Không tìm thấy bản ghi.')`. Ở L31a chưa có xung đột: có `ma` ➜ ghi đè + tăng PhienBan.
+  - `noiDung` phải là đối tượng / mảng; chuỗi hóa > 40.000 ký tự ➜ `Error('Nội dung quá dài (tối đa 40.000 ký tự).')`.
+  - **Tường lửa (L31b, sau LOI L8):** `chanDuLieuNhayCam_(JSON.stringify(noiDung))` không hợp lệ ➜ `Error('Nội dung không được chứa …')`; ô chữ ghi qua `chuChongCT_`.
+- **v2** giữ bản lưu máy làm dự phòng ngoại tuyến; có mạng ➜ gửi theo `maGui`. Cổng ghi này vào `CONG_GHI` của api.js.
+
+### Nhật ký động cơ – `webNhatKyTacVu` (HUB L32 – Sếp duyệt 21/11, hợp đồng ghi 21/11 ke-hoach) – cho v2 🏢 M1.6
+- **Nguồn (ke-hoach chọn: dùng đường Drive sẵn có như tri thức, KHÔNG ghi sheet `NhatKyTacVu` từ máy – máy không có quyền Sheets API):** `_TacVu/dong_bo_hub.py` (15 phút/lần) gọi hàm THUẦN `tao_nhat_ky_hub(goc)` ghi `_TacVu/nhat_ky_hub.json` = `{ capNhat 'dd/mm/yyyy hh:mm', khoa: { dangChay, tacVu, tu 'dd/mm hh:mm' }, luot: [≤ 200 dòng cuối nhat_ky_luot.jsonl: { luc, tacVu }], hangDoi: [{ app, choKH, coKH, daCode, kiemDat, traLai, tam /* ⏸ */ }] }`; chuỗi qua `loc_khong_dua_vao` + bỏ mọi chuỗi giống đường dẫn máy (ổ đĩa `X:` + gạch chéo, `/d/`, `Users`) / khóa / token. Drive đồng bộ ➜ Hub đọc tệp (cách `tepChiMucTriThuc_`: id lưu `ID_TEP_NHAT_KY`, cache 5 phút).
+- **`webNhatKyTacVu(token, {soDong})`** – **chỉ Admin** (`canAdmin_`), chỉ đọc. `soDong` 1–200 (mặc định 50, ngoài khoảng ➜ kẹp) ➜ `{ ok, capNhat, khoa, luot: [soDong dòng, mới nhất trước], hangDoi }`. Chưa có tệp / JSON hỏng ➜ `{ ok:true, capNhat:'', khoa:null, luot:[], hangDoi:[], loi:'Chưa có nhật ký – máy chưa đồng bộ' }` (v2 báo đỏ, không dùng số mẫu).
+- **Cấm trả:** đường dẫn máy, khóa / token, nội dung phiếu.
 
 ## v2.6.0 – Quản trị người dùng & app · Nối PTKH gốc
 
@@ -193,6 +229,11 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
 - **v2.13.7 dùng thêm (🗓️ Xin nghỉ):** `webLichNghiNV(token)` ➜ `{ soTuan, le{yyyy-mm-dd: tên lễ}, daXin{yyyy-mm-dd: …}, hanTuanSau, hanChu, canhBaoTo, tenTo, dsCa, dongNghiep, … }`; `webGuiNghiPhep(token, p)` – p = `{ loai: 'Lịch nghỉ tuần', ngay: ['yyyy-mm-dd'…], lyDo }` hoặc `{ loai: 'Nghỉ ốm', tuNgay, denNgay, buoi: 'Cả ngày'|'Sáng'|'Chiều', lyDo }` (Đổi ca có thêm nguoiDoi / caToi / caMoi – v2 chưa dùng) ➜ `{ tin, canhBao, phep: { cuaToi[], daXin, hanTuanSau, … } }`; lỗi ném chữ (hạn 15h thứ Sáu, mốc giấy ốm, tối đa ngày…). Không có mã chống trùng ➜ v2 khóa bấm đúp + nhắc kiểm app trước khi gửi lại. `webNghiLe` / danh sách chờ duyệt KHÔNG có trong `HAM_WEBGOI_`.
 - **v2.9.8 dùng thêm:** `webLichSuThang(token, 'yyyy-MM')` ➜ cùng khuôn `webLichSu` (+ `camNhan` 1–5 | '', `lyDoLechGio`, gồm báo cáo đã hủy) cho tháng này và tháng trước (chỉ trong `LichSu_SoThang` tháng gần nhất, mặc định 6) – 🧭 Nhịp tháng (NTC M5.5, cảm nhận M5.6).
 - Sau: ghi (`webBangLichNghi`, `webGuiNghiPhep`) – cũng là đường ghi xin nghỉ cho màn Phòng PTKH.
+- **Giờ công / tăng ca – CHỈ ĐỌC (PTKH L581, đổi số từ L580 vì trùng – Sếp duyệt 21/11, hợp đồng ghi 21/11 ke-hoach) – cho v2 🏥 M5.4 + 💰 M3.5.** `webGioCongThang(token, thang 'yyyy-mm')` qua `webGoi` (thêm tên vào `HAM_WEBGOI_`).
+  - **Quyền như 📤 Xuất bảng chấm công** (`webXuatBaoCao` loại `chamcong`): `laLanhDaoChamHTNV_(x) || duocXuatTCNS_(x)` (lãnh đạo phòng, Admin, Ban giám đốc); khác ➜ `Error('Chỉ lãnh đạo phòng, Admin hoặc Ban giám đốc xem được giờ công.')`. Phạm vi NV = `nvXuatBC_(x)`.
+  - **Số liệu:** đúng chuỗi của `webXuatBaoCao` chamcong – `boSungBuCong(boSungBCQuanLy(bc, x.nvDS.ds), docBuCong_())` ➜ `bangChamCong_(dsNV, dongBC, lc, thang, khoaNgayLVDaQua_(thang, new Date()), demTruNTCThang_(dongBC, thang))`; KHÔNG viết logic chấm công mới, KHÔNG ghi sheet / file nào.
+  - ➜ `{ thang, tenThang 'mm/yyyy', ngay: [{ d, thu }], nv: [{ ma, hoTen, donVi, o: { 'dd': số công | mã nghỉ }, ngayCong, truNTC /* công bị trừ = 0,5 × n */, tongCong, gioTC /* giờ tăng ca đã duyệt */ }], tong: { soNV, ngayCong, tongCong, gioTC } }` (số là number, ô trống = ''). Hàm THUẦN `gioCongTuBang_(cc)` đọc `cc.hang` (hàng NV = chỉ số 4 … 4 + soNV − 1).
+  - `thang` sai ➜ `Error('Tháng không hợp lệ.')`. **Không** trả số liệu cả tổ ẩn danh (Morale / NTC cả tổ – vẫn KHÔNG LÀM 08/11), không lý do nghỉ.
 - **Cấm trả:** thông tin người bệnh, nội dung khiếu nại có tên / SĐT khách.
 
 ---

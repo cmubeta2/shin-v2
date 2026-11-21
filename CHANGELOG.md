@@ -4,6 +4,19 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.2] – 21/11/2026 (Bộ kiểm thử hàm thuần)
+
+### 🧪 Kiểm thử
+- Thêm `test/chay.js` + 3 tệp `*.test.js` (41 ca) chạy bằng `node test/chay.js`, không cần trình duyệt / mạng / token: VietQR, lệch dự toán, đề xuất chi, hoa hồng, Task Bus `kiemViec`, SLA, phân luồng RBAC + lead, tường lửa M9.5, Marketing.
+
+### 🐛 Sửa lỗi
+- 📋 Công việc: chip 👤 Của tôi bỏ sót việc khi mã NV đứng cạnh dấu phẩy ("NV007, NV008").
+
+### 📄 Tài liệu
+- HOP_DONG_CONG_V2.md: hợp đồng 5 cổng v1 Sếp duyệt 21/11 (LOI L8, HUB L31–L33, PTKH L581).
+
+---
+
 ## [2.16.1] – 21/11/2026 (Dọn sổ nhóm A phần 1 – bỏ web.js)
 
 ### 🧹 Dọn dẹp

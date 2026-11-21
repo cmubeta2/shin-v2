@@ -67,7 +67,8 @@ const ModuleCongViec = {
     if (!nguoi) return false;
     const v = this.boDau(nguoiViec), ten = this.boDau(nguoi.hoTen), ma = this.boDau(nguoi.maNV || nguoi.ma);
     if (!v) return false;
-    if ((ten && v.indexOf(ten) >= 0) || (ma && (' ' + v + ' ').indexOf(' ' + ma + ' ') >= 0)) return true;
+    // v2.16.2 (bộ kiểm test/): mã NV đứng cạnh dấu câu ("NV007, NV008") vẫn khớp; "NV0071" không khớp NV007.
+    if ((ten && v.indexOf(ten) >= 0) || (ma && (' ' + v.replace(/[^a-z0-9_.@-]+/g, ' ') + ' ').indexOf(' ' + ma + ' ') >= 0)) return true;
     return v.split(/\s*(?:&|,|\/|\bva\b)\s*/).some(p => {
       const goi = p.replace(/^(sep|anh|chi|em|bs|ths|ts|co|thay)\s+/, '').trim();
       return goi && goi !== p.trim() && ten && (' ' + ten).endsWith(' ' + goi);

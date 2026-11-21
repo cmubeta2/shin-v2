@@ -22,6 +22,7 @@
 !/assets/
 !/css/
 !/js/
+!/test/
 
 # Chặn thêm bên trong thư mục được mở (phòng khi chép nhầm)
 .clasp.json

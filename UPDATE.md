@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.16.1** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.16.2** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -11,7 +11,7 @@
 ## 0. VIỆC TUẦN 23–29/11 (Sếp "Duyệt tất cả" kế hoạch cải thiện 21/11 – QUYET_DINH.md mục 21/11)
 - **Nhóm A – ⑤ v2 tự làm (không cần cổng v1):**
   - ✅ v2.16.1 bỏ `js/modules/web.js` (tính năng web đã ở 📣 Marketing M8.5) · dọn nhánh `shin/v2-auto-*` đã trộn.
-  - ⬜ Bộ kiểm thử `test/` chạy bằng `node` cho các hàm THUẦN (VietQR, hoa hồng, lệch dự toán, `kiemViec`, tường lửa M9.5, `maTuNguon`, phân luồng lead…).
+  - ✅ v2.16.2 bộ kiểm thử `test/` (`node test/chay.js`, 41 ca: VietQR, lệch dự toán, đề xuất chi / tạm ứng / thanh toán, hoa hồng, `kiemViec`, SLA, `maTuNguon`, `laCuaToi`, phân luồng RBAC + lead, tường lửa M9.5, vướng mắc ➜ Task Bus, Marketing).
   - ⬜ Máy chủ giả đủ cổng ghi, đúng khuôn trả về của `Loi_Web.gs` – để lượt tự động tự thử luồng ghi không cần token thật.
 - **Nhóm B – 5 cổng v1 mới ĐÃ DUYỆT 21/11 (luồng v1 làm trước, v2 nối màn khi lên app; hợp đồng ở HOP_DONG_CONG_V2.md):**
   - LOI L8 `chanDuLieuNhayCam_` – tường lửa phía máy chủ ➜ v2 🛡️ M9.5 (giữ chặn sớm phía trình duyệt, hiện nguyên câu lỗi máy chủ).
@@ -42,6 +42,14 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.16.2 – BỘ KIỂM THỬ HÀM THUẦN `test/` (21/11/2026, lượt tự động ⑤ 16h)
+- **Nguồn:** mục 0 nhóm A tuần 23–29/11 (Sếp "Duyệt tất cả" 21/11). Không cần cổng v1.
+- **Đã làm:** `test/chay.js` – nạp tệp JS của app vào ngữ cảnh `vm` (window / document / localStorage / ShinApp giả tối thiểu, không gọi mạng, không cần token), chạy mọi `test/*.test.js`, thoát mã 1 khi có ca trượt. Lọc theo tên: `node test/chay.js vietqr`. 3 tệp, **41 ca**: `taichinh.test.js` (VietQR CRC chuẩn "123456789" ➜ 29B1, tag 01/54, QR tĩnh, nội dung bỏ dấu ≤ 25, ma trận QR · lệch dự toán ngưỡng 90/100%, bỏ dự án đóng · đề xuất Chi / Tạm ứng / Thanh toán + tường lửa · `taoMaGui` · hoa hồng M3.3 qua được `kiemDeXuat`), `congviec.test.js` (tường lửa M9.5 `soatKhongDuaVao` · `docHan` / `mucSla` · `maTuNguon` · `laCuaToi` · `phanLuong` RBAC · `kiemViec` · vướng mắc ➜ Task Bus · `maGuiBaiHoc`), `marketing.test.js` (khuôn PAS/AIDA, từ cấm y tế, chốt duyệt M8.4, Smart Lead Dispatcher M8.3, hiệu suất M8.6). `.gitignore` mở `!/test/`.
+- **Lỗi bộ kiểm bắt được + đã sửa:** `ModuleCongViec.laCuaToi` không nhận mã NV đứng cạnh dấu câu ("NV007, NV008" ➜ chip 👤 Của tôi bỏ sót việc) – nay tách theo ký tự ngoài `[a-z0-9_.@-]`; "NV0071" vẫn không khớp NV007.
+- **Lượt tự động từ nay:** chạy `node test/chay.js` ở bước KIỂM (cùng `node --check`); trượt ➜ không đẩy phần lỗi.
+- **Kiểm:** node --check `js/modules/congviec.js`, `js/app.js`, `sw.js`, `test/*.js`; 41/41 đạt; quét bí mật trên diff (số TK mẫu `1234ABCD`, không SĐT / id sheet). Giao diện không đổi (chỉ sửa 1 điều kiện lọc).
+- **Kèm:** HOP_DONG_CONG_V2.md – hợp đồng 5 cổng Sếp duyệt 21/11 (LOI L8, HUB L31–L33, PTKH L581) do lượt v1 ke-hoach ghi, đưa vào commit này.
 
 ### PHIÊN BẢN v2.16.1 – DỌN SỔ NHÓM A PHẦN 1: BỎ `web.js` (21/11/2026, lượt vét ⑤ 13h)
 - **Nguồn:** Sếp 21/11 "Duyệt tất cả" kế hoạch cải thiện SHIN v2 (QUYET_DINH.md mục 21/11) – nhóm A: bỏ `js/modules/web.js`, viết lại mục 0 cho tuần 23–29/11, dọn nhánh đã trộn.
