@@ -171,8 +171,8 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
 |---|---|---|---|
 | M9.1 | Kho SOP 3 tầng: HowTos → Runbooks → References | 🟢 v2.13.2 đọc thật chỉ mục 05_TriThuc qua HUB L28a `webTriThuc` (🧠 Tri thức) · 🟢 v2.13.10 ghi bài học `webLuuBaiHoc` (HUB L28, Hub v1.20.2 – từ 🗂️ Dự án › Ma trận vướng mắc, chờ Admin duyệt) · ⬜ máy chép bài Đã duyệt ➜ 05_TriThuc (Còn chờ v1: HUB L28 bước 5) | – |
-| M9.2 | Tìm kiếm toàn văn (lọc phía trình duyệt trước, FTS5 sau) | ✅ v2.7.3 phía trình duyệt (không dấu, nhiều từ, lọc lĩnh vực, tô đậm) / ⬜ FTS5 máy chủ · cổng v1 đã duyệt 21/11 – HUB L33 (`webTimTriThuc`) | v2.3.0 |
-| M9.3 | Đồ thị liên kết `[[wiki-links]]` | ✅ v2.8.3 phía trình duyệt (liên kết ra / ngược / treo, SVG) – dữ liệu MẪU tới khi v1 có máy chủ kho tri thức · cổng v1 đã duyệt 21/11 – HUB L33 (`webDoThiTriThuc`) | v2.6.0 |
+| M9.2 | Tìm kiếm toàn văn (lọc phía trình duyệt trước, FTS5 sau) | ✅ v2.7.3 phía trình duyệt (không dấu, nhiều từ, lọc lĩnh vực, tô đậm) / ⬜ FTS5 máy chủ · cổng v1 đã duyệt 21/11, v2.16.4 đã nối sẵn (dải vàng tới khi lên app) – HUB L33 (`webTimTriThuc`) | v2.3.0 |
+| M9.3 | Đồ thị liên kết `[[wiki-links]]` | ✅ v2.8.3 phía trình duyệt (liên kết ra / ngược / treo, SVG) – dữ liệu MẪU tới khi v1 có máy chủ kho tri thức · cổng v1 đã duyệt 21/11, v2.16.4 đã nối sẵn (dải vàng tới khi lên app) – HUB L33 (`webDoThiTriThuc`) | v2.6.0 |
 | M9.4 | Trích bài học kinh nghiệm từ báo cáo ca / Flash Report | ✅ v2.9.2 phía trình duyệt từ Flash Khối 2 (chủ đề + Markdown [[wiki-link]]) · 🟢 v2.13.10 📤 gửi vào sổ BaiHoc qua `webLuuBaiHoc` (mã gửi ổn định theo nội dung – gửi lại không trùng, Toast Hoàn tác 6s) | v2.6.0 |
 | M9.5 | Tường lửa `KHONG_DUA_VAO.md` – chặn dữ liệu bệnh nhân vào AI | ✅ v2.8.9 chặn sớm phía trình duyệt mọi cổng ghi (CCCD · BHYT · khóa · token) / ⬜ chặn phía máy chủ v1 · cổng v1 đã duyệt 21/11 – LOI L8 (`chanDuLieuNhayCam_`) | v2.4.0 |
 

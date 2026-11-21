@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.4] – 21/11/2026 (🧠 Tri thức nối sẵn Hub L33)
+
+### ✨ Tính năng
+- 🧠 Tri thức: đồ thị liên kết đọc từ máy chủ (`webDoThiTriThuc`) và tìm kiếm có thêm kết quả máy chủ (`webTimTriThuc`, hoãn 500ms, gộp với lọc trên máy). Cổng chưa lên app ➜ dải vàng "Còn chờ v1", vẫn tìm / vẽ trên máy từ chỉ mục thật.
+
+### 🧪 Kiểm thử
+- `test/trithuc.test.js` (6 ca). Tổng 59 ca.
+
+---
+
 ## [2.16.3] – 21/11/2026 (Máy chủ Hub giả + kiểm luồng ghi)
 
 ### 🧪 Kiểm thử
