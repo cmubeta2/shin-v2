@@ -143,19 +143,24 @@ function taoMayChuGia(tuyChon) {
       if (!LOAI_V2[loai]) throw new Error('Loại dữ liệu không hợp lệ.');
       if (loai === 'taiKhoanQR' && token !== 'admin') throw loiQuyen('Chỉ Admin được lưu tài khoản nhận tiền.');
       if (!MA_GUI.test(cat(du.maGui))) throw new Error('Mã gửi không hợp lệ.');
-      const chuoi = JSON.stringify(du.noiDung === undefined ? null : du.noiDung);
-      if (chuoi.length > 40000) throw new Error('Nội dung quá 40.000 ký tự.');
+      // Hợp đồng L31a/b: maGui đã gặp (ở bất kỳ lần ghi nào của dòng) ➜ trả bản hiện tại, không ghi thêm.
+      const daGui = so.duLieuV2.find(x => x.dsMaGui.indexOf(du.maGui) >= 0);
+      if (daGui) return { ok: true, ma: daGui.ma, phienBan: daGui.phienBan, moi: false };
+      if (!du.noiDung || typeof du.noiDung !== 'object') throw new Error('Nội dung phải là đối tượng hoặc danh sách.');
+      const chuoi = JSON.stringify(du.noiDung);
+      if (chuoi.length > 40000) throw new Error('Nội dung quá dài (tối đa 40.000 ký tự).');
       chan(chuoi);
-      let r = cat(du.ma) ? tim(so.duLieuV2, 'ma', cat(du.ma)) : tim(so.duLieuV2, 'maGui', du.maGui);
-      if (!r) {
-        r = { ma: loai + '-' + du.maGui, loai, maGui: du.maGui, chuSo: token, noiDung: du.noiDung, capNhat: '21/11/2026 16:00', phienBan: 1 };
+      if (!cat(du.ma)) {
+        const r = { ma: loai + '-' + du.maGui, loai, dsMaGui: [du.maGui], chuSo: token, nguoiGhi: token, noiDung: du.noiDung, capNhat: '21/11/2026 16:00', phienBan: 1 };
         so.duLieuV2.push(r);
         return { ok: true, ma: r.ma, phienBan: 1, moi: true };
       }
-      if (r.maGui === du.maGui && !cat(du.ma)) return { ok: true, ma: r.ma, phienBan: r.phienBan, moi: false };
-      if (Number(du.phienBan) !== r.phienBan) return { ok: false, xungDot: true, ma: r.ma, banMoi: { noiDung: r.noiDung, phienBan: r.phienBan } };
-      r.noiDung = du.noiDung; r.phienBan++; r.maGui = du.maGui;
-      return { ok: true, ma: r.ma, phienBan: r.phienBan, moi: false };
+      const r = tim(so.duLieuV2, 'ma', cat(du.ma));
+      if (!r) throw new Error('Không tìm thấy bản ghi.');
+      if (Number(du.phienBan) < r.phienBan)
+        return { ok: false, loi: 'xungDot', ban: { ma: r.ma, noiDung: r.noiDung, phienBan: r.phienBan, capNhat: r.capNhat, nguoiGhi: r.nguoiGhi } };
+      r.noiDung = du.noiDung; r.phienBan++; r.dsMaGui.push(du.maGui); r.nguoiGhi = token; r.capNhat = '21/11/2026 16:05';
+      return { ok: true, ma: r.ma, phienBan: r.phienBan, moi: true };
     }
   };
   const LOAI_V2 = { lichNoiDung: 1, baiViet: 1, chiSoKenh: 1, lopHoc: 1, diemDanh: 1, tienDoLMS: 1, taiKhoanQR: 1 };

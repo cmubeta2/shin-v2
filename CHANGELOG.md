@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.7] – 21/11/2026 (Máy chủ giả khớp hợp đồng L31)
+
+### 🧪 Kiểm thử
+- `test/may_chu_gia.js`: `webGhiDuLieuV2` trả xung đột đúng hợp đồng (`{ok:false, loi:'xungDot', ban}`), chống trùng `maGui` mọi lần ghi, kiểm `noiDung` là đối tượng. Tổng 71 ca.
+
+---
+
 ## [2.16.6] – 21/11/2026 (⏱️ Giờ công & xuất TC-NS)
 
 ### ✨ Tính năng
