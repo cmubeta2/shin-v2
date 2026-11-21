@@ -100,7 +100,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M1.3 | KPI Toàn Viện: bản tin tạm tính (`webBanTin`) · soát lỗi (`webSoatLoi`) · AOP (`webAOP`) · báo cáo quý (`webBaoCaoQuy`) | 🟢 / 🟢 nháp AOP năm sau (v2.7.6 – `webNhap2027` + `webLuuTangTruong`; KPI v1.8.2 đã lên app @9 05/11) | – |
 | M1.4 | Trung tâm Telegram Bot (sự kiện `muc:'gap'`) | ⬜ (chạy phía Apps Script v1) · 🟢 v2.7.1 mở v2 trong Telegram Mini App (`webTelegram`, HUB L8) | v2.4.0 |
 | M1.5 | Khảo sát ACHSI 5 trụ cột + radar cảnh báo ≤ 2★ trong 15 phút | 🟢 v2.7.2 – số phiếu, chờ xác minh, điểm TB câu 5 mức, câu ≤ 2★, xuất CSV (webDsKhaoSat · webKetQuaKS · webXuatKS) · 🟢 v2.8.7 5 trụ ACHSI + hài lòng theo tháng (`webTongHopKS`, KS L6) · 🟢 v2.13.15 🛠️ quản lý khảo sát trên v2: tạo / sửa, chọn câu, ngân hàng câu, trạng thái, phân quyền (cổng KS L1) · 🟢 v2.13.16 📝 nhập hộ phiếu giấy (`webNhapHo` + `webCongKhaiDocKS`, KS L2) · 🟢 v2.13.26 🔳 QR điền phiếu công khai: trang `dienks.html?k=` (không đăng nhập, `webCongKhaiDocKS` / `webCongKhaiGuiPhieu`) + QR chung / theo nguồn NV · Tổ · Vị trí · Cơ sở (`webDsNguon` / `webTaoNguon`, KS L2) | v2.4.0 |
-| M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ⬜ tuần sau (nhật ký `_TacVu` nằm ở máy, chưa có cổng đọc) · cổng v1 đã duyệt 21/11 – HUB L32 (đọc nhật ký `_TacVu`) | v2.4.0 |
+| M1.6 | Động cơ tự động hóa AI 4 ca 24/7 (lịch _TacVu) – chỉ hiển thị nhật ký | ✅ v2.16.5 tab ⚙️ Động cơ ở 🛡️ Quản trị (khóa, hàng đợi theo app, lượt gần đây – dữ liệu MẪU ở Demo) · nối sẵn HUB L32 `webNhatKyTacVu` (Sếp duyệt 21/11, chưa lên app ➜ dải vàng) | v2.4.0 |
 
 ### 👥 MẢNG 2 – KHÁCH HÀNG & ĐỐI TÁC (CRM) · `crm`
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |

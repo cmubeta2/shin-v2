@@ -4,6 +4,16 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.5] – 21/11/2026 (M1.6 tab ⚙️ Động cơ)
+
+### ✨ Tính năng
+- 🛡️ Quản trị: tab ⚙️ Động cơ (chỉ Admin) – khóa tác vụ, hàng đợi kế hoạch theo app, lượt gần đây; đọc cổng Hub `webNhatKyTacVu` (L32). Cổng chưa lên app ➜ dải vàng "Còn chờ v1"; Demo dùng dữ liệu mẫu.
+
+### 🧪 Kiểm thử
+- `test/quantri.test.js` (7 ca). Tổng 66 ca.
+
+---
+
 ## [2.16.4] – 21/11/2026 (🧠 Tri thức nối sẵn Hub L33)
 
 ### ✨ Tính năng

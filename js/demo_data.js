@@ -518,7 +518,25 @@ window.SHIN_DEMO_DATA.quantri = {
     { ma: 'TS', ten: 'Tuyển sinh', dsMa: ['90003'], nguoi: ['Lê Văn C'] },
     { ma: 'KS', ten: 'Khảo sát', dsMa: [], nguoi: [] }
   ],
-  bot: { coKhoa: true, chu: 'Đã có khóa •••• · bot @vidu_bot' }
+  bot: { coKhoa: true, chu: 'Đã có khóa •••• · bot @vidu_bot' },
+  // v2.16.5 M1.6 – MẪU theo khuôn webNhatKyTacVu (HUB L32)
+  dongCo: {
+    capNhat: '21/11/2026 16:15',
+    khoa: { dangChay: true, tacVu: 'shin-v2-viet-code', tu: '21/11 16:12' },
+    luot: [
+      { luc: '21/11/2026 16:12', tacVu: 'shin-v2-viet-code' },
+      { luc: '21/11/2026 15:40', tacVu: 'shin-viet-code' },
+      { luc: '21/11/2026 15:05', tacVu: 'shin-ke-hoach' },
+      { luc: '21/11/2026 14:28', tacVu: 'shin-danh-gia' },
+      { luc: '21/11/2026 13:00', tacVu: 'shin-v2-viet-code' }
+    ],
+    hangDoi: [
+      { app: 'HUB', choKH: 1, coKH: 0, daCode: 3, kiemDat: 0, traLai: 0, tam: 1 },
+      { app: 'PTKH', choKH: 0, coKH: 1, daCode: 1, kiemDat: 0, traLai: 1, tam: 0 },
+      { app: 'LOI', choKH: 0, coKH: 0, daCode: 1, kiemDat: 0, traLai: 0, tam: 0 },
+      { app: 'KPI', choKH: 0, coKH: 0, daCode: 0, kiemDat: 0, traLai: 0, tam: 0 }
+    ]
+  }
 };
 
 window.SHIN_DEMO_DATA.ptkh = {
