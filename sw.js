@@ -4,10 +4,10 @@
  * KHÔNG đụng tới máy chủ Apps Script (script.google.com) – số liệu luôn lấy thật, không lưu đệm.
  * Đổi PHIEN_BAN_SW mỗi khi đổi danh sách tệp vỏ app.
  */
-const PHIEN_BAN_SW = 'shin-v2.16.9';
+const PHIEN_BAN_SW = 'shin-v2.17.0';
 const VO_APP = [
   './', 'index.html', 'offline.html', 'danhgia5t.html', 'dienks.html', 'js/dienks.js', 'manifest.webmanifest', 'css/styles.css',
-  'js/demo_data.js', 'js/api.js', 'js/app.js', 'js/vietqr.js',
+  'js/demo_data.js', 'js/api.js', 'js/dongbo_v2.js', 'js/app.js', 'js/vietqr.js',
   'js/modules/hub.js', 'js/modules/dieuhanh.js', 'js/modules/kpi.js', 'js/modules/khaosat.js', 'js/modules/ks_nhapho.js', 'js/modules/ks_qr.js', 'js/modules/danhgia5t.js', 'js/modules/crm.js',
   'js/modules/tuyensinh.js', 'js/modules/phongkham.js', 'js/modules/ptkh.js', 'js/modules/quantri.js', 'js/modules/duan.js', 'js/modules/congviec.js',
   'js/modules/pheduyet.js', 'js/modules/trithuc.js', 'js/modules/taichinh.js', 'js/modules/mau_lms.js', 'js/modules/mau_marketing.js', 'js/modules/pheu_lanbien.js', 'js/modules/marketing.js', 'js/modules/caidat_module.js',

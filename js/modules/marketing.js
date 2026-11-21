@@ -72,7 +72,7 @@ const ModuleMarketing = {
 
   // ===== Lưu trên máy =====
   docKho: function() { try { return JSON.parse(localStorage.getItem(this.KHOA) || '{}') || {}; } catch (e) { return {}; } },
-  ghiKho: function(k) { try { localStorage.setItem(this.KHOA, JSON.stringify(k)); return true; } catch (e) { ShinApp.toast('Trình duyệt không cho lưu trên máy.', 'error'); return false; } },
+  ghiKho: function(k) { try { localStorage.setItem(this.KHOA, JSON.stringify(k)); if (typeof ShinDongBo !== 'undefined') ShinDongBo.danhDau('baiViet', this.KHOA, () => ShinApp.chuyenModule('marketing')); return true; } catch (e) { ShinApp.toast('Trình duyệt không cho lưu trên máy.', 'error'); return false; } },
 
   khuon: function(ma) { return ((window.MAU_MARKETING || {}).khuon || []).find(k => k.ma === ma) || null; },
 
@@ -149,11 +149,14 @@ const ModuleMarketing = {
       <details class="tq-gon">
         <summary><span>ⓘ Nguồn & giới hạn</span></summary>
         <p class="chu-phu">Lịch + khuôn là MẪU (không chứa dữ liệu thật). Bài viết, trạng thái duyệt lưu trên máy này. Bài dịch vụ y tế tự kiểm từ khẳng định tuyệt đối / cam kết khỏi bệnh và chặn CCCD · BHYT · SĐT người bệnh.</p>
+        ${typeof ShinDongBo !== 'undefined' && ShinDongBo.nhan('baiViet') ? `<p class="chu-phu">${e(ShinDongBo.nhan('baiViet'))}</p>` : ''}
         <p class="chu-phu">Còn chờ v1: gửi bài vào Phê duyệt 0B + đăng tự động đa kênh – chưa có cổng máy chủ.</p>
         <p class="chu-phu">Hiệu suất (M8.6): số nhập tay từ trang quản lý của từng kênh, lưu trên máy này. Chế độ trình diễn hiện số MẪU (ghi rõ). Còn chờ v1: lấy số tự động từ API kênh (Facebook / TikTok / Zalo / YouTube) – chưa có cổng.</p>
       </details>
     `;
     this.veHieuSuat();
+    // v2.17.0 HUB L31: đồng bộ kho bài + hiệu suất với DuLieuV2 (sau cờ – cổng chưa lên app thì im lặng, giữ lưu máy).
+    if (typeof ShinDongBo !== 'undefined') { ShinDongBo.khiMo('baiViet', this.KHOA, () => ShinApp.chuyenModule('marketing')); ShinDongBo.khiMo('chiSoKenh', this.KHOA_HS, () => this.veHieuSuat()); }
     if (typeof PheuLanBien !== 'undefined') PheuLanBien.render(document.getElementById('mkLanBienNoi'));
     if (this._bai) this.veXuong(true);
   },
@@ -184,7 +187,7 @@ const ModuleMarketing = {
     return { theoKenh: Object.values(nhom).map(tyLe).sort((a, b) => b.reach - a.reach), tong: tyLe(tong) };
   },
   docHS: function() { try { const a = JSON.parse(localStorage.getItem(this.KHOA_HS) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } },
-  ghiHS: function(a) { try { localStorage.setItem(this.KHOA_HS, JSON.stringify(a)); return true; } catch (e) { ShinApp.toast('Trình duyệt không cho lưu trên máy.', 'error'); return false; } },
+  ghiHS: function(a) { try { localStorage.setItem(this.KHOA_HS, JSON.stringify(a)); if (typeof ShinDongBo !== 'undefined') ShinDongBo.danhDau('chiSoKenh', this.KHOA_HS, () => this.veHieuSuat()); return true; } catch (e) { ShinApp.toast('Trình duyệt không cho lưu trên máy.', 'error'); return false; } },
 
   veHieuSuat: function() {
     const o = document.getElementById('mkHieuSuat'), M = window.MAU_MARKETING;
