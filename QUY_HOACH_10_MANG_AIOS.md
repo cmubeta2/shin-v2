@@ -115,7 +115,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 ### 💰 MẢNG 3 – TÀI CHÍNH & THANH TOÁN · `taichinh` · *(module có từ v2.5.0 – màn 💰 Tài chính, cổng `webTaiChinh`)*
 | Mã | Micro-Module | Trạng thái · nguồn tái sử dụng | Phiên bản đích |
 |---|---|---|---|
-| M3.1 | Cổng VietQR SePay: sinh QR động, xác nhận thanh toán qua webhook | ✅ v2.10.4 sinh QR động / tĩnh offline trên máy (`js/vietqr.js`, số TK lưu máy người dùng) · ⬜ xác nhận thanh toán (SePay để sau – anh tự liên kết) · M-WEB-03 (v1) · lưu cấu hình: cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) | v2.3.0 |
+| M3.1 | Cổng VietQR SePay: sinh QR động, xác nhận thanh toán qua webhook | ✅ v2.10.4 sinh QR động / tĩnh offline trên máy (`js/vietqr.js`, số TK lưu máy người dùng) · ⬜ xác nhận thanh toán (SePay để sau – anh tự liên kết) · M-WEB-03 (v1) · lưu cấu hình: cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`), **v2.17.1 đã nối sẵn** `taiKhoanQR` (Admin ghi, Kế toán đọc – chờ lên app) | v2.3.0 |
 | M3.2 | Sổ chi phí phát sinh & cảnh báo lệch dự toán (cấp cho Mảng 6) | 🟢 v2.10.2 ngân sách vs đã chi + cảnh báo vượt / sắp chạm cấp dự án (`webDuAn`) · ⬜ theo khoản mục (v1 chưa có dự toán khoản mục) · M5.3 (bản 1.0) | v2.3.0 |
 | M3.3 | Chi trả hoa hồng CTV/đại lý (lấy kết quả tính từ M4.3) | 🟢 v2.13.3 nút ở 🎓 Tuyển sinh ➜ phiếu Thanh toán điền sẵn từ `webLeadCD.hoaHong` ➜ 📤 gửi thật vào 0B qua HUB L26 `webGuiDeXuatChi` (Hub v1.18.5, từ v2.12.2) · ⬜ sổ "đã chi" theo chiến dịch (Còn chờ v1) | v2.3.0 |
 | M3.4 | Đề nghị tạm ứng / thanh toán → gửi 0B duyệt | 🟢 v2.13.3 form gộp Chi / Tạm ứng / Thanh toán, kiểm luật L26 ➜ 📤 gửi thật vào 0B (`webGuiDeXuatChi` nhận loai, hanHoanUng, soChungTu – Hub v1.18.5, Toast Hoàn tác 6s, maGui chống trùng) – 💰 Tài chính | v2.3.0 |

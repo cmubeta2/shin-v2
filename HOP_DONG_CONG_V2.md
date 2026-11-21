@@ -184,6 +184,7 @@ Nguồn phiếu: các app gửi yêu cầu duyệt vào Hub qua liên thông. Hu
   | lopHoc, diemDanh | mảng GIAO_DUC | mảng GIAO_DUC |
   | tienDoLMS | mảng GIAO_DUC thấy hết; người khác chỉ dòng `ChuSo` = mình | mọi người đăng nhập, chỉ dòng của mình (ChuSo ép = mã người gửi) |
   | taiKhoanQR | mảng TC (Kế toán) | **chỉ Admin** |
+- **v2 cần thêm (shin-v2 21/11, v2.17.1):** (1) `taiKhoanQR`: `chanDuLieuNhayCam_` đang chạy trên cả `noiDung` ➜ số TK dạng SĐT (0/84 + 9 số – nhiều ngân hàng cho dùng SĐT làm số TK) hoặc 12 số bị chặn nhầm là SĐT / CCCD. Đề nghị: loại `taiKhoanQR` (chỉ Admin ghi) bỏ qua trường `soTK` khi soát; v2 hiện không gửi các số đó (`ShinVietQR.hubChan`), chỉ lưu máy. (2) Thêm loại `pheuLanBien` (mảng MARKETING, đọc / ghi như `baiViet`) cho 📣 M8.5 Phễu Lặn Biển (kho máy `shin_mkt_lanbien`) – chưa có thì v2 giữ lưu máy. (3) `tienDoLMS` theo người học: v2 hiện chỉ có tiến độ theo LỚP (giáo viên đánh dấu, nằm trong `diemDanh`) – chỉ dùng khi có học viên thật đăng nhập.
 
 - **`webDocDuLieuV2(token, {loai})`** ➜ `{ ok, loai, ds: [{ ma, chuSo, noiDung /* đã JSON.parse; hỏng ➜ null */, capNhat 'dd/mm/yyyy hh:mm', phienBan }] }` – 500 dòng mới nhất theo CapNhat. `loai` sai ➜ `Error('Loại dữ liệu không hợp lệ.')`; không quyền ➜ `loiQuyen_`.
 - **`webGhiDuLieuV2(token, {loai, ma?, noiDung, phienBan, maGui})`** (trong `LockService`):
