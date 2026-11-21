@@ -164,10 +164,11 @@ const ModuleTuyenSinh = {
     try { k = JSON.parse(localStorage.getItem(this.KHOA_LMS) || 'null'); } catch (e) { k = null; }
     return k && k.diemDanh ? k : { diemDanh: Object.assign({}, L.diemDanhMau), baiXong: JSON.parse(JSON.stringify(L.baiXongMau || {})) };
   },
-  ghiLms: function(k) { try { localStorage.setItem(this.KHOA_LMS, JSON.stringify(k)); return true; } catch (e) { ShinApp.toast('Trình duyệt không cho lưu trên máy.', 'error'); return false; } },
+  ghiLms: function(k) { try { localStorage.setItem(this.KHOA_LMS, JSON.stringify(k)); if (typeof ShinDongBo !== 'undefined') ShinDongBo.danhDau('diemDanh', this.KHOA_LMS, () => this.veLms()); return true; } catch (e) { ShinApp.toast('Trình duyệt không cho lưu trên máy.', 'error'); return false; } },
   ngayNay: function() { const d = new Date(), p = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); },
 
   veLms: function() {
+    if (typeof ShinDongBo !== 'undefined') ShinDongBo.khiMo('diemDanh', this.KHOA_LMS, () => this.veLms());   // v2.17.0 HUB L31 (sau cờ)
     const o = document.getElementById('tsLmsNoi'), L = window.MAU_LMS;
     if (!o) return;
     if (!L) { o.innerHTML = '<div class="trong">Chưa tải được dữ liệu lớp mẫu (mau_lms.js).</div>'; return; }
@@ -185,7 +186,7 @@ const ModuleTuyenSinh = {
     const dsTuan = [...new Set(L.bai.map(b => b.tuan))];
 
     o.innerHTML = `
-      <div class="chu-phu" style="color:var(--c-yellow);margin-bottom:8px">⚠️ Dữ liệu MẪU – điểm danh, tiến độ lưu trên máy này. Còn chờ v1: lớp + học viên thật từ app Tuyển sinh.</div>
+      <div class="chu-phu" style="color:var(--c-yellow);margin-bottom:8px">⚠️ Dữ liệu MẪU – điểm danh, tiến độ lưu trên máy này${typeof ShinDongBo !== 'undefined' && ShinDongBo.nhan('diemDanh') ? ' · ' + e(ShinDongBo.nhan('diemDanh')) : ''}. Còn chờ v1: lớp + học viên thật từ app Tuyển sinh.</div>
       
       <div class="hang-nut" role="group" aria-label="Chọn lớp" style="margin-bottom:8px">
         ${L.lop.map(x => `<button class="${x.ma === lop.ma ? 'btn-primary' : 'btn-secondary'}" style="min-height:44px;padding:8px 16px" onclick="ModuleTuyenSinh.chonLop('${e(x.ma)}')">${e(x.ma)}</button>`).join('')}

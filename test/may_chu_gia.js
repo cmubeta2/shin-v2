@@ -201,6 +201,7 @@ function taoMayChuGia(tuyChon) {
     }
   };
   Object.assign(CONG, tuyChon.cong || {});
+  (tuyChon.boCong || []).forEach(t => { delete CONG[t]; });   // v2.17.0: mô phỏng cổng chưa lên app ➜ 'hanh'
 
   /** Các lệnh GHI (đếm vào nhatKyGhi khi đã tới máy chủ). */
   const GHI = /^web(Gui|Day|Doi|Luu|Ghi|Danh|Nhap)/;

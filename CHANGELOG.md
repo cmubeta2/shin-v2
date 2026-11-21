@@ -4,6 +4,19 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.17.0] – 21/11/2026 (Đồng bộ "lưu máy ⇄ Hub" cho kho DuLieuV2 – dựng sẵn HUB L31)
+
+### ✨ Tính năng (sau cờ – cổng chưa lên app thì giữ nguyên hành vi cũ)
+- `js/dongbo_v2.js` (MỚI) `ShinDongBo`: đồng bộ kho trên máy với `webDocDuLieuV2` / `webGhiDuLieuV2` (HUB L31a/b). Bản trên máy luôn là bản làm việc (ngoại tuyến vẫn chạy); sửa ➜ đánh dấu "chưa gửi" ➜ gửi sau 1,5 giây; `maGui` băm theo nội dung (gửi lại không thành 2 dòng); Hub mới hơn mà máy chưa sửa ➜ tự tải về; cả 2 cùng sửa / máy chủ trả `xungDot` ➜ hỏi giữ bản Hub hay bản máy này.
+- Sau cờ: lần hỏi đầu Hub trả `hanh` (cổng chưa có trong `congWeb_`) ➜ nhớ "chưa có" 30 phút, không gọi nữa, không báo lỗi người dùng.
+- Gắn vào 📣 Marketing (kho bài `baiViet`, hiệu suất kênh `chiSoKenh`) và 🎓 LMS (điểm danh + tiến độ `diemDanh`); khi đã đồng bộ hiện 1 dòng chữ nhỏ "☁️ Đã đồng bộ với Hub". Không đổi bố cục.
+
+### 🧪 Kiểm thử
+- `test/dongbo.test.js` – 15 ca trên máy chủ giả (2 máy dùng chung 1 Hub): bảng quyết định, cổng chưa lên app, Demo, gửi mới / gửi sửa, tải về, xung đột 2 hướng + xung đột lúc ghi, mất mạng, mất trả lời, tường lửa CCCD / SĐT, quyền taiKhoanQR, gắn màn. `test/may_chu_gia.js` thêm tùy chọn `boCong`. Tổng **229/229** · 15 tệp.
+
+### 📄 Hợp đồng
+- HOP_DONG_CONG_V2.md: khớp mã thật Hub v1.23.6 (L33 không trả `tu`, nút dùng `ma`, thêm `capNhat` / `loi`) và PTKH v1.314.12 (L581 không có `tenThang`) – ke-hoach đối chiếu 21/11 20h; màn v2 đã tương thích (không đọc các trường bị bỏ).
+
 ## [2.16.9] – 21/11/2026 (Máy chủ giả phần 3 + kịch bản 7 luồng ghi)
 
 ### 🧪 Kiểm thử
