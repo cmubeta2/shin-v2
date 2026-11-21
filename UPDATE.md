@@ -35,6 +35,12 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
 
+### PHIÊN BẢN v2.16.0 – M6.3 BLOCKER MATRIX ➜ TASK BUS 🟢 (21/11/2026, lượt tự động ⑤ 11h)
+- **Nguồn:** QUY_HOACH M6.3 ghi "➜ Task Bus tạm sao chép" vì M7.1 chưa có máy chủ; nay HUB L27 (`webDayViec`) đã nối ở v2.15.0 ➜ gỡ phần tạm. Không cần cổng v1 mới.
+- **Đã làm:** `js/modules/duan.js` – `vuongMacThanhViec` THUẦN (nguồn `duan`, Cao ➜ gấp, bỏ thẻ HTML, ≤ 200 ký tự, hạn dd/mm/yyyy ➜ yyyy-mm-dd nếu chưa quá hạn, người nhận trống) + `dayVuongMac` (kiểm bằng `ModuleCongViec.kiemViec` ➜ Toast Hoàn tác 6s ➜ `webDayViec` đúng 1 lần, id giữ theo nội dung tới khi Hub nhận; Demo / không token ➜ báo, không ghi). Nút 📋 Sao chép giữ làm dự phòng. `css/styles.css` thêm `.da-vm-nut` (2 nút cạnh nhau, rớt dòng ở 320px).
+- **QUY_HOACH:** M6.3 ✅ ➜ 🟢.
+- **Kiểm:** node --check `duan.js`, `app.js`, `sw.js`; kịch bản hàm thuần 13/13 (gấp / thường, bỏ thẻ, quá hạn ➜ trống, hạn hôm nay, hạn sai, cắt 200, người nhận trống, tường lửa SĐT, vướng mắc trống ➜ lỗi); quét bí mật trên diff. Chờ anh: đẩy thử 1 vướng mắc thật bằng token (lượt tự động không có token). Giao diện: chờ agy kiểm (phiếu `11211150_V2_M6.3_giao-dien`).
+
 ### PHIÊN BẢN v2.15.1 – GIAO DIỆN 📋 CÔNG VIỆC THEO AGY (21/11/2026, lượt tự động ⑤ 11h)
 - **Nguồn:** phiếu agy `11161619_V2_M7.1_giao-dien` (ĐÃ VIẾT, UX 9.5/10) – em rà diff + báo cáo, đúng phạm vi `.cv-*` + 1 khối nút trong `veForm`, không đổi logic gọi máy chủ ➜ `ap` về repo, `dung … dat`. Phiếu `11161619_V2_M4.2_ra-ux` (trang `dienks.html` 320 / 375 / 1280 sáng + tối) ĐẠT ➜ đóng.
 - **Đã làm:** `css/styles.css` (`.cv-form` tiêu đề 15px, nhãn 14px, `.cv-form-nut`, `.cv-nut` nút chia đều) + `js/modules/congviec.js` (gom 📤 Đẩy việc + Đóng vào `.cv-form-nut`).

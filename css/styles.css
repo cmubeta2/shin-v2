@@ -3311,3 +3311,8 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .cv-form-nut .btn-secondary { flex: 1 1 120px; min-height: 44px; font-size: calc(14px * var(--font-scale, 1)); }
 .cv-nut { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 .cv-nut .btn-secondary { min-height: 44px; flex: 1 1 0; min-width: 0; font-size: calc(14px * var(--font-scale)); }
+
+/* v2.16.0 M6.3 – Vướng mắc: 📤 Đẩy vào Task Bus + 📋 Sao chép */
+.da-vm-nut { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.da-vm-nut .btn-primary { flex: 2 1 160px; min-height: 44px; font-size: calc(14px * var(--font-scale, 1)); }
+.da-vm-nut .btn-secondary { flex: 1 1 110px; min-height: 44px; font-size: calc(14px * var(--font-scale, 1)); }

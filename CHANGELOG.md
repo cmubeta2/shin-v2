@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.16.0] – 21/11/2026 (M6.3 Blocker Matrix ➜ Task Bus 🟢)
+
+### ✨ Tính năng
+- 🏗️ Dự án › Vướng mắc: mỗi vướng mắc có nút **📤 Đẩy vào Task Bus** gửi thật vào sổ việc Hub (`webDayViec`, HUB L27) thay cho sao chép tạm: nguồn Dự án, mức Cao ➜ ⚡ gấp (Hub báo Telegram ngay), hạn còn hiệu lực chuyển sang yyyy-mm-dd, người nhận trống = người phụ trách mảng Dự án.
+- Kiểm luật Hub + tường lửa SĐT / CCCD / BHYT (dùng chung `ModuleCongViec.kiemViec`), Toast Hoàn tác 6s không gửi gì, mã chống trùng theo nội dung – bấm lại không tạo việc trùng. Nút 📋 Sao chép giữ làm dự phòng.
+
+---
+
 ## [2.15.1] – 21/11/2026 (Giao diện 📋 Công việc theo phiếu agy)
 
 ### 🎨 Giao diện
