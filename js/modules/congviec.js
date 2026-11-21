@@ -329,8 +329,10 @@ const ModuleCongViec = {
           <div><label class="form-label" for="cvNhan">Người nhận (mã Hub)</label><input class="form-input" id="cvNhan" maxlength="60" autocomplete="off" placeholder="Trống = phụ trách mảng"></div>
         </div>
         <div class="chu-phu">Không ghi SĐT / CCCD / BHYT / tên người bệnh vào tiêu đề.</div>
-        <button type="submit" class="btn-primary" id="cvGui">📤 Đẩy việc</button>
-        <button type="button" class="btn-secondary cv-saochep" onclick="ModuleCongViec.taoViec()">Đóng</button>
+        <div class="cv-form-nut">
+          <button type="submit" class="btn-primary" id="cvGui">📤 Đẩy việc</button>
+          <button type="button" class="btn-secondary" onclick="ModuleCongViec.taoViec()">Đóng</button>
+        </div>
       </form>`;
   },
 

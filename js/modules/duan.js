@@ -444,14 +444,71 @@ const ModuleDuAn = {
                   ${x.han ? `<span>📅 Hạn: <strong>${x.han}</strong></span>` : ''}
                 </div>
                 ${x.deXuat ? `<div style="font-size:14px; color:var(--text); background:var(--bg-sub); padding:6px 10px; border-radius:6px; line-height:1.4; overflow-wrap:anywhere;">💡 ${x.deXuat}</div>` : ''}
-                <button class="btn-secondary" style="margin-top:8px; min-height:44px; font-size:14px; width:100%;" onclick="ModuleDuAn.saoChepVuongMac(${i})">📋 Sao chép để giao việc</button>
+                <div class="da-vm-nut">
+                  <button class="btn-primary" onclick="ModuleDuAn.dayVuongMac(${i}, this)">📤 Đẩy vào Task Bus</button>
+                  <button class="btn-secondary" onclick="ModuleDuAn.saoChepVuongMac(${i})">📋 Sao chép</button>
+                </div>
               </div>`).join('')}
           </div>
         </div>`;
     }).join('');
   },
 
-  /** Task Bus (M7.1) chưa có máy chủ ➜ sao chép nội dung để dán vào ⚡ Giao việc / Telegram. Không gửi gì đi. */
+  /**
+   * THUẦN (v2.16.0 M6.3 ➜ M7.1). 1 vướng mắc ➜ gói việc Task Bus cho ModuleCongViec.kiemViec:
+   * nguồn 'duan', Cao ➜ gấp (Hub báo Telegram ngay), tiêu đề bỏ thẻ HTML + gọn ≤ 200 ký tự,
+   * hạn dd/mm/yyyy ➜ yyyy-mm-dd khi còn hạn (đã quá hạn / trống ➜ ''), người nhận để trống = người phụ trách mảng Dự án ở Hub
+   * (tên quản lý dự án không phải mã người dùng Hub).
+   */
+  vuongMacThanhViec: function(x, homNay) {
+    x = x || {};
+    const nay = homNay instanceof Date ? homNay : new Date();
+    const moc = new Date(nay.getFullYear(), nay.getMonth(), nay.getDate()).getTime();
+    const tron = s => String(s == null ? '' : s).replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\s+/g, ' ').trim();
+    const vd = tron(x.vanDe);
+    let tieuDe = vd ? '[Vướng mắc] ' + vd : '';
+    if (tieuDe.length > 200) tieuDe = tieuDe.slice(0, 199) + '…';
+    let han = '';
+    const m = String(x.han || '').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (m) {
+      const d = new Date(+m[3], +m[2] - 1, +m[1]);
+      if (d.getFullYear() === +m[3] && d.getMonth() === +m[2] - 1 && d.getDate() === +m[1] && d.getTime() >= moc)
+        han = m[3] + '-' + String(m[2]).padStart(2, '0') + '-' + String(m[1]).padStart(2, '0');
+    }
+    return { nguon: 'duan', muc: x.muc === 'cao' ? 'gap' : 'thuong', tieuDe, han, nguoiNhan: '' };
+  },
+
+  /** Đẩy 1 vướng mắc vào Task Bus Hub (webDayViec): kiểm luật Hub + tường lửa M9.5 ➜ Toast Hoàn tác 6s ➜ ghi đúng 1 lần (id giữ theo nội dung tới khi Hub nhận). */
+  dayVuongMac: function(i, nut) {
+    const x = (this._maTran || [])[i];
+    if (!x || typeof ModuleCongViec === 'undefined') return;
+    const kq = ModuleCongViec.kiemViec(this.vuongMacThanhViec(x));
+    if (kq.loi) return ShinApp.toast(kq.loi + ' – dùng 📋 Sao chép rồi sửa tay.', 'error');
+    if (!(SHIN_API.laCheDoLive() && this._d && this._d.live && SHIN_API.layToken())) return ShinApp.toast('Đang ở Demo – không ghi lên Task Bus Hub.', 'info');
+    this._maDay = this._maDay || {};
+    if (this._dangDay) return;
+    const khoa = JSON.stringify(kq.goi);
+    if (!this._maDay[khoa]) this._maDay[khoa] = ModuleTaiChinh.taoMaGui(Date.now(), Math.random().toString(36).slice(2));
+    const du = Object.assign({}, kq.goi, { id: this._maDay[khoa] });
+    this._dangDay = true;
+    const khoaNut = on => { if (nut && nut.isConnected) { nut.disabled = on; nut.textContent = on ? '⏳ Chờ 6 giây…' : '📤 Đẩy vào Task Bus'; } };
+    ShinApp.hanhDongHoanTac('Sẽ đẩy "' + kq.goi.tieuDe.slice(0, 60) + '" vào Task Bus' + (kq.goi.muc === 'gap' ? ' (gấp – Hub báo Telegram ngay)' : '') + '.', {
+      lamTruoc: () => khoaNut(true),
+      traLai: () => { this._dangDay = false; khoaNut(false); },
+      thucHien: async () => {
+        const r = await SHIN_API.goi('HUB', 'webDayViec', du);
+        if (!r.ok) throw new Error('Chưa đẩy được: ' + SHIN_API.moTaLoi(r) + ' – bấm lại (không tạo việc trùng).');
+        if (r.isDemo) throw new Error('Chưa có máy chủ Hub – không ghi.');
+        const d = r.data || {};
+        this._dangDay = false;
+        delete this._maDay[khoa];
+        if (nut && nut.isConnected) { nut.textContent = '✅ Đã vào Task Bus ' + (d.ma || ''); nut.disabled = true; }
+        ShinApp.toast((d.moi === false ? 'Việc đã có sẵn ' : 'Đã đẩy vào Task Bus ') + (d.ma || '') + ' – xem ở 📋 Công việc.', 'success');
+      }
+    });
+  },
+
+  /** Sao chép nội dung để dán vào ⚡ Giao việc / Telegram (dự phòng khi chưa có token / Hub lỗi). Không gửi gì đi. */
   saoChepVuongMac: function(i) {
     const x = (this._maTran || [])[i];
     if (!x) return;

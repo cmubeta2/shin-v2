@@ -3301,8 +3301,18 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .topbar-sub { overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 
 /* v2.15.0 M7.1 – Task Bus: khối đẩy việc + nút đổi trạng thái trên thẻ */
-.cv-form { margin: 0 0 12px; display: flex; flex-direction: column; gap: 6px; }
+.cv-form { margin: 0 0 12px; display: flex; flex-direction: column; gap: 8px; }
+.cv-form .section-title { font-size: calc(15px * var(--font-scale, 1)); color: var(--text); margin-bottom: 2px; }
+.cv-form .form-label { display: block; margin-bottom: 4px; font-size: calc(14px * var(--font-scale, 1)); }
 .cv-form .form-input { font-size: 16px; min-height: 44px; width: 100%; box-sizing: border-box; }
-.cv-form-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 8px; }
+.cv-form-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 10px; }
+.cv-form-nut { display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+.cv-form-nut .btn-primary { flex: 2 1 200px; min-height: 48px; }
+.cv-form-nut .btn-secondary { flex: 1 1 120px; min-height: 44px; font-size: calc(14px * var(--font-scale, 1)); }
 .cv-nut { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-.cv-nut .btn-secondary { min-height: 44px; flex: 1 1 auto; font-size: calc(14px * var(--font-scale)); }
+.cv-nut .btn-secondary { min-height: 44px; flex: 1 1 0; min-width: 0; font-size: calc(14px * var(--font-scale)); }
+
+/* v2.16.0 M6.3 – Vướng mắc: 📤 Đẩy vào Task Bus + 📋 Sao chép */
+.da-vm-nut { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.da-vm-nut .btn-primary { flex: 2 1 160px; min-height: 44px; font-size: calc(14px * var(--font-scale, 1)); }
+.da-vm-nut .btn-secondary { flex: 1 1 110px; min-height: 44px; font-size: calc(14px * var(--font-scale, 1)); }
