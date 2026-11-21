@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.17.0** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.17.1** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -15,16 +15,24 @@
   - ✅ v2.16.3 máy chủ Hub giả `test/may_chu_gia.js` (giao thức `cuaWebPost_`, 9 cổng ghi / đọc: L26 đề xuất chi, L27 Task Bus, L28 bài học, L29 CRM, L31 DuLieuV2) + `test/luong_ghi.test.js` 12 ca – lượt tự động tự thử luồng ghi không cần token thật.
   - ✅ v2.16.8 bộ kiểm thử phần 2: 6 tệp module mới + `test/quet_bi_mat.js` (quét bí mật `git diff --cached`).
   - ✅ v2.16.9 máy chủ giả phần 3 (token sai / hết hạn, mất mạng, mất trả lời, trả chậm, sổ lệnh ghi, KS + PTKH) + `test/luong_7.test.js` 81 ca cho 7 luồng ghi ➜ sửa 4 lỗi mã thật.
+  - ✅ v2.17.1 💰 VietQR `taiKhoanQR` gắn lớp đồng bộ (Admin ghi, Kế toán chỉ đọc) – sau cờ, 233/233.
   - ✅ v2.17.0 lớp đồng bộ "lưu máy ⇄ Hub" `js/dongbo_v2.js` cho HUB L31 (📣 Marketing + 🎓 LMS) – sau cờ, thử trên máy chủ giả 15 ca.
   - **Kiểm thử: `node test/chay.js` – 229 ca** (15 tệp, mã thoát 1 khi trượt) · quét bí mật: `node test/quet_bi_mat.js` sau `git add`.
   - **Chờ anh duyệt:** thêm vào SKILL ⑤ mục 4 bước "(1b) `node test/chay.js` phải N/N ĐẠT + (3) chạy `node test/quet_bi_mat.js` thay quét tay" – em KHÔNG tự sửa SKILL.
 - **Nhóm B – 5 cổng v1 mới ĐÃ DUYỆT 21/11 (luồng v1 làm trước, v2 nối màn khi lên app; hợp đồng ở HOP_DONG_CONG_V2.md):**
   - LOI L8 `chanDuLieuNhayCam_` – tường lửa phía máy chủ ➜ v2 🛡️ M9.5 (giữ chặn sớm phía trình duyệt, hiện nguyên câu lỗi máy chủ).
-  - HUB L31 kho dữ liệu dùng chung `DuLieuV2` ➜ v2 📣 M8.1–M8.6 (lịch, bài, duyệt, báo cáo) · 🎓 M4.5 LMS · 💰 M3.1 cấu hình VietQR – chuyển từ "lưu trên máy" sang lưu Hub. **v2.17.0 đã dựng sẵn** lớp đồng bộ + gắn 📣 Marketing (baiViet, chiSoKenh) và 🎓 LMS (diemDanh) – chờ v1 lên app (Hub trên app v1.23.2; L31a «KIỂM ĐẠT v1.23.4», L31b ⏸). Còn lại khi lên app: 💰 VietQR `taiKhoanQR` (chỉ Admin ghi), tách `tienDoLMS` theo người học.
+  - HUB L31 kho dữ liệu dùng chung `DuLieuV2` ➜ v2 📣 M8.1–M8.6 (lịch, bài, duyệt, báo cáo) · 🎓 M4.5 LMS · 💰 M3.1 cấu hình VietQR – chuyển từ "lưu trên máy" sang lưu Hub. **v2.17.0 đã dựng sẵn** lớp đồng bộ + gắn 📣 Marketing (baiViet, chiSoKenh) và 🎓 LMS (diemDanh) – chờ v1 lên app (Hub trên app v1.23.2; L31a «KIỂM ĐẠT v1.23.4», L31b ⏸). **v2.17.1 đã gắn 💰 VietQR `taiKhoanQR`** (Admin ghi, Kế toán chỉ đọc). Còn lại khi lên app: tách `tienDoLMS` theo người học. **Còn chờ v1:** L31b tường lửa `chanDuLieuNhayCam_` chặn số TK dạng SĐT / 12 số trong `taiKhoanQR` – cần miễn trường `soTK` của loại này (v2 tạm không gửi các số đó, chỉ lưu máy).
   - HUB L32 cổng đọc nhật ký `_TacVu` ➜ v2 🏠 M1.6 màn nhật ký động cơ tự động. **v2.16.5 đã nối sẵn** (tab ⚙️ Động cơ ở 🛡️ Quản trị) – chờ v1 lên app.
   - HUB L33 `webTimTriThuc` + `webDoThiTriThuc` ➜ v2 🧠 M9.2 tìm toàn văn + M9.3 đồ thị liên kết (thay dữ liệu MẪU). **v2.16.4 đã nối sẵn** – chờ v1 lên app.
   - PTKH L581 (đề ghi L580 – đổi số vì trùng) cổng CHỈ ĐỌC giờ công / tăng ca ➜ v2 👥 M5.4 + 💰 M3.5 xuất TC-NS. **v2.16.6 đã nối sẵn** (📋 PTKH › ⏱️ Giờ công) – chờ v1 code + lên app.
 - **Nhóm C – anh làm:** (1) 7 luồng ghi v2 **đã thử trên máy chủ giả (v2.16.9, `test/luong_7.test.js` 81/81) – còn chờ anh nghiệm thu 1 lần bằng token thật**: gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠 HUB L28) · đẩy việc + đổi trạng thái Task Bus (📋 Công việc) · đẩy vướng mắc M6.3 (🗂️ Dự án) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝); kết nối Telegram mã ghép vẫn chỉ thử được bằng tay. Lưu ý khi nghiệm thu: PTKH `webGuiNghiPhep` và KS `webNhapHo` (v1) chưa có mã chống trùng – mất mạng giữa chừng thì xem danh sách trước khi gửi lại (màn đã nhắc); (2) V20 Menu Button Telegram; (3) chọn 1 tổ dùng thử (PK L6).
+- **Cổng v1 – trạng thái (ke-hoach vét 21/11 22h4x):**
+  - Cổng v1 LOI L8 `chanDuLieuNhayCam_` KIỂM ĐẠT 21/11 (v1.0.7) – chờ ④ đưa lên app, rồi ⑤ nối màn M9.5
+  - Cổng v1 HUB L31a `webDocDuLieuV2` / `webGhiDuLieuV2` KIỂM ĐẠT 21/11 (v1.23.4) – chờ ④ đưa lên app, rồi ⑤ nối màn M8.1–M8.6 · M4.5 · M3.1 (L31b xung đột + tường lửa «CÓ KH», ② làm tiếp)
+  - Cổng v1 HUB L32 `webNhatKyTacVu` KIỂM ĐẠT 21/11 (v1.23.5) – chờ ④ đưa lên app, rồi ⑤ nối màn M1.6
+  - Cổng v1 HUB L33 `webTimTriThuc` + `webDoThiTriThuc` KIỂM ĐẠT 21/11 (v1.23.6) – chờ ④ đưa lên app, rồi ⑤ nối màn M9.2 + M9.3
+  - Cổng v1 PTKH L581 `webGioCongThang` KIỂM ĐẠT 21/11 (v1.314.12) – chờ ④ đưa lên app, rồi ⑤ nối màn M5.4 + M3.5
+  - KS L7 `webNhapHo` + `maGui` chống ghi trùng «CÓ KH» 21/11 – ② làm; PTKH L618 (`webGuiNghiPhep` + `maGui`) ⏸ chờ anh duyệt
 - **Để sau:** SePay webhook xác nhận thanh toán (M3.1) – anh tự liên kết. Khóa site Turnstile cho trang điền KS công khai vẫn chờ anh.
 - **KHÔNG làm (Sếp chốt):** chỉ số cả tổ ẩn danh (Morale / NTC cả tổ M5.5–M5.6).
 
@@ -47,6 +55,13 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.17.1 – 💰 VIETQR DÙNG CHUNG QUA HUB (21/11/2026, lượt vét hạn mức 23h47)
+- **Nguồn:** phần dở của lượt 22h07 (UPDATE mục DuLieuV2: "Còn lại khi lên app: VietQR `taiKhoanQR`"); quyền theo mã thật v1 `10_Hub/86_DuLieuV2.gs`: đọc = Admin + mảng TC, ghi = chỉ Admin.
+- **Nội dung:** `js/vietqr.js` – mở khối gọi `ShinDongBo.khiMo('taiKhoanQR', …, {chiDoc: !Admin})`; Admin `luuTK` ➜ `danhDau` (ghi Hub sau 1,5 giây); người khác chỉ tải về khi máy trống. `js/dongbo_v2.js` – tùy chọn `chiDoc` (không gửi, không hỏi xung đột, máy khác Hub ➜ `khacHub`, giữ bản máy). "Đổi" tài khoản chỉ gỡ khỏi máy (không xóa trên Hub).
+- **Tường lửa:** v1 `chanDuLieuNhayCam_` chạy trên cả `noiDung` của `taiKhoanQR` ➜ số TK dạng SĐT (nhiều ngân hàng cho dùng SĐT làm số TK) hoặc 12 số bị chặn. v2 kiểm trước bằng `hubChan` ➜ không gửi, toast báo. **Còn chờ v1:** miễn trường `soTK` cho loại `taiKhoanQR` (chỉ Admin ghi).
+- **Kiểm:** `node test/chay.js` **233/233** (+4 ca trong `test/dongbo.test.js`); `PHIEN_BAN_SW` ➜ `shin-v2.17.1`; không thêm tệp (VO_APP giữ nguyên).
+- **Giao diện:** chỉ đổi chữ ghi chú + nhãn nút trong khối 🔳 khi cổng đã lên app – không đổi bố cục, không gửi phiếu agy (agy vắng > 3 giờ).
 
 ### PHIÊN BẢN v2.17.0 – ĐỒNG BỘ "LƯU MÁY ⇄ HUB" CHO DuLieuV2 (21/11/2026, lượt vét hạn mức 22h07)
 - **Nguồn:** Sếp "Duyệt tất cả" kế hoạch cải thiện 21/11 (QUYET_DINH.md mục 21/11) – phần (b) dựng sẵn phía v2 cho HUB L31; hợp đồng HOP_DONG_CONG_V2.md mục DuLieuV2; mã thật v1 `10_Hub/86_DuLieuV2.gs` (v1.23.4, chưa lên app).
