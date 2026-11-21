@@ -154,7 +154,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 |---|---|---|---|
 | M7.1 | Task Event Bus: nhận sự kiện từ mọi mảng, tự sinh việc | 🟢 v2.15.0 nối HUB L27 (lên app Hub v1.23.2 @23): 📋 Công việc Live đọc `webTaskBus`, ＋ đẩy việc `webDayViec` (id chống trùng), ▶ / ✅ / ✖ `webDoiTrangThaiViec`; app khác đẩy việc qua hành liên thông `dayViec` của Hub | v2.3.0 |
 | M7.2 | Universal Kanban 3 cột đa nguồn | ✅ · 🟢 v2.13.11 việc PK có 📋 chi tiết: việc con tick + trao đổi (`webChiTietViec` / `webCapNhatViec`, 🩺 Phòng khám › Công việc) | – |
-| M7.3 | Phân luồng việc theo RBAC (M0.2) | ✅ v2.9.1 phía trình duyệt (ẩn việc mảng không có quyền theo chốt chặn v1 + chip 👤 Của tôi) / ⬜ phân luồng phía máy chủ (cần Task Bus M7.1) | v2.5.0 |
+| M7.3 | Phân luồng việc theo RBAC (M0.2) | 🟢 v2.15.0 phân luồng phía máy chủ qua Task Bus Hub (HUB L27: việc không ghi người nhận ➜ người phụ trách mảng của nguồn; `webTaskBus` chỉ trả việc mình nhận / mình tạo, Admin thấy hết; chỉ người nhận / người tạo / Admin đổi trạng thái) · ✅ v2.9.1 phía trình duyệt (ẩn việc mảng không có quyền + chip 👤 Của tôi) | v2.5.0 |
 | M7.4 | Giám sát SLA Xanh → Vàng → Đỏ + báo Telegram | ✅ v2.8.4 đèn SLA + lọc + sao chép tin cảnh báo phía trình duyệt · 🟢 v2.15.0 đèn SLA lấy từ máy chủ Task Bus; Hub tự báo Telegram việc gấp ngay + việc quá hạn 1 lần (keoSoHenGio) | v2.4.0 |
 
 ### 🚀 MẢNG 8 – TĂNG TRƯỞNG (MARKETING AI & WEB PHỄU) · `marketing` · *(module 📣 Marketing có từ v2.11.0 – M8.1 · M8.2 · M8.4 · M8.6 lưu trên máy)*

@@ -38,7 +38,7 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ### PHIÊN BẢN v2.16.0 – M6.3 BLOCKER MATRIX ➜ TASK BUS 🟢 (21/11/2026, lượt tự động ⑤ 11h)
 - **Nguồn:** QUY_HOACH M6.3 ghi "➜ Task Bus tạm sao chép" vì M7.1 chưa có máy chủ; nay HUB L27 (`webDayViec`) đã nối ở v2.15.0 ➜ gỡ phần tạm. Không cần cổng v1 mới.
 - **Đã làm:** `js/modules/duan.js` – `vuongMacThanhViec` THUẦN (nguồn `duan`, Cao ➜ gấp, bỏ thẻ HTML, ≤ 200 ký tự, hạn dd/mm/yyyy ➜ yyyy-mm-dd nếu chưa quá hạn, người nhận trống) + `dayVuongMac` (kiểm bằng `ModuleCongViec.kiemViec` ➜ Toast Hoàn tác 6s ➜ `webDayViec` đúng 1 lần, id giữ theo nội dung tới khi Hub nhận; Demo / không token ➜ báo, không ghi). Nút 📋 Sao chép giữ làm dự phòng. `css/styles.css` thêm `.da-vm-nut` (2 nút cạnh nhau, rớt dòng ở 320px).
-- **QUY_HOACH:** M6.3 ✅ ➜ 🟢.
+- **QUY_HOACH:** M6.3 ✅ ➜ 🟢. Rà thêm: M7.3 ✅ ➜ 🟢 – phần "⬜ phân luồng phía máy chủ" đã có từ HUB L27 (`10_Hub/85_TaskBus.gs`: `nguoiNhanMacDinh_` giao theo người phụ trách mảng, `locViecTheoQuyen_` lọc việc theo người nhận / người tạo, Admin thấy hết) – chỉ sửa cột trạng thái, không đổi mã.
 - **Kiểm:** node --check `duan.js`, `app.js`, `sw.js`; kịch bản hàm thuần 13/13 (gấp / thường, bỏ thẻ, quá hạn ➜ trống, hạn hôm nay, hạn sai, cắt 200, người nhận trống, tường lửa SĐT, vướng mắc trống ➜ lỗi); quét bí mật trên diff. Chờ anh: đẩy thử 1 vướng mắc thật bằng token (lượt tự động không có token). Giao diện: chờ agy kiểm (phiếu `11211150_V2_M6.3_giao-dien`).
 
 ### PHIÊN BẢN v2.15.1 – GIAO DIỆN 📋 CÔNG VIỆC THEO AGY (21/11/2026, lượt tự động ⑤ 11h)
