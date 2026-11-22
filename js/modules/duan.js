@@ -419,32 +419,34 @@ const ModuleDuAn = {
 
   renderMaTran: function(ds) {
     if (!ds.length) return `<div class="card" style="text-align:center; padding:24px; font-size:14px; color:var(--text-muted);">✅ Không có vướng mắc nào cần gỡ.</div>`;
-    const NHOM = [['cao', '🔴 Cao – gỡ trong ngày', 'var(--c-red)'], ['vua', '🟡 Vừa – gỡ trong tuần', 'var(--c-yellow)'], ['thap', '🟢 Thấp – theo dõi', 'var(--c-green)']];
+    const NHOM = [['cao', '🔴 Cao – gỡ trong ngày'], ['vua', '🟡 Vừa – gỡ trong tuần'], ['thap', '🟢 Thấp – theo dõi']];
     this._maTran = ds;
     const bh = this.trichBaiHoc(ds);
     const dauBh = bh.length ? `
-      <div class="card" style="padding:12px; margin-bottom:14px;">
-        <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:6px;">💡 Bài học kinh nghiệm · ${bh.length}</div>
-        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">${[...new Set(bh.map(b => b.chuDe))].map(cd => `<span class="badge xam" style="font-size:14px;">${ShinApp.esc(cd)} · ${bh.filter(b => b.chuDe === cd).length}</span>`).join('')}</div>
-        <button class="btn-secondary" style="min-height:44px; font-size:14px; width:100%;" onclick="ModuleDuAn.saoChepBaiHoc()">📋 Sao chép bài học (Markdown cho 📚 Tri thức)</button>
-        <button class="btn-primary" style="min-height:44px; font-size:14px; width:100%; margin-top:8px;" onclick="ModuleDuAn.guiBaiHoc(this)">📤 Gửi bài học vào kho 🧠 (chờ Admin duyệt)</button>
+      <div class="card da-bh">
+        <div class="da-vm-nhom-td">💡 Bài học kinh nghiệm · ${bh.length}</div>
+        <div class="da-bh-the">${[...new Set(bh.map(b => b.chuDe))].map(cd => `<span class="badge xam da-bh-nhan">${ShinApp.esc(cd)} · ${bh.filter(b => b.chuDe === cd).length}</span>`).join('')}</div>
+        <div class="da-vm-nut">
+        <button class="btn-secondary" onclick="ModuleDuAn.saoChepBaiHoc()">📋 Sao chép bài học (Markdown cho 📚 Tri thức)</button>
+        <button class="btn-primary" onclick="ModuleDuAn.guiBaiHoc(this)">📤 Gửi bài học vào kho 🧠 (chờ Admin duyệt)</button>
+        </div>
       </div>` : '';
-    return dauBh + NHOM.map(([k, nhan, mau]) => {
+    return dauBh + NHOM.map(([k, nhan]) => {
       const nhom = ds.map((x, i) => ({ x, i })).filter(o => o.x.muc === k);
       if (!nhom.length) return '';
       return `
-        <div style="margin-bottom:14px;">
-          <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:8px;">${nhan} · ${nhom.length}</div>
-          <div style="display:flex; flex-direction:column; gap:8px;">
+        <div class="da-vm-nhom">
+          <div class="da-vm-nhom-td">${nhan} · ${nhom.length}</div>
+          <div class="da-vm-luoi">
             ${nhom.map(({ x, i }) => `
-              <div class="card" style="border-left:4px solid ${mau}; padding:12px;">
-                <div style="font-size:14px; font-weight:700; color:var(--text); line-height:1.4; overflow-wrap:anywhere;">${x.quaHan ? '⏰ ' : '⚠️ '}${x.vanDe}</div>
-                <div style="display:flex; flex-wrap:wrap; gap:6px 14px; font-size:14px; color:var(--text-muted); margin:6px 0;">
+              <div class="card da-vm-the da-vm-${k}">
+                <div class="da-vm-td">${x.quaHan ? '⏰ ' : '⚠️ '}${x.vanDe}</div>
+                <div class="da-vm-meta">
                   <span>📍 ${x.nguon}</span>
                   <span>👤 ${x.nguoiXuLy || '<em>chưa giao</em>'}</span>
                   ${x.han ? `<span>📅 Hạn: <strong>${x.han}</strong></span>` : ''}
                 </div>
-                ${x.deXuat ? `<div style="font-size:14px; color:var(--text); background:var(--bg-sub); padding:6px 10px; border-radius:6px; line-height:1.4; overflow-wrap:anywhere;">💡 ${x.deXuat}</div>` : ''}
+                ${x.deXuat ? `<div class="da-vm-dexuat">💡 ${x.deXuat}</div>` : ''}
                 <div class="da-vm-nut">
                   <button class="btn-primary" onclick="ModuleDuAn.dayVuongMac(${i}, this)">📤 Đẩy vào Task Bus</button>
                   <button class="btn-secondary" onclick="ModuleDuAn.saoChepVuongMac(${i})">📋 Sao chép</button>

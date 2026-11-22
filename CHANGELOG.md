@@ -4,6 +4,27 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.17.3] – 22/11/2026 (🎓 LMS: 📘 Tiến độ học của tôi – `tienDoLMS` mỗi người 1 dòng)
+
+### ✨ Tính năng
+- 🎓 Tuyển sinh › LMS: khối **📘 Tiến độ học của tôi** – mỗi người tự tích bài M01–M20 đã học; lưu máy theo mã người (`shin_lms_toi_<mã>`), có cổng thì đồng bộ Hub `DuLieuV2` loại `tienDoLMS` (HUB L31 – lên app v1.23.7 sáng 22/11). Nhóm Giáo dục thấy thêm **👥 Tiến độ cả nhóm** (ai chậm lên đầu).
+- `ShinDongBo`: tùy chọn `{chuSo}` cho loại dòng-theo-người – chỉ lấy dòng của mình, meta tách `loai@chuSo` (2 người dùng chung máy không lẫn); `dsDaDoc(loai)` trả các dòng Hub vừa đọc.
+
+### 🧪 Kiểm
+- `test/dongbo.test.js` +2 ca (2 người 2 dòng trên máy chủ giả, máy mới tải đúng dòng mình; `tongHopTienDo` THUẦN) ➜ `node test/chay.js` **235/235**.
+
+
+## [2.17.2] – 22/11/2026 (🏗️ Dự án › Vướng mắc: bố cục thẻ – áp phiếu agy 11211150)
+
+### 🎨 Giao diện
+- Thẻ vướng mắc M6.3 bỏ toàn bộ `style=""` nội tuyến ➜ class `.da-vm-nhom / -luoi / -the / -td / -meta / -dexuat`; lưới 2 cột từ 768px, nút 📤 / 📋 không còn kéo dài 577px ở 1280px (agy kiểm 320 / 375 / 1280 sáng + tối: 0 cuộn ngang, chữ ≥ 14px, nút 44px).
+- Khối 💡 Bài học kinh nghiệm gom vào class `.da-bh*`, 2 nút dùng chung hàng `.da-vm-nut` (góp ý phản biện của agy).
+- Gộp tay vì xung đột: giữ chốt chặn v2.16.9 (không gửi bài học MẪU lên Hub).
+
+### 🧪 Kiểm
+- `node test/chay.js` **233/233**; không thêm tệp (VO_APP giữ nguyên), `PHIEN_BAN_SW` ➜ `shin-v2.17.2`.
+
+
 ## [2.17.1] – 21/11/2026 (💰 VietQR dùng chung qua Hub – `taiKhoanQR`, sau cờ)
 
 ### ✨ Tính năng (sau cờ – cổng HUB L31 chưa lên app thì giữ nguyên "chỉ lưu trên máy này")

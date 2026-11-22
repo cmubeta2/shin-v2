@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.17.1** · Cập nhật ngày: **21/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.17.3** · Cập nhật ngày: **22/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -55,6 +55,17 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.17.3 – 🎓 LMS: TIẾN ĐỘ HỌC CỦA TÔI (22/11/2026, lượt 10h12)
+- **Nguồn:** HUB L31a/b + L32 + L33 **đã lên app v1.23.7 @24 sáng 22/11** (10_Hub/KE_HOACH.md) ➜ phần "còn lại khi lên app: tách `tienDoLMS` theo người học".
+- **Nội dung:** `js/modules/tuyensinh.js` khối 📘 (tích bài, bài kế, 👥 cả nhóm cho GIAO_DUC); `js/dongbo_v2.js` `{chuSo}` + `dsDaDoc`; `css/styles.css` `.ts-toi*`.
+- **Kiểm:** `node test/chay.js` 235/235. Giao diện: chờ agy kiểm (phiếu `11221017_V2_M4.5_giao-dien`, gồm cả khối 💡 Bài học của v2.17.2).
+- **Lên app rồi – màn tự chạy số thật (không cần sửa mã, "sau cờ" tự dò):** 📣 Marketing kho bài + hiệu suất, 🎓 LMS điểm danh + tiến độ, 💰 VietQR `taiKhoanQR` (L31) · 🛡️ ⚙️ Động cơ (L32) · 🧠 tìm + đồ thị máy chủ (L33). **Chờ anh:** mở Live 1 lần mỗi màn để nghiệm thu bằng token thật.
+
+### PHIÊN BẢN v2.17.2 – 🏗️ VƯỚNG MẮC M6.3: BỐ CỤC THẺ (22/11/2026, lượt 10h12)
+- **Nguồn:** phiếu agy `11211150_V2_M6.3_giao-dien` (ĐẠT, UX 9/10) – XUNG_ĐỘT với mã sau v2.16.9 ➜ gộp tay, giữ chốt chặn bài học MẪU.
+- **Nội dung:** `js/modules/duan.js` renderMaTran dùng class `.da-vm-*` + `.da-bh*`; `css/styles.css` lưới 2 cột ≥ 768px, nút gọn.
+- **Kiểm:** `node test/chay.js` 233/233. Giao diện: agy đã kiểm phần thẻ (ảnh trong sandbox phiếu); khối 💡 Bài học là phần em sửa thêm – chờ agy kiểm ở phiếu ra-ux kế.
 
 ### PHIÊN BẢN v2.17.1 – 💰 VIETQR DÙNG CHUNG QUA HUB (21/11/2026, lượt vét hạn mức 23h47)
 - **Nguồn:** phần dở của lượt 22h07 (UPDATE mục DuLieuV2: "Còn lại khi lên app: VietQR `taiKhoanQR`"); quyền theo mã thật v1 `10_Hub/86_DuLieuV2.gs`: đọc = Admin + mảng TC, ghi = chỉ Admin.

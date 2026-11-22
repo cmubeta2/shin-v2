@@ -1,5 +1,5 @@
 /**
- * SHIN v2.17.1 – ĐỒNG BỘ "lưu máy ⇄ Hub" cho kho dữ liệu dùng chung `DuLieuV2` (HUB L31a/b – Sếp duyệt 21/11,
+ * SHIN v2.17.3 – ĐỒNG BỘ "lưu máy ⇄ Hub" cho kho dữ liệu dùng chung `DuLieuV2` (HUB L31a/b – Sếp duyệt 21/11,
  * hợp đồng HOP_DONG_CONG_V2.md mục DuLieuV2):
  *   webDocDuLieuV2({loai}) ➜ {ok, loai, ds:[{ma, chuSo, noiDung, capNhat, phienBan}]}
  *   webGhiDuLieuV2({loai, ma?, noiDung, phienBan, maGui}) ➜ {ok, ma, phienBan, moi} | {ok:false, loi:'xungDot', ban:{ma, noiDung, phienBan, capNhat, nguoiGhi}}
@@ -19,7 +19,7 @@ const ShinDongBo = (() => {
   const KHOA_CONG = 'shin_dbv2_cong';
   const NHO_CHUA_CO_MS = 30 * 60 * 1000;
   const TEN = { lichNoiDung: 'Lịch nội dung', baiViet: 'Kho bài Marketing', chiSoKenh: 'Hiệu suất kênh', lopHoc: 'Lớp học', diemDanh: 'Điểm danh & tiến độ LMS', tienDoLMS: 'Tiến độ học', taiKhoanQR: 'Tài khoản nhận tiền' };
-  const hen = {}, daMo = {};
+  const hen = {}, daMo = {}, daDoc = {};
   let hoi = null;
 
   const docJSON = (k, mac) => { try { const v = JSON.parse(localStorage.getItem(k) || 'null'); return v == null ? mac : v; } catch (e) { return mac; } };
@@ -76,7 +76,11 @@ const ShinDongBo = (() => {
     return { trangThai: kq.loi === 'mang' ? 'ngoaiTuyen' : 'loi', loi: kq.loi, chiTiet: kq.chiTiet || '' };
   }
 
-  async function gui(loai, khoa, noiDung, ma, phienBan, lan) {
+  /** v2.17.3: khóa meta – loại dòng-theo-người (tienDoLMS) tách theo chuSo để 2 người dùng chung máy không lẫn. */
+  const khoaMeta = (loai, chuSo) => chuSo ? loai + '@' + chuSo : loai;
+
+  async function gui(loai, khoa, noiDung, ma, phienBan, lan, mk) {
+    mk = mk || loai;
     const du = { loai, noiDung, phienBan: Number(phienBan) || 0, maGui: taoMaGui(loai, ma, phienBan, noiDung) };
     if (ma) du.ma = ma;
     const kq = await SHIN_API.goi('HUB', 'webGhiDuLieuV2', du);
@@ -84,34 +88,39 @@ const ShinDongBo = (() => {
     if (kq.isDemo) return { trangThai: 'may' };
     datCong('ok');
     const d = kq.data || {};
-    if (d.ok === false && d.loi === 'xungDot' && d.ban) return giaiXungDot(loai, khoa, d.ban, noiDung, (lan || 0) + 1);
+    if (d.ok === false && d.loi === 'xungDot' && d.ban) return giaiXungDot(loai, khoa, d.ban, noiDung, (lan || 0) + 1, mk);
     if (!d.ma) return { trangThai: 'loi', loi: 'loi', chiTiet: 'Hub trả thiếu mã bản ghi.' };
-    datMeta(loai, { ma: d.ma, phienBan: Number(d.phienBan) || 1, chuaGui: false });
+    datMeta(mk, { ma: d.ma, phienBan: Number(d.phienBan) || 1, chuaGui: false });
     return { trangThai: 'daGui', moi: d.moi !== false, ma: d.ma, phienBan: Number(d.phienBan) || 1 };
   }
 
-  async function giaiXungDot(loai, khoa, ban, may, lan) {
+  async function giaiXungDot(loai, khoa, ban, may, lan, mk) {
+    mk = mk || loai;
     if ((lan || 0) > 2) return { trangThai: 'loi', loi: 'xungDot', chiTiet: 'Hub đổi liên tục – thử lại sau.' };
     const chon = await hoiXungDot(loai, ban);
     if (chon === 'mayChu') {
       ghiJSON(khoa, ban.noiDung);
-      datMeta(loai, { ma: ban.ma, phienBan: Number(ban.phienBan) || 1, chuaGui: false });
+      datMeta(mk, { ma: ban.ma, phienBan: Number(ban.phienBan) || 1, chuaGui: false });
       return { trangThai: 'daTai', doi: true, xungDot: true };
     }
-    const kq = await gui(loai, khoa, may, ban.ma, ban.phienBan, lan);
+    const kq = await gui(loai, khoa, may, ban.ma, ban.phienBan, lan, mk);
     return Object.assign({ xungDot: true }, kq);
   }
 
   /** Đồng bộ 1 kho: đọc Hub ➜ chonViec ➜ tải về / gửi lên / hỏi xung đột. ➜ {trangThai, doi?} */
   async function dongBo(loai, khoa, tuyChon) {
     const chiDoc = !!(tuyChon && tuyChon.chiDoc);
+    // v2.17.3 tuyChon.chuSo: loại dòng-theo-người (tienDoLMS) – chỉ lấy dòng của mình (GIAO_DUC đọc thấy dòng cả nhóm).
+    const chuSo = tuyChon && tuyChon.chuSo ? String(tuyChon.chuSo) : '', mk = khoaMeta(loai, chuSo);
     if (!coTheGoi()) return { trangThai: 'may' };
     const kq = await SHIN_API.goi('HUB', 'webDocDuLieuV2', { loai });
     if (!kq.ok) return loiGoi(kq);
     if (kq.isDemo) return { trangThai: 'may' };
     datCong('ok');
-    const ds = (kq.data && Array.isArray(kq.data.ds)) ? kq.data.ds : [];
-    const m = docMeta()[loai] || {};
+    const ds0 = (kq.data && Array.isArray(kq.data.ds)) ? kq.data.ds : [];
+    if (chuSo) daDoc[loai] = ds0;
+    const ds = chuSo ? ds0.filter(x => x && String(x.chuSo) === chuSo) : ds0;
+    const m = docMeta()[mk] || {};
     const r = (m.ma && ds.find(x => x && x.ma === m.ma)) || ds[0] || null;
     const may = docJSON(khoa, null);
     const q = chonViec(m, r, may);
@@ -119,25 +128,26 @@ const ShinDongBo = (() => {
     if (chiDoc && (q.viec === 'guiMoi' || q.viec === 'guiSua')) return { trangThai: 'may' };
     if (chiDoc && q.viec === 'xungDot') return { trangThai: 'khacHub' };
     if (q.viec === 'giu') return { trangThai: 'dongBo' };
-    if (q.viec === 'nhan') { datMeta(loai, { ma: r.ma, phienBan: Number(r.phienBan) || 1, chuaGui: false }); return { trangThai: 'dongBo' }; }
+    if (q.viec === 'nhan') { datMeta(mk, { ma: r.ma, phienBan: Number(r.phienBan) || 1, chuaGui: false }); return { trangThai: 'dongBo' }; }
     if (q.viec === 'layMayChu') {
       if (r.noiDung == null) return { trangThai: 'loi', loi: 'loi', chiTiet: 'Bản trên Hub bị hỏng.' };
       ghiJSON(khoa, r.noiDung);
-      datMeta(loai, { ma: r.ma, phienBan: Number(r.phienBan) || 1, chuaGui: false });
+      datMeta(mk, { ma: r.ma, phienBan: Number(r.phienBan) || 1, chuaGui: false });
       return { trangThai: 'daTai', doi: true };
     }
-    if (q.viec === 'guiMoi') return gui(loai, khoa, may, '', 0, 0);
-    if (q.viec === 'guiSua') return gui(loai, khoa, may, r.ma, q.phienBan, 0);
-    return giaiXungDot(loai, khoa, { ma: r.ma, noiDung: r.noiDung, phienBan: r.phienBan, capNhat: r.capNhat || '', nguoiGhi: r.nguoiGhi || r.chuSo || '' }, may, 0);
+    if (q.viec === 'guiMoi') return gui(loai, khoa, may, '', 0, 0, mk);
+    if (q.viec === 'guiSua') return gui(loai, khoa, may, r.ma, q.phienBan, 0, mk);
+    return giaiXungDot(loai, khoa, { ma: r.ma, noiDung: r.noiDung, phienBan: r.phienBan, capNhat: r.capNhat || '', nguoiGhi: r.nguoiGhi || r.chuSo || '' }, may, 0, mk);
   }
 
   /** Gọi ngay sau khi module ghi localStorage: đánh dấu chưa gửi + hẹn gửi 1,5 giây (gộp). */
-  function danhDau(loai, khoa, khiDoi) {
-    const m = docMeta()[loai] || {};
-    datMeta(loai, Object.assign({}, m, { chuaGui: true }));
+  function danhDau(loai, khoa, khiDoi, tuyChon) {
+    const mk = khoaMeta(loai, tuyChon && tuyChon.chuSo);
+    const m = docMeta()[mk] || {};
+    datMeta(mk, Object.assign({}, m, { chuaGui: true }));
     if (!coTheGoi()) return;
     clearTimeout(hen[loai]);
-    hen[loai] = setTimeout(() => { dongBo(loai, khoa).then(kq => baoKq(kq, khiDoi)).catch(() => {}); }, 1500);
+    hen[loai] = setTimeout(() => { dongBo(loai, khoa, tuyChon).then(kq => baoKq(kq, khiDoi)).catch(() => {}); }, 1500);
   }
 
   /** Gọi khi mở màn: đồng bộ 1 lần / phiên cho mỗi loai; Hub có bản khác ➜ khiDoi() để vẽ lại. */
@@ -156,13 +166,16 @@ const ShinDongBo = (() => {
   }
 
   /** Dòng chữ nhỏ cho màn: '' khi cổng chưa có (giữ chữ cũ). */
-  function nhan(loai) {
+  function nhan(loai, chuSo) {
     if (trangThaiCong() !== 'ok') return '';
-    const m = docMeta()[loai] || {};
+    const m = docMeta()[khoaMeta(loai, chuSo)] || {};
     return m.chuaGui ? '☁️ Có thay đổi chưa gửi lên Hub (gửi khi có mạng).' : (m.ma ? '☁️ Đã đồng bộ với Hub (dùng chung cả nhóm).' : '');
   }
 
-  return { TEN, rong, taoMaGui, chonViec, dongBo, danhDau, khiMo, nhan, trangThaiCong,
+  /** v2.17.3: các dòng Hub đã đọc lần đồng bộ gần nhất của loại dòng-theo-người (GIAO_DUC thấy cả nhóm, người khác chỉ dòng mình). */
+  const dsDaDoc = loai => (daDoc[loai] || []).slice();
+
+  return { TEN, rong, taoMaGui, chonViec, dongBo, danhDau, khiMo, nhan, trangThaiCong, dsDaDoc,
     /** cho bộ kiểm thử */ datHoi: f => { hoi = f; }, datLaiPhien: () => { Object.keys(daMo).forEach(k => delete daMo[k]); try { sessionStorage.removeItem(KHOA_CONG); } catch (e) { /* bỏ qua */ } } };
 })();
 if (typeof window !== 'undefined') window.ShinDongBo = ShinDongBo;
