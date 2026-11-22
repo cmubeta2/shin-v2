@@ -57,7 +57,7 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ### PHIÊN BẢN v2.17.4 – 🎨 GIAO DIỆN LMS + VƯỚNG MẮC (AGY) · TRẠNG THÁI CỔNG ĐÃ LÊN APP (22/11/2026, lượt 16h12)
 - **Nguồn:** phiếu agy `11221017_V2_M4.5_giao-dien` (ĐẠT, tự kiểm 320 / 375 / 1280, 14 ảnh, 0 xung đột) + KE_HOACH HUB / LOI: L8, L31a/b, L32, L33 lên app v1.23.7 @24 sáng 22/11.
 - **Nội dung:** `js/modules/tuyensinh.js` khối 📘 thêm thanh tiến độ %, bài đã học tô nền, lời chúc khi xong 20/20, `title` tên bài; `css/styles.css` `.ts-toi-thanh/-muc/-xong`, `.ts-toi-bai.da-xong`, mũi tên ▸/▾ cho 👥 cả nhóm, nút 🏗️ Vướng mắc giãn đều ở điện thoại (`.da-bh .da-vm-nut`). QUY_HOACH mục 2: M1.6 · M3.1 · M4.5 · M8.4 · M8.6 · M9.2 · M9.3 · M9.5 ➜ 🟢 (cổng lên app, chờ nghiệm thu Live). `PHIEN_BAN_SW` ➜ `shin-v2.17.4` (CSS đổi; VO_APP giữ nguyên).
-- **Kiểm:** `node --check` + `node test/chay.js` 235/235 · quét bí mật `test/quet_bi_mat.js`. Giao diện: agy đã kiểm (ảnh trong `_TacVu/hop_agy/sandbox/11221017_V2_M4.5_giao-dien/anh`).
+- **Kiểm:** `node --check` + `node test/chay.js` 235/235 · quét bí mật `test/quet_bi_mat.js`. Giao diện: agy đã kiểm (ảnh trong `_TacVu/hop_agy/sandbox/11221017_V2_M4.5_giao-dien/anh`); khối 💡 Bài học (v2.17.2) + 📘 sau áp: chờ agy kiểm (phiếu `11221615_V2_M6.3_ra-ux`).
 
 ### PHIÊN BẢN v2.17.3 – 🎓 LMS: TIẾN ĐỘ HỌC CỦA TÔI (22/11/2026, lượt 10h12)
 - **Nguồn:** HUB L31a/b + L32 + L33 **đã lên app v1.23.7 @24 sáng 22/11** (10_Hub/KE_HOACH.md) ➜ phần "còn lại khi lên app: tách `tienDoLMS` theo người học".
