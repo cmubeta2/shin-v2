@@ -329,9 +329,10 @@ const ModuleTuyenSinh = {
     const khac = nhom.filter(x => x.chuSo !== ma);
     return `
       <div class="card ts-toi">
-        <div class="ts-toi-dau"><span class="ts-toi-td">📘 Tiến độ học của tôi</span><span class="badge ${td.phanTram === 100 ? 'xanh' : 'vang'}">${td.xong}/${td.tong} bài</span></div>
-        <div class="chu-phu">${ma ? (nh ? e(nh) : 'Lưu trên máy này – có cổng Hub thì tự đồng bộ (chỉ anh / chị và nhóm Giáo dục thấy).') : '🟡 Demo / chưa đăng nhập Hub – chỉ lưu trên máy này.'}${td.ke ? ' · Bài kế: <b>' + e(td.ke) + '</b>' : ''}</div>
-        <div class="ts-toi-luoi">${L.bai.map(b => `<label class="ts-toi-bai"><input type="checkbox" ${k.baiXong.indexOf(b.ma) >= 0 ? 'checked' : ''} onchange="ModuleTuyenSinh.danhDauToi('${e(b.ma)}', this.checked)"><span>${e(b.ma)}</span></label>`).join('')}</div>
+        <div class="ts-toi-dau"><span class="ts-toi-td">📘 Tiến độ học của tôi</span><span class="badge ${td.phanTram === 100 ? 'xanh' : 'vang'}">${td.xong}/${td.tong} bài · ${td.phanTram}%</span></div>
+        <div class="ts-toi-thanh" aria-hidden="true"><div class="ts-toi-muc${td.phanTram === 100 ? ' xong' : ''}" style="width:${td.phanTram}%"></div></div>
+        <div class="chu-phu">${ma ? (nh ? e(nh) : 'Lưu trên máy này – có cổng Hub thì tự đồng bộ (chỉ anh / chị và nhóm Giáo dục thấy).') : '🟡 Demo / chưa đăng nhập Hub – chỉ lưu trên máy này.'}${td.ke ? ' · Bài kế: <b>' + e(td.ke) + '</b>' : ` · <span class="ts-toi-xong">🎉 Hoàn thành ${td.tong}/${td.tong} bài!</span>`}</div>
+        <div class="ts-toi-luoi">${L.bai.map(b => { const daXong = k.baiXong.indexOf(b.ma) >= 0; return `<label class="ts-toi-bai${daXong ? ' da-xong' : ''}" title="${e(b.ma + ': ' + b.ten)}"><input type="checkbox" ${daXong ? 'checked' : ''} onchange="ModuleTuyenSinh.danhDauToi('${e(b.ma)}', this.checked)"><span>${e(b.ma)}</span></label>`; }).join('')}</div>
         ${khac.length ? `<details class="ts-toi-nhom"><summary>👥 Tiến độ cả nhóm (Hub) · ${nhom.length} người</summary>${nhom.map(x => `<div class="ts-toi-hang"><span>${e(x.ten)}</span><span class="badge ${x.phanTram === 100 ? 'xanh' : x.phanTram >= 50 ? 'vang' : 'do'}">${x.xong}/${x.tong}</span></div>`).join('')}</details>` : ''}
       </div>`;
   },
