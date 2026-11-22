@@ -297,7 +297,49 @@ const ModuleTuyenSinh = {
           }).join('')}
         </div>
       </div>
+      ${this.veTienDoToi(L, e)}
     `;
+  },
+  /* ---------------- v2.17.3 📘 Tiến độ học CỦA TÔI (HUB L31 DuLieuV2 `tienDoLMS` – mỗi người 1 dòng, ChuSo = mình) ---------------- */
+  KHOA_TOI: 'shin_lms_toi',
+  maToi: function() { const n = typeof ShinApp !== 'undefined' && ShinApp.live && ShinApp.live.nguoi; return n ? String(n.ma || n.maNV || '') : ''; },
+  khoaToi: function() { const m = this.maToi(); return m ? this.KHOA_TOI + '_' + m : this.KHOA_TOI; },
+  docToi: function() { let k = null; try { k = JSON.parse(localStorage.getItem(this.khoaToi()) || 'null'); } catch (e) { k = null; } return k && Array.isArray(k.baiXong) ? k : { baiXong: [] }; },
+  ghiToi: function(k) {
+    const n = (typeof ShinApp !== 'undefined' && ShinApp.live && ShinApp.live.nguoi) || {};
+    k.ten = n.hoTen || k.ten || ''; k.capNhat = this.ngayNay();
+    try { localStorage.setItem(this.khoaToi(), JSON.stringify(k)); } catch (e) { ShinApp.toast('Trình duyệt không cho lưu tiến độ.', 'error'); return false; }
+    const ma = this.maToi();
+    if (ma && typeof ShinDongBo !== 'undefined') ShinDongBo.danhDau('tienDoLMS', this.khoaToi(), () => this.veLms(), { chuSo: ma });
+    return true;
+  },
+  /** THUẦN: dòng Hub tienDoLMS [{chuSo, noiDung:{ten, baiXong, capNhat}}] ➜ [{chuSo, ten, xong, tong, phanTram, capNhat}] – ai chậm lên đầu. */
+  tongHopTienDo: function(ds, dsBai) {
+    return (ds || []).filter(r => r && r.noiDung && Array.isArray(r.noiDung.baiXong)).map(r => {
+      const td = this.tienDoBai(r.noiDung.baiXong, dsBai);
+      return { chuSo: String(r.chuSo || ''), ten: String(r.noiDung.ten || r.chuSo || ''), xong: td.xong, tong: td.tong, phanTram: td.phanTram, capNhat: r.noiDung.capNhat || r.capNhat || '' };
+    }).sort((a, b) => a.phanTram - b.phanTram || a.ten.localeCompare(b.ten, 'vi'));
+  },
+  veTienDoToi: function(L, e) {
+    const ma = this.maToi();
+    if (ma && typeof ShinDongBo !== 'undefined') ShinDongBo.khiMo('tienDoLMS', this.khoaToi(), () => this.veLms(), { chuSo: ma });
+    const k = this.docToi(), td = this.tienDoBai(k.baiXong, L.bai);
+    const nh = ma && typeof ShinDongBo !== 'undefined' ? ShinDongBo.nhan('tienDoLMS', ma) : '';
+    const nhom = typeof ShinDongBo !== 'undefined' ? this.tongHopTienDo(ShinDongBo.dsDaDoc('tienDoLMS'), L.bai) : [];
+    const khac = nhom.filter(x => x.chuSo !== ma);
+    return `
+      <div class="card ts-toi">
+        <div class="ts-toi-dau"><span class="ts-toi-td">📘 Tiến độ học của tôi</span><span class="badge ${td.phanTram === 100 ? 'xanh' : 'vang'}">${td.xong}/${td.tong} bài</span></div>
+        <div class="chu-phu">${ma ? (nh ? e(nh) : 'Lưu trên máy này – có cổng Hub thì tự đồng bộ (chỉ anh / chị và nhóm Giáo dục thấy).') : '🟡 Demo / chưa đăng nhập Hub – chỉ lưu trên máy này.'}${td.ke ? ' · Bài kế: <b>' + e(td.ke) + '</b>' : ''}</div>
+        <div class="ts-toi-luoi">${L.bai.map(b => `<label class="ts-toi-bai"><input type="checkbox" ${k.baiXong.indexOf(b.ma) >= 0 ? 'checked' : ''} onchange="ModuleTuyenSinh.danhDauToi('${e(b.ma)}', this.checked)"><span>${e(b.ma)}</span></label>`).join('')}</div>
+        ${khac.length ? `<details class="ts-toi-nhom"><summary>👥 Tiến độ cả nhóm (Hub) · ${nhom.length} người</summary>${nhom.map(x => `<div class="ts-toi-hang"><span>${e(x.ten)}</span><span class="badge ${x.phanTram === 100 ? 'xanh' : x.phanTram >= 50 ? 'vang' : 'do'}">${x.xong}/${x.tong}</span></div>`).join('')}</details>` : ''}
+      </div>`;
+  },
+  danhDauToi: function(ma, xong) {
+    const k = this.docToi(), i = k.baiXong.indexOf(ma);
+    if (xong && i < 0) k.baiXong.push(ma);
+    if (!xong && i >= 0) k.baiXong.splice(i, 1);
+    if (this.ghiToi(k)) this.veLms();
   },
   chonLop: function(ma) { this._lop = ma; const n = document.getElementById('tsLmsNgay'); const giu = n ? n.value : ''; this.veLms(); const m = document.getElementById('tsLmsNgay'); if (m && giu) m.value = giu; },
   luuDiemDanh: function() {

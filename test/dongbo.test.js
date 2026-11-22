@@ -221,3 +221,39 @@ kiem('Admin lưu số TK dạng SĐT ➜ chỉ lưu máy, KHÔNG đánh dấu g�
   assert.strictEqual(A.doc().soTK, TK_SDT); assert.notStrictEqual(A.meta().chuaGui, true);
   assert.strictEqual(A.toast[0][1], 'info'); assert.ok(A.toast[0][0].indexOf('chờ v1') >= 0);
 });
+
+mo('🔄 Đồng bộ DuLieuV2 – 🎓 tienDoLMS mỗi người 1 dòng (v2.17.3)');
+function mayLMS(mc, ma, ten) {
+  const app = napApp(['js/api.js', 'js/dongbo_v2.js', 'js/modules/mau_lms.js', 'js/modules/tuyensinh.js'], { fetch: mc.fetch });
+  app.localStorage.setItem('shin_token', ma);
+  const toast = []; app.ShinApp.toast = (m, l) => toast.push([m, l]);
+  app.ShinApp.live = { nguoi: { ma, hoTen: ten } };
+  return { app, toast, DB: app.lay('ShinDongBo'), TS: app.lay('ModuleTuyenSinh') };
+}
+kiem('2 người cùng Hub ➜ 2 dòng riêng (chuSo); người B không lấy nhầm dòng A; meta tách theo người', async () => {
+  const mc = taoMayChuGia();
+  const A = mayLMS(mc, 'u-a', 'Nguyen A'), B = mayLMS(mc, 'u-b', 'Tran B');
+  assert.strictEqual(A.TS.khoaToi(), 'shin_lms_toi_u-a');
+  assert.strictEqual(A.TS.ghiToi({ baiXong: ['M01', 'M02'] }), true);
+  const ra = await A.DB.dongBo('tienDoLMS', A.TS.khoaToi(), { chuSo: 'u-a' });
+  assert.strictEqual(ra.trangThai, 'daGui', JSON.stringify(ra));
+  B.TS.ghiToi({ baiXong: ['M01'] });
+  const rb = await B.DB.dongBo('tienDoLMS', B.TS.khoaToi(), { chuSo: 'u-b' });
+  assert.strictEqual(rb.trangThai, 'daGui', JSON.stringify(rb));   // không hỏi xung đột với dòng của A
+  assert.strictEqual(mc.so.duLieuV2.length, 2);
+  assert.deepStrictEqual(B.TS.docToi().baiXong, ['M01']);
+  const meta = JSON.parse(B.app.localStorage.getItem('shin_dbv2_meta'));
+  assert.ok(meta['tienDoLMS@u-b'] && !meta.tienDoLMS);
+  // máy mới của A (trống) ➜ tải đúng dòng của A
+  const A2 = mayLMS(mc, 'u-a', 'Nguyen A');
+  const r2 = await A2.DB.dongBo('tienDoLMS', A2.TS.khoaToi(), { chuSo: 'u-a' });
+  assert.strictEqual(r2.trangThai, 'daTai'); assert.deepStrictEqual(A2.TS.docToi().baiXong, ['M01', 'M02']);
+  assert.strictEqual(A2.DB.dsDaDoc('tienDoLMS').length, 2);
+});
+kiem('tongHopTienDo THUẦN: bỏ dòng hỏng, ai chậm lên đầu, tên rơi về chuSo', () => {
+  const { TS } = mayLMS(taoMayChuGia(), 'u-x', 'X');
+  const bai = [{ ma: 'M01' }, { ma: 'M02' }, { ma: 'M03' }, { ma: 'M04' }];
+  const kq = TS.tongHopTienDo([{ chuSo: 'u1', noiDung: { ten: 'An', baiXong: ['M01', 'M02', 'M03'] } }, { chuSo: 'u2', noiDung: { baiXong: ['M01'] } }, { chuSo: 'u3', noiDung: null }, null], bai);
+  assert.strictEqual(kq.length, 2);
+  assert.deepStrictEqual(kq.map(x => [x.ten, x.xong, x.phanTram]), [['u2', 1, 25], ['An', 3, 75]]);
+});

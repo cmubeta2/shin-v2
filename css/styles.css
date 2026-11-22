@@ -3312,7 +3312,39 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .cv-nut { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 .cv-nut .btn-secondary { min-height: 44px; flex: 1 1 0; min-width: 0; font-size: calc(14px * var(--font-scale)); }
 
-/* v2.16.0 M6.3 – Vướng mắc: 📤 Đẩy vào Task Bus + 📋 Sao chép */
-.da-vm-nut { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.da-vm-nut .btn-primary { flex: 2 1 160px; min-height: 44px; font-size: calc(14px * var(--font-scale, 1)); }
-.da-vm-nut .btn-secondary { flex: 1 1 110px; min-height: 44px; font-size: calc(14px * var(--font-scale, 1)); }
+/* v2.16.0 M6.3 – Vướng mắc: thẻ gọn, lưới 2 cột desktop, 📤 Đẩy vào Task Bus + 📋 Sao chép */
+.da-vm-nhom { margin-bottom: 16px; }
+.da-vm-nhom-td { font-size: calc(14px * var(--font-scale, 1)); font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.da-vm-luoi { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 768px) {
+  .da-vm-luoi { grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 12px; }
+}
+.da-vm-the { padding: 14px; margin-bottom: 0; border-left: 4px solid var(--border); display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; }
+.da-vm-the.da-vm-cao { border-left-color: var(--c-red); }
+.da-vm-the.da-vm-vua { border-left-color: var(--c-yellow); }
+.da-vm-the.da-vm-thap { border-left-color: var(--c-green); }
+.da-vm-td { font-size: calc(15px * var(--font-scale, 1)); font-weight: 700; color: var(--text); line-height: 1.4; overflow-wrap: anywhere; }
+.da-vm-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: calc(14px * var(--font-scale, 1)); color: var(--text-muted); line-height: 1.4; }
+.da-vm-dexuat { font-size: calc(14px * var(--font-scale, 1)); color: var(--text); background: var(--bg-sub); padding: 8px 10px; border-radius: var(--btn-radius); line-height: 1.45; overflow-wrap: anywhere; border-left: 2px solid var(--border); }
+.da-vm-nut { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 4px; }
+.da-vm-nut .btn-primary { width: auto; flex: 1 1 150px; min-height: 44px; padding: 8px 14px; font-size: calc(14px * var(--font-scale, 1)); }
+.da-vm-nut .btn-secondary { flex: 1 1 112px; min-height: 44px; padding: 8px 14px; font-size: calc(14px * var(--font-scale, 1)); }
+@media (min-width: 768px) {
+  .da-vm-nut .btn-primary { flex: 0 1 auto; }
+  .da-vm-nut .btn-secondary { flex: 0 1 auto; }
+}
+/* v2.17.2 – khối 💡 Bài học kinh nghiệm (gom style nội tuyến, góp ý agy 11211150) */
+.da-bh { padding: 14px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px; }
+.da-bh .da-vm-nhom-td { margin-bottom: 0; }
+.da-bh-the { display: flex; flex-wrap: wrap; gap: 6px; }
+.da-bh-nhan { font-size: calc(14px * var(--font-scale, 1)); }
+.da-bh .da-vm-nut .btn-primary, .da-bh .da-vm-nut .btn-secondary { line-height: 1.35; white-space: normal; }
+/* v2.17.3 🎓 LMS – 📘 Tiến độ học của tôi (tienDoLMS) */
+.ts-toi { padding: 14px; margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.ts-toi-dau { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.ts-toi-td { font-size: calc(15px * var(--font-scale, 1)); font-weight: 700; color: var(--text); }
+.ts-toi-luoi { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; }
+.ts-toi-bai { display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--btn-radius); font-size: calc(14px * var(--font-scale, 1)); color: var(--text); cursor: pointer; }
+.ts-toi-bai input { width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--primary); }
+.ts-toi-nhom summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-size: calc(14px * var(--font-scale, 1)); font-weight: 600; color: var(--text); }
+.ts-toi-hang { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 44px; border-top: 1px solid var(--border-soft); font-size: calc(14px * var(--font-scale, 1)); color: var(--text); overflow-wrap: anywhere; }

@@ -128,7 +128,7 @@ Các mã ngắn `KS`, `TS`, `PK`, `HUB`, `KPI` chỉ còn là **khóa máy chủ
 | M4.2 | Lead theo chiến dịch (`webLeadCD`) · thêm/sửa (`webLuuLead`) · nhật ký · chuyển · xóa | 🟢 | – |
 | M4.3 | Bảng tính hoa hồng bậc thang 6 bậc | 🟢 theo từng chiến dịch | – |
 | M4.4 | Phễu ứng viên: Mới → Tư vấn → Hồ sơ → Nhập học → Hủy | ✅ | – |
-| M4.5 | LMS mini: lớp học, điểm danh, bài tập M01–M20 | ✅ v2.12.1 lớp mẫu + điểm danh theo ngày + chuyên cần (< 80% cảnh báo) + tiến độ M01–M20 (🎓 Tuyển sinh, lưu máy) · ⬜ lớp / học viên thật: cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) | v2.6.0 |
+| M4.5 | LMS mini: lớp học, điểm danh, bài tập M01–M20 | ✅ v2.17.3 📘 tiến độ học của tôi (`tienDoLMS` mỗi người 1 dòng, HUB L31 lên app 22/11 – chờ anh nghiệm thu Live) · v2.12.1 lớp mẫu + điểm danh theo ngày + chuyên cần (< 80% cảnh báo) + tiến độ M01–M20 (🎓 Tuyển sinh, lưu máy) · ⬜ lớp / học viên thật: cổng v1 đã duyệt 21/11 – HUB L31 (kho `DuLieuV2`) | v2.6.0 |
 
 ### 🏥 MẢNG 5 – NHÂN SỰ & VẬN HÀNH PHÒNG KHÁM · `phongkham` · Hoàng Kim
 | Mã | Micro-Module | Trạng thái | Phiên bản đích |
