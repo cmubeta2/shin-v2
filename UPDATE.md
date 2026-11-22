@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.17.3** · Cập nhật ngày: **22/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.17.4** · Cập nhật ngày: **22/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -26,13 +26,11 @@
   - HUB L33 `webTimTriThuc` + `webDoThiTriThuc` ➜ v2 🧠 M9.2 tìm toàn văn + M9.3 đồ thị liên kết (thay dữ liệu MẪU). **v2.16.4 đã nối sẵn** – chờ v1 lên app.
   - PTKH L581 (đề ghi L580 – đổi số vì trùng) cổng CHỈ ĐỌC giờ công / tăng ca ➜ v2 👥 M5.4 + 💰 M3.5 xuất TC-NS. **v2.16.6 đã nối sẵn** (📋 PTKH › ⏱️ Giờ công) – chờ v1 code + lên app.
 - **Nhóm C – anh làm:** (1) 7 luồng ghi v2 **đã thử trên máy chủ giả (v2.16.9, `test/luong_7.test.js` 81/81) – còn chờ anh nghiệm thu 1 lần bằng token thật**: gửi đề xuất chi 0B (💰 M6.4) · ghi liên hệ + đánh dấu lead (👥 CRM) · gửi bài học (🧠 HUB L28) · đẩy việc + đổi trạng thái Task Bus (📋 Công việc) · đẩy vướng mắc M6.3 (🗂️ Dự án) · gửi đơn nghỉ ốm (📋 PTKH) · nhập 1 phiếu KS (🩺 › 🛠️ › 📝); kết nối Telegram mã ghép vẫn chỉ thử được bằng tay. Lưu ý khi nghiệm thu: PTKH `webGuiNghiPhep` và KS `webNhapHo` (v1) chưa có mã chống trùng – mất mạng giữa chừng thì xem danh sách trước khi gửi lại (màn đã nhắc); (2) V20 Menu Button Telegram; (3) chọn 1 tổ dùng thử (PK L6).
-- **Cổng v1 – trạng thái (ke-hoach vét 21/11 22h4x):**
-  - Cổng v1 LOI L8 `chanDuLieuNhayCam_` KIỂM ĐẠT 21/11 (v1.0.7) – chờ ④ đưa lên app, rồi ⑤ nối màn M9.5
-  - Cổng v1 HUB L31a `webDocDuLieuV2` / `webGhiDuLieuV2` KIỂM ĐẠT 21/11 (v1.23.4) – chờ ④ đưa lên app, rồi ⑤ nối màn M8.1–M8.6 · M4.5 · M3.1 (L31b xung đột + tường lửa «CÓ KH», ② làm tiếp)
-  - Cổng v1 HUB L32 `webNhatKyTacVu` KIỂM ĐẠT 21/11 (v1.23.5) – chờ ④ đưa lên app, rồi ⑤ nối màn M1.6
-  - Cổng v1 HUB L33 `webTimTriThuc` + `webDoThiTriThuc` KIỂM ĐẠT 21/11 (v1.23.6) – chờ ④ đưa lên app, rồi ⑤ nối màn M9.2 + M9.3
-  - Cổng v1 PTKH L581 `webGioCongThang` KIỂM ĐẠT 21/11 (v1.314.12) – chờ ④ đưa lên app, rồi ⑤ nối màn M5.4 + M3.5
+- **Cổng v1 – trạng thái (cập nhật lượt 22/11 16h12 theo KE_HOACH các app):**
+  - 🟢 LÊN APP 22/11 10h (HUB v1.23.7 @24): LOI L8 `chanDuLieuNhayCam_` (M9.5) · HUB L31a/b `webDocDuLieuV2` / `webGhiDuLieuV2` (M8.4 · M8.6 · M4.5 · M3.1) · HUB L32 `webNhatKyTacVu` (M1.6) · HUB L33 `webTimTriThuc` + `webDoThiTriThuc` (M9.2 · M9.3). Màn v2 đã nối sẵn, tự dò cổng – **Chờ anh:** nghiệm thu Live 1 lần mỗi màn bằng token thật.
+  - Cổng v1 PTKH L581 `webGioCongThang` KIỂM ĐẠT 21/11 (v1.314.12) – chờ ④ đưa lên app (M5.4 + M3.5 đã nối sẵn)
   - KS L7 `webNhapHo` + `maGui` chống ghi trùng «CÓ KH» 21/11 – ② làm; PTKH L618 (`webGuiNghiPhep` + `maGui`) ⏸ chờ anh duyệt
+  - **Còn chờ v1:** miễn `soTK` khỏi tường lửa cho loại `taiKhoanQR`; thêm loại `pheuLanBien` (M8.5) và `lichNoiDung` đang có trong hợp đồng nhưng màn 📅 lịch M8.1 vẫn tính từ kho bài (không cần cổng riêng).
 - **Để sau:** SePay webhook xác nhận thanh toán (M3.1) – anh tự liên kết. Khóa site Turnstile cho trang điền KS công khai vẫn chờ anh.
 - **KHÔNG làm (Sếp chốt):** chỉ số cả tổ ẩn danh (Morale / NTC cả tổ M5.5–M5.6).
 
@@ -55,6 +53,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.17.4 – 🎨 GIAO DIỆN LMS + VƯỚNG MẮC (AGY) · TRẠNG THÁI CỔNG ĐÃ LÊN APP (22/11/2026, lượt 16h12)
+- **Nguồn:** phiếu agy `11221017_V2_M4.5_giao-dien` (ĐẠT, tự kiểm 320 / 375 / 1280, 14 ảnh, 0 xung đột) + KE_HOACH HUB / LOI: L8, L31a/b, L32, L33 lên app v1.23.7 @24 sáng 22/11.
+- **Nội dung:** `js/modules/tuyensinh.js` khối 📘 thêm thanh tiến độ %, bài đã học tô nền, lời chúc khi xong 20/20, `title` tên bài; `css/styles.css` `.ts-toi-thanh/-muc/-xong`, `.ts-toi-bai.da-xong`, mũi tên ▸/▾ cho 👥 cả nhóm, nút 🏗️ Vướng mắc giãn đều ở điện thoại (`.da-bh .da-vm-nut`). QUY_HOACH mục 2: M1.6 · M3.1 · M4.5 · M8.4 · M8.6 · M9.2 · M9.3 · M9.5 ➜ 🟢 (cổng lên app, chờ nghiệm thu Live). `PHIEN_BAN_SW` ➜ `shin-v2.17.4` (CSS đổi; VO_APP giữ nguyên).
+- **Kiểm:** `node --check` + `node test/chay.js` 235/235 · quét bí mật `test/quet_bi_mat.js`. Giao diện: agy đã kiểm (ảnh trong `_TacVu/hop_agy/sandbox/11221017_V2_M4.5_giao-dien/anh`).
 
 ### PHIÊN BẢN v2.17.3 – 🎓 LMS: TIẾN ĐỘ HỌC CỦA TÔI (22/11/2026, lượt 10h12)
 - **Nguồn:** HUB L31a/b + L32 + L33 **đã lên app v1.23.7 @24 sáng 22/11** (10_Hub/KE_HOACH.md) ➜ phần "còn lại khi lên app: tách `tienDoLMS` theo người học".

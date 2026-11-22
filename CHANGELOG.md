@@ -4,6 +4,14 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.17.4] – 22/11/2026 (🎨 giao diện 📘 Tiến độ học + 🏗️ Vướng mắc – agy · cổng Hub đã lên app)
+
+### 🎨 Giao diện
+- 🎓 LMS › 📘 Tiến độ học của tôi: thanh tiến độ %, bài đã học tô nền, lời chúc khi xong đủ bài, mũi tên mở / gọn 👥 cả nhóm (phiếu agy `11221017`).
+- 🗂️ Dự án › 🏗️ Vướng mắc: 2 nút giãn đều ở điện thoại, gọn lại từ 768px.
+
+### 📋 Trạng thái
+- QUY_HOACH: M1.6 · M3.1 · M4.5 · M8.4 · M8.6 · M9.2 · M9.3 · M9.5 ➜ 🟢 (HUB v1.23.7 @24 lên app 22/11; chờ nghiệm thu Live).
 ## [2.17.3] – 22/11/2026 (🎓 LMS: 📘 Tiến độ học của tôi – `tienDoLMS` mỗi người 1 dòng)
 
 ### ✨ Tính năng

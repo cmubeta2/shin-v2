@@ -3338,13 +3338,27 @@ body.an-navbar .decagon-drawer, body.an-navbar .decagon-overlay {
 .da-bh .da-vm-nhom-td { margin-bottom: 0; }
 .da-bh-the { display: flex; flex-wrap: wrap; gap: 6px; }
 .da-bh-nhan { font-size: calc(14px * var(--font-scale, 1)); }
-.da-bh .da-vm-nut .btn-primary, .da-bh .da-vm-nut .btn-secondary { line-height: 1.35; white-space: normal; }
+.da-bh .da-vm-nut .btn-primary, .da-bh .da-vm-nut .btn-secondary { flex: 1 1 240px; line-height: 1.35; white-space: normal; }
+@media (min-width: 768px) {
+  .da-bh .da-vm-nut .btn-primary, .da-bh .da-vm-nut .btn-secondary { flex: 0 1 auto; }
+}
 /* v2.17.3 🎓 LMS – 📘 Tiến độ học của tôi (tienDoLMS) */
 .ts-toi { padding: 14px; margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
 .ts-toi-dau { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .ts-toi-td { font-size: calc(15px * var(--font-scale, 1)); font-weight: 700; color: var(--text); }
+.ts-toi-thanh { height: 6px; border-radius: 999px; background: var(--bg-sub); overflow: hidden; }
+.ts-toi-muc { height: 100%; border-radius: 999px; background: var(--primary); transition: width 0.2s ease; }
+.ts-toi-muc.xong { background: var(--c-green); }
+.ts-toi-xong { color: var(--c-green); font-weight: 600; }
 .ts-toi-luoi { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; }
-.ts-toi-bai { display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--btn-radius); font-size: calc(14px * var(--font-scale, 1)); color: var(--text); cursor: pointer; }
-.ts-toi-bai input { width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--primary); }
-.ts-toi-nhom summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-size: calc(14px * var(--font-scale, 1)); font-weight: 600; color: var(--text); }
-.ts-toi-hang { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 44px; border-top: 1px solid var(--border-soft); font-size: calc(14px * var(--font-scale, 1)); color: var(--text); overflow-wrap: anywhere; }
+.ts-toi-bai { display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--btn-radius); font-size: calc(14px * var(--font-scale, 1)); color: var(--text); cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease; box-sizing: border-box; }
+.ts-toi-bai:hover { border-color: var(--primary); }
+.ts-toi-bai.da-xong { background: var(--primary-soft); border-color: var(--primary); font-weight: 600; }
+.ts-toi-bai input { width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--primary); cursor: pointer; }
+[data-theme="dark"] .ts-toi-bai input { color-scheme: dark; }
+.ts-toi-nhom { border-top: 1px solid var(--border-soft); padding-top: 4px; }
+.ts-toi-nhom summary { min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; font-size: calc(14px * var(--font-scale, 1)); font-weight: 600; color: var(--text); list-style: none; }
+.ts-toi-nhom summary::-webkit-details-marker { display: none; }
+.ts-toi-nhom summary::after { content: '▸'; color: var(--text-muted); font-size: calc(14px * var(--font-scale, 1)); flex: 0 0 auto; }
+.ts-toi-nhom[open] summary::after { content: '▾'; }
+.ts-toi-hang { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 44px; padding: 8px 0; border-top: 1px solid var(--border-soft); font-size: calc(14px * var(--font-scale, 1)); color: var(--text); overflow-wrap: anywhere; box-sizing: border-box; }
