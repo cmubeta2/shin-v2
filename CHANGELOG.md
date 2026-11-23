@@ -4,6 +4,15 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.17.5] – 23/11/2026 (sửa theo agy kiểm 11221615 · PTKH L581 đã lên app)
+
+### 🎨 Giao diện
+- 🗂️ Dự án › 💡 Bài học: nhãn nút gọn "📋 Chép Markdown" / "📤 Gửi kho Tri thức", ghi chú "chờ Admin duyệt" xuống dòng phụ.
+- 🎓 LMS › 📘 Tiến độ học của tôi: "Bài kế" hiện kèm tên bài.
+
+### 🔌 Cổng
+- PTKH L581 `webGioCongThang` đã lên app (v1.314.53) – ⏱️ Giờ công + 📤 Xuất TC-NS chạy số thật khi đăng nhập Hub (chờ anh nghiệm thu).
+
 ## [2.17.4] – 22/11/2026 (🎨 giao diện 📘 Tiến độ học + 🏗️ Vướng mắc – agy · cổng Hub đã lên app)
 
 ### 🎨 Giao diện
