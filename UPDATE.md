@@ -58,7 +58,7 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 - 🗂️ Dự án › 🏗️ Vướng mắc › 💡 Bài học: rút nhãn 2 nút còn "📋 Chép Markdown" / "📤 Gửi kho Tri thức" (không rớt 2 dòng ở 375px), câu "chờ Admin duyệt" chuyển xuống dòng phụ (agy `11221615` – B Đơn giản).
 - 🎓 LMS › 📘 Tiến độ học của tôi: dòng "Bài kế" kèm tên bài (điện thoại không xem được tooltip) (agy `11221615` – A Hiểu ngay).
 - 📋 PTKH › ⏱️ Giờ công (M5.4) + 💰 M3.5 xuất TC-NS: cổng PTKH L581 đã lên app – QUY_HOACH 🟢, chờ anh nghiệm thu Live.
-- **Kiểm:** `node --check` + `node test/chay.js` · quét bí mật `test/quet_bi_mat.js`. Giao diện: chỉ đổi nhãn / thêm 1 dòng chữ – chờ agy kiểm lại (gộp vào phiếu ra-ux kế).
+- **Kiểm:** `node --check` + `node test/chay.js` · quét bí mật `test/quet_bi_mat.js`. Giao diện: chỉ đổi nhãn / thêm 1 dòng chữ – chờ agy kiểm (phiếu `11231015_V2_M6.3_ra-ux`, gồm cả ⏱️ Giờ công PTKH).
 
 ### PHIÊN BẢN v2.17.4 – 🎨 GIAO DIỆN LMS + VƯỚNG MẮC (AGY) · TRẠNG THÁI CỔNG ĐÃ LÊN APP (22/11/2026, lượt 16h12)
 - **Nguồn:** phiếu agy `11221017_V2_M4.5_giao-dien` (ĐẠT, tự kiểm 320 / 375 / 1280, 14 ảnh, 0 xung đột) + KE_HOACH HUB / LOI: L8, L31a/b, L32, L33 lên app v1.23.7 @24 sáng 22/11.
