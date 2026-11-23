@@ -390,7 +390,7 @@ const ModuleDuAn = {
     const kq = bh.map(b => this.kiemBaiHoc(b)), hop = kq.filter(k => k.goi), bo = kq.length - hop.length;
     if (!hop.length) return ShinApp.toast('Không bài nào gửi được (' + (kq[0] || {}).loi + ').', 'error');
     this._dangGuiBH = true;
-    const khoaNut = on => { if (nut && nut.isConnected) { nut.disabled = on; nut.innerHTML = on ? '⏳ Chờ 6 giây…' : '📤 Gửi bài học vào kho 🧠 (chờ Admin duyệt)'; } };
+    const khoaNut = on => { if (nut && nut.isConnected) { nut.disabled = on; nut.innerHTML = on ? '⏳ Chờ 6 giây…' : '📤 Gửi kho Tri thức'; } };
     ShinApp.hanhDongHoanTac('Sẽ gửi ' + hop.length + ' bài học vào kho tri thức' + (bo ? ' (bỏ ' + bo + ' bài không hợp lệ)' : '') + '.', {
       lamTruoc: () => khoaNut(true),
       traLai: () => { this._dangGuiBH = false; khoaNut(false); },
@@ -427,9 +427,10 @@ const ModuleDuAn = {
         <div class="da-vm-nhom-td">💡 Bài học kinh nghiệm · ${bh.length}</div>
         <div class="da-bh-the">${[...new Set(bh.map(b => b.chuDe))].map(cd => `<span class="badge xam da-bh-nhan">${ShinApp.esc(cd)} · ${bh.filter(b => b.chuDe === cd).length}</span>`).join('')}</div>
         <div class="da-vm-nut">
-        <button class="btn-secondary" onclick="ModuleDuAn.saoChepBaiHoc()">📋 Sao chép bài học (Markdown cho 📚 Tri thức)</button>
-        <button class="btn-primary" onclick="ModuleDuAn.guiBaiHoc(this)">📤 Gửi bài học vào kho 🧠 (chờ Admin duyệt)</button>
+        <button class="btn-secondary" onclick="ModuleDuAn.saoChepBaiHoc()" title="Sao chép bài học dạng Markdown cho 📚 Tri thức">📋 Chép Markdown</button>
+        <button class="btn-primary" onclick="ModuleDuAn.guiBaiHoc(this)" title="Gửi bài học vào kho 🧠 Tri thức">📤 Gửi kho Tri thức</button>
         </div>
+        <div class="chu-phu">Bài gửi vào kho 🧠 chờ Admin duyệt trước khi hiện cho mọi người.</div>
       </div>` : '';
     return dauBh + NHOM.map(([k, nhan]) => {
       const nhom = ds.map((x, i) => ({ x, i })).filter(o => o.x.muc === k);
