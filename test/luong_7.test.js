@@ -88,14 +88,14 @@ const LUONG = [
       assert.deepStrictEqual(Object.assign({}, du.thamSo[0]), { loai: 'Nghỉ ốm', tuNgay: '2026-11-20', denNgay: '2026-11-21', buoi: 'Cả ngày', lyDo: 'Sốt cao, có giấy nghỉ' });
     },
     soLuu: mc => mc.so.donNghi.length },
-  { ten: '⑤ 🩺 Nhập hộ phiếu KS (webNhapHo)', hanh: 'webNhapHo', chongTrung: 'khong', canhBaoTrung: /kiểm danh sách phiếu/,
+  { ten: '⑤ 🩺 Nhập hộ phiếu KS (webNhapHo)', hanh: 'webNhapHo', chongTrung: 'maGui',
     chuan(m, chu, demo) {
       m.KS._ks = { ma: 'KS001', demo: !!demo, cau: [{ maCH: 'C1', loai: '5muc', noiDung: 'Mức hài lòng', batBuoc: true }, { maCH: 'C2', loai: 'chudai', noiDung: 'Góp ý', batBuoc: false }] };
       m.KS._tl = { C1: 5, C2: chu || 'Nhân viên nhiệt tình' }; m.KS._batDau = Date.now() - 42000; m.KS.ve = () => {};
     },
     lai: m => { m.KS._tl = { C1: 5, C2: 'Nhân viên nhiệt tình' }; },
     bam: (m, n) => m.KS.gui(n),
-    kiemGoi(du) { assert.strictEqual(du.ma, 'KS001'); assert.deepStrictEqual(Object.assign({}, du.traLoi), { C1: 5, C2: 'Nhân viên nhiệt tình' }); assert.ok(du.giay >= 42); },
+    kiemGoi(du) { assert.strictEqual(du.ma, 'KS001'); assert.deepStrictEqual(Object.assign({}, du.traLoi), { C1: 5, C2: 'Nhân viên nhiệt tình' }); assert.ok(du.giay >= 42); assert.ok(/^[A-Za-z0-9_-]{6,40}$/.test(du.maGui)); },
     soLuu: mc => mc.so.phieuKS.length },
   { ten: '⑥ 📋 Task Bus đẩy việc (webDayViec)', hanh: 'webDayViec', chongTrung: 'maGui',
     chuan(m, chu, demo) {
@@ -178,7 +178,7 @@ for (const L of LUONG) {
     if (L.chongTrung === 'maGui') {
       const [a, b] = m.mc.nhatKyGhi;
       assert.strictEqual(JSON.stringify(a.du), JSON.stringify(b.du), 'gửi lại phải giữ nguyên mã chống trùng');
-      assert.strictEqual(b.kq.du.moi, false);
+      assert.ok(b.kq.du.moi === false || b.kq.du.trung === true, 'lần 2 máy chủ phải báo bản cũ');
     }
   });
   kiem('máy chủ trả chậm: bấm lại khi đang chờ ➜ không gửi thêm', async () => {

@@ -2,7 +2,7 @@
  * SHIN v2 – 🩺 Khảo sát › 📝 Nhập hộ phiếu giấy (v2.13.16, M1.5)
  * Cổng KS (app 70_KhaoSat v1.3.2 L2, đã lên app):
  *   webCongKhaiDocKS({ma}) ➜ {maKS, tieuDe, moTa, cau:[{maCH, phienBan, loai, noiDung, luaChon[], batBuoc}]}  (đọc câu đúng phiên bản; KS phải Đang mở)
- *   webNhapHo({ma, traLoi:{MaCH: giá trị}, giay}) ➜ {ok, maPhieu, msg}  (Admin / Quản lý của KS; Kenh 'Nhập hộ' + NguoiNhapHo, không giới hạn thiết bị)
+ *   webNhapHo({ma, traLoi:{MaCH: giá trị}, giay, maGui}) ➜ {ok, maPhieu, msg, trung?}  (maGui: KS L7 v1.4.5 – gửi lại cùng mã ➜ phiếu cũ + trung:true)  (Admin / Quản lý của KS; Kenh 'Nhập hộ' + NguoiNhapHo, không giới hạn thiết bị)
  * Cổng KS không có mã chống trùng ➜ khóa nút khi đang gửi + Toast Hoàn tác 6s (Hoàn tác = không gửi gì), gửi xong xóa form.
  * Tường lửa M9.5: ô chữ có CCCD / BHYT / khóa ➜ chặn trước khi gửi (webNhapHo không khớp CONG_GHI nên tự soát ở đây).
  */
@@ -175,7 +175,14 @@ const ModuleKsNhapHo = {
     if (loi) { ShinApp.toast(loi, 'warn'); return; }
     // v2.16.9: không token cũng là Demo (trước đây SHIN_API.goi trả dữ liệu mẫu ➜ báo "Đã lưu phiếu" giả).
     if (ks.demo || !SHIN_API.layToken()) { ShinApp.toast('Đang ở Demo – phiếu không được ghi lên app Khảo sát.', 'info'); return; }
-    const du = { ma: ks.ma, traLoi, giay: Math.round((Date.now() - this._batDau) / 1000) };
+    // v2.17.7: KS L7 (lên app v1.4.5) – maGui chống ghi trùng; giữ nguyên (cả `giay`) tới khi app KS nhận ➜ gửi lại sau mất mạng không thành phiếu 2.
+    const khoa = ks.ma + '|' + JSON.stringify(traLoi);
+    if (this._maGuiCho !== khoa) {
+      this._maGuiCho = khoa;
+      this._maGui = 'v2ks' + Date.now().toString(36) + Math.random().toString(36).replace(/[^a-z0-9]/g, '').slice(0, 6).padEnd(4, '0');
+      this._giayCho = Math.round((Date.now() - this._batDau) / 1000);
+    }
+    const du = { ma: ks.ma, traLoi, giay: this._giayCho, maGui: this._maGui };
     this._dangGui = true;
     if (nut) nut.disabled = true;
     ShinApp.hanhDongHoanTac('Sẽ lưu phiếu nhập hộ sau 6 giây.', {
@@ -184,11 +191,13 @@ const ModuleKsNhapHo = {
         try {
           const r = await SHIN_API.goi('KS', 'webNhapHo', du);
           if (r.isDemo) throw new Error('Chưa có máy chủ Khảo sát – phiếu chưa được ghi.');
-          // v2.16.9: v1 webNhapHo chưa chống ghi trùng (không có maGui) ➜ mất mạng giữa chừng thì phiếu CÓ THỂ đã vào.
-          if (!r.ok) throw new Error(r.loi === 'mang' ? 'Mất kết nối khi đang lưu – phiếu có thể đã vào app Khảo sát: kiểm danh sách phiếu trước khi lưu lại (app KS chưa chống ghi trùng).' : SHIN_API.moTaLoi(r));
+          // v2.17.7: có maGui ➜ mất mạng thì bấm Lưu lại an toàn (app KS trả phiếu cũ + trung:true).
+          if (!r.ok) throw new Error(r.loi === 'mang' ? 'Mất kết nối khi đang lưu – bấm Lưu lại: app Khảo sát chống ghi trùng, phiếu không vào 2 lần.' : SHIN_API.moTaLoi(r));
           const kq = r.data || {};
           if (kq.ok === false) throw new Error(kq.msg || 'App Khảo sát không nhận phiếu.');
-          ShinApp.toast('Đã lưu phiếu ' + (kq.maPhieu || '') + ' – form đã xóa để nhập phiếu tiếp.', 'success');
+          this._maGui = ''; this._maGuiCho = '';
+          ShinApp.toast(kq.trung ? (kq.msg || ('Phiếu ' + (kq.maPhieu || '') + ' đã lưu trước đó – không lưu lần 2.')) + ' Form đã xóa.'
+            : 'Đã lưu phiếu ' + (kq.maPhieu || '') + ' – form đã xóa để nhập phiếu tiếp.', 'success');
           if (this._ks === ks) this.lamMoi();
         } finally {
           this._dangGui = false;
