@@ -427,8 +427,8 @@ const ModuleDuAn = {
         <div class="da-vm-nhom-td">💡 Bài học kinh nghiệm · ${bh.length}</div>
         <div class="da-bh-the">${[...new Set(bh.map(b => b.chuDe))].map(cd => `<span class="badge xam da-bh-nhan">${ShinApp.esc(cd)} · ${bh.filter(b => b.chuDe === cd).length}</span>`).join('')}</div>
         <div class="da-vm-nut">
-        <button class="btn-secondary" onclick="ModuleDuAn.saoChepBaiHoc()" title="Sao chép bài học dạng Markdown cho 📚 Tri thức">📋 Chép Markdown</button>
         <button class="btn-primary" onclick="ModuleDuAn.guiBaiHoc(this)" title="Gửi bài học vào kho 🧠 Tri thức">📤 Gửi kho Tri thức</button>
+        <button class="btn-secondary" onclick="ModuleDuAn.saoChepBaiHoc()" title="Sao chép bài học dạng Markdown cho 📚 Tri thức">📋 Chép Markdown</button>
         </div>
         <div class="chu-phu">Bài gửi vào kho 🧠 chờ Admin duyệt trước khi hiện cho mọi người.</div>
       </div>` : '';

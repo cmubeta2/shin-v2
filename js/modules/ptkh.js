@@ -583,7 +583,7 @@ const ModulePTKH = {
       than = `<p class="chu-phu">${d.live ? 'Số thật' : '🟡 MẪU'} · tháng ${e(t.tenThang || t.thang)} · ${so(t.tong.soNV)} NV · ${String(t.tong.tongCong).replace('.', ',')} công · <b>${String(t.tong.gioTC).replace('.', ',')} giờ tăng ca</b> đã duyệt.</p>
         ${t.nv.length ? `<div class="hn-list">${t.nv.map(x => `<div class="hn-dong" style="cursor:default;"><div class="dong-content">
           <div class="dong-title">${e(x.hoTen || x.ma)}</div>
-          <div class="dong-sub">${e([x.donVi, String(x.tongCong).replace('.', ',') + ' công', x.truNTC ? 'trừ NTC ' + String(x.truNTC).replace('.', ',') : ''].filter(Boolean).join(' · '))}</div></div>
+          <div class="dong-sub" style="white-space:normal;">${e([x.donVi, String(x.tongCong).replace('.', ',') + ' công', x.truNTC ? 'trừ NTC ' + String(x.truNTC).replace('.', ',') : ''].filter(Boolean).join(' · '))}</div></div>
           <div class="dong-meta">${x.gioTC ? `<span class="badge vang">${String(x.gioTC).replace('.', ',')} giờ TC</span>` : ''}</div></div>`).join('')}</div>
         <div class="hang-nut" style="margin-top:10px;"><button class="btn-primary" style="flex:1; min-height:44px;" onclick="ModulePTKH.xuatTCNS()">📤 Xuất bảng TC-NS (CSV) cho Kế toán</button></div>` : '<div class="trong">Không có nhân viên trong phạm vi được xem.</div>'}`;
     }
