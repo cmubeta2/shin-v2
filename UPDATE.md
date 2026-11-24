@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.17.5** · Cập nhật ngày: **23/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.17.6** · Cập nhật ngày: **24/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -21,7 +21,7 @@
   - **Chờ anh duyệt:** thêm vào SKILL ⑤ mục 4 bước "(1b) `node test/chay.js` phải N/N ĐẠT + (3) chạy `node test/quet_bi_mat.js` thay quét tay" – em KHÔNG tự sửa SKILL.
 - **Nhóm B – 5 cổng v1 mới ĐÃ DUYỆT 21/11 (luồng v1 làm trước, v2 nối màn khi lên app; hợp đồng ở HOP_DONG_CONG_V2.md):**
   - LOI L8 `chanDuLieuNhayCam_` – tường lửa phía máy chủ ➜ v2 🛡️ M9.5 (giữ chặn sớm phía trình duyệt, hiện nguyên câu lỗi máy chủ).
-  - HUB L31 kho dữ liệu dùng chung `DuLieuV2` ➜ v2 📣 M8.1–M8.6 (lịch, bài, duyệt, báo cáo) · 🎓 M4.5 LMS · 💰 M3.1 cấu hình VietQR – chuyển từ "lưu trên máy" sang lưu Hub. **v2.17.0 đã dựng sẵn** lớp đồng bộ + gắn 📣 Marketing (baiViet, chiSoKenh) và 🎓 LMS (diemDanh) – chờ v1 lên app (Hub trên app v1.23.2; L31a «KIỂM ĐẠT v1.23.4», L31b ⏸). **v2.17.1 đã gắn 💰 VietQR `taiKhoanQR`** (Admin ghi, Kế toán chỉ đọc). Còn lại khi lên app: tách `tienDoLMS` theo người học. **Còn chờ v1:** L31b tường lửa `chanDuLieuNhayCam_` chặn số TK dạng SĐT / 12 số trong `taiKhoanQR` – cần miễn trường `soTK` của loại này (v2 tạm không gửi các số đó, chỉ lưu máy).
+  - HUB L31 kho dữ liệu dùng chung `DuLieuV2` ➜ v2 📣 M8.1–M8.6 (lịch, bài, duyệt, báo cáo) · 🎓 M4.5 LMS · 💰 M3.1 cấu hình VietQR – chuyển từ "lưu trên máy" sang lưu Hub. **v2.17.0 đã dựng sẵn** lớp đồng bộ + gắn 📣 Marketing (baiViet, chiSoKenh) và 🎓 LMS (diemDanh) – chờ v1 lên app (Hub trên app v1.23.2; L31a «KIỂM ĐẠT v1.23.4», L31b ⏸). **v2.17.1 đã gắn 💰 VietQR `taiKhoanQR`** (Admin ghi, Kế toán chỉ đọc). `tienDoLMS` đã tách theo người học từ v2.17.3 (mỗi người 1 dòng, ChuSo = mình). **Còn chờ v1:** L31b tường lửa `chanDuLieuNhayCam_` chặn số TK dạng SĐT / 12 số trong `taiKhoanQR` – cần miễn trường `soTK` của loại này (v2 tạm không gửi các số đó, chỉ lưu máy).
   - HUB L32 cổng đọc nhật ký `_TacVu` ➜ v2 🏠 M1.6 màn nhật ký động cơ tự động. **v2.16.5 đã nối sẵn** (tab ⚙️ Động cơ ở 🛡️ Quản trị) – chờ v1 lên app.
   - HUB L33 `webTimTriThuc` + `webDoThiTriThuc` ➜ v2 🧠 M9.2 tìm toàn văn + M9.3 đồ thị liên kết (thay dữ liệu MẪU). **v2.16.4 đã nối sẵn** – chờ v1 lên app.
   - PTKH L581 (đề ghi L580 – đổi số vì trùng) cổng CHỈ ĐỌC giờ công / tăng ca ➜ v2 👥 M5.4 + 💰 M3.5 xuất TC-NS. **v2.16.6 đã nối sẵn** (📋 PTKH › ⏱️ Giờ công) – chờ v1 code + lên app.
@@ -53,6 +53,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.17.6 – SỬA THEO AGY KIỂM 11231015 (24/11/2026, lượt 10h12)
+- agy `11231015` ra-ux 3 màn ĐẠT 9.5/10; làm nốt 3 góp ý nhỏ: 🗂️ 💡 Bài học đảo nút chính "📤 Gửi kho Tri thức" lên trước · 🎓 📘 Tiến độ học bỏ dấu ". ·" · 📋 PTKH ⏱️ Giờ công dòng phụ xuống dòng (không mất "trừ NTC 0,5" ở 375px).
+- Nhóm A tuần 23–29/11 không còn mục ⑤ tự làm; mọi màn chờ cổng v1 đã nối sẵn – còn lại là **Chờ anh** nghiệm thu Live bằng token thật (mục 0 Nhóm C).
+- **Kiểm:** `node --check` 5 tệp + `node test/chay.js` 235/235 · quét bí mật `test/quet_bi_mat.js`. Giao diện: chờ agy kiểm (phiếu `11241013_V2_M6.3_ra-ux`).
 
 ### PHIÊN BẢN v2.17.5 – SỬA THEO AGY KIỂM 11221615 · PTKH L581 ĐÃ LÊN APP (23/11/2026, lượt 10h13)
 - 🗂️ Dự án › 🏗️ Vướng mắc › 💡 Bài học: rút nhãn 2 nút còn "📋 Chép Markdown" / "📤 Gửi kho Tri thức" (không rớt 2 dòng ở 375px), câu "chờ Admin duyệt" chuyển xuống dòng phụ (agy `11221615` – B Đơn giản).

@@ -4,6 +4,13 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.17.6] – 24/11/2026 (sửa theo agy kiểm 11231015)
+
+### 🎨 Giao diện
+- 🗂️ Dự án › 💡 Bài học: nút chính "📤 Gửi kho Tri thức" đứng trước "📋 Chép Markdown" (cùng thứ tự với thẻ vướng mắc).
+- 🎓 LMS › 📘 Tiến độ học của tôi: bỏ dấu "." thừa trước " · Bài kế".
+- 📋 PTKH › ⏱️ Giờ công: dòng phụ nhân viên xuống dòng, không cắt mất "trừ NTC" ở 375px.
+
 ## [2.17.5] – 23/11/2026 (sửa theo agy kiểm 11221615 · PTKH L581 đã lên app)
 
 ### 🎨 Giao diện
