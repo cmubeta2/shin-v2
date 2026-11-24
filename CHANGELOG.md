@@ -4,6 +4,12 @@ Tất cả các thay đổi kiến trúc, tính năng và bản phát hành củ
 
 ---
 
+## [2.17.7] – 24/11/2026 (🩺 nhập hộ KS chống ghi trùng – KS L7 lên app)
+
+### ✨ Nối cổng v1
+- 🩺 Khảo sát › 🛠️ › 📝 Nhập hộ: gửi kèm `maGui` cho `webNhapHo` (KS L7, v1.4.5 đã lên app). Mã giữ nguyên tới khi app KS nhận ➜ mất mạng giữa chừng bấm Lưu lại không thành phiếu thứ 2; app trả `trung:true` ➜ toast "đã lưu trước đó".
+- Máy chủ giả + `test/luong_7.test.js`: luồng ⑤ chuyển sang kiểm chống trùng `maGui` (235/235).
+
 ## [2.17.6] – 24/11/2026 (sửa theo agy kiểm 11231015)
 
 ### 🎨 Giao diện

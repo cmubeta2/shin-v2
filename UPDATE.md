@@ -1,7 +1,7 @@
 # KẾ HOẠCH NÂNG CẤP PHIÊN BẢN (UPDATE.md) – SHIN v2
 
 *Tài liệu quản trị phiên bản bắt buộc cho kho `shin-v2`.*  
-*Phiên bản hiện tại: **v2.17.6** · Cập nhật ngày: **24/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
+*Phiên bản hiện tại: **v2.17.7** · Cập nhật ngày: **24/11/2026**.* · Hợp đồng cổng cho v1: **[HOP_DONG_CONG_V2.md](HOP_DONG_CONG_V2.md)**.  
 *Danh mục micro-module, hợp đồng I/O, hiện trạng và tiêu chí hoàn thành chi tiết: **[QUY_HOACH_10_MANG_AIOS.md](QUY_HOACH_10_MANG_AIOS.md)** (mục 2, 3, 6).*
 
 > **Nguyên tắc (Sếp chốt 29/10):** v2 là bản làm lại gom về 1 chỗ của hệ v1 – **v2 chạy trên chính các máy chủ v1**, không tạo cơ sở dữ liệu mới, không sửa giao diện v1. Việc gì v1 đã mở cổng web `web*` thì v2 làm ngay; việc gì v1 chưa có cổng thì phải mở cổng ở v1 trước (làm trong thư mục `He sinh thai Shin`), rồi v2 mới dựng màn.
@@ -29,7 +29,7 @@
 - **Cổng v1 – trạng thái (cập nhật lượt 22/11 16h12 theo KE_HOACH các app):**
   - 🟢 LÊN APP 22/11 10h (HUB v1.23.7 @24): LOI L8 `chanDuLieuNhayCam_` (M9.5) · HUB L31a/b `webDocDuLieuV2` / `webGhiDuLieuV2` (M8.4 · M8.6 · M4.5 · M3.1) · HUB L32 `webNhatKyTacVu` (M1.6) · HUB L33 `webTimTriThuc` + `webDoThiTriThuc` (M9.2 · M9.3). Màn v2 đã nối sẵn, tự dò cổng – **Chờ anh:** nghiệm thu Live 1 lần mỗi màn bằng token thật.
   - 🟢 LÊN APP 22/11 (PTKH v1.314.53 @314, app hiện v1.315.57): PTKH L581 `webGioCongThang` (M5.4 · M3.5) – mã v1 khớp hợp đồng (`nv[].ma/hoTen/donVi/ngayCong/truNTC/tongCong/gioTC`). **Chờ anh:** nghiệm thu Live 📋 PTKH › ⏱️ Giờ công + 📤 Xuất TC-NS. (M5.4 + M3.5 đã nối sẵn)
-  - KS L7 `webNhapHo` + `maGui` chống ghi trùng «CÓ KH» 21/11 – ② làm; PTKH L618 (`webGuiNghiPhep` + `maGui`) ⏸ chờ anh duyệt
+  - 🟢 KS L7 `webNhapHo` + `maGui` lên app v1.4.5 @6 ➜ v2.17.7 đã gửi `maGui` (🩺 Nhập hộ). **Chờ anh:** xác nhận /exec KS (KE_HOACH ghi "/exec trả trang đăng nhập") + nhập thử 1 phiếu thật. PTKH L618 (`webGuiNghiPhep` + `maGui`) ⏸ chờ anh duyệt
   - **Còn chờ v1:** miễn `soTK` khỏi tường lửa cho loại `taiKhoanQR`; thêm loại `pheuLanBien` (M8.5) và `lichNoiDung` đang có trong hợp đồng nhưng màn 📅 lịch M8.1 vẫn tính từ kho bài (không cần cổng riêng).
 - **Để sau:** SePay webhook xác nhận thanh toán (M3.1) – anh tự liên kết. Khóa site Turnstile cho trang điền KS công khai vẫn chờ anh.
 - **KHÔNG làm (Sếp chốt):** chỉ số cả tổ ẩn danh (Morale / NTC cả tổ M5.5–M5.6).
@@ -53,6 +53,11 @@ Theo quy ước số phiên bản đã được Sếp duyệt:
 ---
 
 ## 2. CHI TIẾT CÁC PHIÊN BẢN
+
+### PHIÊN BẢN v2.17.7 – 🩺 NHẬP HỘ KS CHỐNG GHI TRÙNG (24/11/2026, lượt 16h12)
+- **Nguồn:** `70_KhaoSat/KE_HOACH.md` L7 [x] lên app v1.4.5 @6 – `webNhapHo` nhận `maGui` tùy chọn, gửi lại cùng mã trả `{ok:true, maPhieu:<cũ>, trung:true, msg}`.
+- **Đã làm:** `js/modules/ks_nhapho.js` tạo `maGui` (`v2ks…`, khớp `^[A-Za-z0-9_-]{6,40}$`) theo khóa KS + câu trả lời, giữ nguyên cả `giay` tới khi app nhận; lỗi mạng báo "bấm Lưu lại – không vào 2 lần" thay câu "kiểm danh sách phiếu"; `trung` ➜ toast msg của app. Máy chủ giả có `maGui`; luồng ⑤ của `test/luong_7.test.js` chuyển `chongTrung: 'maGui'`. Nhóm C mục 0: còn PTKH `webGuiNghiPhep` chưa chống trùng (L618 chờ anh duyệt).
+- **Kiểm:** `node --check` + `node test/chay.js` 235/235 · quét bí mật `test/quet_bi_mat.js`. Giao diện: chỉ đổi câu toast – không gửi phiếu agy. **Chờ anh:** nhập thử 1 phiếu thật (lượt tự động không có token).
 
 ### PHIÊN BẢN v2.17.6 – SỬA THEO AGY KIỂM 11231015 (24/11/2026, lượt 10h12)
 - agy `11231015` ra-ux 3 màn ĐẠT 9.5/10; làm nốt 3 góp ý nhỏ: 🗂️ 💡 Bài học đảo nút chính "📤 Gửi kho Tri thức" lên trước · 🎓 📘 Tiến độ học bỏ dấu ". ·" · 📋 PTKH ⏱️ Giờ công dòng phụ xuống dòng (không mất "trừ NTC 0,5" ở 375px).

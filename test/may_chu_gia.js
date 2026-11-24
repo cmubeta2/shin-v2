@@ -175,13 +175,17 @@ function taoMayChuGia(tuyChon) {
   const LOAI_V2 = { lichNoiDung: 1, baiViet: 1, chiSoKenh: 1, lopHoc: 1, diemDanh: 1, tienDoLMS: 1, taiKhoanQR: 1 };
 
   /* App KS – 70_KhaoSat/40_DienKS.gs webNhapHo(token, du) ➜ luuPhieuKS_(ks, du, 'Nhập hộ', nd.ma) ➜ {ok, maPhieu, msg}.
-     v1 KHÔNG có maGui ➜ máy chủ không tự chống trùng (mỗi lần tới = 1 phiếu) – v2 phải tự giữ "đúng 1 lần". */
+     KS L7 (v1.4.5): maGui tùy chọn [A-Za-z0-9_-]{6,40} ➜ gửi lại cùng mã (cùng KS) trả phiếu cũ + trung:true, không ghi. */
   so.phieuKS = [];
   CONG.webNhapHo = function(token, du) {
     if (!/^KS\d{3,}$/.test(cat(du.ma))) throw new Error('Không tìm thấy khảo sát.');
     if (!du.traLoi || typeof du.traLoi !== 'object' || Array.isArray(du.traLoi) || !Object.keys(du.traLoi).length) throw new Error('Phiếu trống.');
     chan(JSON.stringify(du.traLoi));
-    const p = { maPhieu: 'PH' + String(so.phieuKS.length + 1).padStart(4, '0'), ma: du.ma, traLoi: du.traLoi, kenh: 'Nhập hộ', nguoiNhapHo: token, giay: Number(du.giay) || 0 };
+    const mg = du.maGui == null || du.maGui === '' ? '' : cat(du.maGui);
+    if (mg && !/^[A-Za-z0-9_-]{6,40}$/.test(mg)) throw new Error('Mã chống trùng (maGui) không hợp lệ.');
+    const cu = mg && so.phieuKS.find(x => x.ma === du.ma && x.maGui === mg);
+    if (cu) return { ok: true, maPhieu: cu.maPhieu, trung: true, msg: 'Phiếu này đã lưu trước đó (' + cu.maPhieu + ') – không lưu lần 2.' };
+    const p = { maGui: mg, maPhieu: 'PH' + String(so.phieuKS.length + 1).padStart(4, '0'), ma: du.ma, traLoi: du.traLoi, kenh: 'Nhập hộ', nguoiNhapHo: token, giay: Number(du.giay) || 0 };
     so.phieuKS.push(p);
     return { ok: true, maPhieu: p.maPhieu, msg: 'Đã lưu phiếu ' + p.maPhieu };
   };
